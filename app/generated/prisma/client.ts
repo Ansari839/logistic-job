@@ -75,7 +75,32 @@ export type SystemSetting = Prisma.SystemSettingModel
  */
 export type User = Prisma.UserModel
 /**
- * Model Post
+ * Model Customer
  * 
  */
-export type Post = Prisma.PostModel
+export type Customer = Prisma.CustomerModel
+/**
+ * Model Vendor
+ * 
+ */
+export type Vendor = Prisma.VendorModel
+/**
+ * Model Job
+ * 
+ */
+export type Job = Prisma.JobModel
+/**
+ * Model Expense
+ * 
+ */
+export type Expense = Prisma.ExpenseModel
+/**
+ * Model Invoice
+ * 
+ */
+export type Invoice = Prisma.InvoiceModel
+/**
+ * Model InvoiceItem
+ * 
+ */
+export type InvoiceItem = Prisma.InvoiceItemModel

@@ -58,7 +58,12 @@ export const ModelName = {
   TaxSetting: 'TaxSetting',
   SystemSetting: 'SystemSetting',
   User: 'User',
-  Post: 'Post'
+  Customer: 'Customer',
+  Vendor: 'Vendor',
+  Job: 'Job',
+  Expense: 'Expense',
+  Invoice: 'Invoice',
+  InvoiceItem: 'InvoiceItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -173,15 +178,113 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-export const PostScalarFieldEnum = {
+export const CustomerScalarFieldEnum = {
   id: 'id',
-  title: 'title',
-  content: 'content',
-  published: 'published',
-  authorId: 'authorId'
+  name: 'name',
+  code: 'code',
+  address: 'address',
+  phone: 'phone',
+  email: 'email',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
+
+
+export const VendorScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  type: 'type',
+  address: 'address',
+  phone: 'phone',
+  email: 'email',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VendorScalarFieldEnum = (typeof VendorScalarFieldEnum)[keyof typeof VendorScalarFieldEnum]
+
+
+export const JobScalarFieldEnum = {
+  id: 'id',
+  jobNumber: 'jobNumber',
+  date: 'date',
+  jobType: 'jobType',
+  customerId: 'customerId',
+  vessel: 'vessel',
+  place: 'place',
+  shipperRef: 'shipperRef',
+  gdNo: 'gdNo',
+  formE: 'formE',
+  commodity: 'commodity',
+  volume: 'volume',
+  containerNo: 'containerNo',
+  packages: 'packages',
+  weight: 'weight',
+  hawbBl: 'hawbBl',
+  handledBy: 'handledBy',
+  salesPerson: 'salesPerson',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JobScalarFieldEnum = (typeof JobScalarFieldEnum)[keyof typeof JobScalarFieldEnum]
+
+
+export const ExpenseScalarFieldEnum = {
+  id: 'id',
+  jobId: 'jobId',
+  vendorId: 'vendorId',
+  description: 'description',
+  costPrice: 'costPrice',
+  sellingPrice: 'sellingPrice',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExpenseScalarFieldEnum = (typeof ExpenseScalarFieldEnum)[keyof typeof ExpenseScalarFieldEnum]
+
+
+export const InvoiceScalarFieldEnum = {
+  id: 'id',
+  invoiceNumber: 'invoiceNumber',
+  date: 'date',
+  jobId: 'jobId',
+  customerId: 'customerId',
+  type: 'type',
+  status: 'status',
+  totalAmount: 'totalAmount',
+  taxAmount: 'taxAmount',
+  grandTotal: 'grandTotal',
+  currencyCode: 'currencyCode',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
+
+
+export const InvoiceItemScalarFieldEnum = {
+  id: 'id',
+  invoiceId: 'invoiceId',
+  description: 'description',
+  amount: 'amount',
+  taxPercentage: 'taxPercentage',
+  taxAmount: 'taxAmount',
+  total: 'total'
+} as const
+
+export type InvoiceItemScalarFieldEnum = (typeof InvoiceItemScalarFieldEnum)[keyof typeof InvoiceItemScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -17,3 +17,29 @@ export const Role = {
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const JobType = {
+  IMPORT: 'IMPORT',
+  EXPORT: 'EXPORT'
+} as const
+
+export type JobType = (typeof JobType)[keyof typeof JobType]
+
+
+export const InvoiceStatus = {
+  DRAFT: 'DRAFT',
+  SENT: 'SENT',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type InvoiceStatus = (typeof InvoiceStatus)[keyof typeof InvoiceStatus]
+
+
+export const InvoiceType = {
+  MASTER: 'MASTER',
+  PROFORMA: 'PROFORMA'
+} as const
+
+export type InvoiceType = (typeof InvoiceType)[keyof typeof InvoiceType]

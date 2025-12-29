@@ -230,6 +230,7 @@ export type BranchWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   taxSettings?: Prisma.TaxSettingListRelationFilter
+  jobs?: Prisma.JobListRelationFilter
 }
 
 export type BranchOrderByWithRelationInput = {
@@ -241,6 +242,7 @@ export type BranchOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   taxSettings?: Prisma.TaxSettingOrderByRelationAggregateInput
+  jobs?: Prisma.JobOrderByRelationAggregateInput
 }
 
 export type BranchWhereUniqueInput = Prisma.AtLeast<{
@@ -255,6 +257,7 @@ export type BranchWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   taxSettings?: Prisma.TaxSettingListRelationFilter
+  jobs?: Prisma.JobListRelationFilter
 }, "id">
 
 export type BranchOrderByWithAggregationInput = {
@@ -290,6 +293,7 @@ export type BranchCreateInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutBranchesInput
   taxSettings?: Prisma.TaxSettingCreateNestedManyWithoutBranchInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateInput = {
@@ -300,6 +304,7 @@ export type BranchUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   taxSettings?: Prisma.TaxSettingUncheckedCreateNestedManyWithoutBranchInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUpdateInput = {
@@ -309,6 +314,7 @@ export type BranchUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutBranchesNestedInput
   taxSettings?: Prisma.TaxSettingUpdateManyWithoutBranchNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateInput = {
@@ -319,6 +325,7 @@ export type BranchUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   taxSettings?: Prisma.TaxSettingUncheckedUpdateManyWithoutBranchNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyInput = {
@@ -456,12 +463,29 @@ export type BranchUpdateOneWithoutTaxSettingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutTaxSettingsInput, Prisma.BranchUpdateWithoutTaxSettingsInput>, Prisma.BranchUncheckedUpdateWithoutTaxSettingsInput>
 }
 
+export type BranchCreateNestedOneWithoutJobsInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutJobsInput, Prisma.BranchUncheckedCreateWithoutJobsInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutJobsInput
+  connect?: Prisma.BranchWhereUniqueInput
+}
+
+export type BranchUpdateOneWithoutJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutJobsInput, Prisma.BranchUncheckedCreateWithoutJobsInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutJobsInput
+  upsert?: Prisma.BranchUpsertWithoutJobsInput
+  disconnect?: Prisma.BranchWhereInput | boolean
+  delete?: Prisma.BranchWhereInput | boolean
+  connect?: Prisma.BranchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutJobsInput, Prisma.BranchUpdateWithoutJobsInput>, Prisma.BranchUncheckedUpdateWithoutJobsInput>
+}
+
 export type BranchCreateWithoutCompanyInput = {
   name: string
   location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   taxSettings?: Prisma.TaxSettingCreateNestedManyWithoutBranchInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutCompanyInput = {
@@ -471,6 +495,7 @@ export type BranchUncheckedCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   taxSettings?: Prisma.TaxSettingUncheckedCreateNestedManyWithoutBranchInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutCompanyInput = {
@@ -517,6 +542,7 @@ export type BranchCreateWithoutTaxSettingsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutBranchesInput
+  jobs?: Prisma.JobCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutTaxSettingsInput = {
@@ -526,6 +552,7 @@ export type BranchUncheckedCreateWithoutTaxSettingsInput = {
   companyId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutTaxSettingsInput = {
@@ -550,6 +577,7 @@ export type BranchUpdateWithoutTaxSettingsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutBranchesNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutTaxSettingsInput = {
@@ -559,6 +587,61 @@ export type BranchUncheckedUpdateWithoutTaxSettingsInput = {
   companyId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchCreateWithoutJobsInput = {
+  name: string
+  location?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutBranchesInput
+  taxSettings?: Prisma.TaxSettingCreateNestedManyWithoutBranchInput
+}
+
+export type BranchUncheckedCreateWithoutJobsInput = {
+  id?: number
+  name: string
+  location?: string | null
+  companyId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  taxSettings?: Prisma.TaxSettingUncheckedCreateNestedManyWithoutBranchInput
+}
+
+export type BranchCreateOrConnectWithoutJobsInput = {
+  where: Prisma.BranchWhereUniqueInput
+  create: Prisma.XOR<Prisma.BranchCreateWithoutJobsInput, Prisma.BranchUncheckedCreateWithoutJobsInput>
+}
+
+export type BranchUpsertWithoutJobsInput = {
+  update: Prisma.XOR<Prisma.BranchUpdateWithoutJobsInput, Prisma.BranchUncheckedUpdateWithoutJobsInput>
+  create: Prisma.XOR<Prisma.BranchCreateWithoutJobsInput, Prisma.BranchUncheckedCreateWithoutJobsInput>
+  where?: Prisma.BranchWhereInput
+}
+
+export type BranchUpdateToOneWithWhereWithoutJobsInput = {
+  where?: Prisma.BranchWhereInput
+  data: Prisma.XOR<Prisma.BranchUpdateWithoutJobsInput, Prisma.BranchUncheckedUpdateWithoutJobsInput>
+}
+
+export type BranchUpdateWithoutJobsInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutBranchesNestedInput
+  taxSettings?: Prisma.TaxSettingUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchUncheckedUpdateWithoutJobsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  taxSettings?: Prisma.TaxSettingUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyCompanyInput = {
@@ -575,6 +658,7 @@ export type BranchUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   taxSettings?: Prisma.TaxSettingUpdateManyWithoutBranchNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutCompanyInput = {
@@ -584,6 +668,7 @@ export type BranchUncheckedUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   taxSettings?: Prisma.TaxSettingUncheckedUpdateManyWithoutBranchNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateManyWithoutCompanyInput = {
@@ -601,10 +686,12 @@ export type BranchUncheckedUpdateManyWithoutCompanyInput = {
 
 export type BranchCountOutputType = {
   taxSettings: number
+  jobs: number
 }
 
 export type BranchCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   taxSettings?: boolean | BranchCountOutputTypeCountTaxSettingsArgs
+  jobs?: boolean | BranchCountOutputTypeCountJobsArgs
 }
 
 /**
@@ -624,6 +711,13 @@ export type BranchCountOutputTypeCountTaxSettingsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.TaxSettingWhereInput
 }
 
+/**
+ * BranchCountOutputType without action
+ */
+export type BranchCountOutputTypeCountJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobWhereInput
+}
+
 
 export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -634,6 +728,7 @@ export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   taxSettings?: boolean | Prisma.Branch$taxSettingsArgs<ExtArgs>
+  jobs?: boolean | Prisma.Branch$jobsArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["branch"]>
 
@@ -670,6 +765,7 @@ export type BranchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type BranchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   taxSettings?: boolean | Prisma.Branch$taxSettingsArgs<ExtArgs>
+  jobs?: boolean | Prisma.Branch$jobsArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BranchIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -684,6 +780,7 @@ export type $BranchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
     taxSettings: Prisma.$TaxSettingPayload<ExtArgs>[]
+    jobs: Prisma.$JobPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1088,6 +1185,7 @@ export interface Prisma__BranchClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   taxSettings<T extends Prisma.Branch$taxSettingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$taxSettingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaxSettingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jobs<T extends Prisma.Branch$jobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$jobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1540,6 +1638,30 @@ export type Branch$taxSettingsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.TaxSettingScalarFieldEnum | Prisma.TaxSettingScalarFieldEnum[]
+}
+
+/**
+ * Branch.jobs
+ */
+export type Branch$jobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Job
+   */
+  select?: Prisma.JobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Job
+   */
+  omit?: Prisma.JobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobInclude<ExtArgs> | null
+  where?: Prisma.JobWhereInput
+  orderBy?: Prisma.JobOrderByWithRelationInput | Prisma.JobOrderByWithRelationInput[]
+  cursor?: Prisma.JobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobScalarFieldEnum | Prisma.JobScalarFieldEnum[]
 }
 
 /**

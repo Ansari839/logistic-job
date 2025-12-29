@@ -47,21 +47,34 @@ async function main() {
   console.log('Main Company seeded');
 
   // 3. Create Branches
-  const branches = [
-    { name: 'Head Office', location: 'Karachi, Pakistan', companyId: mainCompany.id },
-    { name: 'North Warehouse', location: 'Lahore, Pakistan', companyId: mainCompany.id },
-  ];
+  const headOffice = await prisma.branch.upsert({
+    where: { id: 1 }, // Assuming ID 1 for simplicity in seed or find by name
+    update: {},
+    create: {
+      name: 'Head Office',
+      location: 'Karachi, Pakistan',
+      companyId: mainCompany.id,
+    },
+  });
 
-  for (const b of branches) {
-    await prisma.branch.create({ data: b });
-  }
+  await prisma.branch.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+      name: 'North Warehouse',
+      location: 'Lahore, Pakistan',
+      companyId: mainCompany.id,
+    },
+  });
   console.log('Branches seeded');
 
   // 4. Link Currencies to Company
   const pkr = await prisma.currency.findUnique({ where: { code: 'PKR' } });
   if (pkr) {
-    await prisma.companyCurrency.create({
-      data: {
+    await prisma.companyCurrency.upsert({
+      where: { companyId_currencyId: { companyId: mainCompany.id, currencyId: pkr.id } },
+      update: {},
+      create: {
         companyId: mainCompany.id,
         currencyId: pkr.id,
         isDefault: true,
@@ -78,7 +91,11 @@ async function main() {
   ];
 
   for (const s of settings) {
-    await prisma.systemSetting.create({ data: s });
+    await prisma.systemSetting.upsert({
+      where: { companyId_key: { companyId: mainCompany.id, key: s.key } },
+      update: { value: s.value },
+      create: s,
+    });
   }
   console.log('System Settings seeded');
 
@@ -104,7 +121,50 @@ async function main() {
     });
     console.log(`Created/Updated user with id: ${user.id}`);
   }
-  console.log(`Seeding finished.`);
+
+  // Seed Customers
+  const customer = await prisma.customer.upsert({
+    where: { code: 'CUST001' },
+    update: {},
+    create: {
+      name: 'Global Trade Inc.',
+      code: 'CUST001',
+      email: 'imports@globaltrade.com',
+      companyId: mainCompany.id,
+    },
+  });
+
+  // Seed Vendors
+  const vendor = await prisma.vendor.upsert({
+    where: { code: 'VND001' },
+    update: {},
+    create: {
+      name: 'Fast Track Logistics',
+      code: 'VND001',
+      type: 'TRANSPORT',
+      companyId: mainCompany.id,
+    },
+  });
+
+  // Seed a Job
+  await prisma.job.upsert({
+    where: { jobNumber: 'JOB-2025-001' },
+    update: {},
+    create: {
+      jobNumber: 'JOB-2025-001',
+      jobType: 'EXPORT',
+      customerId: customer.id,
+      companyId: mainCompany.id,
+      branchId: headOffice.id,
+      vessel: 'MSC ORION',
+      commodity: 'Textiles',
+      volume: '1x40HC',
+      containerNo: 'MSCU1234567',
+    },
+  });
+
+  console.log('Logistics data seeded');
+  console.log('Seeding finished.');
 }
 
 main()
