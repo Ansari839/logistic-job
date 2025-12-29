@@ -51,6 +51,12 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Company: 'Company',
+  Branch: 'Branch',
+  Currency: 'Currency',
+  CompanyCurrency: 'CompanyCurrency',
+  TaxSetting: 'TaxSetting',
+  SystemSetting: 'SystemSetting',
   User: 'User',
   Post: 'Post'
 } as const
@@ -71,12 +77,90 @@ export const TransactionIsolationLevel = {
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const CompanyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  uniqueId: 'uniqueId',
+  address: 'address',
+  phone: 'phone',
+  email: 'email',
+  industry: 'industry',
+  logo: 'logo',
+  themeConfig: 'themeConfig',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyScalarFieldEnum = (typeof CompanyScalarFieldEnum)[keyof typeof CompanyScalarFieldEnum]
+
+
+export const BranchScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  location: 'location',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BranchScalarFieldEnum = (typeof BranchScalarFieldEnum)[keyof typeof BranchScalarFieldEnum]
+
+
+export const CurrencyScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  symbol: 'symbol',
+  name: 'name'
+} as const
+
+export type CurrencyScalarFieldEnum = (typeof CurrencyScalarFieldEnum)[keyof typeof CurrencyScalarFieldEnum]
+
+
+export const CompanyCurrencyScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  currencyId: 'currencyId',
+  exchangeRate: 'exchangeRate',
+  isDefault: 'isDefault'
+} as const
+
+export type CompanyCurrencyScalarFieldEnum = (typeof CompanyCurrencyScalarFieldEnum)[keyof typeof CompanyCurrencyScalarFieldEnum]
+
+
+export const TaxSettingScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  percentage: 'percentage',
+  type: 'type',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TaxSettingScalarFieldEnum = (typeof TaxSettingScalarFieldEnum)[keyof typeof TaxSettingScalarFieldEnum]
+
+
+export const SystemSettingScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  type: 'type',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   name: 'name',
   password: 'password',
   role: 'role',
+  companyId: 'companyId',
   branch: 'branch',
   department: 'department',
   region: 'region',
@@ -108,12 +192,29 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull'
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const JsonNullValueFilter = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull',
+  AnyNull: 'AnyNull'
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 export const NullsOrder = {

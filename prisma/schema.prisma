@@ -14,12 +14,90 @@ enum Role {
   SALES
 }
 
+model Company {
+  id             Int             @id @default(autoincrement())
+  name           String
+  uniqueId       String          @unique // For multi-tenant mapping
+  address        String?
+  phone          String?
+  email          String?
+  industry       String?
+  logo           String?
+  themeConfig    Json?           // { primaryColor: string, darkMode: boolean, etc. }
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  users          User[]
+  branches       Branch[]
+  currencies     CompanyCurrency[]
+  taxSettings    TaxSetting[]
+  systemSettings SystemSetting[]
+}
+
+model Branch {
+  id          Int          @id @default(autoincrement())
+  name        String
+  location    String?
+  companyId   Int
+  company     Company      @relation(fields: [companyId], references: [id])
+  taxSettings TaxSetting[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Currency {
+  id        Int               @id @default(autoincrement())
+  code      String            @unique // PKR, USD, EUR
+  symbol    String
+  name      String
+  companies CompanyCurrency[]
+}
+
+model CompanyCurrency {
+  id           Int      @id @default(autoincrement())
+  companyId    Int
+  currencyId   Int
+  exchangeRate Float    @default(1.0)
+  isDefault    Boolean  @default(false)
+  company      Company  @relation(fields: [companyId], references: [id])
+  currency     Currency @relation(fields: [currencyId], references: [id])
+
+  @@unique([companyId, currencyId])
+}
+
+model TaxSetting {
+  id         Int      @id @default(autoincrement())
+  name       String   // Sales Tax, WHT
+  percentage Float
+  type       String   // SALES, WHT
+  companyId  Int
+  branchId   Int?
+  company    Company  @relation(fields: [companyId], references: [id])
+  branch     Branch?  @relation(fields: [branchId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model SystemSetting {
+  id        Int      @id @default(autoincrement())
+  key       String   // timezone, language, dateFormat, numberFormat, featureFlags
+  value     String
+  type      String   // FLAG, FORMAT, CONFIG
+  companyId Int
+  company   Company  @relation(fields: [companyId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([companyId, key])
+}
+
 model User {
   id               Int       @id @default(autoincrement())
   email            String    @unique
   name             String?
   password         String
   role             Role      @default(OPERATOR)
+  companyId        Int?
+  company          Company?  @relation(fields: [companyId], references: [id])
   branch           String?
   department       String?
   region           String?
