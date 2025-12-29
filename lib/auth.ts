@@ -13,6 +13,7 @@ export interface AuthUser {
     branch: string | null;
     department: string | null;
     region: string | null;
+    companyId: number | null;
 }
 
 export const hashPassword = async (password: string) => {

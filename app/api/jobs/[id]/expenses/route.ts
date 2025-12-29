@@ -66,17 +66,47 @@ export async function POST(
             return NextResponse.json({ error: 'Description is required' }, { status: 400 });
         }
 
-        const expense = await prisma.expense.create({
-            data: {
-                jobId: parseInt(id),
-                companyId: user.companyId,
-                vendorId: vendorId ? parseInt(vendorId) : null,
-                description,
-                costPrice: costPrice ? parseFloat(costPrice) : 0,
-                sellingPrice: sellingPrice ? parseFloat(sellingPrice) : 0,
-                currencyCode: currencyCode || 'PKR',
-                exchangeRate: exchangeRate ? parseFloat(exchangeRate) : 1,
+        const expense = await prisma.$transaction(async (tx) => {
+            const e = await tx.expense.create({
+                data: {
+                    jobId: parseInt(id),
+                    companyId: user.companyId,
+                    vendorId: vendorId ? parseInt(vendorId) : null,
+                    description,
+                    costPrice: costPrice ? parseFloat(costPrice) : 0,
+                    sellingPrice: sellingPrice ? parseFloat(sellingPrice) : 0,
+                    currencyCode: currencyCode || 'PKR',
+                    exchangeRate: exchangeRate ? parseFloat(exchangeRate) : 1,
+                }
+            });
+
+            if (e.costPrice > 0) {
+                // Post to Accounting
+                const costAccount = await tx.account.findUnique({
+                    where: { companyId_code: { companyId: user.companyId, code: '5000' } }
+                });
+                const payableAccount = await tx.account.findUnique({
+                    where: { companyId_code: { companyId: user.companyId, code: '2110' } }
+                });
+
+                if (costAccount && payableAccount) {
+                    await tx.transaction.create({
+                        data: {
+                            reference: `EXP-${e.id}`,
+                            description: `Expense for Job ${id}: ${description}`,
+                            type: 'JOURNAL',
+                            companyId: user.companyId,
+                            entries: {
+                                create: [
+                                    { accountId: costAccount.id, debit: e.costPrice, description: `Job ${id} Expense` },
+                                    { accountId: payableAccount.id, credit: e.costPrice, description: `Payable to Vendor ${vendorId}` }
+                                ]
+                            }
+                        }
+                    });
+                }
             }
+            return e;
         });
 
         return NextResponse.json({ expense });

@@ -43,3 +43,34 @@ export const InvoiceType = {
 } as const
 
 export type InvoiceType = (typeof InvoiceType)[keyof typeof InvoiceType]
+
+
+export const AccountType = {
+  ASSET: 'ASSET',
+  LIABILITY: 'LIABILITY',
+  EQUITY: 'EQUITY',
+  REVENUE: 'REVENUE',
+  EXPENSE: 'EXPENSE'
+} as const
+
+export type AccountType = (typeof AccountType)[keyof typeof AccountType]
+
+
+export const TransactionType = {
+  JOURNAL: 'JOURNAL',
+  RECEIPT: 'RECEIPT',
+  PAYMENT: 'PAYMENT',
+  INVOICE: 'INVOICE'
+} as const
+
+export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
+
+
+export const PaymentMode = {
+  CASH: 'CASH',
+  BANK: 'BANK',
+  CHEQUE: 'CHEQUE',
+  ONLINE: 'ONLINE'
+} as const
+
+export type PaymentMode = (typeof PaymentMode)[keyof typeof PaymentMode]

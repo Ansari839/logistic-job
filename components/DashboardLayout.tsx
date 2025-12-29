@@ -7,7 +7,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
     LayoutDashboard, Users, BarChart2, Shield, LogOut,
-    Package, CreditCard, FileText, Sun, Moon, Menu, X
+    Package, CreditCard, FileText, Sun, Moon, Menu, X,
+    Building2, BookOpen, ArrowRightLeft, Settings
 } from 'lucide-react';
 
 interface NavItem {
@@ -25,17 +26,14 @@ const navItems: NavItem[] = [
     { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Jobs', href: '/jobs', icon: Package, roles: ['ADMIN', 'OPERATOR', 'SALES'] },
     { name: 'Invoices', href: '/invoices', icon: FileText, roles: ['ADMIN', 'ACCOUNTS', 'SALES'] },
-    { name: 'Vendors', href: '/vendors', icon: Users, roles: ['ADMIN', 'OPERATOR'] },
-    { name: 'Reports', href: '/reports', icon: BarChart2, roles: ['ADMIN', 'SALES'] },
-    { name: 'Ledgers', href: '/ledgers', icon: BookOpen, roles: ['ADMIN', 'ACCOUNTS'] },
+    { name: 'Vendors', href: '/vendors', icon: Building2, roles: ['ADMIN', 'OPERATOR'] },
+    { name: 'Chart of Accounts', href: '/accounts', icon: BookOpen, roles: ['ADMIN', 'ACCOUNTS'] },
+    { name: 'Journal Vouchers', href: '/vouchers', icon: ArrowRightLeft, roles: ['ADMIN', 'ACCOUNTS'] },
     { name: 'Payments', href: '/payments', icon: CreditCard, roles: ['ADMIN', 'ACCOUNTS'] },
-    { name: 'Users', href: '/admin/users', icon: Users, roles: ['ADMIN'] },
-    { name: 'Settings', href: '/settings/profile', icon: Shield },
+    { name: 'Financial Reports', href: '/reports', icon: BarChart2, roles: ['ADMIN', 'ACCOUNTS'] },
+    { name: 'Settings', href: '/settings/profile', icon: Settings, roles: ['ADMIN'] },
 ];
 
-function BookOpen(props: any) {
-    return <FileText {...props} />;
-}
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const { user, logout, loading } = useAuth();

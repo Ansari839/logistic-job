@@ -164,6 +164,57 @@ async function main() {
   });
 
   console.log('Logistics data seeded');
+
+  // 7. Seed Chart of Accounts (COA)
+  const coaData = [
+    // ASSETS
+    { code: '1000', name: 'Non-Current Assets', type: 'ASSET' },
+    { code: '1100', name: 'Current Assets', type: 'ASSET' },
+    { code: '1110', name: 'Cash in Hand', type: 'ASSET', parentCode: '1100' },
+    { code: '1120', name: 'Bank Accounts', type: 'ASSET', parentCode: '1100' },
+    { code: '1130', name: 'Accounts Receivable', type: 'ASSET', parentCode: '1100' },
+
+    // LIABILITIES
+    { code: '2000', name: 'Non-Current Liabilities', type: 'LIABILITY' },
+    { code: '2100', name: 'Current Liabilities', type: 'LIABILITY' },
+    { code: '2110', name: 'Accounts Payable', type: 'LIABILITY', parentCode: '2100' },
+    { code: '2120', name: 'Sales Tax Payable', type: 'LIABILITY', parentCode: '2100' },
+
+    // EQUITY
+    { code: '3000', name: 'Equity', type: 'EQUITY' },
+    { code: '3100', name: 'Share Capital', type: 'EQUITY', parentCode: '3000' },
+    { code: '3200', name: 'Retained Earnings', type: 'EQUITY', parentCode: '3000' },
+
+    // REVENUE
+    { code: '4000', name: 'Revenue', type: 'REVENUE' },
+    { code: '4100', name: 'Service Revenue', type: 'REVENUE', parentCode: '4000' },
+    { code: '4200', name: 'Other Income', type: 'REVENUE', parentCode: '4000' },
+
+    // EXPENSE
+    { code: '5000', name: 'Cost of Services', type: 'EXPENSE' },
+    { code: '5100', name: 'Operating Expenses', type: 'EXPENSE' },
+    { code: '5120', name: 'Rent Expense', type: 'EXPENSE', parentCode: '5100' },
+  ];
+
+  console.log('Seeding Chart of Accounts...');
+  for (const ac of coaData) {
+    const parent = ac.parentCode
+      ? await prisma.account.findUnique({ where: { companyId_code: { companyId: mainCompany.id, code: ac.parentCode } } })
+      : null;
+
+    await prisma.account.upsert({
+      where: { companyId_code: { companyId: mainCompany.id, code: ac.code } },
+      update: { parentId: parent?.id },
+      create: {
+        code: ac.code,
+        name: ac.name,
+        type: ac.type as any,
+        companyId: mainCompany.id,
+        parentId: parent?.id
+      }
+    });
+  }
+  console.log('Chart of Accounts seeded');
   console.log('Seeding finished.');
 }
 

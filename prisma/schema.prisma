@@ -31,6 +31,28 @@ enum InvoiceType {
   PROFORMA
 }
 
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+}
+
+enum TransactionType {
+  JOURNAL
+  RECEIPT
+  PAYMENT
+  INVOICE
+}
+
+enum PaymentMode {
+  CASH
+  BANK
+  CHEQUE
+  ONLINE
+}
+
 model Company {
   id             Int             @id @default(autoincrement())
   name           String
@@ -53,6 +75,9 @@ model Company {
   jobs           Job[]
   expenses       Expense[]
   invoices       Invoice[]
+  accounts       Account[]
+  transactions   Transaction[]
+  payments       Payment[]
 }
 
 model Branch {
@@ -141,6 +166,7 @@ model Customer {
   company   Company   @relation(fields: [companyId], references: [id])
   jobs      Job[]
   invoices  Invoice[]
+  payments  Payment[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -156,6 +182,7 @@ model Vendor {
   companyId Int
   company   Company   @relation(fields: [companyId], references: [id])
   expenses  Expense[]
+  payments  Payment[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -243,6 +270,10 @@ model Invoice {
   
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  
+  // Account mapping
+  transaction   Transaction?  @relation(fields: [transactionId], references: [id])
+  transactionId Int?          @unique
 }
 
 model InvoiceItem {
@@ -255,4 +286,85 @@ model InvoiceItem {
   taxPercentage Float   @default(0.0)
   taxAmount     Float   @default(0.0)
   total         Float
+}
+
+model Account {
+  id          Int           @id @default(autoincrement())
+  code        String        // e.g., 1000, 1100
+  name        String        // e.g., Cash, Accounts Receivable
+  type        AccountType
+  description String?
+  
+  parentId    Int?
+  parent      Account?      @relation("AccountHierarchy", fields: [parentId], references: [id])
+  children    Account[]     @relation("AccountHierarchy")
+  
+  companyId   Int
+  company     Company       @relation(fields: [companyId], references: [id])
+  
+  entries     AccountEntry[]
+  
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@unique([companyId, code])
+}
+
+model Transaction {
+  id            Int             @id @default(autoincrement())
+  reference     String          @unique // JV-001, INV-001, PAY-001
+  date          DateTime        @default(now())
+  description   String?
+  type          TransactionType @default(JOURNAL)
+  
+  entries       AccountEntry[]
+  
+  invoice       Invoice?
+  payment       Payment?
+  
+  companyId     Int
+  company       Company         @relation(fields: [companyId], references: [id])
+  
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model AccountEntry {
+  id            Int         @id @default(autoincrement())
+  transactionId Int
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  
+  accountId     Int
+  account       Account     @relation(fields: [accountId], references: [id])
+  
+  description   String?
+  debit         Float       @default(0.0)
+  credit        Float       @default(0.0)
+  
+  createdAt     DateTime    @default(now())
+}
+
+model Payment {
+  id            Int         @id @default(autoincrement())
+  receiptNumber String      @unique // REC-001, PAY-001
+  date          DateTime    @default(now())
+  
+  amount        Float
+  mode          PaymentMode @default(CASH)
+  reference     String?     // Cheque no, Online ref
+  
+  customerId    Int?
+  customer      Customer?   @relation(fields: [customerId], references: [id])
+  
+  vendorId      Int?
+  vendor        Vendor?     @relation(fields: [vendorId], references: [id])
+  
+  transactionId Int         @unique
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  
+  companyId     Int
+  company       Company     @relation(fields: [companyId], references: [id])
+  
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }

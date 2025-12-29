@@ -34,6 +34,7 @@ export type InvoiceAvgAggregateOutputType = {
   taxAmount: number | null
   grandTotal: number | null
   companyId: number | null
+  transactionId: number | null
 }
 
 export type InvoiceSumAggregateOutputType = {
@@ -44,6 +45,7 @@ export type InvoiceSumAggregateOutputType = {
   taxAmount: number | null
   grandTotal: number | null
   companyId: number | null
+  transactionId: number | null
 }
 
 export type InvoiceMinAggregateOutputType = {
@@ -61,6 +63,7 @@ export type InvoiceMinAggregateOutputType = {
   companyId: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  transactionId: number | null
 }
 
 export type InvoiceMaxAggregateOutputType = {
@@ -78,6 +81,7 @@ export type InvoiceMaxAggregateOutputType = {
   companyId: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  transactionId: number | null
 }
 
 export type InvoiceCountAggregateOutputType = {
@@ -95,6 +99,7 @@ export type InvoiceCountAggregateOutputType = {
   companyId: number
   createdAt: number
   updatedAt: number
+  transactionId: number
   _all: number
 }
 
@@ -107,6 +112,7 @@ export type InvoiceAvgAggregateInputType = {
   taxAmount?: true
   grandTotal?: true
   companyId?: true
+  transactionId?: true
 }
 
 export type InvoiceSumAggregateInputType = {
@@ -117,6 +123,7 @@ export type InvoiceSumAggregateInputType = {
   taxAmount?: true
   grandTotal?: true
   companyId?: true
+  transactionId?: true
 }
 
 export type InvoiceMinAggregateInputType = {
@@ -134,6 +141,7 @@ export type InvoiceMinAggregateInputType = {
   companyId?: true
   createdAt?: true
   updatedAt?: true
+  transactionId?: true
 }
 
 export type InvoiceMaxAggregateInputType = {
@@ -151,6 +159,7 @@ export type InvoiceMaxAggregateInputType = {
   companyId?: true
   createdAt?: true
   updatedAt?: true
+  transactionId?: true
 }
 
 export type InvoiceCountAggregateInputType = {
@@ -168,6 +177,7 @@ export type InvoiceCountAggregateInputType = {
   companyId?: true
   createdAt?: true
   updatedAt?: true
+  transactionId?: true
   _all?: true
 }
 
@@ -272,6 +282,7 @@ export type InvoiceGroupByOutputType = {
   companyId: number
   createdAt: Date
   updatedAt: Date
+  transactionId: number | null
   _count: InvoiceCountAggregateOutputType | null
   _avg: InvoiceAvgAggregateOutputType | null
   _sum: InvoiceSumAggregateOutputType | null
@@ -312,10 +323,12 @@ export type InvoiceWhereInput = {
   companyId?: Prisma.IntFilter<"Invoice"> | number
   createdAt?: Prisma.DateTimeFilter<"Invoice"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Invoice"> | Date | string
+  transactionId?: Prisma.IntNullableFilter<"Invoice"> | number | null
   job?: Prisma.XOR<Prisma.JobScalarRelationFilter, Prisma.JobWhereInput>
   customer?: Prisma.XOR<Prisma.CustomerScalarRelationFilter, Prisma.CustomerWhereInput>
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   items?: Prisma.InvoiceItemListRelationFilter
+  transaction?: Prisma.XOR<Prisma.TransactionNullableScalarRelationFilter, Prisma.TransactionWhereInput> | null
 }
 
 export type InvoiceOrderByWithRelationInput = {
@@ -333,15 +346,18 @@ export type InvoiceOrderByWithRelationInput = {
   companyId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  transactionId?: Prisma.SortOrderInput | Prisma.SortOrder
   job?: Prisma.JobOrderByWithRelationInput
   customer?: Prisma.CustomerOrderByWithRelationInput
   company?: Prisma.CompanyOrderByWithRelationInput
   items?: Prisma.InvoiceItemOrderByRelationAggregateInput
+  transaction?: Prisma.TransactionOrderByWithRelationInput
 }
 
 export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   invoiceNumber?: string
+  transactionId?: number
   AND?: Prisma.InvoiceWhereInput | Prisma.InvoiceWhereInput[]
   OR?: Prisma.InvoiceWhereInput[]
   NOT?: Prisma.InvoiceWhereInput | Prisma.InvoiceWhereInput[]
@@ -361,7 +377,8 @@ export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
   customer?: Prisma.XOR<Prisma.CustomerScalarRelationFilter, Prisma.CustomerWhereInput>
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   items?: Prisma.InvoiceItemListRelationFilter
-}, "id" | "invoiceNumber">
+  transaction?: Prisma.XOR<Prisma.TransactionNullableScalarRelationFilter, Prisma.TransactionWhereInput> | null
+}, "id" | "invoiceNumber" | "transactionId">
 
 export type InvoiceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -378,6 +395,7 @@ export type InvoiceOrderByWithAggregationInput = {
   companyId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  transactionId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.InvoiceCountOrderByAggregateInput
   _avg?: Prisma.InvoiceAvgOrderByAggregateInput
   _max?: Prisma.InvoiceMaxOrderByAggregateInput
@@ -403,6 +421,7 @@ export type InvoiceScalarWhereWithAggregatesInput = {
   companyId?: Prisma.IntWithAggregatesFilter<"Invoice"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Invoice"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Invoice"> | Date | string
+  transactionId?: Prisma.IntNullableWithAggregatesFilter<"Invoice"> | number | null
 }
 
 export type InvoiceCreateInput = {
@@ -420,6 +439,7 @@ export type InvoiceCreateInput = {
   customer: Prisma.CustomerCreateNestedOneWithoutInvoicesInput
   company: Prisma.CompanyCreateNestedOneWithoutInvoicesInput
   items?: Prisma.InvoiceItemCreateNestedManyWithoutInvoiceInput
+  transaction?: Prisma.TransactionCreateNestedOneWithoutInvoiceInput
 }
 
 export type InvoiceUncheckedCreateInput = {
@@ -437,6 +457,7 @@ export type InvoiceUncheckedCreateInput = {
   companyId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  transactionId?: number | null
   items?: Prisma.InvoiceItemUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
@@ -455,6 +476,7 @@ export type InvoiceUpdateInput = {
   customer?: Prisma.CustomerUpdateOneRequiredWithoutInvoicesNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutInvoicesNestedInput
   items?: Prisma.InvoiceItemUpdateManyWithoutInvoiceNestedInput
+  transaction?: Prisma.TransactionUpdateOneWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateInput = {
@@ -472,6 +494,7 @@ export type InvoiceUncheckedUpdateInput = {
   companyId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   items?: Prisma.InvoiceItemUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
@@ -490,6 +513,7 @@ export type InvoiceCreateManyInput = {
   companyId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  transactionId?: number | null
 }
 
 export type InvoiceUpdateManyMutationInput = {
@@ -520,6 +544,7 @@ export type InvoiceUncheckedUpdateManyInput = {
   companyId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type InvoiceListRelationFilter = {
@@ -547,6 +572,7 @@ export type InvoiceCountOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  transactionId?: Prisma.SortOrder
 }
 
 export type InvoiceAvgOrderByAggregateInput = {
@@ -557,6 +583,7 @@ export type InvoiceAvgOrderByAggregateInput = {
   taxAmount?: Prisma.SortOrder
   grandTotal?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
+  transactionId?: Prisma.SortOrder
 }
 
 export type InvoiceMaxOrderByAggregateInput = {
@@ -574,6 +601,7 @@ export type InvoiceMaxOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  transactionId?: Prisma.SortOrder
 }
 
 export type InvoiceMinOrderByAggregateInput = {
@@ -591,6 +619,7 @@ export type InvoiceMinOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  transactionId?: Prisma.SortOrder
 }
 
 export type InvoiceSumOrderByAggregateInput = {
@@ -601,11 +630,17 @@ export type InvoiceSumOrderByAggregateInput = {
   taxAmount?: Prisma.SortOrder
   grandTotal?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
+  transactionId?: Prisma.SortOrder
 }
 
 export type InvoiceScalarRelationFilter = {
   is?: Prisma.InvoiceWhereInput
   isNot?: Prisma.InvoiceWhereInput
+}
+
+export type InvoiceNullableScalarRelationFilter = {
+  is?: Prisma.InvoiceWhereInput | null
+  isNot?: Prisma.InvoiceWhereInput | null
 }
 
 export type InvoiceCreateNestedManyWithoutCompanyInput = {
@@ -756,6 +791,38 @@ export type InvoiceUpdateOneRequiredWithoutItemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.InvoiceUpdateToOneWithWhereWithoutItemsInput, Prisma.InvoiceUpdateWithoutItemsInput>, Prisma.InvoiceUncheckedUpdateWithoutItemsInput>
 }
 
+export type InvoiceCreateNestedOneWithoutTransactionInput = {
+  create?: Prisma.XOR<Prisma.InvoiceCreateWithoutTransactionInput, Prisma.InvoiceUncheckedCreateWithoutTransactionInput>
+  connectOrCreate?: Prisma.InvoiceCreateOrConnectWithoutTransactionInput
+  connect?: Prisma.InvoiceWhereUniqueInput
+}
+
+export type InvoiceUncheckedCreateNestedOneWithoutTransactionInput = {
+  create?: Prisma.XOR<Prisma.InvoiceCreateWithoutTransactionInput, Prisma.InvoiceUncheckedCreateWithoutTransactionInput>
+  connectOrCreate?: Prisma.InvoiceCreateOrConnectWithoutTransactionInput
+  connect?: Prisma.InvoiceWhereUniqueInput
+}
+
+export type InvoiceUpdateOneWithoutTransactionNestedInput = {
+  create?: Prisma.XOR<Prisma.InvoiceCreateWithoutTransactionInput, Prisma.InvoiceUncheckedCreateWithoutTransactionInput>
+  connectOrCreate?: Prisma.InvoiceCreateOrConnectWithoutTransactionInput
+  upsert?: Prisma.InvoiceUpsertWithoutTransactionInput
+  disconnect?: Prisma.InvoiceWhereInput | boolean
+  delete?: Prisma.InvoiceWhereInput | boolean
+  connect?: Prisma.InvoiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InvoiceUpdateToOneWithWhereWithoutTransactionInput, Prisma.InvoiceUpdateWithoutTransactionInput>, Prisma.InvoiceUncheckedUpdateWithoutTransactionInput>
+}
+
+export type InvoiceUncheckedUpdateOneWithoutTransactionNestedInput = {
+  create?: Prisma.XOR<Prisma.InvoiceCreateWithoutTransactionInput, Prisma.InvoiceUncheckedCreateWithoutTransactionInput>
+  connectOrCreate?: Prisma.InvoiceCreateOrConnectWithoutTransactionInput
+  upsert?: Prisma.InvoiceUpsertWithoutTransactionInput
+  disconnect?: Prisma.InvoiceWhereInput | boolean
+  delete?: Prisma.InvoiceWhereInput | boolean
+  connect?: Prisma.InvoiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InvoiceUpdateToOneWithWhereWithoutTransactionInput, Prisma.InvoiceUpdateWithoutTransactionInput>, Prisma.InvoiceUncheckedUpdateWithoutTransactionInput>
+}
+
 export type InvoiceCreateWithoutCompanyInput = {
   invoiceNumber: string
   date?: Date | string
@@ -770,6 +837,7 @@ export type InvoiceCreateWithoutCompanyInput = {
   job: Prisma.JobCreateNestedOneWithoutInvoicesInput
   customer: Prisma.CustomerCreateNestedOneWithoutInvoicesInput
   items?: Prisma.InvoiceItemCreateNestedManyWithoutInvoiceInput
+  transaction?: Prisma.TransactionCreateNestedOneWithoutInvoiceInput
 }
 
 export type InvoiceUncheckedCreateWithoutCompanyInput = {
@@ -786,6 +854,7 @@ export type InvoiceUncheckedCreateWithoutCompanyInput = {
   currencyCode?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  transactionId?: number | null
   items?: Prisma.InvoiceItemUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
@@ -833,6 +902,7 @@ export type InvoiceScalarWhereInput = {
   companyId?: Prisma.IntFilter<"Invoice"> | number
   createdAt?: Prisma.DateTimeFilter<"Invoice"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Invoice"> | Date | string
+  transactionId?: Prisma.IntNullableFilter<"Invoice"> | number | null
 }
 
 export type InvoiceCreateWithoutCustomerInput = {
@@ -849,6 +919,7 @@ export type InvoiceCreateWithoutCustomerInput = {
   job: Prisma.JobCreateNestedOneWithoutInvoicesInput
   company: Prisma.CompanyCreateNestedOneWithoutInvoicesInput
   items?: Prisma.InvoiceItemCreateNestedManyWithoutInvoiceInput
+  transaction?: Prisma.TransactionCreateNestedOneWithoutInvoiceInput
 }
 
 export type InvoiceUncheckedCreateWithoutCustomerInput = {
@@ -865,6 +936,7 @@ export type InvoiceUncheckedCreateWithoutCustomerInput = {
   companyId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  transactionId?: number | null
   items?: Prisma.InvoiceItemUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
@@ -908,6 +980,7 @@ export type InvoiceCreateWithoutJobInput = {
   customer: Prisma.CustomerCreateNestedOneWithoutInvoicesInput
   company: Prisma.CompanyCreateNestedOneWithoutInvoicesInput
   items?: Prisma.InvoiceItemCreateNestedManyWithoutInvoiceInput
+  transaction?: Prisma.TransactionCreateNestedOneWithoutInvoiceInput
 }
 
 export type InvoiceUncheckedCreateWithoutJobInput = {
@@ -924,6 +997,7 @@ export type InvoiceUncheckedCreateWithoutJobInput = {
   companyId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  transactionId?: number | null
   items?: Prisma.InvoiceItemUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
@@ -967,6 +1041,7 @@ export type InvoiceCreateWithoutItemsInput = {
   job: Prisma.JobCreateNestedOneWithoutInvoicesInput
   customer: Prisma.CustomerCreateNestedOneWithoutInvoicesInput
   company: Prisma.CompanyCreateNestedOneWithoutInvoicesInput
+  transaction?: Prisma.TransactionCreateNestedOneWithoutInvoiceInput
 }
 
 export type InvoiceUncheckedCreateWithoutItemsInput = {
@@ -984,6 +1059,7 @@ export type InvoiceUncheckedCreateWithoutItemsInput = {
   companyId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  transactionId?: number | null
 }
 
 export type InvoiceCreateOrConnectWithoutItemsInput = {
@@ -1016,6 +1092,7 @@ export type InvoiceUpdateWithoutItemsInput = {
   job?: Prisma.JobUpdateOneRequiredWithoutInvoicesNestedInput
   customer?: Prisma.CustomerUpdateOneRequiredWithoutInvoicesNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutInvoicesNestedInput
+  transaction?: Prisma.TransactionUpdateOneWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateWithoutItemsInput = {
@@ -1033,6 +1110,93 @@ export type InvoiceUncheckedUpdateWithoutItemsInput = {
   companyId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type InvoiceCreateWithoutTransactionInput = {
+  invoiceNumber: string
+  date?: Date | string
+  type?: $Enums.InvoiceType
+  status?: $Enums.InvoiceStatus
+  totalAmount?: number
+  taxAmount?: number
+  grandTotal?: number
+  currencyCode?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  job: Prisma.JobCreateNestedOneWithoutInvoicesInput
+  customer: Prisma.CustomerCreateNestedOneWithoutInvoicesInput
+  company: Prisma.CompanyCreateNestedOneWithoutInvoicesInput
+  items?: Prisma.InvoiceItemCreateNestedManyWithoutInvoiceInput
+}
+
+export type InvoiceUncheckedCreateWithoutTransactionInput = {
+  id?: number
+  invoiceNumber: string
+  date?: Date | string
+  jobId: number
+  customerId: number
+  type?: $Enums.InvoiceType
+  status?: $Enums.InvoiceStatus
+  totalAmount?: number
+  taxAmount?: number
+  grandTotal?: number
+  currencyCode?: string
+  companyId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.InvoiceItemUncheckedCreateNestedManyWithoutInvoiceInput
+}
+
+export type InvoiceCreateOrConnectWithoutTransactionInput = {
+  where: Prisma.InvoiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.InvoiceCreateWithoutTransactionInput, Prisma.InvoiceUncheckedCreateWithoutTransactionInput>
+}
+
+export type InvoiceUpsertWithoutTransactionInput = {
+  update: Prisma.XOR<Prisma.InvoiceUpdateWithoutTransactionInput, Prisma.InvoiceUncheckedUpdateWithoutTransactionInput>
+  create: Prisma.XOR<Prisma.InvoiceCreateWithoutTransactionInput, Prisma.InvoiceUncheckedCreateWithoutTransactionInput>
+  where?: Prisma.InvoiceWhereInput
+}
+
+export type InvoiceUpdateToOneWithWhereWithoutTransactionInput = {
+  where?: Prisma.InvoiceWhereInput
+  data: Prisma.XOR<Prisma.InvoiceUpdateWithoutTransactionInput, Prisma.InvoiceUncheckedUpdateWithoutTransactionInput>
+}
+
+export type InvoiceUpdateWithoutTransactionInput = {
+  invoiceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  type?: Prisma.EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
+  status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  grandTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  job?: Prisma.JobUpdateOneRequiredWithoutInvoicesNestedInput
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutInvoicesNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutInvoicesNestedInput
+  items?: Prisma.InvoiceItemUpdateManyWithoutInvoiceNestedInput
+}
+
+export type InvoiceUncheckedUpdateWithoutTransactionInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  invoiceNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobId?: Prisma.IntFieldUpdateOperationsInput | number
+  customerId?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
+  status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  grandTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.InvoiceItemUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
 export type InvoiceCreateManyCompanyInput = {
@@ -1049,6 +1213,7 @@ export type InvoiceCreateManyCompanyInput = {
   currencyCode?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  transactionId?: number | null
 }
 
 export type InvoiceUpdateWithoutCompanyInput = {
@@ -1065,6 +1230,7 @@ export type InvoiceUpdateWithoutCompanyInput = {
   job?: Prisma.JobUpdateOneRequiredWithoutInvoicesNestedInput
   customer?: Prisma.CustomerUpdateOneRequiredWithoutInvoicesNestedInput
   items?: Prisma.InvoiceItemUpdateManyWithoutInvoiceNestedInput
+  transaction?: Prisma.TransactionUpdateOneWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateWithoutCompanyInput = {
@@ -1081,6 +1247,7 @@ export type InvoiceUncheckedUpdateWithoutCompanyInput = {
   currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   items?: Prisma.InvoiceItemUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
@@ -1098,6 +1265,7 @@ export type InvoiceUncheckedUpdateManyWithoutCompanyInput = {
   currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type InvoiceCreateManyCustomerInput = {
@@ -1114,6 +1282,7 @@ export type InvoiceCreateManyCustomerInput = {
   companyId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  transactionId?: number | null
 }
 
 export type InvoiceUpdateWithoutCustomerInput = {
@@ -1130,6 +1299,7 @@ export type InvoiceUpdateWithoutCustomerInput = {
   job?: Prisma.JobUpdateOneRequiredWithoutInvoicesNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutInvoicesNestedInput
   items?: Prisma.InvoiceItemUpdateManyWithoutInvoiceNestedInput
+  transaction?: Prisma.TransactionUpdateOneWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateWithoutCustomerInput = {
@@ -1146,6 +1316,7 @@ export type InvoiceUncheckedUpdateWithoutCustomerInput = {
   companyId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   items?: Prisma.InvoiceItemUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
@@ -1163,6 +1334,7 @@ export type InvoiceUncheckedUpdateManyWithoutCustomerInput = {
   companyId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type InvoiceCreateManyJobInput = {
@@ -1179,6 +1351,7 @@ export type InvoiceCreateManyJobInput = {
   companyId: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  transactionId?: number | null
 }
 
 export type InvoiceUpdateWithoutJobInput = {
@@ -1195,6 +1368,7 @@ export type InvoiceUpdateWithoutJobInput = {
   customer?: Prisma.CustomerUpdateOneRequiredWithoutInvoicesNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutInvoicesNestedInput
   items?: Prisma.InvoiceItemUpdateManyWithoutInvoiceNestedInput
+  transaction?: Prisma.TransactionUpdateOneWithoutInvoiceNestedInput
 }
 
 export type InvoiceUncheckedUpdateWithoutJobInput = {
@@ -1211,6 +1385,7 @@ export type InvoiceUncheckedUpdateWithoutJobInput = {
   companyId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   items?: Prisma.InvoiceItemUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
@@ -1228,6 +1403,7 @@ export type InvoiceUncheckedUpdateManyWithoutJobInput = {
   companyId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -1276,10 +1452,12 @@ export type InvoiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   companyId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  transactionId?: boolean
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   items?: boolean | Prisma.Invoice$itemsArgs<ExtArgs>
+  transaction?: boolean | Prisma.Invoice$transactionArgs<ExtArgs>
   _count?: boolean | Prisma.InvoiceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["invoice"]>
 
@@ -1298,9 +1476,11 @@ export type InvoiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   companyId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  transactionId?: boolean
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  transaction?: boolean | Prisma.Invoice$transactionArgs<ExtArgs>
 }, ExtArgs["result"]["invoice"]>
 
 export type InvoiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1318,9 +1498,11 @@ export type InvoiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   companyId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  transactionId?: boolean
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  transaction?: boolean | Prisma.Invoice$transactionArgs<ExtArgs>
 }, ExtArgs["result"]["invoice"]>
 
 export type InvoiceSelectScalar = {
@@ -1338,25 +1520,29 @@ export type InvoiceSelectScalar = {
   companyId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  transactionId?: boolean
 }
 
-export type InvoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "invoiceNumber" | "date" | "jobId" | "customerId" | "type" | "status" | "totalAmount" | "taxAmount" | "grandTotal" | "currencyCode" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["invoice"]>
+export type InvoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "invoiceNumber" | "date" | "jobId" | "customerId" | "type" | "status" | "totalAmount" | "taxAmount" | "grandTotal" | "currencyCode" | "companyId" | "createdAt" | "updatedAt" | "transactionId", ExtArgs["result"]["invoice"]>
 export type InvoiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   items?: boolean | Prisma.Invoice$itemsArgs<ExtArgs>
+  transaction?: boolean | Prisma.Invoice$transactionArgs<ExtArgs>
   _count?: boolean | Prisma.InvoiceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type InvoiceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  transaction?: boolean | Prisma.Invoice$transactionArgs<ExtArgs>
 }
 export type InvoiceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  transaction?: boolean | Prisma.Invoice$transactionArgs<ExtArgs>
 }
 
 export type $InvoicePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1366,6 +1552,7 @@ export type $InvoicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     customer: Prisma.$CustomerPayload<ExtArgs>
     company: Prisma.$CompanyPayload<ExtArgs>
     items: Prisma.$InvoiceItemPayload<ExtArgs>[]
+    transaction: Prisma.$TransactionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1382,6 +1569,7 @@ export type $InvoicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     companyId: number
     createdAt: Date
     updatedAt: Date
+    transactionId: number | null
   }, ExtArgs["result"]["invoice"]>
   composites: {}
 }
@@ -1780,6 +1968,7 @@ export interface Prisma__InvoiceClient<T, Null = never, ExtArgs extends runtime.
   customer<T extends Prisma.CustomerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CustomerDefaultArgs<ExtArgs>>): Prisma.Prisma__CustomerClient<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.Invoice$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Invoice$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transaction<T extends Prisma.Invoice$transactionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Invoice$transactionArgs<ExtArgs>>): Prisma.Prisma__TransactionClient<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1823,6 +2012,7 @@ export interface InvoiceFieldRefs {
   readonly companyId: Prisma.FieldRef<"Invoice", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Invoice", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Invoice", 'DateTime'>
+  readonly transactionId: Prisma.FieldRef<"Invoice", 'Int'>
 }
     
 
@@ -2240,6 +2430,25 @@ export type Invoice$itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.InvoiceItemScalarFieldEnum | Prisma.InvoiceItemScalarFieldEnum[]
+}
+
+/**
+ * Invoice.transaction
+ */
+export type Invoice$transactionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Transaction
+   */
+  select?: Prisma.TransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Transaction
+   */
+  omit?: Prisma.TransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransactionInclude<ExtArgs> | null
+  where?: Prisma.TransactionWhereInput
 }
 
 /**
