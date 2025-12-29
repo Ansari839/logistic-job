@@ -24,6 +24,8 @@ interface NavItem {
 const navItems: NavItem[] = [
     { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Jobs', href: '/jobs', icon: Package, roles: ['ADMIN', 'OPERATOR', 'SALES'] },
+    { name: 'Invoices', href: '/invoices', icon: FileText, roles: ['ADMIN', 'ACCOUNTS', 'SALES'] },
+    { name: 'Vendors', href: '/vendors', icon: Users, roles: ['ADMIN', 'OPERATOR'] },
     { name: 'Reports', href: '/reports', icon: BarChart2, roles: ['ADMIN', 'SALES'] },
     { name: 'Ledgers', href: '/ledgers', icon: BookOpen, roles: ['ADMIN', 'ACCOUNTS'] },
     { name: 'Payments', href: '/payments', icon: CreditCard, roles: ['ADMIN', 'ACCOUNTS'] },
@@ -88,8 +90,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             href={item.href}
                             onClick={() => setIsSidebarOpen(false)}
                             className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${pathname.startsWith(item.href.split('/')[1] === 'settings' ? '/settings' : item.href)
-                                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                                    : theme === 'dark' ? 'text-slate-400 hover:bg-white/5 hover:text-white' : 'text-slate-500 hover:bg-slate-100'
+                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
+                                : theme === 'dark' ? 'text-slate-400 hover:bg-white/5 hover:text-white' : 'text-slate-500 hover:bg-slate-100'
                                 }`}
                         >
                             <item.icon size={20} />
