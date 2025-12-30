@@ -94,7 +94,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             key={item.href}
                             href={item.href}
                             onClick={() => setIsSidebarOpen(false)}
-                            className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${pathname.startsWith(item.href.split('/')[1] === 'settings' ? '/settings' : item.href)
+                            className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href))
                                 ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
                                 : theme === 'dark' ? 'text-slate-400 hover:bg-white/5 hover:text-white' : 'text-slate-500 hover:bg-slate-100'
                                 }`}

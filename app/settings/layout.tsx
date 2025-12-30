@@ -16,6 +16,12 @@ const settingsNav = [
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
+    const isFullWidthPage = pathname.startsWith('/settings/audit-logs') || pathname.startsWith('/settings/financial-periods');
+
+    if (isFullWidthPage) {
+        return <DashboardLayout>{children}</DashboardLayout>;
+    }
+
     return (
         <DashboardLayout>
             <div className="flex flex-col lg:flex-row gap-8">
@@ -26,8 +32,8 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                             key={item.href}
                             href={item.href}
                             className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${pathname === item.href
-                                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                                    : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
+                                : 'text-slate-400 hover:bg-white/5 hover:text-white'
                                 }`}
                         >
                             <item.icon size={20} />
