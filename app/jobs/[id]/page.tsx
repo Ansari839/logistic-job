@@ -55,6 +55,7 @@ interface Job {
     jobDate?: string;
     gdDate?: string;
     formEDate?: string;
+    status: 'DRAFT' | 'IN_PROGRESS' | 'CLOSED';
 }
 
 export default function JobDetailsPage({ params }: { params: Promise<{ id: string }> }) {
@@ -65,8 +66,8 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'overview' | 'expenses' | 'invoices'>('overview');
 
-    // Expense Modal State
     const [showExpenseModal, setShowExpenseModal] = useState(false);
+    const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
     const [vendors, setVendors] = useState<{ id: number; name: string }[]>([]);
     const [expenseForm, setExpenseForm] = useState({
         description: '',
@@ -134,18 +135,39 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
     const handleAddExpense = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await fetch(`/api/jobs/${id}/expenses`, {
-                method: 'POST',
+            const url = `/api/jobs/${id}/expenses`;
+            const method = editingExpense ? 'PATCH' : 'POST';
+            const payload = editingExpense ? { ...expenseForm, id: editingExpense.id } : expenseForm;
+
+            const res = await fetch(url, {
+                method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(expenseForm),
+                body: JSON.stringify(payload),
             });
             if (res.ok) {
                 setShowExpenseModal(false);
+                setEditingExpense(null);
                 setExpenseForm({ description: '', vendorId: '', costPrice: '', sellingPrice: '', currencyCode: 'PKR' });
                 fetchJob();
             }
         } catch (err) {
             console.error('Book expense failed');
+        }
+    };
+
+    const handleDeleteExpense = async (expenseId: number) => {
+        if (!confirm('Are you sure you want to delete this expense?')) return;
+        try {
+            const res = await fetch(`/api/jobs/${id}/expenses?expenseId=${expenseId}`, {
+                method: 'DELETE'
+            });
+            if (res.ok) {
+                fetchJob();
+            } else {
+                alert('Failed to delete expense');
+            }
+        } catch (err) {
+            console.error('Delete expense failed');
         }
     };
 
@@ -313,8 +335,8 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                             <div className="hidden sm:block text-center sm:text-left">
                                 <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Status</p>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
-                                    <p className="text-sm font-black text-white uppercase tracking-widest">Active</p>
+                                    <div className={`w-3 h-3 rounded-full animate-pulse ${job.status === 'CLOSED' ? 'bg-slate-500' : 'bg-emerald-500'}`} />
+                                    <p className="text-sm font-black text-white uppercase tracking-widest">{job.status}</p>
                                 </div>
                             </div>
                         </div>
@@ -386,7 +408,11 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                             <div className="p-8 border-b border-slate-800/60 flex items-center justify-between">
                                 <h3 className="text-lg font-black text-white uppercase tracking-tight">Expense Tracking</h3>
                                 <button
-                                    onClick={() => setShowExpenseModal(true)}
+                                    onClick={() => {
+                                        setEditingExpense(null);
+                                        setExpenseForm({ description: '', vendorId: '', costPrice: '', sellingPrice: '', currencyCode: 'PKR' });
+                                        setShowExpenseModal(true);
+                                    }}
                                     className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-2xl font-black transition-all flex items-center gap-2 text-xs uppercase tracking-widest shadow-lg shadow-emerald-600/20"
                                 >
                                     <Plus size={16} />
@@ -402,6 +428,7 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                             <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Cost</th>
                                             <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Selling</th>
                                             <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Profit</th>
+                                            <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-800/60">
@@ -421,6 +448,32 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                                     <td className="px-8 py-5 text-right font-mono font-bold text-emerald-400 text-sm">
                                                         {(exp.sellingPrice - exp.costPrice).toLocaleString()}
                                                     </td>
+                                                    <td className="px-8 py-5 text-right">
+                                                        <div className="flex justify-end gap-2">
+                                                            <button
+                                                                onClick={() => {
+                                                                    setEditingExpense(exp);
+                                                                    setExpenseForm({
+                                                                        description: exp.description,
+                                                                        vendorId: exp.vendor?.id?.toString() || '',
+                                                                        costPrice: exp.costPrice.toString(),
+                                                                        sellingPrice: exp.sellingPrice.toString(),
+                                                                        currencyCode: exp.currencyCode
+                                                                    });
+                                                                    setShowExpenseModal(true);
+                                                                }}
+                                                                className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-blue-400 transition-colors"
+                                                            >
+                                                                <Edit3 size={14} />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleDeleteExpense(exp.id)}
+                                                                className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-red-400 transition-colors"
+                                                            >
+                                                                <Trash2 size={14} />
+                                                            </button>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             ))
                                         )}
@@ -432,6 +485,7 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                                 <td className="px-8 py-6 text-right font-mono text-slate-400 font-bold">{totalCost.toLocaleString()}</td>
                                                 <td className="px-8 py-6 text-right font-mono text-white font-black">{totalSelling.toLocaleString()}</td>
                                                 <td className="px-8 py-6 text-right font-mono text-emerald-400 font-black">{profit.toLocaleString()}</td>
+                                                <td className="px-8 py-6"></td>
                                             </tr>
                                         </tfoot>
                                     )}
@@ -445,7 +499,24 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                             <div className="flex justify-end gap-3">
                                 <button
                                     onClick={() => {
-                                        setInvoiceForm(prev => ({ ...prev, invoiceNumber: `INV-${job?.jobNumber?.split('-')[2] || '001'}` }));
+                                        const jobItems = (job?.expenses || []).map(exp => ({
+                                            description: exp.description,
+                                            quantity: 1,
+                                            rate: exp.sellingPrice,
+                                            amount: exp.sellingPrice,
+                                            taxPercentage: 0,
+                                            taxAmount: 0,
+                                            total: exp.sellingPrice,
+                                            productId: null
+                                        }));
+
+                                        setInvoiceForm({
+                                            invoiceNumber: `INV-${job?.jobNumber?.split('-')[2] || '001'}`,
+                                            type: 'MASTER',
+                                            currencyCode: 'PKR',
+                                            taxAmount: 0,
+                                            items: jobItems
+                                        });
                                         setShowInvoiceModal(true);
                                     }}
                                     className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-3xl font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-blue-600/20"
@@ -503,8 +574,8 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                         <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={() => setShowExpenseModal(false)} />
                         <div className="relative bg-slate-900 border border-slate-800 w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
                             <div className="p-8 border-b border-white/5">
-                                <h3 className="text-2xl font-black text-white tracking-tighter">Book New Expense</h3>
-                                <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Operational Cost Entry</p>
+                                <h3 className="text-2xl font-black text-white tracking-tighter">{editingExpense ? 'Edit Expense' : 'Book New Expense'}</h3>
+                                <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">{editingExpense ? 'Update Operational Cost' : 'Operational Cost Entry'}</p>
                             </div>
                             <form onSubmit={handleAddExpense} className="p-8 space-y-6">
                                 <div className="space-y-4">
@@ -564,7 +635,7 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                         type="submit"
                                         className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-black py-4 rounded-2xl text-xs uppercase tracking-widest shadow-lg shadow-emerald-600/20 transition-all active:scale-95"
                                     >
-                                        Record Expense
+                                        {editingExpense ? 'Update Expense' : 'Record Expense'}
                                     </button>
                                 </div>
                             </form>

@@ -1,25 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { jwtVerify } from 'jose';
-import { cookies } from 'next/headers';
-
-const JWT_SECRET = new TextEncoder().encode(
-    process.env.JWT_SECRET || 'your-default-secret-key-change-it'
-);
-
-async function getAuthUser() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('auth_token')?.value;
-
-    if (!token) return null;
-
-    try {
-        const { payload } = await jwtVerify(token, JWT_SECRET);
-        return payload as any;
-    } catch (error) {
-        return null;
-    }
-}
+import { getAuthUser } from '@/lib/auth';
 
 export async function GET(
     request: Request,
@@ -34,7 +15,7 @@ export async function GET(
         const expenses = await prisma.expense.findMany({
             where: {
                 jobId: parseInt(id),
-                companyId: user.companyId
+                companyId: user.companyId as number
             },
             include: {
                 vendor: { select: { name: true, code: true } }
@@ -54,7 +35,7 @@ export async function POST(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const user = await getAuthUser();
-    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!user || !user.companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { id } = await params;
 
@@ -66,52 +47,80 @@ export async function POST(
             return NextResponse.json({ error: 'Description is required' }, { status: 400 });
         }
 
-        const expense = await prisma.$transaction(async (tx) => {
-            const e = await tx.expense.create({
-                data: {
-                    jobId: parseInt(id),
-                    companyId: user.companyId,
-                    vendorId: vendorId ? parseInt(vendorId) : null,
-                    description,
-                    costPrice: costPrice ? parseFloat(costPrice) : 0,
-                    sellingPrice: sellingPrice ? parseFloat(sellingPrice) : 0,
-                    currencyCode: currencyCode || 'PKR',
-                    exchangeRate: exchangeRate ? parseFloat(exchangeRate) : 1,
-                }
-            });
-
-            if (e.costPrice > 0) {
-                // Post to Accounting
-                const costAccount = await tx.account.findUnique({
-                    where: { companyId_code: { companyId: user.companyId, code: '5000' } }
-                });
-                const payableAccount = await tx.account.findUnique({
-                    where: { companyId_code: { companyId: user.companyId, code: '2110' } }
-                });
-
-                if (costAccount && payableAccount) {
-                    await tx.transaction.create({
-                        data: {
-                            reference: `EXP-${e.id}`,
-                            description: `Expense for Job ${id}: ${description}`,
-                            type: 'JOURNAL',
-                            companyId: user.companyId,
-                            entries: {
-                                create: [
-                                    { accountId: costAccount.id, debit: e.costPrice, description: `Job ${id} Expense` },
-                                    { accountId: payableAccount.id, credit: e.costPrice, description: `Payable to Vendor ${vendorId}` }
-                                ]
-                            }
-                        }
-                    });
-                }
+        const expense = await prisma.expense.create({
+            data: {
+                jobId: parseInt(id),
+                companyId: user.companyId as number,
+                vendorId: vendorId ? parseInt(vendorId) : null,
+                description,
+                costPrice: costPrice ? parseFloat(costPrice) : 0,
+                sellingPrice: sellingPrice ? parseFloat(sellingPrice) : 0,
+                currencyCode: currencyCode || 'PKR',
+                exchangeRate: exchangeRate ? parseFloat(exchangeRate) : 1,
             }
-            return e;
         });
 
         return NextResponse.json({ expense });
     } catch (error) {
         console.error('Create expense error:', error);
         return NextResponse.json({ error: 'Failed to create expense' }, { status: 500 });
+    }
+}
+
+export async function PATCH(
+    request: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    const user = await getAuthUser();
+    if (!user || !user.companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const { id: jobId } = await params;
+
+    try {
+        const body = await request.json();
+        const { id, description, costPrice, sellingPrice, vendorId, currencyCode, exchangeRate } = body;
+
+        if (!id) return NextResponse.json({ error: 'Expense ID is required' }, { status: 400 });
+
+        const expense = await prisma.expense.update({
+            where: { id: parseInt(id), companyId: user.companyId as number },
+            data: {
+                description,
+                vendorId: vendorId ? parseInt(vendorId) : null,
+                costPrice: costPrice ? parseFloat(costPrice) : 0,
+                sellingPrice: sellingPrice ? parseFloat(sellingPrice) : 0,
+                currencyCode: currencyCode || 'PKR',
+                exchangeRate: exchangeRate ? parseFloat(exchangeRate) : 1,
+            }
+        });
+
+        return NextResponse.json({ expense });
+    } catch (error) {
+        console.error('Update expense error:', error);
+        return NextResponse.json({ error: 'Failed to update expense' }, { status: 500 });
+    }
+}
+
+export async function DELETE(
+    request: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    const user = await getAuthUser();
+    if (!user || !user.companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const { searchParams } = new URL(request.url);
+    const expenseId = searchParams.get('expenseId');
+
+    if (!expenseId) return NextResponse.json({ error: 'Expense ID is required' }, { status: 400 });
+
+    try {
+        await prisma.expense.delete({
+            where: { id: parseInt(expenseId), companyId: user.companyId as number }
+        });
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error('Delete expense error:', error);
+        return NextResponse.json({ error: 'Failed to delete expense' }, { status: 500 });
     }
 }

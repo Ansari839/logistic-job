@@ -133,7 +133,7 @@ export async function PATCH(request: Request) {
                     data: { isApproved: true, approvedById: user.id }
                 });
 
-                // Post to Accounting on Approval
+                // 1. Post REVENUE to Accounting on Approval
                 const receivableAccount = await tx.account.findUnique({
                     where: { companyId_code: { companyId: user.companyId as number, code: '1130' } }
                 });
@@ -162,10 +162,43 @@ export async function PATCH(request: Request) {
                     });
                 }
 
-                // ALSO LOCK THE JOB
+                // 2. Post JOB EXPENSES to Accounting on Approval
+                const jobExpenses = await tx.expense.findMany({
+                    where: { jobId: inv.jobId, companyId: user.companyId as number }
+                });
+
+                const costAccount = await tx.account.findUnique({
+                    where: { companyId_code: { companyId: user.companyId as number, code: '5000' } }
+                });
+                const payableAccount = await tx.account.findUnique({
+                    where: { companyId_code: { companyId: user.companyId as number, code: '2110' } }
+                });
+
+                if (costAccount && payableAccount) {
+                    for (const exp of jobExpenses) {
+                        if (exp.costPrice > 0) {
+                            await tx.transaction.create({
+                                data: {
+                                    reference: `EXP-${exp.id}`,
+                                    description: `Job ${inv.jobId} Expense: ${exp.description}`,
+                                    type: 'JOURNAL',
+                                    companyId: user.companyId as number,
+                                    entries: {
+                                        create: [
+                                            { accountId: costAccount.id, debit: exp.costPrice, description: `Expense for Job ${inv.jobId}` },
+                                            { accountId: payableAccount.id, credit: exp.costPrice, description: `Payable for ${exp.description}` }
+                                        ]
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+
+                // 3. LOCK THE JOB (Set status to CLOSED)
                 await tx.job.update({
                     where: { id: inv.jobId },
-                    data: { status: 'CLOSED' } // Or keep IN_PROGRESS? Plan says "Job Locking". Let's set to CLOSED or just lock edit.
+                    data: { status: 'CLOSED' }
                 });
 
                 return inv;
