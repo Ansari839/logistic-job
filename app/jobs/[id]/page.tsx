@@ -25,6 +25,8 @@ interface Invoice {
     invoiceNumber: string;
     date: string;
     status: string;
+    isApproved: boolean;
+    isLocked: boolean;
     grandTotal: number;
     currencyCode: string;
 }
@@ -43,7 +45,7 @@ interface Job {
     hawbBl: string | null;
     branches: { name: string } | null;
     expenses: Expense[];
-    invoices: Invoice[];
+    invoice: Invoice | null;
     place?: string;
     shipperRef?: string;
     formE?: string;
@@ -79,9 +81,11 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
 
     // Invoice Modal State
     const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+    const [editingInvoiceId, setEditingInvoiceId] = useState<number | null>(null);
     const [inventory, setInventory] = useState<any[]>([]);
     const [invoiceForm, setInvoiceForm] = useState({
         invoiceNumber: '',
+        status: 'DRAFT',
         type: 'MASTER',
         currencyCode: 'PKR',
         taxAmount: 0,
@@ -176,24 +180,61 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
         if (!job) return;
 
         try {
+            const method = editingInvoiceId ? 'PATCH' : 'POST';
+            const body = {
+                ...invoiceForm,
+                jobId: id,
+                customerId: job.customerId,
+                totalAmount: invoiceForm.items.reduce((sum, i) => sum + Number(i.amount), 0),
+                grandTotal: invoiceForm.items.reduce((sum, i) => sum + Number(i.total), 0) + Number(invoiceForm.taxAmount),
+            };
+
+            if (editingInvoiceId) {
+                (body as any).id = editingInvoiceId;
+                (body as any).action = 'UPDATE';
+            }
+
             const res = await fetch(`/api/invoices`, {
-                method: 'POST',
+                method: editingInvoiceId ? 'PATCH' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...invoiceForm,
-                    jobId: id,
-                    customerId: job.customerId,
-                    totalAmount: invoiceForm.items.reduce((sum, i) => sum + Number(i.amount), 0),
-                    grandTotal: invoiceForm.items.reduce((sum, i) => sum + Number(i.total), 0) + Number(invoiceForm.taxAmount),
-                }),
+                body: JSON.stringify(body),
             });
             if (res.ok) {
                 const data = await res.json();
                 setShowInvoiceModal(false);
-                router.push(`/invoices/${data.invoice.id}`);
+                setEditingInvoiceId(null);
+                if (!editingInvoiceId) router.push(`/invoices/${data.invoice.id}`);
+                else fetchJob();
+            } else {
+                const data = await res.json().catch(() => ({ error: 'Server returned an invalid response' }));
+                alert(data.error || 'Failed to process invoice');
             }
         } catch (err) {
-            console.error('Generate invoice failed');
+            console.error('Invoice action failed:', err);
+            alert('A network error occurred while processing the invoice.');
+        }
+    };
+
+    const handleInvoiceAction = async (invoiceId: number, action: string) => {
+        if (action === 'DELETE' && !confirm('Are you sure you want to delete this invoice?')) return;
+        if (action === 'REVERT_TO_DRAFT' && !confirm('WARNING: This will UNLOCK the job and DELETE all associated ledger entries. Proceed?')) return;
+
+        try {
+            const res = await fetch(`/api/invoices`, {
+                method: action === 'DELETE' ? 'DELETE' : 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: invoiceId, action })
+            });
+
+            if (res.ok) {
+                fetchJob();
+            } else {
+                const data = await res.json().catch(() => ({ error: 'Server returned an invalid response' }));
+                alert(data.error || 'Invoice action failed');
+            }
+        } catch (err) {
+            console.error('Invoice action failed:', err);
+            alert('A network error occurred. Please check your connection.');
         }
     };
 
@@ -250,6 +291,8 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
         </DashboardLayout>
     );
 
+    const isClosed = job.status === 'CLOSED';
+
     const totalCost = job.expenses.reduce((sum, e) => sum + e.costPrice, 0);
     const totalSelling = job.expenses.reduce((sum, e) => sum + e.sellingPrice, 0);
     const profit = totalSelling - totalCost;
@@ -257,7 +300,19 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
 
     return (
         <DashboardLayout>
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto space-y-8 pb-20">
+                {/* Locking Banner */}
+                {isClosed && (
+                    <div className="bg-amber-500/10 border border-amber-500/20 p-4 rounded-[2rem] flex items-center justify-between animate-in slide-in-from-top duration-500">
+                        <div className="flex items-center gap-4 px-4">
+                            <Clock className="text-amber-400" size={24} />
+                            <div>
+                                <p className="text-amber-400 font-black uppercase tracking-widest text-xs">Job is Locked (Status: CLOSED)</p>
+                                <p className="text-slate-400 text-sm font-medium">Approved invoice has locked this job. Revert invoice to draft to make changes.</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {/* Navigation Header */}
                 <div className="flex items-center justify-between mb-8">
                     <button
@@ -288,12 +343,20 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                         <button className="p-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all">
                             <Printer size={18} />
                         </button>
-                        <button className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-lg shadow-blue-600/20"
-                            onClick={() => router.push(`/jobs/${id}/edit`)}
-                        >
-                            <Edit3 size={18} />
-                            Edit Job
-                        </button>
+                        <div className="flex gap-4">
+                            {!isClosed && (
+                                <button
+                                    onClick={() => router.push(`/jobs/${id}/edit`)}
+                                    className="bg-slate-900 border border-slate-800 text-slate-400 p-4 rounded-2xl hover:text-white transition-all shadow-xl"
+                                >
+                                    <Edit3 size={20} />
+                                </button>
+                            )}
+                            <button className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-[2rem] font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-blue-600/20">
+                                <Share2 size={20} />
+                                Export
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -399,6 +462,34 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                     <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">G.D Date</p><p className="text-white font-bold">{job.gdDate ? new Date(job.gdDate).toLocaleDateString() : '-'}</p></div>
                                     <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Form E Date</p><p className="text-white font-bold">{job.formEDate ? new Date(job.formEDate).toLocaleDateString() : '-'}</p></div>
                                     <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Sales Person</p><p className="text-white font-bold">{job.salesPerson || '-'}</p></div>
+                                    <div className="flex justify-between items-center bg-slate-900/40 p-6 rounded-[2rem] border border-white/5">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center border border-orange-500/20 font-black">
+                                                $
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Expenses</p>
+                                                <button
+                                                    onClick={() => setActiveTab('expenses')}
+                                                    className="text-lg font-black text-white hover:text-blue-400 transition-colors"
+                                                >
+                                                    {job.expenses.length} Entries
+                                                </button>
+                                            </div>
+                                        </div>
+                                        {!isClosed && (
+                                            <button
+                                                onClick={() => {
+                                                    setEditingExpense(null);
+                                                    setExpenseForm({ description: '', vendorId: '', costPrice: '', sellingPrice: '', currencyCode: 'PKR' });
+                                                    setShowExpenseModal(true);
+                                                }}
+                                                className="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white transition-all hover:scale-110 active:scale-95"
+                                            >
+                                                <Plus size={20} />
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -451,28 +542,37 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                                     </td>
                                                     <td className="px-8 py-5 text-right">
                                                         <div className="flex justify-end gap-2">
-                                                            <button
-                                                                onClick={() => {
-                                                                    setEditingExpense(exp);
-                                                                    setExpenseForm({
-                                                                        description: exp.description,
-                                                                        vendorId: exp.vendor?.id?.toString() || '',
-                                                                        costPrice: exp.costPrice.toString(),
-                                                                        sellingPrice: exp.sellingPrice.toString(),
-                                                                        currencyCode: exp.currencyCode
-                                                                    });
-                                                                    setShowExpenseModal(true);
-                                                                }}
-                                                                className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-blue-400 transition-colors"
-                                                            >
-                                                                <Edit3 size={14} />
-                                                            </button>
-                                                            <button
-                                                                onClick={() => handleDeleteExpense(exp.id)}
-                                                                className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-red-400 transition-colors"
-                                                            >
-                                                                <Trash2 size={14} />
-                                                            </button>
+                                                            {!isClosed && (
+                                                                <>
+                                                                    <button
+                                                                        onClick={() => {
+                                                                            setEditingExpense(exp);
+                                                                            setExpenseForm({
+                                                                                description: exp.description,
+                                                                                vendorId: exp.vendor?.id?.toString() || '',
+                                                                                costPrice: exp.costPrice.toString(),
+                                                                                sellingPrice: exp.sellingPrice.toString(),
+                                                                                currencyCode: exp.currencyCode
+                                                                            });
+                                                                            setShowExpenseModal(true);
+                                                                        }}
+                                                                        className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-blue-400 transition-colors"
+                                                                    >
+                                                                        <Edit3 size={14} />
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleDeleteExpense(exp.id)}
+                                                                        className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-red-400 transition-colors"
+                                                                    >
+                                                                        <Trash2 size={14} />
+                                                                    </button>
+                                                                </>
+                                                            )}
+                                                            {isClosed && (
+                                                                <span className="p-2 text-slate-600">
+                                                                    <Anchor size={14} />
+                                                                </span>
+                                                            )}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -497,52 +597,57 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
 
                     {activeTab === 'invoices' && (
                         <div className="space-y-6">
-                            <div className="flex justify-end gap-3">
-                                <button
-                                    onClick={() => {
-                                        const jobItems = (job?.expenses || []).map(exp => ({
-                                            description: exp.description,
-                                            quantity: 1,
-                                            rate: exp.sellingPrice,
-                                            amount: exp.sellingPrice,
-                                            taxPercentage: 0,
-                                            taxAmount: 0,
-                                            total: exp.sellingPrice,
-                                            productId: null
-                                        }));
+                            {!isClosed && !job.invoice && (
+                                <div className="flex justify-end gap-3">
+                                    <button
+                                        onClick={() => {
+                                            const jobItems = (job?.expenses || []).map(exp => ({
+                                                description: exp.description,
+                                                quantity: 1,
+                                                rate: exp.sellingPrice,
+                                                amount: exp.sellingPrice,
+                                                taxPercentage: 0,
+                                                taxAmount: 0,
+                                                total: exp.sellingPrice,
+                                                productId: null
+                                            }));
 
-                                        setInvoiceForm({
-                                            invoiceNumber: `INV-${job?.jobNumber?.split('-')[2] || '001'}`,
-                                            type: 'MASTER',
-                                            currencyCode: 'PKR',
-                                            taxAmount: 0,
-                                            items: jobItems
-                                        });
-                                        setShowInvoiceModal(true);
-                                    }}
-                                    className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-3xl font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-blue-600/20"
-                                >
-                                    <FileText size={20} />
-                                    Generate Invoice
-                                </button>
-                            </div>
+                                            setEditingInvoiceId(null);
+                                            setInvoiceForm({
+                                                invoiceNumber: `INV-${job?.jobNumber?.split('-')[2] || '001'}`,
+                                                status: 'DRAFT',
+                                                type: 'MASTER',
+                                                currencyCode: 'PKR',
+                                                taxAmount: 0,
+                                                items: jobItems
+                                            });
+                                            setShowInvoiceModal(true);
+                                        }}
+                                        className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-3xl font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-blue-600/20"
+                                    >
+                                        <FileText size={20} />
+                                        Generate Invoice
+                                    </button>
+                                </div>
+                            )}
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {job.invoices.length === 0 ? (
+                                {!job.invoice ? (
                                     <div className="col-span-full bg-slate-900/40 border border-slate-800/60 rounded-[2.5rem] p-20 text-center">
                                         <FileText className="w-12 h-12 text-slate-700 mx-auto mb-4" />
-                                        <h3 className="text-lg font-bold text-slate-300">No invoices generated</h3>
-                                        <p className="text-slate-500 text-sm mt-1">Generate your first invoice from job expenses.</p>
+                                        <h3 className="text-lg font-bold text-slate-300">No invoice generated</h3>
+                                        <p className="text-slate-500 text-sm mt-1">Generate an invoice from job expenses.</p>
                                     </div>
                                 ) : (
-                                    job.invoices.map((inv) => (
+                                    [job.invoice].map((inv) => (
                                         <div key={inv.id} className="bg-slate-900/40 border border-slate-800/60 rounded-[2rem] p-6 hover:border-blue-500/50 transition-all group">
                                             <div className="flex justify-between items-start mb-6">
                                                 <div>
                                                     <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Invoice Number</p>
                                                     <h4 className="text-xl font-black text-white">{inv.invoiceNumber}</h4>
                                                 </div>
-                                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20`}>
-                                                    {inv.status}
+                                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest ${inv.isApproved ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                                                    }`}>
+                                                    {inv.isApproved ? 'Approved' : 'Draft'}
                                                 </span>
                                             </div>
                                             <div className="space-y-4 mb-6">
@@ -555,13 +660,56 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                                     <span className="text-white font-black">{inv.grandTotal.toLocaleString()} {inv.currencyCode}</span>
                                                 </div>
                                             </div>
-                                            <div className="pt-4 border-t border-slate-800/60 flex gap-2">
+                                            <div className="pt-4 border-t border-slate-800/60 flex flex-wrap gap-2">
                                                 <button
                                                     onClick={() => router.push(`/invoices/${inv.id}`)}
                                                     className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-widest transition-all"
                                                 >
                                                     View
                                                 </button>
+                                                {!inv.isApproved && (
+                                                    <>
+                                                        <button
+                                                            onClick={() => {
+                                                                setEditingInvoiceId(inv.id);
+                                                                setInvoiceForm({
+                                                                    invoiceNumber: inv.invoiceNumber,
+                                                                    status: inv.status,
+                                                                    type: 'MASTER',
+                                                                    currencyCode: inv.currencyCode,
+                                                                    taxAmount: 0,
+                                                                    items: (inv as any).items || [] // Note: Need to ensure items are fetched
+                                                                });
+                                                                setShowInvoiceModal(true);
+                                                            }}
+                                                            className="p-3 rounded-xl bg-slate-800 text-slate-400 hover:text-blue-400 transition-all"
+                                                        >
+                                                            <Edit3 size={16} />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleInvoiceAction(inv.id, 'DELETE')}
+                                                            className="p-3 rounded-xl bg-slate-800 text-slate-400 hover:text-red-400 transition-all font-bold"
+                                                        >
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleInvoiceAction(inv.id, 'APPROVE')}
+                                                            className="p-3 rounded-xl bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/40 transition-all"
+                                                        >
+                                                            <CheckCircle2 size={16} />
+                                                        </button>
+                                                    </>
+                                                )}
+                                                {inv.isApproved && (
+                                                    <button
+                                                        onClick={() => handleInvoiceAction(inv.id, 'REVERT_TO_DRAFT')}
+                                                        className="p-3 rounded-xl bg-amber-600/10 text-amber-400 hover:bg-amber-600/20 transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
+                                                        title="Unlock Job / Revert to Draft"
+                                                    >
+                                                        <Loader2 size={14} className="animate-spin-slow" />
+                                                        Unlock
+                                                    </button>
+                                                )}
                                                 <button
                                                     onClick={() => router.push(`/invoices/${inv.id}`)}
                                                     className="p-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 transition-all font-bold"

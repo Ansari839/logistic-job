@@ -17,7 +17,8 @@ interface Job {
     customer: { name: string; code: string };
     commodity: string | null;
     vessel: string | null;
-    _count: { expenses: number; invoices: number };
+    invoice: { id: number } | null;
+    _count: { expenses: number };
 }
 
 export default function JobsPage() {
@@ -146,8 +147,8 @@ export default function JobsPage() {
                                             <p className="text-lg font-black text-white">{job._count.expenses}</p>
                                         </div>
                                         <div className="text-center px-4">
-                                            <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Invoices</p>
-                                            <p className="text-lg font-black text-white">{job._count.invoices}</p>
+                                            <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Invoice</p>
+                                            <p className="text-lg font-black text-white">{job.invoice ? 1 : 0}</p>
                                         </div>
                                         <div className="ml-4 p-3 rounded-2xl bg-white/5 opacity-0 group-hover:opacity-100 transition-all text-blue-400">
                                             <ArrowUpRight size={20} />

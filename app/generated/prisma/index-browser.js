@@ -300,7 +300,6 @@ exports.Prisma.InvoiceScalarFieldEnum = {
   companyId: 'companyId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt',
   transactionId: 'transactionId'
 };
 

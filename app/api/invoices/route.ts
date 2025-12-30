@@ -14,7 +14,6 @@ export async function GET(request: Request) {
         const invoices = await prisma.invoice.findMany({
             where: {
                 companyId: user.companyId as number,
-                deletedAt: null,
                 ...(jobId && { jobId: parseInt(jobId) }),
             },
             include: {
@@ -110,7 +109,7 @@ export async function POST(request: Request) {
     } catch (error: any) {
         console.error('Create invoice error:', error);
         if (error.code === 'P2002') {
-            return NextResponse.json({ error: 'Invoice Number already exists' }, { status: 400 });
+            return NextResponse.json({ error: 'An invoice already exists for this job or number.' }, { status: 400 });
         }
         return NextResponse.json({ error: 'Failed to create invoice' }, { status: 500 });
     }
@@ -121,19 +120,92 @@ export async function PATCH(request: Request) {
     if (!user || user.role !== 'ADMIN') return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     try {
-        const { id, action } = await request.json(); // action: 'APPROVE', 'LOCK', 'DELETE'
+        const { id, action, ...updateData } = await request.json();
 
-        const invoice = await prisma.invoice.findUnique({ where: { id: parseInt(id) } });
+        const invoice = await prisma.invoice.findUnique({
+            where: { id: parseInt(id) },
+            include: { items: true }
+        });
         if (!invoice) return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
 
+        if (action === 'UPDATE') {
+            if (invoice.isApproved) return NextResponse.json({ error: 'Cannot update approved invoice' }, { status: 400 });
+
+            const updated = await prisma.$transaction(async (tx) => {
+                await tx.invoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
+
+                return await tx.invoice.update({
+                    where: { id: invoice.id },
+                    data: {
+                        invoiceNumber: updateData.invoiceNumber,
+                        status: updateData.status,
+                        type: updateData.type,
+                        totalAmount: parseFloat(updateData.totalAmount) || 0,
+                        taxAmount: parseFloat(updateData.taxAmount) || 0,
+                        grandTotal: parseFloat(updateData.grandTotal) || 0,
+                        currencyCode: updateData.currencyCode,
+                        items: {
+                            create: updateData.items?.map((item: any) => ({
+                                description: item.description,
+                                quantity: parseFloat(item.quantity) || 1,
+                                rate: parseFloat(item.rate) || 0,
+                                amount: parseFloat(item.amount),
+                                taxPercentage: parseFloat(item.taxPercentage) || 0,
+                                taxAmount: parseFloat(item.taxAmount) || 0,
+                                total: parseFloat(item.total),
+                                productId: item.productId ? parseInt(item.productId) : null,
+                            })) || []
+                        }
+                    },
+                    include: { items: true }
+                });
+            });
+            return NextResponse.json({ invoice: updated });
+        }
+
+        if (action === 'REVERT_TO_DRAFT') {
+            if (!invoice.isApproved) return NextResponse.json({ error: 'Invoice is already in draft status' }, { status: 400 });
+
+            const updated = await prisma.$transaction(async (tx) => {
+                if (invoice.transactionId) {
+                    await tx.transaction.delete({ where: { id: invoice.transactionId } });
+                }
+
+                const expenses = await tx.expense.findMany({ where: { jobId: invoice.jobId } });
+                const expRefs = expenses.map(e => `EXP-${e.id}`);
+                await tx.transaction.deleteMany({
+                    where: {
+                        companyId: user.companyId as number,
+                        reference: { in: expRefs }
+                    }
+                });
+
+                const inv = await tx.invoice.update({
+                    where: { id: invoice.id },
+                    data: { isApproved: false, approvedById: null, transactionId: null }
+                });
+
+                await tx.job.update({
+                    where: { id: invoice.jobId },
+                    data: { status: 'IN_PROGRESS' }
+                });
+
+                return inv;
+            });
+
+            await logAction({ user, action: 'REVERT_TO_DRAFT', module: 'INVOICE', entityId: invoice.id });
+            return NextResponse.json({ invoice: updated });
+        }
+
         if (action === 'APPROVE') {
+            if (invoice.isApproved) return NextResponse.json({ error: 'Invoice is already approved' }, { status: 400 });
+
             const updated = await prisma.$transaction(async (tx) => {
                 const inv = await tx.invoice.update({
                     where: { id: parseInt(id) },
                     data: { isApproved: true, approvedById: user.id }
                 });
 
-                // 1. Post REVENUE to Accounting on Approval
                 const receivableAccount = await tx.account.findUnique({
                     where: { companyId_code: { companyId: user.companyId as number, code: '1130' } }
                 });
@@ -162,7 +234,6 @@ export async function PATCH(request: Request) {
                     });
                 }
 
-                // 2. Post JOB EXPENSES to Accounting on Approval
                 const jobExpenses = await tx.expense.findMany({
                     where: { jobId: inv.jobId, companyId: user.companyId as number }
                 });
@@ -195,7 +266,6 @@ export async function PATCH(request: Request) {
                     }
                 }
 
-                // 3. LOCK THE JOB (Set status to CLOSED)
                 await tx.job.update({
                     where: { id: inv.jobId },
                     data: { status: 'CLOSED' }
@@ -218,18 +288,45 @@ export async function PATCH(request: Request) {
         }
 
         if (action === 'DELETE') {
+            if (invoice.isApproved) return NextResponse.json({ error: 'Approved invoice cannot be deleted' }, { status: 400 });
             if (invoice.isLocked) return NextResponse.json({ error: 'Locked document cannot be deleted' }, { status: 400 });
-            const updated = await prisma.invoice.update({
-                where: { id: invoice.id },
-                data: { deletedAt: new Date() }
-            });
+
+            await prisma.invoice.delete({ where: { id: invoice.id } });
             await logAction({ user, action: 'DELETE', module: 'INVOICE', entityId: invoice.id });
             return NextResponse.json({ success: true });
         }
 
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
-    } catch (error) {
-        console.error('Invoice action error:', error);
+    } catch (error: any) {
+        console.error('Invoice action error detail:', JSON.stringify(error, null, 2));
+        if (error.code === 'P2002') {
+            const field = error.meta?.target || 'Record';
+            return NextResponse.json({ error: `Conflict: ${field} already exists. (Each Job can have only ONE invoice).` }, { status: 400 });
+        }
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
+}
+
+export async function DELETE(request: Request) {
+    const user = await getAuthUser();
+    if (!user || user.role !== 'ADMIN') return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    try {
+        const { id } = await request.json();
+        const invoice = await prisma.invoice.findUnique({ where: { id: parseInt(id) } });
+
+        if (!invoice || invoice.companyId !== user.companyId) {
+            return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
+        }
+
+        if (invoice.isApproved) return NextResponse.json({ error: 'Approved invoice cannot be deleted' }, { status: 400 });
+        if (invoice.isLocked) return NextResponse.json({ error: 'Locked document cannot be deleted' }, { status: 400 });
+
+        await prisma.invoice.delete({ where: { id: invoice.id } });
+        await logAction({ user, action: 'DELETE', module: 'INVOICE', entityId: invoice.id });
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error('Delete invoice error detail:', error);
+        return NextResponse.json({ error: 'Failed to delete invoice' }, { status: 500 });
     }
 }

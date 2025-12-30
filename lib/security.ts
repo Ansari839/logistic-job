@@ -6,7 +6,7 @@ import { AuthUser } from './auth';
  */
 export async function logAction(params: {
     user: AuthUser;
-    action: 'CREATE' | 'UPDATE' | 'DELETE' | 'APPROVE' | 'LOCK' | 'UNLOCK';
+    action: 'CREATE' | 'UPDATE' | 'DELETE' | 'APPROVE' | 'LOCK' | 'UNLOCK' | 'REVERT_TO_DRAFT';
     module: string;
     entityId?: number;
     payload?: any;

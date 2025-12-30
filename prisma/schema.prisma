@@ -240,7 +240,7 @@ model Job {
   branch         Branch?   @relation(fields: [branchId], references: [id])
   
   expenses       Expense[]
-  invoices       Invoice[]
+  invoice        Invoice?
   
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
@@ -282,10 +282,10 @@ model Expense {
 
 model Invoice {
   id            Int           @id @default(autoincrement())
-  invoiceNumber String        @unique
+  invoiceNumber String
   date          DateTime      @default(now())
   
-  jobId         Int
+  jobId         Int           @unique
   job           Job           @relation(fields: [jobId], references: [id])
   
   customerId    Int
@@ -321,11 +321,12 @@ model Invoice {
   
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-  deletedAt     DateTime?
   
   // Account mapping
   transaction   Transaction?  @relation(fields: [transactionId], references: [id])
   transactionId Int?          @unique
+  
+  @@unique([companyId, invoiceNumber])
 }
 
 model InvoiceItem {
@@ -489,7 +490,7 @@ model Account {
 
 model Transaction {
   id            Int             @id @default(autoincrement())
-  reference     String          @unique // JV-001, INV-001, PAY-001
+  reference     String          // JV-001, INV-001, PAY-001
   date          DateTime        @default(now())
   description   String?
   type          TransactionType @default(JOURNAL)
@@ -506,6 +507,8 @@ model Transaction {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   isLocked      Boolean         @default(false)
+
+  @@unique([companyId, reference])
 }
 
 model AccountEntry {
@@ -525,7 +528,7 @@ model AccountEntry {
 
 model Payment {
   id            Int         @id @default(autoincrement())
-  receiptNumber String      @unique // REC-001, PAY-001
+  receiptNumber String      // REC-001, PAY-001
   date          DateTime    @default(now())
   
   amount        Float
@@ -546,6 +549,8 @@ model Payment {
   
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+
+  @@unique([companyId, receiptNumber])
 }
 
 model AuditLog {

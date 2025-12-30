@@ -16,7 +16,6 @@ export async function GET(
             where: {
                 id: parseInt(id),
                 companyId: user.companyId as number,
-                deletedAt: null
             },
             include: {
                 customer: true,

@@ -43,6 +43,16 @@ export async function POST(
         const body = await request.json();
         const { description, costPrice, sellingPrice, vendorId, currencyCode, exchangeRate } = body;
 
+        // Check Job Status
+        const job = await prisma.job.findUnique({
+            where: { id: parseInt(id), companyId: user.companyId as number },
+            select: { status: true }
+        });
+        if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+        if (job.status === 'CLOSED') {
+            return NextResponse.json({ error: 'Job is locked. Revert invoice to draft to manage expenses.' }, { status: 400 });
+        }
+
         if (!description) {
             return NextResponse.json({ error: 'Description is required' }, { status: 400 });
         }
@@ -80,6 +90,16 @@ export async function PATCH(
         const body = await request.json();
         const { id, description, costPrice, sellingPrice, vendorId, currencyCode, exchangeRate } = body;
 
+        // Check Job Status
+        const job = await prisma.job.findUnique({
+            where: { id: parseInt(jobId), companyId: user.companyId as number },
+            select: { status: true }
+        });
+        if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+        if (job.status === 'CLOSED') {
+            return NextResponse.json({ error: 'Job is locked. Revert invoice to draft to manage expenses.' }, { status: 400 });
+        }
+
         if (!id) return NextResponse.json({ error: 'Expense ID is required' }, { status: 400 });
 
         const expense = await prisma.expense.update({
@@ -105,7 +125,9 @@ export async function DELETE(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id: jobId } = await params;
     const user = await getAuthUser();
+
     if (!user || !user.companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { searchParams } = new URL(request.url);
@@ -114,6 +136,16 @@ export async function DELETE(
     if (!expenseId) return NextResponse.json({ error: 'Expense ID is required' }, { status: 400 });
 
     try {
+        // Check Job Status
+        const job = await prisma.job.findUnique({
+            where: { id: parseInt(jobId), companyId: user.companyId as number },
+            select: { status: true }
+        });
+        if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+        if (job.status === 'CLOSED') {
+            return NextResponse.json({ error: 'Job is locked. Revert invoice to draft to manage expenses.' }, { status: 400 });
+        }
+
         await prisma.expense.delete({
             where: { id: parseInt(expenseId), companyId: user.companyId as number }
         });

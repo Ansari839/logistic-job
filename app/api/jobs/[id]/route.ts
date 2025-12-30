@@ -40,8 +40,8 @@ export async function GET(
                     include: { vendor: { select: { name: true, code: true } } },
                     orderBy: { createdAt: 'desc' }
                 },
-                invoices: {
-                    orderBy: { createdAt: 'desc' }
+                invoice: {
+                    include: { items: true }
                 }
             }
         });
@@ -75,14 +75,18 @@ export async function PATCH(
             weight, hawbBl, handledBy, salesPerson
         } = body;
 
-        // Check ownership
+        // Check ownership and status
         const existingJob = await prisma.job.findUnique({
             where: { id: parseInt(id) },
-            select: { companyId: true }
+            select: { companyId: true, status: true }
         });
 
         if (!existingJob || existingJob.companyId !== user.companyId) {
             return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+        }
+
+        if (existingJob.status === 'CLOSED') {
+            return NextResponse.json({ error: 'Job is locked (Status: CLOSED). Revert invoice to draft to make changes.' }, { status: 400 });
         }
 
         const job = await prisma.job.update({

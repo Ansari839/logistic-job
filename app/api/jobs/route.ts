@@ -27,7 +27,10 @@ export async function GET(request: Request) {
                     select: { name: true }
                 },
                 _count: {
-                    select: { expenses: true, invoices: true }
+                    select: { expenses: true }
+                },
+                invoice: {
+                    select: { id: true }
                 }
             },
             orderBy: { createdAt: 'desc' },
