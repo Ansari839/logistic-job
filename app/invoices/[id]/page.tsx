@@ -1,0 +1,305 @@
+'use client';
+
+import React, { useEffect, useState, use } from 'react';
+import { useRouter } from 'next/navigation';
+import DashboardLayout from '@/components/DashboardLayout';
+import {
+    FileText, Printer, ChevronLeft, Download,
+    Ship, User, MapPin, Calendar, Hash,
+    Package, Info, CreditCard, Building2,
+    CheckCircle2, Clock, AlertCircle
+} from 'lucide-react';
+
+interface InvoiceItem {
+    id: number;
+    description: string;
+    quantity: number;
+    rate: number;
+    amount: number;
+    taxPercentage: number;
+    taxAmount: number;
+    total: number;
+}
+
+interface Invoice {
+    id: number;
+    invoiceNumber: string;
+    date: string;
+    status: string;
+    type: string;
+    totalAmount: number;
+    taxAmount: number;
+    grandTotal: number;
+    currencyCode: string;
+    isApproved: boolean;
+    customer: {
+        name: string;
+        code: string;
+        email: string | null;
+        phone: string | null;
+        address: string | null;
+    };
+    job: {
+        id: number;
+        jobNumber: string;
+        jobType: string;
+        vessel: string | null;
+        gdNo: string | null;
+        containerNo: string | null;
+        hawbBl: string | null;
+    };
+    items: InvoiceItem[];
+    company: {
+        name: string;
+        address: string | null;
+        phone: string | null;
+        email: string | null;
+        logo: string | null;
+    };
+}
+
+export default function InvoiceViewPage({ params }: { params: Promise<{ id: string }> }) {
+    const resolvedParams = use(params);
+    const id = resolvedParams.id;
+    const router = useRouter();
+    const [invoice, setInvoice] = useState<Invoice | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchInvoice = async () => {
+            try {
+                const res = await fetch(`/api/invoices/${id}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setInvoice(data.invoice);
+                } else {
+                    console.error('Failed to fetch invoice');
+                }
+            } catch (err) {
+                console.error('Error fetching invoice:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchInvoice();
+    }, [id]);
+
+    const handlePrint = () => {
+        window.print();
+    };
+
+    if (loading) return (
+        <DashboardLayout>
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <div className="animate-spin w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full" />
+            </div>
+        </DashboardLayout>
+    );
+
+    if (!invoice) return (
+        <DashboardLayout>
+            <div className="text-center py-20 bg-slate-900/40 border border-slate-800/60 rounded-[2.5rem] max-w-4xl mx-auto">
+                <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+                <h1 className="text-2xl font-black text-white">Invoice Not Found</h1>
+                <button onClick={() => router.push('/invoices')} className="mt-4 text-blue-400 font-bold uppercase tracking-widest text-sm underline">Back to Invoices</button>
+            </div>
+        </DashboardLayout>
+    );
+
+    return (
+        <DashboardLayout>
+            <div className="max-w-5xl mx-auto">
+                {/* Actions Header - Hidden on Print */}
+                <div className="flex items-center justify-between mb-8 print:hidden">
+                    <button
+                        onClick={() => router.back()}
+                        className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-sm font-black uppercase tracking-widest"
+                    >
+                        <ChevronLeft size={16} />
+                        Back
+                    </button>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={handlePrint}
+                            className="bg-slate-900 border border-slate-800 text-white px-6 py-3 rounded-2xl font-black transition-all hover:bg-slate-800 flex items-center gap-2 text-xs uppercase tracking-widest shadow-xl"
+                        >
+                            <Printer size={18} />
+                            Print Invoice
+                        </button>
+                        <button className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-black transition-all flex items-center gap-2 text-xs uppercase tracking-widest shadow-lg shadow-blue-600/20">
+                            <Download size={18} />
+                            PDF
+                        </button>
+                    </div>
+                </div>
+
+                {/* Main Invoice Card */}
+                <div className="bg-white text-slate-900 rounded-[2rem] overflow-hidden shadow-2xl print:shadow-none print:rounded-none">
+                    {/* Header: Company & Invoice Info */}
+                    <div className="p-10 border-b-2 border-slate-100 flex justify-between items-start bg-slate-50/50">
+                        <div>
+                            {invoice.company.logo ? (
+                                <img src={invoice.company.logo} alt="Logo" className="h-16 mb-4" />
+                            ) : (
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-blue-600/20">L</div>
+                                    <span className="text-2xl font-black tracking-tighter uppercase italic text-blue-900">{invoice.company.name}</span>
+                                </div>
+                            )}
+                            <div className="space-y-1 text-slate-500 text-sm">
+                                <p className="font-bold flex items-center gap-2"><MapPin size={14} /> {invoice.company.address || 'Address Placeholder'}</p>
+                                <p className="font-bold flex items-center gap-2"><Building2 size={14} /> {invoice.company.email} | {invoice.company.phone}</p>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <h1 className="text-6xl font-black text-slate-200 tracking-tighter leading-none mb-4 uppercase italic">Invoice</h1>
+                            <div className="space-y-2">
+                                <div>
+                                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Invoice Number</p>
+                                    <p className="text-xl font-black font-mono text-slate-900">{invoice.invoiceNumber}</p>
+                                </div>
+                                <div className="flex justify-end gap-6">
+                                    <div className="text-right">
+                                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Issue Date</p>
+                                        <p className="font-black text-slate-700">{new Date(invoice.date).toLocaleDateString()}</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Job Number</p>
+                                        <p className="font-black text-slate-900"># {invoice.job.jobNumber}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Billing Details */}
+                    <div className="p-10 grid grid-cols-2 gap-12 bg-white">
+                        <div>
+                            <p className="text-[10px] text-blue-600 font-black uppercase tracking-[0.2em] mb-4 border-b pb-2 border-blue-50/50">Bill To</p>
+                            <h3 className="text-2xl font-black text-slate-900 mb-2">{invoice.customer.name}</h3>
+                            <div className="space-y-1 text-slate-500 text-sm font-bold">
+                                <p>{invoice.customer.address}</p>
+                                <p>{invoice.customer.email}</p>
+                                <p>{invoice.customer.phone}</p>
+                            </div>
+                        </div>
+                        <div className="bg-slate-50 rounded-3xl p-6 border border-slate-100 flex flex-col justify-center">
+                            <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mb-4 border-b pb-2 border-slate-200">Job Metadata</p>
+                            <div className="grid grid-cols-2 gap-y-4 gap-x-6">
+                                <div>
+                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">Vessel/Voyage</p>
+                                    <p className="text-xs font-black text-slate-700">{invoice.job.vessel || 'N/A'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">GD Number</p>
+                                    <p className="text-xs font-black text-slate-700">{invoice.job.gdNo || 'N/A'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">B/L / HAWB</p>
+                                    <p className="text-xs font-black text-slate-700">{invoice.job.hawbBl || 'N/A'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">Container #</p>
+                                    <p className="text-xs font-black text-slate-700 font-mono tracking-tighter">{invoice.job.containerNo || 'N/A'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Items Table */}
+                    <div className="px-10 pb-10">
+                        <div className="rounded-3xl border border-slate-100 overflow-hidden">
+                            <table className="w-full text-left">
+                                <thead>
+                                    <tr className="bg-slate-900 text-white">
+                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest">Detail Description</th>
+                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-center">Qty</th>
+                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-right">Unit Rate</th>
+                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-right">Tax (%)</th>
+                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-right">Total ({invoice.currencyCode})</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100">
+                                    {invoice.items.map((item, idx) => (
+                                        <tr key={item.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}>
+                                            <td className="px-6 py-4 font-bold text-slate-800 text-sm">{item.description}</td>
+                                            <td className="px-6 py-4 text-center font-bold text-slate-600 text-sm">{item.quantity}</td>
+                                            <td className="px-6 py-4 text-right font-mono text-slate-600 text-sm">{item.rate.toLocaleString()}</td>
+                                            <td className="px-6 py-4 text-right font-mono text-slate-400 text-xs">{item.taxPercentage}%</td>
+                                            <td className="px-6 py-4 text-right font-black text-slate-900 text-sm">{item.total.toLocaleString()}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {/* Summary Footer */}
+                    <div className="p-10 bg-slate-50/50 border-t-2 border-slate-100 grid grid-cols-2 gap-20">
+                        <div className="space-y-6">
+                            <div className="bg-white p-6 rounded-3xl border border-slate-200">
+                                <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-4">Payment Terms & Info</p>
+                                <p className="text-xs text-slate-500 font-bold leading-relaxed italic">
+                                    Please include the invoice number on your check or wire transfer reference.
+                                    Payments are due within 15 days of issue date unless otherwise specified.
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-4 px-6">
+                                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                                    <Info size={20} />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Document Status</p>
+                                    <p className="text-sm font-black text-blue-900 uppercase tracking-tighter">{invoice.isApproved ? 'Official Document' : 'Proforma / Draft'}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="space-y-3">
+                            <div className="flex justify-between items-center px-4">
+                                <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Subtotal</span>
+                                <span className="text-lg font-bold text-slate-600">{invoice.totalAmount.toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between items-center px-4">
+                                <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">WHT / Other Taxes</span>
+                                <span className="text-lg font-bold text-slate-600">{invoice.taxAmount.toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-blue-600 p-6 rounded-[2.5rem] shadow-xl shadow-blue-600/20">
+                                <span className="text-[10px] text-blue-100 font-black uppercase tracking-[0.2em]">Grand Total ({invoice.currencyCode})</span>
+                                <span className="text-3xl font-black text-white italic tracking-tighter leading-none">{invoice.grandTotal.toLocaleString()}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Authorized Signature */}
+                    <div className="px-10 pb-16 pt-10 grid grid-cols-2">
+                        <div className="self-end">
+                            <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Generated By System At</p>
+                            <p className="text-xs font-black text-slate-400">{new Date().toLocaleString()}</p>
+                        </div>
+                        <div className="text-right">
+                            <div className="w-48 h-1 bg-slate-200 ml-auto mb-2" />
+                            <p className="text-[10px] text-blue-600 font-black uppercase tracking-widest">Authorized Signature</p>
+                            <p className="text-[9px] text-slate-400 font-bold italic">This is a computer generated document and does not require a physical seal.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <style jsx global>{`
+                @media print {
+                    nav, button, .print\\:hidden {
+                        display: none !important;
+                    }
+                    body {
+                        background: white !important;
+                        padding: 0 !important;
+                        margin: 0 !important;
+                    }
+                    .max-w-5xl {
+                        max-width: 100% !important;
+                    }
+                }
+            `}</style>
+        </DashboardLayout>
+    );
+}

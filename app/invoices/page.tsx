@@ -148,7 +148,10 @@ export default function InvoicesPage() {
                                             </p>
                                         </div>
                                         <div className="flex gap-2">
-                                            <button className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-slate-500 hover:text-white transition-all">
+                                            <button
+                                                onClick={() => router.push(`/invoices/${inv.id}`)}
+                                                className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-slate-500 hover:text-white transition-all font-bold"
+                                            >
                                                 <Printer size={18} />
                                             </button>
                                             <button

@@ -188,8 +188,9 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                 }),
             });
             if (res.ok) {
+                const data = await res.json();
                 setShowInvoiceModal(false);
-                fetchJob();
+                router.push(`/invoices/${data.invoice.id}`);
             }
         } catch (err) {
             console.error('Generate invoice failed');
@@ -555,8 +556,16 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                                 </div>
                                             </div>
                                             <div className="pt-4 border-t border-slate-800/60 flex gap-2">
-                                                <button className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-widest transition-all">View</button>
-                                                <button className="p-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 transition-all">
+                                                <button
+                                                    onClick={() => router.push(`/invoices/${inv.id}`)}
+                                                    className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-widest transition-all"
+                                                >
+                                                    View
+                                                </button>
+                                                <button
+                                                    onClick={() => router.push(`/invoices/${inv.id}`)}
+                                                    className="p-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 transition-all font-bold"
+                                                >
                                                     <Printer size={16} />
                                                 </button>
                                             </div>

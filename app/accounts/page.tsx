@@ -25,7 +25,16 @@ export default function ChartOfAccountsPage() {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
-    const [showAddModal, setShowAddModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [editingAccount, setEditingAccount] = useState<Account | null>(null);
+    const [formData, setFormData] = useState({
+        id: '',
+        code: '',
+        name: '',
+        type: 'EXPENSE' as any,
+        description: '',
+        parentId: ''
+    });
 
     useEffect(() => {
         fetchAccounts();
@@ -45,6 +54,24 @@ export default function ChartOfAccountsPage() {
         }
     };
 
+    useEffect(() => {
+        const fetchSuggestedCode = async () => {
+            if (!formData.parentId || editingAccount) return;
+            try {
+                const res = await fetch(`/api/accounts?suggestCode=true&parentId=${formData.parentId}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.nextCode) {
+                        setFormData(prev => ({ ...prev, code: data.nextCode }));
+                    }
+                }
+            } catch (err) {
+                console.error('Fetch suggested code failed');
+            }
+        };
+        fetchSuggestedCode();
+    }, [formData.parentId, editingAccount]);
+
     const buildTree = (list: Account[], parentId: number | null = null): Account[] => {
         return list
             .filter(a => a.parentId === parentId)
@@ -56,6 +83,43 @@ export default function ChartOfAccountsPage() {
         if (next.has(id)) next.delete(id);
         else next.add(id);
         setExpandedIds(next);
+    };
+
+    const handleSaveAccount = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const method = editingAccount ? 'PATCH' : 'POST';
+            const res = await fetch('/api/accounts', {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            if (res.ok) {
+                setShowModal(false);
+                fetchAccounts();
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Failed to save account');
+            }
+        } catch (err) {
+            console.error('Save account error:', err);
+        }
+    };
+
+    const handleDeleteAccount = async (id: number) => {
+        if (!confirm('Are you sure you want to delete this account? This will check for children and transactions.')) return;
+        try {
+            const res = await fetch(`/api/accounts?id=${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                fetchAccounts();
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Failed to delete account');
+            }
+        } catch (err) {
+            console.error('Delete account error:', err);
+        }
     };
 
     const tree = buildTree(accounts);
@@ -79,9 +143,9 @@ export default function ChartOfAccountsPage() {
                     </button>
 
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center mr-4 ${node.type === 'ASSET' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                            node.type === 'LIABILITY' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                                node.type === 'REVENUE' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
-                                    'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                        node.type === 'LIABILITY' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                            node.type === 'REVENUE' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                                'bg-rose-500/10 text-rose-400 border border-rose-500/20'
                         }`}>
                         {hasChildren ? <Folder size={18} /> : <FileText size={18} />}
                     </div>
@@ -97,11 +161,45 @@ export default function ChartOfAccountsPage() {
                     </div>
 
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
-                        <button className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-500 hover:text-blue-400 transition-all">
+                        <button
+                            onClick={() => {
+                                setEditingAccount(node);
+                                setFormData({
+                                    id: node.id.toString(),
+                                    code: node.code,
+                                    name: node.name,
+                                    type: node.type,
+                                    description: node.description || '',
+                                    parentId: node.parentId?.toString() || ''
+                                });
+                                setShowModal(true);
+                            }}
+                            className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-500 hover:text-blue-400 transition-all font-bold"
+                        >
                             <Edit3 size={16} />
                         </button>
-                        <button className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-500 hover:text-emerald-400 transition-all">
+                        <button
+                            onClick={() => {
+                                setEditingAccount(null);
+                                setFormData({
+                                    id: '',
+                                    code: '',
+                                    name: '',
+                                    type: node.type,
+                                    description: '',
+                                    parentId: node.id.toString()
+                                });
+                                setShowModal(true);
+                            }}
+                            className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-500 hover:text-emerald-400 transition-all font-bold"
+                        >
                             <Plus size={16} />
+                        </button>
+                        <button
+                            onClick={() => handleDeleteAccount(node.id)}
+                            className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-500 hover:text-red-400 transition-all font-bold"
+                        >
+                            <Trash2 size={16} />
                         </button>
                     </div>
                 </div>
@@ -128,7 +226,14 @@ export default function ChartOfAccountsPage() {
                             <Layers size={18} />
                             Full Expand
                         </button>
-                        <button className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-[2rem] font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-blue-600/20">
+                        <button
+                            onClick={() => {
+                                setEditingAccount(null);
+                                setFormData({ id: '', code: '', name: '', type: 'ASSET', description: '', parentId: '' });
+                                setShowModal(true);
+                            }}
+                            className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-[2rem] font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-blue-600/20"
+                        >
                             <Plus size={20} />
                             New Account
                         </button>
@@ -187,6 +292,101 @@ export default function ChartOfAccountsPage() {
                         </p>
                     </div>
                 </div>
+                {/* Management Modal */}
+                {showModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={() => setShowModal(false)} />
+                        <div className="relative bg-slate-900 border border-slate-800 w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
+                            <div className="p-8 border-b border-white/5">
+                                <h3 className="text-2xl font-black text-white tracking-tighter">{editingAccount ? 'Edit Account' : 'New Account'}</h3>
+                                <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Manage Financial Structure</p>
+                            </div>
+                            <form onSubmit={handleSaveAccount} className="p-8 space-y-6">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Account Code</label>
+                                        <input
+                                            required
+                                            className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                                            value={formData.code}
+                                            onChange={e => setFormData({ ...formData, code: e.target.value })}
+                                            placeholder="e.g. 1000"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Type</label>
+                                        <select
+                                            className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs font-black uppercase tracking-widest"
+                                            value={formData.type}
+                                            onChange={e => setFormData({ ...formData, type: e.target.value as any })}
+                                        >
+                                            <option value="ASSET">Asset</option>
+                                            <option value="LIABILITY">Liability</option>
+                                            <option value="EQUITY">Equity</option>
+                                            <option value="REVENUE">Revenue</option>
+                                            <option value="EXPENSE">Expense</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Account Name</label>
+                                    <input
+                                        required
+                                        className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        value={formData.name}
+                                        onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                        placeholder="e.g. Cash in Hand"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Parent Account</label>
+                                    <select
+                                        className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-bold"
+                                        value={formData.parentId}
+                                        onChange={e => {
+                                            const pid = e.target.value;
+                                            const parent = accounts.find(a => a.id === parseInt(pid));
+                                            setFormData({
+                                                ...formData,
+                                                parentId: pid,
+                                                type: parent ? parent.type : formData.type
+                                            });
+                                        }}
+                                    >
+                                        <option value="">Root Account (No Parent)</option>
+                                        {accounts.filter(a => a.id !== parseInt(formData.id)).map(a => (
+                                            <option key={a.id} value={a.id}>({a.code}) {a.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Description</label>
+                                    <textarea
+                                        rows={2}
+                                        className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        value={formData.description}
+                                        onChange={e => setFormData({ ...formData, description: e.target.value })}
+                                    />
+                                </div>
+                                <div className="flex gap-4 pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowModal(false)}
+                                        className="flex-1 px-6 py-4 rounded-2xl border border-slate-800 text-slate-400 font-bold uppercase tracking-widest text-xs hover:bg-slate-800 hover:text-white transition-all"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl text-xs uppercase tracking-widest shadow-lg shadow-blue-600/20 transition-all active:scale-95"
+                                    >
+                                        {editingAccount ? 'Update Account' : 'Create Account'}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         </DashboardLayout>
     );
