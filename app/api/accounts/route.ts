@@ -15,7 +15,10 @@ const accountSchema = z.object({
     name: z.string().min(1),
     type: z.enum(['ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE']),
     description: z.string().optional(),
-    parentId: z.number().nullable().optional(),
+    parentId: z.preprocess((val) => {
+        if (val === '' || val === null || val === undefined) return null;
+        return Number(val);
+    }, z.number().nullable().optional()),
 });
 
 async function getAuthUser() {
