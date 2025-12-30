@@ -24,7 +24,7 @@ export async function GET() {
             where: { companyId: user.companyId },
             include: {
                 category: { select: { name: true } },
-                _count: { select: { stockMovements: true } }
+                _count: { select: { movements: true } }
             },
             orderBy: { name: 'asc' },
         });
