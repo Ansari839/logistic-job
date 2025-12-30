@@ -86,6 +86,8 @@ model Company {
   warehouses        Warehouse[]
   stockMovements    StockMovement[]
   purchaseInvoices  PurchaseInvoice[]
+  auditLogs         AuditLog[]
+  financialPeriods  FinancialPeriod[]
 }
 
 model Branch {
@@ -161,6 +163,7 @@ model User {
   resetTokenExpiry DateTime?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
+  auditLogs        AuditLog[]
 }
 
 model Customer {
@@ -230,6 +233,7 @@ model Job {
   
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
 }
 
 model Expense {
@@ -272,6 +276,11 @@ model Invoice {
   grandTotal    Float         @default(0.0)
   currencyCode  String        @default("PKR")
   
+  isApproved    Boolean       @default(false)
+  approvedById  Int?
+  isLocked      Boolean       @default(false)
+  lockedAt      DateTime?
+  
   companyId     Int
   company       Company       @relation(fields: [companyId], references: [id])
   
@@ -279,6 +288,7 @@ model Invoice {
   
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  deletedAt     DateTime?
   
   // Account mapping
   transaction   Transaction?  @relation(fields: [transactionId], references: [id])
@@ -336,6 +346,7 @@ model Product {
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+  deletedAt     DateTime?
 
   @@unique([companyId, name])
 }
@@ -386,6 +397,11 @@ model PurchaseInvoice {
   grandTotal    Float         @default(0.0)
   currencyCode  String        @default("PKR")
   
+  isApproved    Boolean       @default(false)
+  approvedById  Int?
+  isLocked      Boolean       @default(false)
+  lockedAt      DateTime?
+  
   companyId     Int
   company       Company       @relation(fields: [companyId], references: [id])
   
@@ -396,6 +412,7 @@ model PurchaseInvoice {
 
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  deletedAt     DateTime?
 }
 
 model PurchaseInvoiceItem {
@@ -455,6 +472,7 @@ model Transaction {
   
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+  isLocked      Boolean         @default(false)
 }
 
 model AccountEntry {
@@ -495,4 +513,31 @@ model Payment {
   
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  action    String   // CREATE, UPDATE, DELETE, APPROVE, LOCK
+  module    String   // JOB, INVOICE, ACCOUNT, etc.
+  entityId  Int?
+  payload   Json?    // Before/After values or current state
+  ipAddress String?
+  createdAt DateTime @default(now())
+  companyId Int
+  company   Company  @relation(fields: [companyId], references: [id])
+}
+
+model FinancialPeriod {
+  id        Int      @id @default(autoincrement())
+  month     Int      // 1-12
+  year      Int
+  isClosed  Boolean  @default(false)
+  closedById Int?
+  closedAt  DateTime?
+  companyId Int
+  company   Company  @relation(fields: [companyId], references: [id])
+
+  @@unique([companyId, month, year])
 }

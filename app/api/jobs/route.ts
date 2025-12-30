@@ -1,25 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { jwtVerify } from 'jose';
-import { cookies } from 'next/headers';
-
-const JWT_SECRET = new TextEncoder().encode(
-    process.env.JWT_SECRET || 'your-default-secret-key-change-it'
-);
-
-async function getAuthUser() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('auth_token')?.value;
-
-    if (!token) return null;
-
-    try {
-        const { payload } = await jwtVerify(token, JWT_SECRET);
-        return payload as any;
-    } catch (error) {
-        return null;
-    }
-}
+import { getAuthUser } from '@/lib/auth';
+import { logAction } from '@/lib/security';
 
 export async function GET(request: Request) {
     const user = await getAuthUser();
@@ -32,7 +14,8 @@ export async function GET(request: Request) {
     try {
         const jobs = await prisma.job.findMany({
             where: {
-                companyId: user.companyId,
+                companyId: user.companyId as number,
+                deletedAt: null,
                 ...(jobType && { jobType: jobType as any }),
                 ...(customerId && { customerId: parseInt(customerId) }),
             },
@@ -79,7 +62,7 @@ export async function POST(request: Request) {
                 jobNumber,
                 jobType,
                 customerId: parseInt(customerId),
-                companyId: user.companyId,
+                companyId: user.companyId as number,
                 branchId: branchId ? parseInt(branchId) : null,
                 vessel,
                 place,
@@ -99,6 +82,14 @@ export async function POST(request: Request) {
                 customer: true,
                 branch: true
             }
+        });
+
+        await logAction({
+            user,
+            action: 'CREATE',
+            module: 'JOB',
+            entityId: job.id,
+            payload: { jobNumber: job.jobNumber }
         });
 
         return NextResponse.json({ job });

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getAuthUser } from '@/lib/auth';
 import { z } from 'zod';
+import { logAction, isPeriodClosed } from '@/lib/security';
 
 const purchaseSchema = z.object({
     purchaseNumber: z.string().min(1),
@@ -27,7 +28,8 @@ export async function GET(request: Request) {
     try {
         const purchases = await prisma.purchaseInvoice.findMany({
             where: {
-                companyId: user.companyId,
+                companyId: user.companyId as number,
+                deletedAt: null,
                 ...(vendorId && { vendorId: parseInt(vendorId) }),
             },
             include: {
@@ -51,6 +53,11 @@ export async function POST(request: Request) {
     try {
         const body = await request.json();
         const { purchaseNumber, date, vendorId, currencyCode, items } = purchaseSchema.parse(body);
+
+        const purchaseDate = date ? new Date(date) : new Date();
+        if (await isPeriodClosed(user.companyId as number, purchaseDate)) {
+            return NextResponse.json({ error: 'Financial period is closed for this date' }, { status: 400 });
+        }
 
         const purchase = await prisma.$transaction(async (tx) => {
             // 1. Calculate totals
@@ -150,7 +157,20 @@ export async function POST(request: Request) {
                 });
             }
 
-            return pi;
+            const result = await tx.purchaseInvoice.findUnique({
+                where: { id: pi.id },
+                include: { items: true, vendor: true }
+            });
+
+            await logAction({
+                user,
+                action: 'CREATE',
+                module: 'PURCHASE',
+                entityId: result?.id,
+                payload: { purchaseNumber: result?.purchaseNumber, total: result?.grandTotal }
+            });
+
+            return result;
         });
 
         return NextResponse.json({ purchase });

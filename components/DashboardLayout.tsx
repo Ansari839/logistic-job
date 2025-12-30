@@ -9,7 +9,9 @@ import {
     LayoutDashboard, Users, BarChart2, Shield, LogOut,
     Package, CreditCard, FileText, Sun, Moon, Menu, X,
     Building2, BookOpen, ArrowRightLeft, Settings,
-    Box, ShoppingBag
+    Box, ShoppingBag,
+    History as HistoryIcon,
+    Lock as LockIcon
 } from 'lucide-react';
 
 interface NavItem {
@@ -34,7 +36,9 @@ const navItems: NavItem[] = [
     { name: 'Journal Vouchers', href: '/vouchers', icon: ArrowRightLeft, roles: ['ADMIN', 'ACCOUNTS'] },
     { name: 'Payments', href: '/payments', icon: CreditCard, roles: ['ADMIN', 'ACCOUNTS'] },
     { name: 'Business Reports', href: '/reports', icon: BarChart2, roles: ['ADMIN', 'ACCOUNTS', 'OPERATOR', 'SALES'] },
-    { name: 'Settings', href: '/settings/profile', icon: Settings, roles: ['ADMIN'] },
+    { name: 'Audit Logs', href: '/settings/audit-logs', icon: HistoryIcon, roles: ['ADMIN'] },
+    { name: 'Financial Periods', href: '/settings/financial-periods', icon: LockIcon, roles: ['ADMIN'] },
+    { name: 'System Settings', href: '/settings/system', icon: Settings, roles: ['ADMIN'] },
 ];
 
 

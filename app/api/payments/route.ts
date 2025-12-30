@@ -1,14 +1,8 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/app/generated/prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { cookies } from 'next/headers';
-import { verifyToken } from '@/lib/auth';
+import prisma from '@/lib/prisma';
+import { getAuthUser } from '@/lib/auth';
 import { z } from 'zod';
-
-const adapter = new PrismaPg({
-    connectionString: process.env.DATABASE_URL!,
-});
-const prisma = new PrismaClient({ adapter });
+import { logAction, isPeriodClosed } from '@/lib/security';
 
 const paymentSchema = z.object({
     receiptNumber: z.string().min(1),
@@ -21,12 +15,6 @@ const paymentSchema = z.object({
     bankAccountId: z.number(), // The specific Cash or Bank account
 });
 
-async function getAuthUser() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('auth_token')?.value;
-    if (!token) return null;
-    return verifyToken(token);
-}
 
 export async function GET(req: Request) {
     const user = await getAuthUser();
@@ -63,6 +51,11 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
         const validatedData = paymentSchema.parse(body);
+
+        const paymentDate = validatedData.date ? new Date(validatedData.date) : new Date();
+        if (await isPeriodClosed(user.companyId as number, paymentDate)) {
+            return NextResponse.json({ error: 'Financial period is closed for this date' }, { status: 400 });
+        }
 
         if (!validatedData.customerId && !validatedData.vendorId) {
             return NextResponse.json({ error: 'Either Customer or Vendor must be specified' }, { status: 400 });
@@ -125,6 +118,14 @@ export async function POST(req: Request) {
                     transactionId: transaction.id,
                     companyId: user.companyId!,
                 }
+            });
+
+            await logAction({
+                user,
+                action: 'CREATE',
+                module: 'PAYMENT',
+                entityId: p.id,
+                payload: { receiptNumber: p.receiptNumber, amount: p.amount }
             });
 
             return p;

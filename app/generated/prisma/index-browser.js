@@ -242,7 +242,8 @@ exports.Prisma.JobScalarFieldEnum = {
   companyId: 'companyId',
   branchId: 'branchId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.ExpenseScalarFieldEnum = {
@@ -271,9 +272,14 @@ exports.Prisma.InvoiceScalarFieldEnum = {
   taxAmount: 'taxAmount',
   grandTotal: 'grandTotal',
   currencyCode: 'currencyCode',
+  isApproved: 'isApproved',
+  approvedById: 'approvedById',
+  isLocked: 'isLocked',
+  lockedAt: 'lockedAt',
   companyId: 'companyId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
   transactionId: 'transactionId'
 };
 
@@ -310,7 +316,8 @@ exports.Prisma.ProductScalarFieldEnum = {
   categoryId: 'categoryId',
   companyId: 'companyId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.WarehouseScalarFieldEnum = {
@@ -343,10 +350,15 @@ exports.Prisma.PurchaseInvoiceScalarFieldEnum = {
   taxAmount: 'taxAmount',
   grandTotal: 'grandTotal',
   currencyCode: 'currencyCode',
+  isApproved: 'isApproved',
+  approvedById: 'approvedById',
+  isLocked: 'isLocked',
+  lockedAt: 'lockedAt',
   companyId: 'companyId',
   transactionId: 'transactionId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.PurchaseInvoiceItemScalarFieldEnum = {
@@ -382,7 +394,8 @@ exports.Prisma.TransactionScalarFieldEnum = {
   type: 'type',
   companyId: 'companyId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isLocked: 'isLocked'
 };
 
 exports.Prisma.AccountEntryScalarFieldEnum = {
@@ -408,6 +421,28 @@ exports.Prisma.PaymentScalarFieldEnum = {
   companyId: 'companyId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AuditLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  action: 'action',
+  module: 'module',
+  entityId: 'entityId',
+  payload: 'payload',
+  ipAddress: 'ipAddress',
+  createdAt: 'createdAt',
+  companyId: 'companyId'
+};
+
+exports.Prisma.FinancialPeriodScalarFieldEnum = {
+  id: 'id',
+  month: 'month',
+  year: 'year',
+  isClosed: 'isClosed',
+  closedById: 'closedById',
+  closedAt: 'closedAt',
+  companyId: 'companyId'
 };
 
 exports.Prisma.SortOrder = {
@@ -505,7 +540,9 @@ exports.Prisma.ModelName = {
   Account: 'Account',
   Transaction: 'Transaction',
   AccountEntry: 'AccountEntry',
-  Payment: 'Payment'
+  Payment: 'Payment',
+  AuditLog: 'AuditLog',
+  FinancialPeriod: 'FinancialPeriod'
 };
 
 /**
