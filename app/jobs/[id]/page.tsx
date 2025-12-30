@@ -44,6 +44,17 @@ interface Job {
     branches: { name: string } | null;
     expenses: Expense[];
     invoices: Invoice[];
+    place?: string;
+    shipperRef?: string;
+    formE?: string;
+    volume?: string;
+    packages?: number;
+    weight?: number;
+    handledBy?: string;
+    salesPerson?: string;
+    jobDate?: string;
+    gdDate?: string;
+    formEDate?: string;
 }
 
 export default function JobDetailsPage({ params }: { params: Promise<{ id: string }> }) {
@@ -318,84 +329,37 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                 {/* Tab Content */}
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {activeTab === 'overview' && (
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            <div className="lg:col-span-2 space-y-8">
-                                <div className="bg-slate-900/40 border border-slate-800/60 p-8 rounded-[2rem]">
-                                    <h3 className="text-lg font-black text-white uppercase tracking-tight mb-8 flex items-center gap-3">
-                                        <Info size={18} className="text-blue-400" />
-                                        Shipment Details
-                                    </h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
-                                        <div>
-                                            <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-2">Vessel / Carrier</p>
-                                            <p className="text-white font-bold flex items-center gap-2">
-                                                <Ship size={16} className="text-slate-600" />
-                                                {job.vessel || 'N/A'}
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-2">Commodity</p>
-                                            <p className="text-white font-bold flex items-center gap-2">
-                                                <Package size={16} className="text-slate-600" />
-                                                {job.commodity || 'N/A'}
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-2">GD Number</p>
-                                            <p className="text-white font-mono font-bold flex items-center gap-2">
-                                                <Hash size={16} className="text-slate-600" />
-                                                {job.gdNo || 'N/A'}
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-2">HAWB / BL</p>
-                                            <p className="text-white font-mono font-bold flex items-center gap-2">
-                                                <FileText size={16} className="text-slate-600" />
-                                                {job.hawbBl || 'N/A'}
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-2">Container No</p>
-                                            <p className="text-white font-mono font-bold flex items-center gap-2">
-                                                <Anchor size={16} className="text-slate-600" />
-                                                {job.containerNo || 'N/A'}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="space-y-8">
-                                <div className="bg-slate-900/40 border border-slate-800/60 p-8 rounded-[2rem]">
-                                    <h3 className="text-lg font-black text-white uppercase tracking-tight mb-8 flex items-center gap-3">
-                                        <User size={18} className="text-blue-400" />
-                                        Contact Info
-                                    </h3>
-                                    <div className="space-y-6">
-                                        <div>
-                                            <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Customer</p>
-                                            <p className="text-white font-bold">{job.customer.name}</p>
-                                            <p className="text-slate-500 text-xs font-mono">{job.customer.code}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Customer Email</p>
-                                            <p className="text-white font-bold break-all">{job.customer.email || 'N/A'}</p>
-                                        </div>
-                                    </div>
+                        <div className="bg-slate-900/40 border border-slate-800/60 p-8 rounded-[2rem]">
+                            <h3 className="text-lg font-black text-white uppercase tracking-tight mb-8 flex items-center gap-3">
+                                <FileText size={18} className="text-blue-400" />
+                                Job Sheet Details
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                                {/* Left Column View */}
+                                <div className="space-y-6">
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Job Number</p><p className="text-white font-mono font-bold">{job.jobNumber}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Customer</p><p className="text-white font-bold">{job.customer.name}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Vessel</p><p className="text-white font-bold">{job.vessel || '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Place</p><p className="text-white font-bold">{job.place || '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Shipper Ref</p><p className="text-white font-bold">{job.shipperRef || '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">G.D No</p><p className="text-white font-mono font-bold">{job.gdNo || '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Form E</p><p className="text-white font-mono font-bold">{job.formE || '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Commodity</p><p className="text-white font-bold">{job.commodity || '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Volume</p><p className="text-white font-bold">{job.volume || '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Container #</p><p className="text-white font-mono font-bold">{job.containerNo || '-'}</p></div>
                                 </div>
 
-                                <div className="bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/20 p-8 rounded-[2rem]">
-                                    <h3 className="text-lg font-black text-white uppercase tracking-tight mb-4">Quick Stats</h3>
-                                    <div className="space-y-4">
-                                        <div className="flex justify-between items-center bg-white/5 p-4 rounded-2xl">
-                                            <span className="text-xs font-bold text-slate-300 uppercase">Expenses</span>
-                                            <span className="text-white font-black">{job.expenses.length}</span>
-                                        </div>
-                                        <div className="flex justify-between items-center bg-white/5 p-4 rounded-2xl">
-                                            <span className="text-xs font-bold text-slate-300 uppercase">Invoices</span>
-                                            <span className="text-white font-black">{job.invoices.length}</span>
-                                        </div>
-                                    </div>
+                                {/* Right Column View */}
+                                <div className="space-y-6">
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Job Date</p><p className="text-white font-bold">{job.jobDate ? new Date(job.jobDate).toLocaleDateString() : '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Packages</p><p className="text-white font-bold">{job.packages || '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Type</p><p className="text-white font-bold">{job.jobType}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Weight</p><p className="text-white font-bold">{job.weight || '-'} KG</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">HAWB / House</p><p className="text-white font-bold">{job.hawbBl || '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Handle By</p><p className="text-white font-bold">{job.handledBy || '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">G.D Date</p><p className="text-white font-bold">{job.gdDate ? new Date(job.gdDate).toLocaleDateString() : '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Form E Date</p><p className="text-white font-bold">{job.formEDate ? new Date(job.formEDate).toLocaleDateString() : '-'}</p></div>
+                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Sales Person</p><p className="text-white font-bold">{job.salesPerson || '-'}</p></div>
                                 </div>
                             </div>
                         </div>

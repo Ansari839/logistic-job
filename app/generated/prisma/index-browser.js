@@ -224,13 +224,17 @@ exports.Prisma.JobScalarFieldEnum = {
   id: 'id',
   jobNumber: 'jobNumber',
   date: 'date',
+  jobDate: 'jobDate',
   jobType: 'jobType',
+  status: 'status',
   customerId: 'customerId',
   vessel: 'vessel',
   place: 'place',
   shipperRef: 'shipperRef',
   gdNo: 'gdNo',
+  gdDate: 'gdDate',
   formE: 'formE',
+  formEDate: 'formEDate',
   commodity: 'commodity',
   volume: 'volume',
   containerNo: 'containerNo',
@@ -244,6 +248,15 @@ exports.Prisma.JobScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
+};
+
+exports.Prisma.ExpenseMasterScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ExpenseScalarFieldEnum = {
@@ -268,10 +281,18 @@ exports.Prisma.InvoiceScalarFieldEnum = {
   customerId: 'customerId',
   type: 'type',
   status: 'status',
+  masterNumber: 'masterNumber',
+  agentCode: 'agentCode',
+  shippingLine: 'shippingLine',
+  origin: 'origin',
+  destination: 'destination',
+  creditDays: 'creditDays',
+  vendorType: 'vendorType',
   totalAmount: 'totalAmount',
   taxAmount: 'taxAmount',
   grandTotal: 'grandTotal',
   currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
   isApproved: 'isApproved',
   approvedById: 'approvedById',
   isLocked: 'isLocked',
@@ -482,6 +503,12 @@ exports.JobType = exports.$Enums.JobType = {
   EXPORT: 'EXPORT'
 };
 
+exports.JobStatus = exports.$Enums.JobStatus = {
+  DRAFT: 'DRAFT',
+  IN_PROGRESS: 'IN_PROGRESS',
+  CLOSED: 'CLOSED'
+};
+
 exports.InvoiceType = exports.$Enums.InvoiceType = {
   MASTER: 'MASTER',
   PROFORMA: 'PROFORMA'
@@ -528,6 +555,7 @@ exports.Prisma.ModelName = {
   Customer: 'Customer',
   Vendor: 'Vendor',
   Job: 'Job',
+  ExpenseMaster: 'ExpenseMaster',
   Expense: 'Expense',
   Invoice: 'Invoice',
   InvoiceItem: 'InvoiceItem',

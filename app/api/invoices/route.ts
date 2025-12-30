@@ -95,53 +95,11 @@ export async function POST(request: Request) {
                 }
             }
 
-            // Post to Accounting
-            const receivableAccount = await tx.account.findUnique({
-                where: { companyId_code: { companyId: user.companyId as number, code: '1130' } }
-            });
-            const revenueAccount = await tx.account.findUnique({
-                where: { companyId_code: { companyId: user.companyId as number, code: '4100' } }
-            });
+            // Handle Stock & COGS for products (Only if immediate stock deduction is desired, otherwise move to approval)
+            // Keeping stock deduction on creation for now, but Accounting Postponed.
 
-            if (receivableAccount && revenueAccount && inv.grandTotal > 0) {
-                const transaction = await tx.transaction.create({
-                    data: {
-                        reference: inv.invoiceNumber,
-                        description: `Invoiced Job ${jobId}: ${inv.invoiceNumber}`,
-                        type: 'INVOICE',
-                        companyId: user.companyId as number,
-                        entries: {
-                            create: [
-                                { accountId: receivableAccount.id, debit: inv.grandTotal, description: `Invoice ${inv.invoiceNumber}` },
-                                { accountId: revenueAccount.id, credit: inv.grandTotal, description: `Service Revenue` }
-                            ]
-                        }
-                    }
-                });
-
-                // Post COGS if products were sold
-                if (totalCogs > 0) {
-                    const cogsAccount = await tx.account.findUnique({
-                        where: { companyId_code: { companyId: user.companyId as number, code: '5100' } }
-                    });
-                    const inventoryAccount = await tx.account.findUnique({
-                        where: { companyId_code: { companyId: user.companyId as number, code: '1140' } }
-                    });
-                    if (cogsAccount && inventoryAccount) {
-                        await tx.accountEntry.createMany({
-                            data: [
-                                { transactionId: transaction.id, accountId: cogsAccount.id, debit: totalCogs, description: 'Cost of Goods Sold' },
-                                { transactionId: transaction.id, accountId: inventoryAccount.id, credit: totalCogs, description: 'Inventory Deduction' }
-                            ]
-                        });
-                    }
-                }
-
-                await tx.invoice.update({
-                    where: { id: inv.id },
-                    data: { transactionId: transaction.id }
-                });
-            }
+            // Post to Accounting REMOVED from creation.
+            // Accounting entries will be generated upon APPROVAL.
 
             const result = await tx.invoice.findUnique({
                 where: { id: inv.id },
@@ -180,10 +138,50 @@ export async function PATCH(request: Request) {
         if (!invoice) return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
 
         if (action === 'APPROVE') {
-            const updated = await prisma.invoice.update({
-                where: { id: invoice.id },
-                data: { isApproved: true, approvedById: user.id }
+            const updated = await prisma.$transaction(async (tx) => {
+                const inv = await tx.invoice.update({
+                    where: { id: parseInt(id) },
+                    data: { isApproved: true, approvedById: user.id }
+                });
+
+                // Post to Accounting on Approval
+                const receivableAccount = await tx.account.findUnique({
+                    where: { companyId_code: { companyId: user.companyId as number, code: '1130' } }
+                });
+                const revenueAccount = await tx.account.findUnique({
+                    where: { companyId_code: { companyId: user.companyId as number, code: '4100' } }
+                });
+
+                if (receivableAccount && revenueAccount && inv.grandTotal > 0) {
+                    const transaction = await tx.transaction.create({
+                        data: {
+                            reference: inv.invoiceNumber,
+                            description: `Invoiced Job ${inv.jobId}: ${inv.invoiceNumber}`,
+                            type: 'INVOICE',
+                            companyId: user.companyId as number,
+                            entries: {
+                                create: [
+                                    { accountId: receivableAccount.id, debit: inv.grandTotal, description: `Invoice ${inv.invoiceNumber}` },
+                                    { accountId: revenueAccount.id, credit: inv.grandTotal, description: `Service Revenue` }
+                                ]
+                            }
+                        }
+                    });
+                    await tx.invoice.update({
+                        where: { id: inv.id },
+                        data: { transactionId: transaction.id }
+                    });
+                }
+
+                // ALSO LOCK THE JOB
+                await tx.job.update({
+                    where: { id: inv.jobId },
+                    data: { status: 'CLOSED' } // Or keep IN_PROGRESS? Plan says "Job Locking". Let's set to CLOSED or just lock edit.
+                });
+
+                return inv;
             });
+
             await logAction({ user, action: 'APPROVE', module: 'INVOICE', entityId: invoice.id });
             return NextResponse.json({ invoice: updated });
         }

@@ -64,6 +64,11 @@ export type Vendor = $Result.DefaultSelection<Prisma.$VendorPayload>
  */
 export type Job = $Result.DefaultSelection<Prisma.$JobPayload>
 /**
+ * Model ExpenseMaster
+ * 
+ */
+export type ExpenseMaster = $Result.DefaultSelection<Prisma.$ExpenseMasterPayload>
+/**
  * Model Expense
  * 
  */
@@ -210,6 +215,15 @@ export const PaymentMode: {
 
 export type PaymentMode = (typeof PaymentMode)[keyof typeof PaymentMode]
 
+
+export const JobStatus: {
+  DRAFT: 'DRAFT',
+  IN_PROGRESS: 'IN_PROGRESS',
+  CLOSED: 'CLOSED'
+};
+
+export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]
+
 }
 
 export type Role = $Enums.Role
@@ -239,6 +253,10 @@ export const TransactionType: typeof $Enums.TransactionType
 export type PaymentMode = $Enums.PaymentMode
 
 export const PaymentMode: typeof $Enums.PaymentMode
+
+export type JobStatus = $Enums.JobStatus
+
+export const JobStatus: typeof $Enums.JobStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -456,6 +474,16 @@ export class PrismaClient<
     * ```
     */
   get job(): Prisma.JobDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.expenseMaster`: Exposes CRUD operations for the **ExpenseMaster** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ExpenseMasters
+    * const expenseMasters = await prisma.expenseMaster.findMany()
+    * ```
+    */
+  get expenseMaster(): Prisma.ExpenseMasterDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.expense`: Exposes CRUD operations for the **Expense** model.
@@ -1050,6 +1078,7 @@ export namespace Prisma {
     Customer: 'Customer',
     Vendor: 'Vendor',
     Job: 'Job',
+    ExpenseMaster: 'ExpenseMaster',
     Expense: 'Expense',
     Invoice: 'Invoice',
     InvoiceItem: 'InvoiceItem',
@@ -1080,7 +1109,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "company" | "branch" | "currency" | "companyCurrency" | "taxSetting" | "systemSetting" | "user" | "customer" | "vendor" | "job" | "expense" | "invoice" | "invoiceItem" | "productCategory" | "product" | "warehouse" | "stockMovement" | "purchaseInvoice" | "purchaseInvoiceItem" | "account" | "transaction" | "accountEntry" | "payment" | "auditLog" | "financialPeriod"
+      modelProps: "company" | "branch" | "currency" | "companyCurrency" | "taxSetting" | "systemSetting" | "user" | "customer" | "vendor" | "job" | "expenseMaster" | "expense" | "invoice" | "invoiceItem" | "productCategory" | "product" | "warehouse" | "stockMovement" | "purchaseInvoice" | "purchaseInvoiceItem" | "account" | "transaction" | "accountEntry" | "payment" | "auditLog" | "financialPeriod"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1821,6 +1850,80 @@ export namespace Prisma {
           count: {
             args: Prisma.JobCountArgs<ExtArgs>
             result: $Utils.Optional<JobCountAggregateOutputType> | number
+          }
+        }
+      }
+      ExpenseMaster: {
+        payload: Prisma.$ExpenseMasterPayload<ExtArgs>
+        fields: Prisma.ExpenseMasterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ExpenseMasterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpenseMasterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ExpenseMasterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpenseMasterPayload>
+          }
+          findFirst: {
+            args: Prisma.ExpenseMasterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpenseMasterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ExpenseMasterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpenseMasterPayload>
+          }
+          findMany: {
+            args: Prisma.ExpenseMasterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpenseMasterPayload>[]
+          }
+          create: {
+            args: Prisma.ExpenseMasterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpenseMasterPayload>
+          }
+          createMany: {
+            args: Prisma.ExpenseMasterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ExpenseMasterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpenseMasterPayload>[]
+          }
+          delete: {
+            args: Prisma.ExpenseMasterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpenseMasterPayload>
+          }
+          update: {
+            args: Prisma.ExpenseMasterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpenseMasterPayload>
+          }
+          deleteMany: {
+            args: Prisma.ExpenseMasterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ExpenseMasterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ExpenseMasterUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpenseMasterPayload>[]
+          }
+          upsert: {
+            args: Prisma.ExpenseMasterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExpenseMasterPayload>
+          }
+          aggregate: {
+            args: Prisma.ExpenseMasterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateExpenseMaster>
+          }
+          groupBy: {
+            args: Prisma.ExpenseMasterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ExpenseMasterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ExpenseMasterCountArgs<ExtArgs>
+            result: $Utils.Optional<ExpenseMasterCountAggregateOutputType> | number
           }
         }
       }
@@ -3052,6 +3155,7 @@ export namespace Prisma {
     customer?: CustomerOmit
     vendor?: VendorOmit
     job?: JobOmit
+    expenseMaster?: ExpenseMasterOmit
     expense?: ExpenseOmit
     invoice?: InvoiceOmit
     invoiceItem?: InvoiceItemOmit
@@ -3167,6 +3271,7 @@ export namespace Prisma {
     purchaseInvoices: number
     auditLogs: number
     financialPeriods: number
+    expensesMaster: number
   }
 
   export type CompanyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3190,6 +3295,7 @@ export namespace Prisma {
     purchaseInvoices?: boolean | CompanyCountOutputTypeCountPurchaseInvoicesArgs
     auditLogs?: boolean | CompanyCountOutputTypeCountAuditLogsArgs
     financialPeriods?: boolean | CompanyCountOutputTypeCountFinancialPeriodsArgs
+    expensesMaster?: boolean | CompanyCountOutputTypeCountExpensesMasterArgs
   }
 
   // Custom InputTypes
@@ -3341,6 +3447,13 @@ export namespace Prisma {
    */
   export type CompanyCountOutputTypeCountFinancialPeriodsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FinancialPeriodWhereInput
+  }
+
+  /**
+   * CompanyCountOutputType without action
+   */
+  export type CompanyCountOutputTypeCountExpensesMasterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExpenseMasterWhereInput
   }
 
 
@@ -4094,6 +4207,7 @@ export namespace Prisma {
     purchaseInvoices?: boolean | Company$purchaseInvoicesArgs<ExtArgs>
     auditLogs?: boolean | Company$auditLogsArgs<ExtArgs>
     financialPeriods?: boolean | Company$financialPeriodsArgs<ExtArgs>
+    expensesMaster?: boolean | Company$expensesMasterArgs<ExtArgs>
     _count?: boolean | CompanyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["company"]>
 
@@ -4161,6 +4275,7 @@ export namespace Prisma {
     purchaseInvoices?: boolean | Company$purchaseInvoicesArgs<ExtArgs>
     auditLogs?: boolean | Company$auditLogsArgs<ExtArgs>
     financialPeriods?: boolean | Company$financialPeriodsArgs<ExtArgs>
+    expensesMaster?: boolean | Company$expensesMasterArgs<ExtArgs>
     _count?: boolean | CompanyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CompanyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4189,6 +4304,7 @@ export namespace Prisma {
       purchaseInvoices: Prisma.$PurchaseInvoicePayload<ExtArgs>[]
       auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
       financialPeriods: Prisma.$FinancialPeriodPayload<ExtArgs>[]
+      expensesMaster: Prisma.$ExpenseMasterPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4616,6 +4732,7 @@ export namespace Prisma {
     purchaseInvoices<T extends Company$purchaseInvoicesArgs<ExtArgs> = {}>(args?: Subset<T, Company$purchaseInvoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseInvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     auditLogs<T extends Company$auditLogsArgs<ExtArgs> = {}>(args?: Subset<T, Company$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     financialPeriods<T extends Company$financialPeriodsArgs<ExtArgs> = {}>(args?: Subset<T, Company$financialPeriodsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialPeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    expensesMaster<T extends Company$expensesMasterArgs<ExtArgs> = {}>(args?: Subset<T, Company$expensesMasterArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5521,6 +5638,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FinancialPeriodScalarFieldEnum | FinancialPeriodScalarFieldEnum[]
+  }
+
+  /**
+   * Company.expensesMaster
+   */
+  export type Company$expensesMasterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterInclude<ExtArgs> | null
+    where?: ExpenseMasterWhereInput
+    orderBy?: ExpenseMasterOrderByWithRelationInput | ExpenseMasterOrderByWithRelationInput[]
+    cursor?: ExpenseMasterWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExpenseMasterScalarFieldEnum | ExpenseMasterScalarFieldEnum[]
   }
 
   /**
@@ -14968,13 +15109,17 @@ export namespace Prisma {
     id: number | null
     jobNumber: string | null
     date: Date | null
+    jobDate: Date | null
     jobType: $Enums.JobType | null
+    status: $Enums.JobStatus | null
     customerId: number | null
     vessel: string | null
     place: string | null
     shipperRef: string | null
     gdNo: string | null
+    gdDate: Date | null
     formE: string | null
+    formEDate: Date | null
     commodity: string | null
     volume: string | null
     containerNo: string | null
@@ -14994,13 +15139,17 @@ export namespace Prisma {
     id: number | null
     jobNumber: string | null
     date: Date | null
+    jobDate: Date | null
     jobType: $Enums.JobType | null
+    status: $Enums.JobStatus | null
     customerId: number | null
     vessel: string | null
     place: string | null
     shipperRef: string | null
     gdNo: string | null
+    gdDate: Date | null
     formE: string | null
+    formEDate: Date | null
     commodity: string | null
     volume: string | null
     containerNo: string | null
@@ -15020,13 +15169,17 @@ export namespace Prisma {
     id: number
     jobNumber: number
     date: number
+    jobDate: number
     jobType: number
+    status: number
     customerId: number
     vessel: number
     place: number
     shipperRef: number
     gdNo: number
+    gdDate: number
     formE: number
+    formEDate: number
     commodity: number
     volume: number
     containerNo: number
@@ -15066,13 +15219,17 @@ export namespace Prisma {
     id?: true
     jobNumber?: true
     date?: true
+    jobDate?: true
     jobType?: true
+    status?: true
     customerId?: true
     vessel?: true
     place?: true
     shipperRef?: true
     gdNo?: true
+    gdDate?: true
     formE?: true
+    formEDate?: true
     commodity?: true
     volume?: true
     containerNo?: true
@@ -15092,13 +15249,17 @@ export namespace Prisma {
     id?: true
     jobNumber?: true
     date?: true
+    jobDate?: true
     jobType?: true
+    status?: true
     customerId?: true
     vessel?: true
     place?: true
     shipperRef?: true
     gdNo?: true
+    gdDate?: true
     formE?: true
+    formEDate?: true
     commodity?: true
     volume?: true
     containerNo?: true
@@ -15118,13 +15279,17 @@ export namespace Prisma {
     id?: true
     jobNumber?: true
     date?: true
+    jobDate?: true
     jobType?: true
+    status?: true
     customerId?: true
     vessel?: true
     place?: true
     shipperRef?: true
     gdNo?: true
+    gdDate?: true
     formE?: true
+    formEDate?: true
     commodity?: true
     volume?: true
     containerNo?: true
@@ -15231,13 +15396,17 @@ export namespace Prisma {
     id: number
     jobNumber: string
     date: Date
+    jobDate: Date
     jobType: $Enums.JobType
+    status: $Enums.JobStatus
     customerId: number
     vessel: string | null
     place: string | null
     shipperRef: string | null
     gdNo: string | null
+    gdDate: Date | null
     formE: string | null
+    formEDate: Date | null
     commodity: string | null
     volume: string | null
     containerNo: string | null
@@ -15276,13 +15445,17 @@ export namespace Prisma {
     id?: boolean
     jobNumber?: boolean
     date?: boolean
+    jobDate?: boolean
     jobType?: boolean
+    status?: boolean
     customerId?: boolean
     vessel?: boolean
     place?: boolean
     shipperRef?: boolean
     gdNo?: boolean
+    gdDate?: boolean
     formE?: boolean
+    formEDate?: boolean
     commodity?: boolean
     volume?: boolean
     containerNo?: boolean
@@ -15308,13 +15481,17 @@ export namespace Prisma {
     id?: boolean
     jobNumber?: boolean
     date?: boolean
+    jobDate?: boolean
     jobType?: boolean
+    status?: boolean
     customerId?: boolean
     vessel?: boolean
     place?: boolean
     shipperRef?: boolean
     gdNo?: boolean
+    gdDate?: boolean
     formE?: boolean
+    formEDate?: boolean
     commodity?: boolean
     volume?: boolean
     containerNo?: boolean
@@ -15337,13 +15514,17 @@ export namespace Prisma {
     id?: boolean
     jobNumber?: boolean
     date?: boolean
+    jobDate?: boolean
     jobType?: boolean
+    status?: boolean
     customerId?: boolean
     vessel?: boolean
     place?: boolean
     shipperRef?: boolean
     gdNo?: boolean
+    gdDate?: boolean
     formE?: boolean
+    formEDate?: boolean
     commodity?: boolean
     volume?: boolean
     containerNo?: boolean
@@ -15366,13 +15547,17 @@ export namespace Prisma {
     id?: boolean
     jobNumber?: boolean
     date?: boolean
+    jobDate?: boolean
     jobType?: boolean
+    status?: boolean
     customerId?: boolean
     vessel?: boolean
     place?: boolean
     shipperRef?: boolean
     gdNo?: boolean
+    gdDate?: boolean
     formE?: boolean
+    formEDate?: boolean
     commodity?: boolean
     volume?: boolean
     containerNo?: boolean
@@ -15388,7 +15573,7 @@ export namespace Prisma {
     deletedAt?: boolean
   }
 
-  export type JobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jobNumber" | "date" | "jobType" | "customerId" | "vessel" | "place" | "shipperRef" | "gdNo" | "formE" | "commodity" | "volume" | "containerNo" | "packages" | "weight" | "hawbBl" | "handledBy" | "salesPerson" | "companyId" | "branchId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["job"]>
+  export type JobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jobNumber" | "date" | "jobDate" | "jobType" | "status" | "customerId" | "vessel" | "place" | "shipperRef" | "gdNo" | "gdDate" | "formE" | "formEDate" | "commodity" | "volume" | "containerNo" | "packages" | "weight" | "hawbBl" | "handledBy" | "salesPerson" | "companyId" | "branchId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["job"]>
   export type JobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -15421,13 +15606,17 @@ export namespace Prisma {
       id: number
       jobNumber: string
       date: Date
+      jobDate: Date
       jobType: $Enums.JobType
+      status: $Enums.JobStatus
       customerId: number
       vessel: string | null
       place: string | null
       shipperRef: string | null
       gdNo: string | null
+      gdDate: Date | null
       formE: string | null
+      formEDate: Date | null
       commodity: string | null
       volume: string | null
       containerNo: string | null
@@ -15872,13 +16061,17 @@ export namespace Prisma {
     readonly id: FieldRef<"Job", 'Int'>
     readonly jobNumber: FieldRef<"Job", 'String'>
     readonly date: FieldRef<"Job", 'DateTime'>
+    readonly jobDate: FieldRef<"Job", 'DateTime'>
     readonly jobType: FieldRef<"Job", 'JobType'>
+    readonly status: FieldRef<"Job", 'JobStatus'>
     readonly customerId: FieldRef<"Job", 'Int'>
     readonly vessel: FieldRef<"Job", 'String'>
     readonly place: FieldRef<"Job", 'String'>
     readonly shipperRef: FieldRef<"Job", 'String'>
     readonly gdNo: FieldRef<"Job", 'String'>
+    readonly gdDate: FieldRef<"Job", 'DateTime'>
     readonly formE: FieldRef<"Job", 'String'>
+    readonly formEDate: FieldRef<"Job", 'DateTime'>
     readonly commodity: FieldRef<"Job", 'String'>
     readonly volume: FieldRef<"Job", 'String'>
     readonly containerNo: FieldRef<"Job", 'String'>
@@ -16370,6 +16563,1115 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: JobInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ExpenseMaster
+   */
+
+  export type AggregateExpenseMaster = {
+    _count: ExpenseMasterCountAggregateOutputType | null
+    _avg: ExpenseMasterAvgAggregateOutputType | null
+    _sum: ExpenseMasterSumAggregateOutputType | null
+    _min: ExpenseMasterMinAggregateOutputType | null
+    _max: ExpenseMasterMaxAggregateOutputType | null
+  }
+
+  export type ExpenseMasterAvgAggregateOutputType = {
+    id: number | null
+    companyId: number | null
+  }
+
+  export type ExpenseMasterSumAggregateOutputType = {
+    id: number | null
+    companyId: number | null
+  }
+
+  export type ExpenseMasterMinAggregateOutputType = {
+    id: number | null
+    code: string | null
+    name: string | null
+    companyId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ExpenseMasterMaxAggregateOutputType = {
+    id: number | null
+    code: string | null
+    name: string | null
+    companyId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ExpenseMasterCountAggregateOutputType = {
+    id: number
+    code: number
+    name: number
+    companyId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ExpenseMasterAvgAggregateInputType = {
+    id?: true
+    companyId?: true
+  }
+
+  export type ExpenseMasterSumAggregateInputType = {
+    id?: true
+    companyId?: true
+  }
+
+  export type ExpenseMasterMinAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    companyId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ExpenseMasterMaxAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    companyId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ExpenseMasterCountAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    companyId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ExpenseMasterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExpenseMaster to aggregate.
+     */
+    where?: ExpenseMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpenseMasters to fetch.
+     */
+    orderBy?: ExpenseMasterOrderByWithRelationInput | ExpenseMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ExpenseMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpenseMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpenseMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ExpenseMasters
+    **/
+    _count?: true | ExpenseMasterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ExpenseMasterAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ExpenseMasterSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ExpenseMasterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ExpenseMasterMaxAggregateInputType
+  }
+
+  export type GetExpenseMasterAggregateType<T extends ExpenseMasterAggregateArgs> = {
+        [P in keyof T & keyof AggregateExpenseMaster]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateExpenseMaster[P]>
+      : GetScalarType<T[P], AggregateExpenseMaster[P]>
+  }
+
+
+
+
+  export type ExpenseMasterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExpenseMasterWhereInput
+    orderBy?: ExpenseMasterOrderByWithAggregationInput | ExpenseMasterOrderByWithAggregationInput[]
+    by: ExpenseMasterScalarFieldEnum[] | ExpenseMasterScalarFieldEnum
+    having?: ExpenseMasterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ExpenseMasterCountAggregateInputType | true
+    _avg?: ExpenseMasterAvgAggregateInputType
+    _sum?: ExpenseMasterSumAggregateInputType
+    _min?: ExpenseMasterMinAggregateInputType
+    _max?: ExpenseMasterMaxAggregateInputType
+  }
+
+  export type ExpenseMasterGroupByOutputType = {
+    id: number
+    code: string
+    name: string
+    companyId: number
+    createdAt: Date
+    updatedAt: Date
+    _count: ExpenseMasterCountAggregateOutputType | null
+    _avg: ExpenseMasterAvgAggregateOutputType | null
+    _sum: ExpenseMasterSumAggregateOutputType | null
+    _min: ExpenseMasterMinAggregateOutputType | null
+    _max: ExpenseMasterMaxAggregateOutputType | null
+  }
+
+  type GetExpenseMasterGroupByPayload<T extends ExpenseMasterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ExpenseMasterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ExpenseMasterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ExpenseMasterGroupByOutputType[P]>
+            : GetScalarType<T[P], ExpenseMasterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ExpenseMasterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    companyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expenseMaster"]>
+
+  export type ExpenseMasterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    companyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expenseMaster"]>
+
+  export type ExpenseMasterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    companyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["expenseMaster"]>
+
+  export type ExpenseMasterSelectScalar = {
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    companyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ExpenseMasterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["expenseMaster"]>
+  export type ExpenseMasterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+  }
+  export type ExpenseMasterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+  }
+  export type ExpenseMasterIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+  }
+
+  export type $ExpenseMasterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ExpenseMaster"
+    objects: {
+      company: Prisma.$CompanyPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      code: string
+      name: string
+      companyId: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["expenseMaster"]>
+    composites: {}
+  }
+
+  type ExpenseMasterGetPayload<S extends boolean | null | undefined | ExpenseMasterDefaultArgs> = $Result.GetResult<Prisma.$ExpenseMasterPayload, S>
+
+  type ExpenseMasterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ExpenseMasterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ExpenseMasterCountAggregateInputType | true
+    }
+
+  export interface ExpenseMasterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ExpenseMaster'], meta: { name: 'ExpenseMaster' } }
+    /**
+     * Find zero or one ExpenseMaster that matches the filter.
+     * @param {ExpenseMasterFindUniqueArgs} args - Arguments to find a ExpenseMaster
+     * @example
+     * // Get one ExpenseMaster
+     * const expenseMaster = await prisma.expenseMaster.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ExpenseMasterFindUniqueArgs>(args: SelectSubset<T, ExpenseMasterFindUniqueArgs<ExtArgs>>): Prisma__ExpenseMasterClient<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ExpenseMaster that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ExpenseMasterFindUniqueOrThrowArgs} args - Arguments to find a ExpenseMaster
+     * @example
+     * // Get one ExpenseMaster
+     * const expenseMaster = await prisma.expenseMaster.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ExpenseMasterFindUniqueOrThrowArgs>(args: SelectSubset<T, ExpenseMasterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ExpenseMasterClient<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExpenseMaster that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpenseMasterFindFirstArgs} args - Arguments to find a ExpenseMaster
+     * @example
+     * // Get one ExpenseMaster
+     * const expenseMaster = await prisma.expenseMaster.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ExpenseMasterFindFirstArgs>(args?: SelectSubset<T, ExpenseMasterFindFirstArgs<ExtArgs>>): Prisma__ExpenseMasterClient<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExpenseMaster that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpenseMasterFindFirstOrThrowArgs} args - Arguments to find a ExpenseMaster
+     * @example
+     * // Get one ExpenseMaster
+     * const expenseMaster = await prisma.expenseMaster.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ExpenseMasterFindFirstOrThrowArgs>(args?: SelectSubset<T, ExpenseMasterFindFirstOrThrowArgs<ExtArgs>>): Prisma__ExpenseMasterClient<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ExpenseMasters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpenseMasterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ExpenseMasters
+     * const expenseMasters = await prisma.expenseMaster.findMany()
+     * 
+     * // Get first 10 ExpenseMasters
+     * const expenseMasters = await prisma.expenseMaster.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const expenseMasterWithIdOnly = await prisma.expenseMaster.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ExpenseMasterFindManyArgs>(args?: SelectSubset<T, ExpenseMasterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ExpenseMaster.
+     * @param {ExpenseMasterCreateArgs} args - Arguments to create a ExpenseMaster.
+     * @example
+     * // Create one ExpenseMaster
+     * const ExpenseMaster = await prisma.expenseMaster.create({
+     *   data: {
+     *     // ... data to create a ExpenseMaster
+     *   }
+     * })
+     * 
+     */
+    create<T extends ExpenseMasterCreateArgs>(args: SelectSubset<T, ExpenseMasterCreateArgs<ExtArgs>>): Prisma__ExpenseMasterClient<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ExpenseMasters.
+     * @param {ExpenseMasterCreateManyArgs} args - Arguments to create many ExpenseMasters.
+     * @example
+     * // Create many ExpenseMasters
+     * const expenseMaster = await prisma.expenseMaster.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ExpenseMasterCreateManyArgs>(args?: SelectSubset<T, ExpenseMasterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ExpenseMasters and returns the data saved in the database.
+     * @param {ExpenseMasterCreateManyAndReturnArgs} args - Arguments to create many ExpenseMasters.
+     * @example
+     * // Create many ExpenseMasters
+     * const expenseMaster = await prisma.expenseMaster.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ExpenseMasters and only return the `id`
+     * const expenseMasterWithIdOnly = await prisma.expenseMaster.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ExpenseMasterCreateManyAndReturnArgs>(args?: SelectSubset<T, ExpenseMasterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ExpenseMaster.
+     * @param {ExpenseMasterDeleteArgs} args - Arguments to delete one ExpenseMaster.
+     * @example
+     * // Delete one ExpenseMaster
+     * const ExpenseMaster = await prisma.expenseMaster.delete({
+     *   where: {
+     *     // ... filter to delete one ExpenseMaster
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ExpenseMasterDeleteArgs>(args: SelectSubset<T, ExpenseMasterDeleteArgs<ExtArgs>>): Prisma__ExpenseMasterClient<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ExpenseMaster.
+     * @param {ExpenseMasterUpdateArgs} args - Arguments to update one ExpenseMaster.
+     * @example
+     * // Update one ExpenseMaster
+     * const expenseMaster = await prisma.expenseMaster.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ExpenseMasterUpdateArgs>(args: SelectSubset<T, ExpenseMasterUpdateArgs<ExtArgs>>): Prisma__ExpenseMasterClient<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ExpenseMasters.
+     * @param {ExpenseMasterDeleteManyArgs} args - Arguments to filter ExpenseMasters to delete.
+     * @example
+     * // Delete a few ExpenseMasters
+     * const { count } = await prisma.expenseMaster.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ExpenseMasterDeleteManyArgs>(args?: SelectSubset<T, ExpenseMasterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExpenseMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpenseMasterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ExpenseMasters
+     * const expenseMaster = await prisma.expenseMaster.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ExpenseMasterUpdateManyArgs>(args: SelectSubset<T, ExpenseMasterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExpenseMasters and returns the data updated in the database.
+     * @param {ExpenseMasterUpdateManyAndReturnArgs} args - Arguments to update many ExpenseMasters.
+     * @example
+     * // Update many ExpenseMasters
+     * const expenseMaster = await prisma.expenseMaster.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ExpenseMasters and only return the `id`
+     * const expenseMasterWithIdOnly = await prisma.expenseMaster.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ExpenseMasterUpdateManyAndReturnArgs>(args: SelectSubset<T, ExpenseMasterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ExpenseMaster.
+     * @param {ExpenseMasterUpsertArgs} args - Arguments to update or create a ExpenseMaster.
+     * @example
+     * // Update or create a ExpenseMaster
+     * const expenseMaster = await prisma.expenseMaster.upsert({
+     *   create: {
+     *     // ... data to create a ExpenseMaster
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ExpenseMaster we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ExpenseMasterUpsertArgs>(args: SelectSubset<T, ExpenseMasterUpsertArgs<ExtArgs>>): Prisma__ExpenseMasterClient<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ExpenseMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpenseMasterCountArgs} args - Arguments to filter ExpenseMasters to count.
+     * @example
+     * // Count the number of ExpenseMasters
+     * const count = await prisma.expenseMaster.count({
+     *   where: {
+     *     // ... the filter for the ExpenseMasters we want to count
+     *   }
+     * })
+    **/
+    count<T extends ExpenseMasterCountArgs>(
+      args?: Subset<T, ExpenseMasterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ExpenseMasterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ExpenseMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpenseMasterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ExpenseMasterAggregateArgs>(args: Subset<T, ExpenseMasterAggregateArgs>): Prisma.PrismaPromise<GetExpenseMasterAggregateType<T>>
+
+    /**
+     * Group by ExpenseMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExpenseMasterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ExpenseMasterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ExpenseMasterGroupByArgs['orderBy'] }
+        : { orderBy?: ExpenseMasterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ExpenseMasterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetExpenseMasterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ExpenseMaster model
+   */
+  readonly fields: ExpenseMasterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ExpenseMaster.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ExpenseMasterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ExpenseMaster model
+   */
+  interface ExpenseMasterFieldRefs {
+    readonly id: FieldRef<"ExpenseMaster", 'Int'>
+    readonly code: FieldRef<"ExpenseMaster", 'String'>
+    readonly name: FieldRef<"ExpenseMaster", 'String'>
+    readonly companyId: FieldRef<"ExpenseMaster", 'Int'>
+    readonly createdAt: FieldRef<"ExpenseMaster", 'DateTime'>
+    readonly updatedAt: FieldRef<"ExpenseMaster", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ExpenseMaster findUnique
+   */
+  export type ExpenseMasterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpenseMaster to fetch.
+     */
+    where: ExpenseMasterWhereUniqueInput
+  }
+
+  /**
+   * ExpenseMaster findUniqueOrThrow
+   */
+  export type ExpenseMasterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpenseMaster to fetch.
+     */
+    where: ExpenseMasterWhereUniqueInput
+  }
+
+  /**
+   * ExpenseMaster findFirst
+   */
+  export type ExpenseMasterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpenseMaster to fetch.
+     */
+    where?: ExpenseMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpenseMasters to fetch.
+     */
+    orderBy?: ExpenseMasterOrderByWithRelationInput | ExpenseMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExpenseMasters.
+     */
+    cursor?: ExpenseMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpenseMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpenseMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExpenseMasters.
+     */
+    distinct?: ExpenseMasterScalarFieldEnum | ExpenseMasterScalarFieldEnum[]
+  }
+
+  /**
+   * ExpenseMaster findFirstOrThrow
+   */
+  export type ExpenseMasterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpenseMaster to fetch.
+     */
+    where?: ExpenseMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpenseMasters to fetch.
+     */
+    orderBy?: ExpenseMasterOrderByWithRelationInput | ExpenseMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExpenseMasters.
+     */
+    cursor?: ExpenseMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpenseMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpenseMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExpenseMasters.
+     */
+    distinct?: ExpenseMasterScalarFieldEnum | ExpenseMasterScalarFieldEnum[]
+  }
+
+  /**
+   * ExpenseMaster findMany
+   */
+  export type ExpenseMasterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which ExpenseMasters to fetch.
+     */
+    where?: ExpenseMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExpenseMasters to fetch.
+     */
+    orderBy?: ExpenseMasterOrderByWithRelationInput | ExpenseMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ExpenseMasters.
+     */
+    cursor?: ExpenseMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExpenseMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExpenseMasters.
+     */
+    skip?: number
+    distinct?: ExpenseMasterScalarFieldEnum | ExpenseMasterScalarFieldEnum[]
+  }
+
+  /**
+   * ExpenseMaster create
+   */
+  export type ExpenseMasterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ExpenseMaster.
+     */
+    data: XOR<ExpenseMasterCreateInput, ExpenseMasterUncheckedCreateInput>
+  }
+
+  /**
+   * ExpenseMaster createMany
+   */
+  export type ExpenseMasterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ExpenseMasters.
+     */
+    data: ExpenseMasterCreateManyInput | ExpenseMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ExpenseMaster createManyAndReturn
+   */
+  export type ExpenseMasterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * The data used to create many ExpenseMasters.
+     */
+    data: ExpenseMasterCreateManyInput | ExpenseMasterCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ExpenseMaster update
+   */
+  export type ExpenseMasterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ExpenseMaster.
+     */
+    data: XOR<ExpenseMasterUpdateInput, ExpenseMasterUncheckedUpdateInput>
+    /**
+     * Choose, which ExpenseMaster to update.
+     */
+    where: ExpenseMasterWhereUniqueInput
+  }
+
+  /**
+   * ExpenseMaster updateMany
+   */
+  export type ExpenseMasterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ExpenseMasters.
+     */
+    data: XOR<ExpenseMasterUpdateManyMutationInput, ExpenseMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which ExpenseMasters to update
+     */
+    where?: ExpenseMasterWhereInput
+    /**
+     * Limit how many ExpenseMasters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExpenseMaster updateManyAndReturn
+   */
+  export type ExpenseMasterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * The data used to update ExpenseMasters.
+     */
+    data: XOR<ExpenseMasterUpdateManyMutationInput, ExpenseMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which ExpenseMasters to update
+     */
+    where?: ExpenseMasterWhereInput
+    /**
+     * Limit how many ExpenseMasters to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ExpenseMaster upsert
+   */
+  export type ExpenseMasterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ExpenseMaster to update in case it exists.
+     */
+    where: ExpenseMasterWhereUniqueInput
+    /**
+     * In case the ExpenseMaster found by the `where` argument doesn't exist, create a new ExpenseMaster with this data.
+     */
+    create: XOR<ExpenseMasterCreateInput, ExpenseMasterUncheckedCreateInput>
+    /**
+     * In case the ExpenseMaster was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ExpenseMasterUpdateInput, ExpenseMasterUncheckedUpdateInput>
+  }
+
+  /**
+   * ExpenseMaster delete
+   */
+  export type ExpenseMasterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterInclude<ExtArgs> | null
+    /**
+     * Filter which ExpenseMaster to delete.
+     */
+    where: ExpenseMasterWhereUniqueInput
+  }
+
+  /**
+   * ExpenseMaster deleteMany
+   */
+  export type ExpenseMasterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExpenseMasters to delete
+     */
+    where?: ExpenseMasterWhereInput
+    /**
+     * Limit how many ExpenseMasters to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExpenseMaster without action
+   */
+  export type ExpenseMasterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpenseMaster
+     */
+    select?: ExpenseMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpenseMaster
+     */
+    omit?: ExpenseMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpenseMasterInclude<ExtArgs> | null
   }
 
 
@@ -17618,9 +18920,11 @@ export namespace Prisma {
     id: number | null
     jobId: number | null
     customerId: number | null
+    creditDays: number | null
     totalAmount: number | null
     taxAmount: number | null
     grandTotal: number | null
+    exchangeRate: number | null
     approvedById: number | null
     companyId: number | null
     transactionId: number | null
@@ -17630,9 +18934,11 @@ export namespace Prisma {
     id: number | null
     jobId: number | null
     customerId: number | null
+    creditDays: number | null
     totalAmount: number | null
     taxAmount: number | null
     grandTotal: number | null
+    exchangeRate: number | null
     approvedById: number | null
     companyId: number | null
     transactionId: number | null
@@ -17646,10 +18952,18 @@ export namespace Prisma {
     customerId: number | null
     type: $Enums.InvoiceType | null
     status: $Enums.InvoiceStatus | null
+    masterNumber: string | null
+    agentCode: string | null
+    shippingLine: string | null
+    origin: string | null
+    destination: string | null
+    creditDays: number | null
+    vendorType: string | null
     totalAmount: number | null
     taxAmount: number | null
     grandTotal: number | null
     currencyCode: string | null
+    exchangeRate: number | null
     isApproved: boolean | null
     approvedById: number | null
     isLocked: boolean | null
@@ -17669,10 +18983,18 @@ export namespace Prisma {
     customerId: number | null
     type: $Enums.InvoiceType | null
     status: $Enums.InvoiceStatus | null
+    masterNumber: string | null
+    agentCode: string | null
+    shippingLine: string | null
+    origin: string | null
+    destination: string | null
+    creditDays: number | null
+    vendorType: string | null
     totalAmount: number | null
     taxAmount: number | null
     grandTotal: number | null
     currencyCode: string | null
+    exchangeRate: number | null
     isApproved: boolean | null
     approvedById: number | null
     isLocked: boolean | null
@@ -17692,10 +19014,18 @@ export namespace Prisma {
     customerId: number
     type: number
     status: number
+    masterNumber: number
+    agentCode: number
+    shippingLine: number
+    origin: number
+    destination: number
+    creditDays: number
+    vendorType: number
     totalAmount: number
     taxAmount: number
     grandTotal: number
     currencyCode: number
+    exchangeRate: number
     isApproved: number
     approvedById: number
     isLocked: number
@@ -17713,9 +19043,11 @@ export namespace Prisma {
     id?: true
     jobId?: true
     customerId?: true
+    creditDays?: true
     totalAmount?: true
     taxAmount?: true
     grandTotal?: true
+    exchangeRate?: true
     approvedById?: true
     companyId?: true
     transactionId?: true
@@ -17725,9 +19057,11 @@ export namespace Prisma {
     id?: true
     jobId?: true
     customerId?: true
+    creditDays?: true
     totalAmount?: true
     taxAmount?: true
     grandTotal?: true
+    exchangeRate?: true
     approvedById?: true
     companyId?: true
     transactionId?: true
@@ -17741,10 +19075,18 @@ export namespace Prisma {
     customerId?: true
     type?: true
     status?: true
+    masterNumber?: true
+    agentCode?: true
+    shippingLine?: true
+    origin?: true
+    destination?: true
+    creditDays?: true
+    vendorType?: true
     totalAmount?: true
     taxAmount?: true
     grandTotal?: true
     currencyCode?: true
+    exchangeRate?: true
     isApproved?: true
     approvedById?: true
     isLocked?: true
@@ -17764,10 +19106,18 @@ export namespace Prisma {
     customerId?: true
     type?: true
     status?: true
+    masterNumber?: true
+    agentCode?: true
+    shippingLine?: true
+    origin?: true
+    destination?: true
+    creditDays?: true
+    vendorType?: true
     totalAmount?: true
     taxAmount?: true
     grandTotal?: true
     currencyCode?: true
+    exchangeRate?: true
     isApproved?: true
     approvedById?: true
     isLocked?: true
@@ -17787,10 +19137,18 @@ export namespace Prisma {
     customerId?: true
     type?: true
     status?: true
+    masterNumber?: true
+    agentCode?: true
+    shippingLine?: true
+    origin?: true
+    destination?: true
+    creditDays?: true
+    vendorType?: true
     totalAmount?: true
     taxAmount?: true
     grandTotal?: true
     currencyCode?: true
+    exchangeRate?: true
     isApproved?: true
     approvedById?: true
     isLocked?: true
@@ -17897,10 +19255,18 @@ export namespace Prisma {
     customerId: number
     type: $Enums.InvoiceType
     status: $Enums.InvoiceStatus
+    masterNumber: string | null
+    agentCode: string | null
+    shippingLine: string | null
+    origin: string | null
+    destination: string | null
+    creditDays: number | null
+    vendorType: string | null
     totalAmount: number
     taxAmount: number
     grandTotal: number
     currencyCode: string
+    exchangeRate: number
     isApproved: boolean
     approvedById: number | null
     isLocked: boolean
@@ -17939,10 +19305,18 @@ export namespace Prisma {
     customerId?: boolean
     type?: boolean
     status?: boolean
+    masterNumber?: boolean
+    agentCode?: boolean
+    shippingLine?: boolean
+    origin?: boolean
+    destination?: boolean
+    creditDays?: boolean
+    vendorType?: boolean
     totalAmount?: boolean
     taxAmount?: boolean
     grandTotal?: boolean
     currencyCode?: boolean
+    exchangeRate?: boolean
     isApproved?: boolean
     approvedById?: boolean
     isLocked?: boolean
@@ -17968,10 +19342,18 @@ export namespace Prisma {
     customerId?: boolean
     type?: boolean
     status?: boolean
+    masterNumber?: boolean
+    agentCode?: boolean
+    shippingLine?: boolean
+    origin?: boolean
+    destination?: boolean
+    creditDays?: boolean
+    vendorType?: boolean
     totalAmount?: boolean
     taxAmount?: boolean
     grandTotal?: boolean
     currencyCode?: boolean
+    exchangeRate?: boolean
     isApproved?: boolean
     approvedById?: boolean
     isLocked?: boolean
@@ -17995,10 +19377,18 @@ export namespace Prisma {
     customerId?: boolean
     type?: boolean
     status?: boolean
+    masterNumber?: boolean
+    agentCode?: boolean
+    shippingLine?: boolean
+    origin?: boolean
+    destination?: boolean
+    creditDays?: boolean
+    vendorType?: boolean
     totalAmount?: boolean
     taxAmount?: boolean
     grandTotal?: boolean
     currencyCode?: boolean
+    exchangeRate?: boolean
     isApproved?: boolean
     approvedById?: boolean
     isLocked?: boolean
@@ -18022,10 +19412,18 @@ export namespace Prisma {
     customerId?: boolean
     type?: boolean
     status?: boolean
+    masterNumber?: boolean
+    agentCode?: boolean
+    shippingLine?: boolean
+    origin?: boolean
+    destination?: boolean
+    creditDays?: boolean
+    vendorType?: boolean
     totalAmount?: boolean
     taxAmount?: boolean
     grandTotal?: boolean
     currencyCode?: boolean
+    exchangeRate?: boolean
     isApproved?: boolean
     approvedById?: boolean
     isLocked?: boolean
@@ -18037,7 +19435,7 @@ export namespace Prisma {
     transactionId?: boolean
   }
 
-  export type InvoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "invoiceNumber" | "date" | "jobId" | "customerId" | "type" | "status" | "totalAmount" | "taxAmount" | "grandTotal" | "currencyCode" | "isApproved" | "approvedById" | "isLocked" | "lockedAt" | "companyId" | "createdAt" | "updatedAt" | "deletedAt" | "transactionId", ExtArgs["result"]["invoice"]>
+  export type InvoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "invoiceNumber" | "date" | "jobId" | "customerId" | "type" | "status" | "masterNumber" | "agentCode" | "shippingLine" | "origin" | "destination" | "creditDays" | "vendorType" | "totalAmount" | "taxAmount" | "grandTotal" | "currencyCode" | "exchangeRate" | "isApproved" | "approvedById" | "isLocked" | "lockedAt" | "companyId" | "createdAt" | "updatedAt" | "deletedAt" | "transactionId", ExtArgs["result"]["invoice"]>
   export type InvoiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     job?: boolean | JobDefaultArgs<ExtArgs>
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
@@ -18076,10 +19474,18 @@ export namespace Prisma {
       customerId: number
       type: $Enums.InvoiceType
       status: $Enums.InvoiceStatus
+      masterNumber: string | null
+      agentCode: string | null
+      shippingLine: string | null
+      origin: string | null
+      destination: string | null
+      creditDays: number | null
+      vendorType: string | null
       totalAmount: number
       taxAmount: number
       grandTotal: number
       currencyCode: string
+      exchangeRate: number
       isApproved: boolean
       approvedById: number | null
       isLocked: boolean
@@ -18524,10 +19930,18 @@ export namespace Prisma {
     readonly customerId: FieldRef<"Invoice", 'Int'>
     readonly type: FieldRef<"Invoice", 'InvoiceType'>
     readonly status: FieldRef<"Invoice", 'InvoiceStatus'>
+    readonly masterNumber: FieldRef<"Invoice", 'String'>
+    readonly agentCode: FieldRef<"Invoice", 'String'>
+    readonly shippingLine: FieldRef<"Invoice", 'String'>
+    readonly origin: FieldRef<"Invoice", 'String'>
+    readonly destination: FieldRef<"Invoice", 'String'>
+    readonly creditDays: FieldRef<"Invoice", 'Int'>
+    readonly vendorType: FieldRef<"Invoice", 'String'>
     readonly totalAmount: FieldRef<"Invoice", 'Float'>
     readonly taxAmount: FieldRef<"Invoice", 'Float'>
     readonly grandTotal: FieldRef<"Invoice", 'Float'>
     readonly currencyCode: FieldRef<"Invoice", 'String'>
+    readonly exchangeRate: FieldRef<"Invoice", 'Float'>
     readonly isApproved: FieldRef<"Invoice", 'Boolean'>
     readonly approvedById: FieldRef<"Invoice", 'Int'>
     readonly isLocked: FieldRef<"Invoice", 'Boolean'>
@@ -34844,13 +36258,17 @@ export namespace Prisma {
     id: 'id',
     jobNumber: 'jobNumber',
     date: 'date',
+    jobDate: 'jobDate',
     jobType: 'jobType',
+    status: 'status',
     customerId: 'customerId',
     vessel: 'vessel',
     place: 'place',
     shipperRef: 'shipperRef',
     gdNo: 'gdNo',
+    gdDate: 'gdDate',
     formE: 'formE',
+    formEDate: 'formEDate',
     commodity: 'commodity',
     volume: 'volume',
     containerNo: 'containerNo',
@@ -34867,6 +36285,18 @@ export namespace Prisma {
   };
 
   export type JobScalarFieldEnum = (typeof JobScalarFieldEnum)[keyof typeof JobScalarFieldEnum]
+
+
+  export const ExpenseMasterScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    name: 'name',
+    companyId: 'companyId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ExpenseMasterScalarFieldEnum = (typeof ExpenseMasterScalarFieldEnum)[keyof typeof ExpenseMasterScalarFieldEnum]
 
 
   export const ExpenseScalarFieldEnum: {
@@ -34894,10 +36324,18 @@ export namespace Prisma {
     customerId: 'customerId',
     type: 'type',
     status: 'status',
+    masterNumber: 'masterNumber',
+    agentCode: 'agentCode',
+    shippingLine: 'shippingLine',
+    origin: 'origin',
+    destination: 'destination',
+    creditDays: 'creditDays',
+    vendorType: 'vendorType',
     totalAmount: 'totalAmount',
     taxAmount: 'taxAmount',
     grandTotal: 'grandTotal',
     currencyCode: 'currencyCode',
+    exchangeRate: 'exchangeRate',
     isApproved: 'isApproved',
     approvedById: 'approvedById',
     isLocked: 'isLocked',
@@ -35265,6 +36703,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'JobStatus'
+   */
+  export type EnumJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'JobStatus[]'
+   */
+  export type ListEnumJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'InvoiceType'
    */
   export type EnumInvoiceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvoiceType'>
@@ -35372,6 +36824,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceListRelationFilter
     auditLogs?: AuditLogListRelationFilter
     financialPeriods?: FinancialPeriodListRelationFilter
+    expensesMaster?: ExpenseMasterListRelationFilter
   }
 
   export type CompanyOrderByWithRelationInput = {
@@ -35406,6 +36859,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceOrderByRelationAggregateInput
     auditLogs?: AuditLogOrderByRelationAggregateInput
     financialPeriods?: FinancialPeriodOrderByRelationAggregateInput
+    expensesMaster?: ExpenseMasterOrderByRelationAggregateInput
   }
 
   export type CompanyWhereUniqueInput = Prisma.AtLeast<{
@@ -35443,6 +36897,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceListRelationFilter
     auditLogs?: AuditLogListRelationFilter
     financialPeriods?: FinancialPeriodListRelationFilter
+    expensesMaster?: ExpenseMasterListRelationFilter
   }, "id" | "uniqueId">
 
   export type CompanyOrderByWithAggregationInput = {
@@ -36089,13 +37544,17 @@ export namespace Prisma {
     id?: IntFilter<"Job"> | number
     jobNumber?: StringFilter<"Job"> | string
     date?: DateTimeFilter<"Job"> | Date | string
+    jobDate?: DateTimeFilter<"Job"> | Date | string
     jobType?: EnumJobTypeFilter<"Job"> | $Enums.JobType
+    status?: EnumJobStatusFilter<"Job"> | $Enums.JobStatus
     customerId?: IntFilter<"Job"> | number
     vessel?: StringNullableFilter<"Job"> | string | null
     place?: StringNullableFilter<"Job"> | string | null
     shipperRef?: StringNullableFilter<"Job"> | string | null
     gdNo?: StringNullableFilter<"Job"> | string | null
+    gdDate?: DateTimeNullableFilter<"Job"> | Date | string | null
     formE?: StringNullableFilter<"Job"> | string | null
+    formEDate?: DateTimeNullableFilter<"Job"> | Date | string | null
     commodity?: StringNullableFilter<"Job"> | string | null
     volume?: StringNullableFilter<"Job"> | string | null
     containerNo?: StringNullableFilter<"Job"> | string | null
@@ -36120,13 +37579,17 @@ export namespace Prisma {
     id?: SortOrder
     jobNumber?: SortOrder
     date?: SortOrder
+    jobDate?: SortOrder
     jobType?: SortOrder
+    status?: SortOrder
     customerId?: SortOrder
     vessel?: SortOrderInput | SortOrder
     place?: SortOrderInput | SortOrder
     shipperRef?: SortOrderInput | SortOrder
     gdNo?: SortOrderInput | SortOrder
+    gdDate?: SortOrderInput | SortOrder
     formE?: SortOrderInput | SortOrder
+    formEDate?: SortOrderInput | SortOrder
     commodity?: SortOrderInput | SortOrder
     volume?: SortOrderInput | SortOrder
     containerNo?: SortOrderInput | SortOrder
@@ -36154,13 +37617,17 @@ export namespace Prisma {
     OR?: JobWhereInput[]
     NOT?: JobWhereInput | JobWhereInput[]
     date?: DateTimeFilter<"Job"> | Date | string
+    jobDate?: DateTimeFilter<"Job"> | Date | string
     jobType?: EnumJobTypeFilter<"Job"> | $Enums.JobType
+    status?: EnumJobStatusFilter<"Job"> | $Enums.JobStatus
     customerId?: IntFilter<"Job"> | number
     vessel?: StringNullableFilter<"Job"> | string | null
     place?: StringNullableFilter<"Job"> | string | null
     shipperRef?: StringNullableFilter<"Job"> | string | null
     gdNo?: StringNullableFilter<"Job"> | string | null
+    gdDate?: DateTimeNullableFilter<"Job"> | Date | string | null
     formE?: StringNullableFilter<"Job"> | string | null
+    formEDate?: DateTimeNullableFilter<"Job"> | Date | string | null
     commodity?: StringNullableFilter<"Job"> | string | null
     volume?: StringNullableFilter<"Job"> | string | null
     containerNo?: StringNullableFilter<"Job"> | string | null
@@ -36185,13 +37652,17 @@ export namespace Prisma {
     id?: SortOrder
     jobNumber?: SortOrder
     date?: SortOrder
+    jobDate?: SortOrder
     jobType?: SortOrder
+    status?: SortOrder
     customerId?: SortOrder
     vessel?: SortOrderInput | SortOrder
     place?: SortOrderInput | SortOrder
     shipperRef?: SortOrderInput | SortOrder
     gdNo?: SortOrderInput | SortOrder
+    gdDate?: SortOrderInput | SortOrder
     formE?: SortOrderInput | SortOrder
+    formEDate?: SortOrderInput | SortOrder
     commodity?: SortOrderInput | SortOrder
     volume?: SortOrderInput | SortOrder
     containerNo?: SortOrderInput | SortOrder
@@ -36219,13 +37690,17 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Job"> | number
     jobNumber?: StringWithAggregatesFilter<"Job"> | string
     date?: DateTimeWithAggregatesFilter<"Job"> | Date | string
+    jobDate?: DateTimeWithAggregatesFilter<"Job"> | Date | string
     jobType?: EnumJobTypeWithAggregatesFilter<"Job"> | $Enums.JobType
+    status?: EnumJobStatusWithAggregatesFilter<"Job"> | $Enums.JobStatus
     customerId?: IntWithAggregatesFilter<"Job"> | number
     vessel?: StringNullableWithAggregatesFilter<"Job"> | string | null
     place?: StringNullableWithAggregatesFilter<"Job"> | string | null
     shipperRef?: StringNullableWithAggregatesFilter<"Job"> | string | null
     gdNo?: StringNullableWithAggregatesFilter<"Job"> | string | null
+    gdDate?: DateTimeNullableWithAggregatesFilter<"Job"> | Date | string | null
     formE?: StringNullableWithAggregatesFilter<"Job"> | string | null
+    formEDate?: DateTimeNullableWithAggregatesFilter<"Job"> | Date | string | null
     commodity?: StringNullableWithAggregatesFilter<"Job"> | string | null
     volume?: StringNullableWithAggregatesFilter<"Job"> | string | null
     containerNo?: StringNullableWithAggregatesFilter<"Job"> | string | null
@@ -36239,6 +37714,69 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Job"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Job"> | Date | string
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Job"> | Date | string | null
+  }
+
+  export type ExpenseMasterWhereInput = {
+    AND?: ExpenseMasterWhereInput | ExpenseMasterWhereInput[]
+    OR?: ExpenseMasterWhereInput[]
+    NOT?: ExpenseMasterWhereInput | ExpenseMasterWhereInput[]
+    id?: IntFilter<"ExpenseMaster"> | number
+    code?: StringFilter<"ExpenseMaster"> | string
+    name?: StringFilter<"ExpenseMaster"> | string
+    companyId?: IntFilter<"ExpenseMaster"> | number
+    createdAt?: DateTimeFilter<"ExpenseMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"ExpenseMaster"> | Date | string
+    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
+  }
+
+  export type ExpenseMasterOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    companyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    company?: CompanyOrderByWithRelationInput
+  }
+
+  export type ExpenseMasterWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    companyId_code?: ExpenseMasterCompanyIdCodeCompoundUniqueInput
+    AND?: ExpenseMasterWhereInput | ExpenseMasterWhereInput[]
+    OR?: ExpenseMasterWhereInput[]
+    NOT?: ExpenseMasterWhereInput | ExpenseMasterWhereInput[]
+    code?: StringFilter<"ExpenseMaster"> | string
+    name?: StringFilter<"ExpenseMaster"> | string
+    companyId?: IntFilter<"ExpenseMaster"> | number
+    createdAt?: DateTimeFilter<"ExpenseMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"ExpenseMaster"> | Date | string
+    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
+  }, "id" | "companyId_code">
+
+  export type ExpenseMasterOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    companyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ExpenseMasterCountOrderByAggregateInput
+    _avg?: ExpenseMasterAvgOrderByAggregateInput
+    _max?: ExpenseMasterMaxOrderByAggregateInput
+    _min?: ExpenseMasterMinOrderByAggregateInput
+    _sum?: ExpenseMasterSumOrderByAggregateInput
+  }
+
+  export type ExpenseMasterScalarWhereWithAggregatesInput = {
+    AND?: ExpenseMasterScalarWhereWithAggregatesInput | ExpenseMasterScalarWhereWithAggregatesInput[]
+    OR?: ExpenseMasterScalarWhereWithAggregatesInput[]
+    NOT?: ExpenseMasterScalarWhereWithAggregatesInput | ExpenseMasterScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ExpenseMaster"> | number
+    code?: StringWithAggregatesFilter<"ExpenseMaster"> | string
+    name?: StringWithAggregatesFilter<"ExpenseMaster"> | string
+    companyId?: IntWithAggregatesFilter<"ExpenseMaster"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ExpenseMaster"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ExpenseMaster"> | Date | string
   }
 
   export type ExpenseWhereInput = {
@@ -36345,10 +37883,18 @@ export namespace Prisma {
     customerId?: IntFilter<"Invoice"> | number
     type?: EnumInvoiceTypeFilter<"Invoice"> | $Enums.InvoiceType
     status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
+    masterNumber?: StringNullableFilter<"Invoice"> | string | null
+    agentCode?: StringNullableFilter<"Invoice"> | string | null
+    shippingLine?: StringNullableFilter<"Invoice"> | string | null
+    origin?: StringNullableFilter<"Invoice"> | string | null
+    destination?: StringNullableFilter<"Invoice"> | string | null
+    creditDays?: IntNullableFilter<"Invoice"> | number | null
+    vendorType?: StringNullableFilter<"Invoice"> | string | null
     totalAmount?: FloatFilter<"Invoice"> | number
     taxAmount?: FloatFilter<"Invoice"> | number
     grandTotal?: FloatFilter<"Invoice"> | number
     currencyCode?: StringFilter<"Invoice"> | string
+    exchangeRate?: FloatFilter<"Invoice"> | number
     isApproved?: BoolFilter<"Invoice"> | boolean
     approvedById?: IntNullableFilter<"Invoice"> | number | null
     isLocked?: BoolFilter<"Invoice"> | boolean
@@ -36373,10 +37919,18 @@ export namespace Prisma {
     customerId?: SortOrder
     type?: SortOrder
     status?: SortOrder
+    masterNumber?: SortOrderInput | SortOrder
+    agentCode?: SortOrderInput | SortOrder
+    shippingLine?: SortOrderInput | SortOrder
+    origin?: SortOrderInput | SortOrder
+    destination?: SortOrderInput | SortOrder
+    creditDays?: SortOrderInput | SortOrder
+    vendorType?: SortOrderInput | SortOrder
     totalAmount?: SortOrder
     taxAmount?: SortOrder
     grandTotal?: SortOrder
     currencyCode?: SortOrder
+    exchangeRate?: SortOrder
     isApproved?: SortOrder
     approvedById?: SortOrderInput | SortOrder
     isLocked?: SortOrder
@@ -36405,10 +37959,18 @@ export namespace Prisma {
     customerId?: IntFilter<"Invoice"> | number
     type?: EnumInvoiceTypeFilter<"Invoice"> | $Enums.InvoiceType
     status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
+    masterNumber?: StringNullableFilter<"Invoice"> | string | null
+    agentCode?: StringNullableFilter<"Invoice"> | string | null
+    shippingLine?: StringNullableFilter<"Invoice"> | string | null
+    origin?: StringNullableFilter<"Invoice"> | string | null
+    destination?: StringNullableFilter<"Invoice"> | string | null
+    creditDays?: IntNullableFilter<"Invoice"> | number | null
+    vendorType?: StringNullableFilter<"Invoice"> | string | null
     totalAmount?: FloatFilter<"Invoice"> | number
     taxAmount?: FloatFilter<"Invoice"> | number
     grandTotal?: FloatFilter<"Invoice"> | number
     currencyCode?: StringFilter<"Invoice"> | string
+    exchangeRate?: FloatFilter<"Invoice"> | number
     isApproved?: BoolFilter<"Invoice"> | boolean
     approvedById?: IntNullableFilter<"Invoice"> | number | null
     isLocked?: BoolFilter<"Invoice"> | boolean
@@ -36432,10 +37994,18 @@ export namespace Prisma {
     customerId?: SortOrder
     type?: SortOrder
     status?: SortOrder
+    masterNumber?: SortOrderInput | SortOrder
+    agentCode?: SortOrderInput | SortOrder
+    shippingLine?: SortOrderInput | SortOrder
+    origin?: SortOrderInput | SortOrder
+    destination?: SortOrderInput | SortOrder
+    creditDays?: SortOrderInput | SortOrder
+    vendorType?: SortOrderInput | SortOrder
     totalAmount?: SortOrder
     taxAmount?: SortOrder
     grandTotal?: SortOrder
     currencyCode?: SortOrder
+    exchangeRate?: SortOrder
     isApproved?: SortOrder
     approvedById?: SortOrderInput | SortOrder
     isLocked?: SortOrder
@@ -36463,10 +38033,18 @@ export namespace Prisma {
     customerId?: IntWithAggregatesFilter<"Invoice"> | number
     type?: EnumInvoiceTypeWithAggregatesFilter<"Invoice"> | $Enums.InvoiceType
     status?: EnumInvoiceStatusWithAggregatesFilter<"Invoice"> | $Enums.InvoiceStatus
+    masterNumber?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    agentCode?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    shippingLine?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    origin?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    destination?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    creditDays?: IntNullableWithAggregatesFilter<"Invoice"> | number | null
+    vendorType?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
     totalAmount?: FloatWithAggregatesFilter<"Invoice"> | number
     taxAmount?: FloatWithAggregatesFilter<"Invoice"> | number
     grandTotal?: FloatWithAggregatesFilter<"Invoice"> | number
     currencyCode?: StringWithAggregatesFilter<"Invoice"> | string
+    exchangeRate?: FloatWithAggregatesFilter<"Invoice"> | number
     isApproved?: BoolWithAggregatesFilter<"Invoice"> | boolean
     approvedById?: IntNullableWithAggregatesFilter<"Invoice"> | number | null
     isLocked?: BoolWithAggregatesFilter<"Invoice"> | boolean
@@ -37620,6 +39198,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateInput = {
@@ -37654,6 +39233,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUpdateInput = {
@@ -37687,6 +39267,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateInput = {
@@ -37721,6 +39302,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyCreateManyInput = {
@@ -38376,12 +39958,16 @@ export namespace Prisma {
   export type JobCreateInput = {
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -38404,13 +39990,17 @@ export namespace Prisma {
     id?: number
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     customerId: number
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -38431,12 +40021,16 @@ export namespace Prisma {
   export type JobUpdateInput = {
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38459,13 +40053,17 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     customerId?: IntFieldUpdateOperationsInput | number
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38487,13 +40085,17 @@ export namespace Prisma {
     id?: number
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     customerId: number
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -38512,12 +40114,16 @@ export namespace Prisma {
   export type JobUpdateManyMutationInput = {
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38535,13 +40141,17 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     customerId?: IntFieldUpdateOperationsInput | number
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38555,6 +40165,65 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ExpenseMasterCreateInput = {
+    code: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutExpensesMasterInput
+  }
+
+  export type ExpenseMasterUncheckedCreateInput = {
+    id?: number
+    code: string
+    name: string
+    companyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ExpenseMasterUpdateInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutExpensesMasterNestedInput
+  }
+
+  export type ExpenseMasterUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    companyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpenseMasterCreateManyInput = {
+    id?: number
+    code: string
+    name: string
+    companyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ExpenseMasterUpdateManyMutationInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpenseMasterUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    companyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ExpenseCreateInput = {
@@ -38654,10 +40323,18 @@ export namespace Prisma {
     date?: Date | string
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -38680,10 +40357,18 @@ export namespace Prisma {
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -38701,10 +40386,18 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -38727,10 +40420,18 @@ export namespace Prisma {
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -38751,10 +40452,18 @@ export namespace Prisma {
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -38771,10 +40480,18 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -38792,10 +40509,18 @@ export namespace Prisma {
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -40119,6 +41844,12 @@ export namespace Prisma {
     none?: FinancialPeriodWhereInput
   }
 
+  export type ExpenseMasterListRelationFilter = {
+    every?: ExpenseMasterWhereInput
+    some?: ExpenseMasterWhereInput
+    none?: ExpenseMasterWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -40201,6 +41932,10 @@ export namespace Prisma {
   }
 
   export type FinancialPeriodOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ExpenseMasterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -40834,6 +42569,13 @@ export namespace Prisma {
     not?: NestedEnumJobTypeFilter<$PrismaModel> | $Enums.JobType
   }
 
+  export type EnumJobStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.JobStatus | EnumJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumJobStatusFilter<$PrismaModel> | $Enums.JobStatus
+  }
+
   export type FloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -40854,13 +42596,17 @@ export namespace Prisma {
     id?: SortOrder
     jobNumber?: SortOrder
     date?: SortOrder
+    jobDate?: SortOrder
     jobType?: SortOrder
+    status?: SortOrder
     customerId?: SortOrder
     vessel?: SortOrder
     place?: SortOrder
     shipperRef?: SortOrder
     gdNo?: SortOrder
+    gdDate?: SortOrder
     formE?: SortOrder
+    formEDate?: SortOrder
     commodity?: SortOrder
     volume?: SortOrder
     containerNo?: SortOrder
@@ -40889,13 +42635,17 @@ export namespace Prisma {
     id?: SortOrder
     jobNumber?: SortOrder
     date?: SortOrder
+    jobDate?: SortOrder
     jobType?: SortOrder
+    status?: SortOrder
     customerId?: SortOrder
     vessel?: SortOrder
     place?: SortOrder
     shipperRef?: SortOrder
     gdNo?: SortOrder
+    gdDate?: SortOrder
     formE?: SortOrder
+    formEDate?: SortOrder
     commodity?: SortOrder
     volume?: SortOrder
     containerNo?: SortOrder
@@ -40915,13 +42665,17 @@ export namespace Prisma {
     id?: SortOrder
     jobNumber?: SortOrder
     date?: SortOrder
+    jobDate?: SortOrder
     jobType?: SortOrder
+    status?: SortOrder
     customerId?: SortOrder
     vessel?: SortOrder
     place?: SortOrder
     shipperRef?: SortOrder
     gdNo?: SortOrder
+    gdDate?: SortOrder
     formE?: SortOrder
+    formEDate?: SortOrder
     commodity?: SortOrder
     volume?: SortOrder
     containerNo?: SortOrder
@@ -40956,6 +42710,16 @@ export namespace Prisma {
     _max?: NestedEnumJobTypeFilter<$PrismaModel>
   }
 
+  export type EnumJobStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.JobStatus | EnumJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumJobStatusWithAggregatesFilter<$PrismaModel> | $Enums.JobStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumJobStatusFilter<$PrismaModel>
+    _max?: NestedEnumJobStatusFilter<$PrismaModel>
+  }
+
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -40970,6 +42734,48 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type ExpenseMasterCompanyIdCodeCompoundUniqueInput = {
+    companyId: number
+    code: string
+  }
+
+  export type ExpenseMasterCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    companyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ExpenseMasterAvgOrderByAggregateInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+  }
+
+  export type ExpenseMasterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    companyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ExpenseMasterMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    companyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ExpenseMasterSumOrderByAggregateInput = {
+    id?: SortOrder
+    companyId?: SortOrder
   }
 
   export type JobScalarRelationFilter = {
@@ -41081,10 +42887,18 @@ export namespace Prisma {
     customerId?: SortOrder
     type?: SortOrder
     status?: SortOrder
+    masterNumber?: SortOrder
+    agentCode?: SortOrder
+    shippingLine?: SortOrder
+    origin?: SortOrder
+    destination?: SortOrder
+    creditDays?: SortOrder
+    vendorType?: SortOrder
     totalAmount?: SortOrder
     taxAmount?: SortOrder
     grandTotal?: SortOrder
     currencyCode?: SortOrder
+    exchangeRate?: SortOrder
     isApproved?: SortOrder
     approvedById?: SortOrder
     isLocked?: SortOrder
@@ -41100,9 +42914,11 @@ export namespace Prisma {
     id?: SortOrder
     jobId?: SortOrder
     customerId?: SortOrder
+    creditDays?: SortOrder
     totalAmount?: SortOrder
     taxAmount?: SortOrder
     grandTotal?: SortOrder
+    exchangeRate?: SortOrder
     approvedById?: SortOrder
     companyId?: SortOrder
     transactionId?: SortOrder
@@ -41116,10 +42932,18 @@ export namespace Prisma {
     customerId?: SortOrder
     type?: SortOrder
     status?: SortOrder
+    masterNumber?: SortOrder
+    agentCode?: SortOrder
+    shippingLine?: SortOrder
+    origin?: SortOrder
+    destination?: SortOrder
+    creditDays?: SortOrder
+    vendorType?: SortOrder
     totalAmount?: SortOrder
     taxAmount?: SortOrder
     grandTotal?: SortOrder
     currencyCode?: SortOrder
+    exchangeRate?: SortOrder
     isApproved?: SortOrder
     approvedById?: SortOrder
     isLocked?: SortOrder
@@ -41139,10 +42963,18 @@ export namespace Prisma {
     customerId?: SortOrder
     type?: SortOrder
     status?: SortOrder
+    masterNumber?: SortOrder
+    agentCode?: SortOrder
+    shippingLine?: SortOrder
+    origin?: SortOrder
+    destination?: SortOrder
+    creditDays?: SortOrder
+    vendorType?: SortOrder
     totalAmount?: SortOrder
     taxAmount?: SortOrder
     grandTotal?: SortOrder
     currencyCode?: SortOrder
+    exchangeRate?: SortOrder
     isApproved?: SortOrder
     approvedById?: SortOrder
     isLocked?: SortOrder
@@ -41158,9 +42990,11 @@ export namespace Prisma {
     id?: SortOrder
     jobId?: SortOrder
     customerId?: SortOrder
+    creditDays?: SortOrder
     totalAmount?: SortOrder
     taxAmount?: SortOrder
     grandTotal?: SortOrder
+    exchangeRate?: SortOrder
     approvedById?: SortOrder
     companyId?: SortOrder
     transactionId?: SortOrder
@@ -42190,6 +44024,13 @@ export namespace Prisma {
     connect?: FinancialPeriodWhereUniqueInput | FinancialPeriodWhereUniqueInput[]
   }
 
+  export type ExpenseMasterCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<ExpenseMasterCreateWithoutCompanyInput, ExpenseMasterUncheckedCreateWithoutCompanyInput> | ExpenseMasterCreateWithoutCompanyInput[] | ExpenseMasterUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: ExpenseMasterCreateOrConnectWithoutCompanyInput | ExpenseMasterCreateOrConnectWithoutCompanyInput[]
+    createMany?: ExpenseMasterCreateManyCompanyInputEnvelope
+    connect?: ExpenseMasterWhereUniqueInput | ExpenseMasterWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutCompanyInput = {
     create?: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput> | UserCreateWithoutCompanyInput[] | UserUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: UserCreateOrConnectWithoutCompanyInput | UserCreateOrConnectWithoutCompanyInput[]
@@ -42328,6 +44169,13 @@ export namespace Prisma {
     connectOrCreate?: FinancialPeriodCreateOrConnectWithoutCompanyInput | FinancialPeriodCreateOrConnectWithoutCompanyInput[]
     createMany?: FinancialPeriodCreateManyCompanyInputEnvelope
     connect?: FinancialPeriodWhereUniqueInput | FinancialPeriodWhereUniqueInput[]
+  }
+
+  export type ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<ExpenseMasterCreateWithoutCompanyInput, ExpenseMasterUncheckedCreateWithoutCompanyInput> | ExpenseMasterCreateWithoutCompanyInput[] | ExpenseMasterUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: ExpenseMasterCreateOrConnectWithoutCompanyInput | ExpenseMasterCreateOrConnectWithoutCompanyInput[]
+    createMany?: ExpenseMasterCreateManyCompanyInputEnvelope
+    connect?: ExpenseMasterWhereUniqueInput | ExpenseMasterWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -42622,6 +44470,20 @@ export namespace Prisma {
     deleteMany?: FinancialPeriodScalarWhereInput | FinancialPeriodScalarWhereInput[]
   }
 
+  export type ExpenseMasterUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<ExpenseMasterCreateWithoutCompanyInput, ExpenseMasterUncheckedCreateWithoutCompanyInput> | ExpenseMasterCreateWithoutCompanyInput[] | ExpenseMasterUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: ExpenseMasterCreateOrConnectWithoutCompanyInput | ExpenseMasterCreateOrConnectWithoutCompanyInput[]
+    upsert?: ExpenseMasterUpsertWithWhereUniqueWithoutCompanyInput | ExpenseMasterUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: ExpenseMasterCreateManyCompanyInputEnvelope
+    set?: ExpenseMasterWhereUniqueInput | ExpenseMasterWhereUniqueInput[]
+    disconnect?: ExpenseMasterWhereUniqueInput | ExpenseMasterWhereUniqueInput[]
+    delete?: ExpenseMasterWhereUniqueInput | ExpenseMasterWhereUniqueInput[]
+    connect?: ExpenseMasterWhereUniqueInput | ExpenseMasterWhereUniqueInput[]
+    update?: ExpenseMasterUpdateWithWhereUniqueWithoutCompanyInput | ExpenseMasterUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: ExpenseMasterUpdateManyWithWhereWithoutCompanyInput | ExpenseMasterUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: ExpenseMasterScalarWhereInput | ExpenseMasterScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -42908,6 +44770,20 @@ export namespace Prisma {
     update?: FinancialPeriodUpdateWithWhereUniqueWithoutCompanyInput | FinancialPeriodUpdateWithWhereUniqueWithoutCompanyInput[]
     updateMany?: FinancialPeriodUpdateManyWithWhereWithoutCompanyInput | FinancialPeriodUpdateManyWithWhereWithoutCompanyInput[]
     deleteMany?: FinancialPeriodScalarWhereInput | FinancialPeriodScalarWhereInput[]
+  }
+
+  export type ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<ExpenseMasterCreateWithoutCompanyInput, ExpenseMasterUncheckedCreateWithoutCompanyInput> | ExpenseMasterCreateWithoutCompanyInput[] | ExpenseMasterUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: ExpenseMasterCreateOrConnectWithoutCompanyInput | ExpenseMasterCreateOrConnectWithoutCompanyInput[]
+    upsert?: ExpenseMasterUpsertWithWhereUniqueWithoutCompanyInput | ExpenseMasterUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: ExpenseMasterCreateManyCompanyInputEnvelope
+    set?: ExpenseMasterWhereUniqueInput | ExpenseMasterWhereUniqueInput[]
+    disconnect?: ExpenseMasterWhereUniqueInput | ExpenseMasterWhereUniqueInput[]
+    delete?: ExpenseMasterWhereUniqueInput | ExpenseMasterWhereUniqueInput[]
+    connect?: ExpenseMasterWhereUniqueInput | ExpenseMasterWhereUniqueInput[]
+    update?: ExpenseMasterUpdateWithWhereUniqueWithoutCompanyInput | ExpenseMasterUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: ExpenseMasterUpdateManyWithWhereWithoutCompanyInput | ExpenseMasterUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: ExpenseMasterScalarWhereInput | ExpenseMasterScalarWhereInput[]
   }
 
   export type CompanyCreateNestedOneWithoutBranchesInput = {
@@ -43538,6 +45414,10 @@ export namespace Prisma {
     set?: $Enums.JobType
   }
 
+  export type EnumJobStatusFieldUpdateOperationsInput = {
+    set?: $Enums.JobStatus
+  }
+
   export type NullableFloatFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -43626,6 +45506,20 @@ export namespace Prisma {
     update?: InvoiceUpdateWithWhereUniqueWithoutJobInput | InvoiceUpdateWithWhereUniqueWithoutJobInput[]
     updateMany?: InvoiceUpdateManyWithWhereWithoutJobInput | InvoiceUpdateManyWithWhereWithoutJobInput[]
     deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
+  }
+
+  export type CompanyCreateNestedOneWithoutExpensesMasterInput = {
+    create?: XOR<CompanyCreateWithoutExpensesMasterInput, CompanyUncheckedCreateWithoutExpensesMasterInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutExpensesMasterInput
+    connect?: CompanyWhereUniqueInput
+  }
+
+  export type CompanyUpdateOneRequiredWithoutExpensesMasterNestedInput = {
+    create?: XOR<CompanyCreateWithoutExpensesMasterInput, CompanyUncheckedCreateWithoutExpensesMasterInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutExpensesMasterInput
+    upsert?: CompanyUpsertWithoutExpensesMasterInput
+    connect?: CompanyWhereUniqueInput
+    update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutExpensesMasterInput, CompanyUpdateWithoutExpensesMasterInput>, CompanyUncheckedUpdateWithoutExpensesMasterInput>
   }
 
   export type JobCreateNestedOneWithoutExpensesInput = {
@@ -44906,6 +46800,13 @@ export namespace Prisma {
     not?: NestedEnumJobTypeFilter<$PrismaModel> | $Enums.JobType
   }
 
+  export type NestedEnumJobStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.JobStatus | EnumJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumJobStatusFilter<$PrismaModel> | $Enums.JobStatus
+  }
+
   export type NestedEnumJobTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.JobType | EnumJobTypeFieldRefInput<$PrismaModel>
     in?: $Enums.JobType[] | ListEnumJobTypeFieldRefInput<$PrismaModel>
@@ -44914,6 +46815,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumJobTypeFilter<$PrismaModel>
     _max?: NestedEnumJobTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumJobStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.JobStatus | EnumJobStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumJobStatusWithAggregatesFilter<$PrismaModel> | $Enums.JobStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumJobStatusFilter<$PrismaModel>
+    _max?: NestedEnumJobStatusFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -45245,12 +47156,16 @@ export namespace Prisma {
   export type JobCreateWithoutCompanyInput = {
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -45272,13 +47187,17 @@ export namespace Prisma {
     id?: number
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     customerId: number
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -45345,10 +47264,18 @@ export namespace Prisma {
     date?: Date | string
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -45370,10 +47297,18 @@ export namespace Prisma {
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -45741,6 +47676,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ExpenseMasterCreateWithoutCompanyInput = {
+    code: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ExpenseMasterUncheckedCreateWithoutCompanyInput = {
+    id?: number
+    code: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ExpenseMasterCreateOrConnectWithoutCompanyInput = {
+    where: ExpenseMasterWhereUniqueInput
+    create: XOR<ExpenseMasterCreateWithoutCompanyInput, ExpenseMasterUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type ExpenseMasterCreateManyCompanyInputEnvelope = {
+    data: ExpenseMasterCreateManyCompanyInput | ExpenseMasterCreateManyCompanyInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithWhereUniqueWithoutCompanyInput = {
     where: UserWhereUniqueInput
     update: XOR<UserUpdateWithoutCompanyInput, UserUncheckedUpdateWithoutCompanyInput>
@@ -45976,13 +47936,17 @@ export namespace Prisma {
     id?: IntFilter<"Job"> | number
     jobNumber?: StringFilter<"Job"> | string
     date?: DateTimeFilter<"Job"> | Date | string
+    jobDate?: DateTimeFilter<"Job"> | Date | string
     jobType?: EnumJobTypeFilter<"Job"> | $Enums.JobType
+    status?: EnumJobStatusFilter<"Job"> | $Enums.JobStatus
     customerId?: IntFilter<"Job"> | number
     vessel?: StringNullableFilter<"Job"> | string | null
     place?: StringNullableFilter<"Job"> | string | null
     shipperRef?: StringNullableFilter<"Job"> | string | null
     gdNo?: StringNullableFilter<"Job"> | string | null
+    gdDate?: DateTimeNullableFilter<"Job"> | Date | string | null
     formE?: StringNullableFilter<"Job"> | string | null
+    formEDate?: DateTimeNullableFilter<"Job"> | Date | string | null
     commodity?: StringNullableFilter<"Job"> | string | null
     volume?: StringNullableFilter<"Job"> | string | null
     containerNo?: StringNullableFilter<"Job"> | string | null
@@ -46058,10 +48022,18 @@ export namespace Prisma {
     customerId?: IntFilter<"Invoice"> | number
     type?: EnumInvoiceTypeFilter<"Invoice"> | $Enums.InvoiceType
     status?: EnumInvoiceStatusFilter<"Invoice"> | $Enums.InvoiceStatus
+    masterNumber?: StringNullableFilter<"Invoice"> | string | null
+    agentCode?: StringNullableFilter<"Invoice"> | string | null
+    shippingLine?: StringNullableFilter<"Invoice"> | string | null
+    origin?: StringNullableFilter<"Invoice"> | string | null
+    destination?: StringNullableFilter<"Invoice"> | string | null
+    creditDays?: IntNullableFilter<"Invoice"> | number | null
+    vendorType?: StringNullableFilter<"Invoice"> | string | null
     totalAmount?: FloatFilter<"Invoice"> | number
     taxAmount?: FloatFilter<"Invoice"> | number
     grandTotal?: FloatFilter<"Invoice"> | number
     currencyCode?: StringFilter<"Invoice"> | string
+    exchangeRate?: FloatFilter<"Invoice"> | number
     isApproved?: BoolFilter<"Invoice"> | boolean
     approvedById?: IntNullableFilter<"Invoice"> | number | null
     isLocked?: BoolFilter<"Invoice"> | boolean
@@ -46389,6 +48361,34 @@ export namespace Prisma {
     companyId?: IntFilter<"FinancialPeriod"> | number
   }
 
+  export type ExpenseMasterUpsertWithWhereUniqueWithoutCompanyInput = {
+    where: ExpenseMasterWhereUniqueInput
+    update: XOR<ExpenseMasterUpdateWithoutCompanyInput, ExpenseMasterUncheckedUpdateWithoutCompanyInput>
+    create: XOR<ExpenseMasterCreateWithoutCompanyInput, ExpenseMasterUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type ExpenseMasterUpdateWithWhereUniqueWithoutCompanyInput = {
+    where: ExpenseMasterWhereUniqueInput
+    data: XOR<ExpenseMasterUpdateWithoutCompanyInput, ExpenseMasterUncheckedUpdateWithoutCompanyInput>
+  }
+
+  export type ExpenseMasterUpdateManyWithWhereWithoutCompanyInput = {
+    where: ExpenseMasterScalarWhereInput
+    data: XOR<ExpenseMasterUpdateManyMutationInput, ExpenseMasterUncheckedUpdateManyWithoutCompanyInput>
+  }
+
+  export type ExpenseMasterScalarWhereInput = {
+    AND?: ExpenseMasterScalarWhereInput | ExpenseMasterScalarWhereInput[]
+    OR?: ExpenseMasterScalarWhereInput[]
+    NOT?: ExpenseMasterScalarWhereInput | ExpenseMasterScalarWhereInput[]
+    id?: IntFilter<"ExpenseMaster"> | number
+    code?: StringFilter<"ExpenseMaster"> | string
+    name?: StringFilter<"ExpenseMaster"> | string
+    companyId?: IntFilter<"ExpenseMaster"> | number
+    createdAt?: DateTimeFilter<"ExpenseMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"ExpenseMaster"> | Date | string
+  }
+
   export type CompanyCreateWithoutBranchesInput = {
     name: string
     uniqueId: string
@@ -46419,6 +48419,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutBranchesInput = {
@@ -46452,6 +48453,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutBranchesInput = {
@@ -46491,12 +48493,16 @@ export namespace Prisma {
   export type JobCreateWithoutBranchInput = {
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -46518,13 +48524,17 @@ export namespace Prisma {
     id?: number
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     customerId: number
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -46592,6 +48602,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutBranchesInput = {
@@ -46625,6 +48636,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type TaxSettingUpsertWithWhereUniqueWithoutBranchInput = {
@@ -46728,6 +48740,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutCurrenciesInput = {
@@ -46761,6 +48774,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutCurrenciesInput = {
@@ -46827,6 +48841,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutCurrenciesInput = {
@@ -46860,6 +48875,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CurrencyUpsertWithoutCompaniesInput = {
@@ -46916,6 +48932,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutTaxSettingsInput = {
@@ -46949,6 +48966,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutTaxSettingsInput = {
@@ -47021,6 +49039,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutTaxSettingsInput = {
@@ -47054,6 +49073,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type BranchUpsertWithoutTaxSettingsInput = {
@@ -47116,6 +49136,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutSystemSettingsInput = {
@@ -47149,6 +49170,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutSystemSettingsInput = {
@@ -47197,6 +49219,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutSystemSettingsInput = {
@@ -47230,6 +49253,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyCreateWithoutUsersInput = {
@@ -47262,6 +49286,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutUsersInput = {
@@ -47295,6 +49320,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutUsersInput = {
@@ -47374,6 +49400,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutUsersInput = {
@@ -47407,6 +49434,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type AuditLogUpsertWithWhereUniqueWithoutUserInput = {
@@ -47455,6 +49483,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutCustomersInput = {
@@ -47488,6 +49517,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutCustomersInput = {
@@ -47498,12 +49528,16 @@ export namespace Prisma {
   export type JobCreateWithoutCustomerInput = {
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -47525,12 +49559,16 @@ export namespace Prisma {
     id?: number
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -47563,10 +49601,18 @@ export namespace Prisma {
     date?: Date | string
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -47587,10 +49633,18 @@ export namespace Prisma {
     jobId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -47691,6 +49745,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutCustomersInput = {
@@ -47724,6 +49779,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type JobUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -47804,6 +49860,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutVendorsInput = {
@@ -47837,6 +49894,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutVendorsInput = {
@@ -48008,6 +50066,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutVendorsInput = {
@@ -48041,6 +50100,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type ExpenseUpsertWithWhereUniqueWithoutVendorInput = {
@@ -48153,6 +50213,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutJobsInput = {
@@ -48186,6 +50247,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutJobsInput = {
@@ -48257,10 +50319,18 @@ export namespace Prisma {
     date?: Date | string
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -48281,10 +50351,18 @@ export namespace Prisma {
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -48386,6 +50464,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutJobsInput = {
@@ -48419,6 +50498,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type BranchUpsertWithoutJobsInput = {
@@ -48483,15 +50563,169 @@ export namespace Prisma {
     data: XOR<InvoiceUpdateManyMutationInput, InvoiceUncheckedUpdateManyWithoutJobInput>
   }
 
+  export type CompanyCreateWithoutExpensesMasterInput = {
+    name: string
+    uniqueId: string
+    address?: string | null
+    phone?: string | null
+    email?: string | null
+    industry?: string | null
+    logo?: string | null
+    themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutCompanyInput
+    branches?: BranchCreateNestedManyWithoutCompanyInput
+    currencies?: CompanyCurrencyCreateNestedManyWithoutCompanyInput
+    taxSettings?: TaxSettingCreateNestedManyWithoutCompanyInput
+    systemSettings?: SystemSettingCreateNestedManyWithoutCompanyInput
+    customers?: CustomerCreateNestedManyWithoutCompanyInput
+    vendors?: VendorCreateNestedManyWithoutCompanyInput
+    jobs?: JobCreateNestedManyWithoutCompanyInput
+    expenses?: ExpenseCreateNestedManyWithoutCompanyInput
+    invoices?: InvoiceCreateNestedManyWithoutCompanyInput
+    accounts?: AccountCreateNestedManyWithoutCompanyInput
+    transactions?: TransactionCreateNestedManyWithoutCompanyInput
+    payments?: PaymentCreateNestedManyWithoutCompanyInput
+    productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
+    products?: ProductCreateNestedManyWithoutCompanyInput
+    warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
+    stockMovements?: StockMovementCreateNestedManyWithoutCompanyInput
+    purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
+    auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
+    financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyUncheckedCreateWithoutExpensesMasterInput = {
+    id?: number
+    name: string
+    uniqueId: string
+    address?: string | null
+    phone?: string | null
+    email?: string | null
+    industry?: string | null
+    logo?: string | null
+    themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutCompanyInput
+    branches?: BranchUncheckedCreateNestedManyWithoutCompanyInput
+    currencies?: CompanyCurrencyUncheckedCreateNestedManyWithoutCompanyInput
+    taxSettings?: TaxSettingUncheckedCreateNestedManyWithoutCompanyInput
+    systemSettings?: SystemSettingUncheckedCreateNestedManyWithoutCompanyInput
+    customers?: CustomerUncheckedCreateNestedManyWithoutCompanyInput
+    vendors?: VendorUncheckedCreateNestedManyWithoutCompanyInput
+    jobs?: JobUncheckedCreateNestedManyWithoutCompanyInput
+    expenses?: ExpenseUncheckedCreateNestedManyWithoutCompanyInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutCompanyInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
+    products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
+    warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutCompanyInput
+    purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+    financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyCreateOrConnectWithoutExpensesMasterInput = {
+    where: CompanyWhereUniqueInput
+    create: XOR<CompanyCreateWithoutExpensesMasterInput, CompanyUncheckedCreateWithoutExpensesMasterInput>
+  }
+
+  export type CompanyUpsertWithoutExpensesMasterInput = {
+    update: XOR<CompanyUpdateWithoutExpensesMasterInput, CompanyUncheckedUpdateWithoutExpensesMasterInput>
+    create: XOR<CompanyCreateWithoutExpensesMasterInput, CompanyUncheckedCreateWithoutExpensesMasterInput>
+    where?: CompanyWhereInput
+  }
+
+  export type CompanyUpdateToOneWithWhereWithoutExpensesMasterInput = {
+    where?: CompanyWhereInput
+    data: XOR<CompanyUpdateWithoutExpensesMasterInput, CompanyUncheckedUpdateWithoutExpensesMasterInput>
+  }
+
+  export type CompanyUpdateWithoutExpensesMasterInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    uniqueId?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutCompanyNestedInput
+    branches?: BranchUpdateManyWithoutCompanyNestedInput
+    currencies?: CompanyCurrencyUpdateManyWithoutCompanyNestedInput
+    taxSettings?: TaxSettingUpdateManyWithoutCompanyNestedInput
+    systemSettings?: SystemSettingUpdateManyWithoutCompanyNestedInput
+    customers?: CustomerUpdateManyWithoutCompanyNestedInput
+    vendors?: VendorUpdateManyWithoutCompanyNestedInput
+    jobs?: JobUpdateManyWithoutCompanyNestedInput
+    expenses?: ExpenseUpdateManyWithoutCompanyNestedInput
+    invoices?: InvoiceUpdateManyWithoutCompanyNestedInput
+    accounts?: AccountUpdateManyWithoutCompanyNestedInput
+    transactions?: TransactionUpdateManyWithoutCompanyNestedInput
+    payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
+    products?: ProductUpdateManyWithoutCompanyNestedInput
+    warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutCompanyNestedInput
+    purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
+    financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateWithoutExpensesMasterInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    uniqueId?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutCompanyNestedInput
+    currencies?: CompanyCurrencyUncheckedUpdateManyWithoutCompanyNestedInput
+    taxSettings?: TaxSettingUncheckedUpdateManyWithoutCompanyNestedInput
+    systemSettings?: SystemSettingUncheckedUpdateManyWithoutCompanyNestedInput
+    customers?: CustomerUncheckedUpdateManyWithoutCompanyNestedInput
+    vendors?: VendorUncheckedUpdateManyWithoutCompanyNestedInput
+    jobs?: JobUncheckedUpdateManyWithoutCompanyNestedInput
+    expenses?: ExpenseUncheckedUpdateManyWithoutCompanyNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutCompanyNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+    products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
+    warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
+    purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+    financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
   export type JobCreateWithoutExpensesInput = {
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -48513,13 +50747,17 @@ export namespace Prisma {
     id?: number
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     customerId: number
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -48605,6 +50843,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutExpensesInput = {
@@ -48638,6 +50877,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutExpensesInput = {
@@ -48659,12 +50899,16 @@ export namespace Prisma {
   export type JobUpdateWithoutExpensesInput = {
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48686,13 +50930,17 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     customerId?: IntFieldUpdateOperationsInput | number
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48790,6 +51038,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutExpensesInput = {
@@ -48823,17 +51072,22 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type JobCreateWithoutInvoicesInput = {
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -48855,13 +51109,17 @@ export namespace Prisma {
     id?: number
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     customerId: number
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -48945,6 +51203,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutInvoicesInput = {
@@ -48978,6 +51237,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutInvoicesInput = {
@@ -49066,12 +51326,16 @@ export namespace Prisma {
   export type JobUpdateWithoutInvoicesInput = {
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49093,13 +51357,17 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     customerId?: IntFieldUpdateOperationsInput | number
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49195,6 +51463,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutInvoicesInput = {
@@ -49228,6 +51497,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type InvoiceItemUpsertWithWhereUniqueWithoutInvoiceInput = {
@@ -49307,10 +51577,18 @@ export namespace Prisma {
     date?: Date | string
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -49332,10 +51610,18 @@ export namespace Prisma {
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -49406,10 +51692,18 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -49431,10 +51725,18 @@ export namespace Prisma {
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -49520,6 +51822,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutProductCategoriesInput = {
@@ -49553,6 +51856,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutProductCategoriesInput = {
@@ -49644,6 +51948,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutProductCategoriesInput = {
@@ -49677,6 +51982,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type ProductUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -49747,6 +52053,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutProductsInput = {
@@ -49780,6 +52087,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutProductsInput = {
@@ -49951,6 +52259,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutProductsInput = {
@@ -49984,6 +52293,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type StockMovementUpsertWithWhereUniqueWithoutProductInput = {
@@ -50080,6 +52390,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutWarehousesInput = {
@@ -50113,6 +52424,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutWarehousesInput = {
@@ -50190,6 +52502,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutWarehousesInput = {
@@ -50223,6 +52536,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type StockMovementUpsertWithWhereUniqueWithoutWarehouseInput = {
@@ -50331,6 +52645,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutStockMovementsInput = {
@@ -50364,6 +52679,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutStockMovementsInput = {
@@ -50484,6 +52800,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutStockMovementsInput = {
@@ -50517,6 +52834,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type VendorCreateWithoutPurchaseInvoicesInput = {
@@ -50583,6 +52901,7 @@ export namespace Prisma {
     stockMovements?: StockMovementCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutPurchaseInvoicesInput = {
@@ -50616,6 +52935,7 @@ export namespace Prisma {
     stockMovements?: StockMovementUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutPurchaseInvoicesInput = {
@@ -50771,6 +53091,7 @@ export namespace Prisma {
     stockMovements?: StockMovementUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutPurchaseInvoicesInput = {
@@ -50804,6 +53125,7 @@ export namespace Prisma {
     stockMovements?: StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type PurchaseInvoiceItemUpsertWithWhereUniqueWithoutPurchaseInvoiceInput = {
@@ -51137,6 +53459,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutAccountsInput = {
@@ -51170,6 +53493,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutAccountsInput = {
@@ -51297,6 +53621,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutAccountsInput = {
@@ -51330,6 +53655,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type AccountEntryUpsertWithWhereUniqueWithoutAccountInput = {
@@ -51393,10 +53719,18 @@ export namespace Prisma {
     date?: Date | string
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -51418,10 +53752,18 @@ export namespace Prisma {
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -51546,6 +53888,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutTransactionsInput = {
@@ -51579,6 +53922,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutTransactionsInput = {
@@ -51618,10 +53962,18 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -51643,10 +53995,18 @@ export namespace Prisma {
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -51789,6 +54149,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutTransactionsInput = {
@@ -51822,6 +54183,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type TransactionCreateWithoutEntriesInput = {
@@ -52094,6 +54456,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutPaymentsInput = {
@@ -52127,6 +54490,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutPaymentsInput = {
@@ -52293,6 +54657,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutPaymentsInput = {
@@ -52326,6 +54691,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type UserCreateWithoutAuditLogsInput = {
@@ -52394,6 +54760,7 @@ export namespace Prisma {
     stockMovements?: StockMovementCreateNestedManyWithoutCompanyInput
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutAuditLogsInput = {
@@ -52427,6 +54794,7 @@ export namespace Prisma {
     stockMovements?: StockMovementUncheckedCreateNestedManyWithoutCompanyInput
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutAuditLogsInput = {
@@ -52517,6 +54885,7 @@ export namespace Prisma {
     stockMovements?: StockMovementUpdateManyWithoutCompanyNestedInput
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutAuditLogsInput = {
@@ -52550,6 +54919,7 @@ export namespace Prisma {
     stockMovements?: StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyCreateWithoutFinancialPeriodsInput = {
@@ -52582,6 +54952,7 @@ export namespace Prisma {
     stockMovements?: StockMovementCreateNestedManyWithoutCompanyInput
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutFinancialPeriodsInput = {
@@ -52615,6 +54986,7 @@ export namespace Prisma {
     stockMovements?: StockMovementUncheckedCreateNestedManyWithoutCompanyInput
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutFinancialPeriodsInput = {
@@ -52663,6 +55035,7 @@ export namespace Prisma {
     stockMovements?: StockMovementUpdateManyWithoutCompanyNestedInput
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutFinancialPeriodsInput = {
@@ -52696,6 +55069,7 @@ export namespace Prisma {
     stockMovements?: StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type UserCreateManyCompanyInput = {
@@ -52774,13 +55148,17 @@ export namespace Prisma {
     id?: number
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     customerId: number
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -52816,10 +55194,18 @@ export namespace Prisma {
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -52944,6 +55330,14 @@ export namespace Prisma {
     isClosed?: boolean
     closedById?: number | null
     closedAt?: Date | string | null
+  }
+
+  export type ExpenseMasterCreateManyCompanyInput = {
+    id?: number
+    code: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type UserUpdateWithoutCompanyInput = {
@@ -53176,12 +55570,16 @@ export namespace Prisma {
   export type JobUpdateWithoutCompanyInput = {
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53203,13 +55601,17 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     customerId?: IntFieldUpdateOperationsInput | number
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53230,13 +55632,17 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     customerId?: IntFieldUpdateOperationsInput | number
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53294,10 +55700,18 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -53319,10 +55733,18 @@ export namespace Prisma {
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -53342,10 +55764,18 @@ export namespace Prisma {
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -53718,6 +56148,29 @@ export namespace Prisma {
     closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type ExpenseMasterUpdateWithoutCompanyInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpenseMasterUncheckedUpdateWithoutCompanyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExpenseMasterUncheckedUpdateManyWithoutCompanyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TaxSettingCreateManyBranchInput = {
     id?: number
     name: string
@@ -53732,13 +56185,17 @@ export namespace Prisma {
     id?: number
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     customerId: number
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -53785,12 +56242,16 @@ export namespace Prisma {
   export type JobUpdateWithoutBranchInput = {
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53812,13 +56273,17 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     customerId?: IntFieldUpdateOperationsInput | number
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53839,13 +56304,17 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     customerId?: IntFieldUpdateOperationsInput | number
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53934,12 +56403,16 @@ export namespace Prisma {
     id?: number
     jobNumber: string
     date?: Date | string
+    jobDate?: Date | string
     jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
     vessel?: string | null
     place?: string | null
     shipperRef?: string | null
     gdNo?: string | null
+    gdDate?: Date | string | null
     formE?: string | null
+    formEDate?: Date | string | null
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
@@ -53962,10 +56435,18 @@ export namespace Prisma {
     jobId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -53994,12 +56475,16 @@ export namespace Prisma {
   export type JobUpdateWithoutCustomerInput = {
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54021,12 +56506,16 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54048,12 +56537,16 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
     jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
     vessel?: NullableStringFieldUpdateOperationsInput | string | null
     place?: NullableStringFieldUpdateOperationsInput | string | null
     shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
     gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54074,10 +56567,18 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -54098,10 +56599,18 @@ export namespace Prisma {
     jobId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -54121,10 +56630,18 @@ export namespace Prisma {
     jobId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -54384,10 +56901,18 @@ export namespace Prisma {
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
     totalAmount?: number
     taxAmount?: number
     grandTotal?: number
     currencyCode?: string
+    exchangeRate?: number
     isApproved?: boolean
     approvedById?: number | null
     isLocked?: boolean
@@ -54442,10 +56967,18 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -54466,10 +56999,18 @@ export namespace Prisma {
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -54489,10 +57030,18 @@ export namespace Prisma {
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     grandTotal?: FloatFieldUpdateOperationsInput | number
     currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean

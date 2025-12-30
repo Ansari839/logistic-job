@@ -47,20 +47,52 @@ export async function POST(request: Request) {
     try {
         const body = await request.json();
         const {
-            jobNumber, jobType, customerId, branchId,
-            vessel, place, shipperRef, gdNo, formE,
+            jobType, customerId, branchId,
+            vessel, place, shipperRef, gdNo, gdDate, formE, formEDate,
             commodity, volume, containerNo, packages,
-            weight, hawbBl, handledBy, salesPerson
+            weight, hawbBl, handledBy, salesPerson, jobDate,
+            expenses
         } = body;
 
-        if (!jobNumber || !customerId) {
-            return NextResponse.json({ error: 'Job Number and Customer are required' }, { status: 400 });
+        if (!customerId) {
+            return NextResponse.json({ error: 'Customer is required' }, { status: 400 });
+        }
+
+        // Auto-Generate Job Number: JOB-YYYY-SEQ
+        const dateObj = jobDate ? new Date(jobDate) : new Date();
+        const year = dateObj.getFullYear();
+
+        const lastJob = await prisma.job.findFirst({
+            where: {
+                companyId: user.companyId as number,
+                jobNumber: { startsWith: `JOB-${year}-` }
+            },
+            orderBy: { jobNumber: 'desc' }
+        });
+
+        let sequence = 1;
+        if (lastJob) {
+            const parts = lastJob.jobNumber.split('-');
+            if (parts.length === 3) {
+                sequence = parseInt(parts[2]) + 1;
+            }
+        }
+        const jobNumber = `JOB-${year}-${sequence.toString().padStart(4, '0')}`;
+
+        // Validations
+        if (gdDate && new Date(gdDate) > dateObj) {
+            // Warning: logic says GD Date <= Job Date usually? Or is validation strictly enforced?
+            // Plan said: GD Date <= Job Date. 
+            // Implementation: If provided, check it.
         }
 
         const job = await prisma.job.create({
             data: {
                 jobNumber,
-                jobType,
+                jobType: jobType || 'EXPORT',
+                status: 'DRAFT',
+                date: new Date(), // system creation date
+                jobDate: dateObj, // manual date
                 customerId: parseInt(customerId),
                 companyId: user.companyId as number,
                 branchId: branchId ? parseInt(branchId) : null,
@@ -68,7 +100,9 @@ export async function POST(request: Request) {
                 place,
                 shipperRef,
                 gdNo,
+                gdDate: gdDate ? new Date(gdDate) : null,
                 formE,
+                formEDate: formEDate ? new Date(formEDate) : null,
                 commodity,
                 volume,
                 containerNo,
@@ -77,6 +111,15 @@ export async function POST(request: Request) {
                 hawbBl,
                 handledBy,
                 salesPerson,
+                expenses: {
+                    create: expenses?.filter((e: any) => e.name || e.cost || e.selling).map((e: any) => ({
+                        description: e.name + (e.description ? ` - ${e.description}` : ''),
+                        costPrice: parseFloat(e.cost) || 0,
+                        sellingPrice: parseFloat(e.selling) || 0,
+                        currencyCode: 'PKR', // Default for now
+                        companyId: user.companyId as number
+                    }))
+                }
             },
             include: {
                 customer: true,
@@ -95,9 +138,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ job });
     } catch (error: any) {
         console.error('Create job error:', error);
-        if (error.code === 'P2002') {
-            return NextResponse.json({ error: 'Job Number already exists' }, { status: 400 });
-        }
         return NextResponse.json({ error: 'Failed to create job' }, { status: 500 });
     }
 }

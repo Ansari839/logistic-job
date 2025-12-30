@@ -88,6 +88,7 @@ model Company {
   purchaseInvoices  PurchaseInvoice[]
   auditLogs         AuditLog[]
   financialPeriods  FinancialPeriod[]
+  expensesMaster    ExpenseMaster[]
 }
 
 model Branch {
@@ -199,11 +200,19 @@ model Vendor {
   updatedAt DateTime  @updatedAt
 }
 
+enum JobStatus {
+  DRAFT
+  IN_PROGRESS
+  CLOSED
+}
+
 model Job {
   id             Int       @id @default(autoincrement())
   jobNumber      String    @unique
   date           DateTime  @default(now())
+  jobDate        DateTime  @default(now()) // Manual date from UI
   jobType        JobType   @default(EXPORT)
+  status         JobStatus @default(DRAFT)
   
   customerId     Int
   customer       Customer  @relation(fields: [customerId], references: [id])
@@ -212,7 +221,9 @@ model Job {
   place          String?
   shipperRef     String?
   gdNo           String?
+  gdDate         DateTime?
   formE          String?
+  formEDate      DateTime?
   commodity      String?
   volume         String?
   containerNo    String?
@@ -234,6 +245,18 @@ model Job {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   deletedAt      DateTime?
+}
+
+model ExpenseMaster {
+  id          Int      @id @default(autoincrement())
+  code        String
+  name        String
+  companyId   Int
+  company     Company  @relation(fields: [companyId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([companyId, code])
 }
 
 model Expense {
@@ -271,10 +294,20 @@ model Invoice {
   type          InvoiceType   @default(MASTER)
   status        InvoiceStatus @default(DRAFT)
   
+  // COT Fields
+  masterNumber  String?
+  agentCode     String?
+  shippingLine  String?
+  origin        String?
+  destination   String?
+  creditDays    Int?
+  vendorType    String?
+  
   totalAmount   Float         @default(0.0)
   taxAmount     Float         @default(0.0)
   grandTotal    Float         @default(0.0)
   currencyCode  String        @default("PKR")
+  exchangeRate  Float         @default(1.0)
   
   isApproved    Boolean       @default(false)
   approvedById  Int?

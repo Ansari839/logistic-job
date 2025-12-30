@@ -1,0 +1,73 @@
+Start seeding DEMO data...
+Seeding Customer...
+🤝 Customer created: Global Textiles Exports
+Seeding Vendor...
+Seeding Job...
+Error seeding Job: PrismaClientKnownRequestError: 
+Invalid `prisma.job.upsert()` invocation in
+C:\Abdullah\logistic-job\prisma\seed-demo.ts:74:36
+
+  71 }
+  72 
+  73 if (customer) {
+→ 74     job = await prisma.job.upsert(
+The column `jobDate` does not exist in the current database.
+    at qr.handleRequestError (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:69:8172)
+    at qr.handleAndLogRequestError (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:69:7467)
+    at qr.request (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:69:7174)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async a (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:79:5816)
+    at async main (C:\Abdullah\logistic-job\prisma\seed-demo.ts:74:19) {
+  code: 'P2022',
+  meta: {
+    modelName: 'Job',
+    driverAdapterError: DriverAdapterError: ColumnNotFound
+        at PrismaPgAdapter.onError (C:\Abdullah\logistic-job\node_modules\@prisma\adapter-pg\dist\index.js:687:11)
+        at PrismaPgAdapter.performIO (C:\Abdullah\logistic-job\node_modules\@prisma\adapter-pg\dist\index.js:682:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at async PrismaPgAdapter.queryRaw (C:\Abdullah\logistic-job\node_modules\@prisma\adapter-pg\dist\index.js:602:30)
+        at async C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:15:24331
+        at async fr (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:15:24170)
+        at async e.interpretNode (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:15:42277)
+        at async e.interpretNode (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:15:42701)
+        at async e.interpretNode (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:15:43875)
+        at async e.run (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:15:41116) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.2.0'
+}
+PrismaClientKnownRequestError: 
+Invalid `prisma.job.findUnique()` invocation in
+C:\Abdullah\logistic-job\prisma\seed-demo.ts:106:32
+
+  103 
+  104 // 4. Create Job Expenses
+  105 if (!job) {
+→ 106     job = await prisma.job.findUnique(
+The column `(not available)` does not exist in the current database.
+    at qr.handleRequestError (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:69:8172)
+    at qr.handleAndLogRequestError (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:69:7467)
+    at qr.request (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:69:7174)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async a (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:79:5816)
+    at async main (C:\Abdullah\logistic-job\prisma\seed-demo.ts:106:15) {
+  code: 'P2022',
+  meta: {
+    modelName: 'Job',
+    driverAdapterError: DriverAdapterError: ColumnNotFound
+        at PrismaPgAdapter.onError (C:\Abdullah\logistic-job\node_modules\@prisma\adapter-pg\dist\index.js:687:11)
+        at PrismaPgAdapter.performIO (C:\Abdullah\logistic-job\node_modules\@prisma\adapter-pg\dist\index.js:682:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at async PrismaPgAdapter.queryRaw (C:\Abdullah\logistic-job\node_modules\@prisma\adapter-pg\dist\index.js:602:30)
+        at async C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:15:24331
+        at async fr (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:15:24170)
+        at async e.interpretNode (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:15:42277)
+        at async e.interpretNode (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:15:42701)
+        at async e.interpretNode (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:15:43875)
+        at async e.run (C:\Abdullah\logistic-job\app\generated\prisma\runtime\client.js:15:41116) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.2.0'
+}

@@ -48,6 +48,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const pathname = usePathname();
 
+    const [companyName, setCompanyName] = useState('LogisticOS');
+
+    React.useEffect(() => {
+        const fetchCompany = async () => {
+            try {
+                const res = await fetch('/api/company');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.name) setCompanyName(data.name);
+                }
+            } catch (error) {
+                console.error('Failed to fetch company info');
+            }
+        };
+        fetchCompany();
+    }, []);
+
     if (loading) {
         return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Loading...</div>;
     }
@@ -64,7 +81,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     });
 
     return (
-        <div className={`min-h-screen font-sans ${theme === 'dark' ? 'bg-slate-900 text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
+        <div className={`min-h-screen font-sans ${theme === 'dark' ? 'bg-transparent text-slate-100' : 'bg-slate-50/80 text-slate-900'}`}>
             {/* Mobile Backdrop */}
             {isSidebarOpen && (
                 <div
@@ -75,13 +92,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             {/* Sidebar */}
             <aside className={`
-        fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out border-r
-        ${theme === 'dark' ? 'bg-slate-950 border-slate-800' : 'bg-white border-slate-200'}
+        fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out border-r backdrop-blur-md
+        ${theme === 'dark' ? 'bg-slate-950/80 border-slate-800' : 'bg-white/80 border-slate-200'}
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
                 <div className="p-6 flex justify-between items-center">
-                    <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">
-                        LogisticOS
+                    <h2 className="text-xl font-bold bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent truncate" title={companyName}>
+                        {companyName}
                     </h2>
                     <button className="lg:hidden p-2 rounded-lg hover:bg-slate-800/10" onClick={() => setIsSidebarOpen(false)}>
                         <X size={20} />
