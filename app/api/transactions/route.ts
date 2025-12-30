@@ -79,9 +79,37 @@ export async function POST(req: Request) {
         }
 
         const transaction = await prisma.$transaction(async (tx) => {
+            let reference = validatedData.reference;
+
+            // Auto-generate reference if not provided or if it's a JOURNAL type
+            if (!reference || validatedData.type === 'JOURNAL') {
+                const dateObj = validatedData.date ? new Date(validatedData.date) : new Date();
+                const year = dateObj.getFullYear();
+                const prefix = validatedData.type === 'JOURNAL' ? 'JV' : 'TX';
+
+                const lastTx = await tx.transaction.findFirst({
+                    where: {
+                        companyId: user.companyId as number,
+                        type: validatedData.type,
+                        reference: { startsWith: `${prefix}-${year}-` }
+                    },
+                    orderBy: { reference: 'desc' }
+                });
+
+                let sequence = 1;
+                if (lastTx) {
+                    const parts = lastTx.reference.split('-');
+                    if (parts.length === 3) {
+                        const lastSeq = parseInt(parts[2]);
+                        if (!isNaN(lastSeq)) sequence = lastSeq + 1;
+                    }
+                }
+                reference = `${prefix}-${year}-${sequence.toString().padStart(4, '0')}`;
+            }
+
             const t = await tx.transaction.create({
                 data: {
-                    reference: validatedData.reference,
+                    reference,
                     date: validatedData.date ? new Date(validatedData.date) : new Date(),
                     description: validatedData.description,
                     type: validatedData.type,
