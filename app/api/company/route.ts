@@ -13,14 +13,18 @@ export async function GET() {
     // Get user with company info
     const dbUser = await prisma.user.findUnique({
         where: { id: user.id },
-        include: { company: true },
+        include: {
+            company: {
+                include: { branches: true }
+            }
+        },
     });
 
     if (!dbUser?.company) {
         return NextResponse.json({ error: 'Company not found' }, { status: 404 });
     }
 
-    return NextResponse.json(dbUser.company);
+    return NextResponse.json({ company: dbUser.company });
 }
 
 export async function PATCH(request: Request) {

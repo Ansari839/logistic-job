@@ -245,13 +245,29 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                         Job Operations
                     </button>
                     <div className="flex gap-3">
+                        <button
+                            onClick={async () => {
+                                if (confirm('Are you sure you want to delete this job? This action cannot be undone.')) {
+                                    setLoading(true);
+                                    try {
+                                        const res = await fetch(`/api/jobs/${id}`, { method: 'DELETE' });
+                                        if (res.ok) router.push('/jobs');
+                                        else alert('Failed to delete job');
+                                    } catch (e) { alert('Error deleting job'); }
+                                    finally { setLoading(false); }
+                                }
+                            }}
+                            className="p-3 rounded-2xl bg-slate-900 border border-slate-800 text-red-500 hover:text-white hover:bg-red-500 transition-all shadow-lg"
+                            title="Delete Job"
+                        >
+                            <Trash2 size={18} />
+                        </button>
                         <button className="p-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all">
                             <Printer size={18} />
                         </button>
-                        <button className="p-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all">
-                            <Share2 size={18} />
-                        </button>
-                        <button className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-lg shadow-blue-600/20">
+                        <button className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-lg shadow-blue-600/20"
+                            onClick={() => router.push(`/jobs/${id}/edit`)}
+                        >
                             <Edit3 size={18} />
                             Edit Job
                         </button>

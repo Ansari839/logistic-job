@@ -47,7 +47,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Invoice Number, Job, and Customer are required' }, { status: 400 });
         }
 
-        const invoice = await prisma.$transaction(async (tx) => {
+        const result = await prisma.$transaction(async (tx) => {
             const inv = await tx.invoice.create({
                 data: {
                     invoiceNumber,
@@ -72,52 +72,41 @@ export async function POST(request: Request) {
                         })) || []
                     }
                 },
-                include: { items: true }
+                include: {
+                    items: true,
+                    customer: true,
+                    job: true
+                }
             });
 
-            // Handle Stock & COGS for products
-            let totalCogs = 0;
+            // Handle Stock Movements
             for (const item of inv.items) {
                 if (item.productId) {
-                    const product = await tx.product.findUnique({ where: { id: item.productId } });
-                    if (product) {
-                        await tx.stockMovement.create({
-                            data: {
-                                productId: product.id,
-                                quantity: -item.quantity,
-                                type: 'SALE',
-                                reference: inv.invoiceNumber,
-                                companyId: user.companyId as number,
-                            }
-                        });
-                        totalCogs += item.quantity * product.purchasePrice;
-                    }
+                    await tx.stockMovement.create({
+                        data: {
+                            productId: item.productId,
+                            quantity: -item.quantity,
+                            type: 'SALE',
+                            reference: inv.invoiceNumber,
+                            companyId: user.companyId as number,
+                        }
+                    });
                 }
             }
 
-            // Handle Stock & COGS for products (Only if immediate stock deduction is desired, otherwise move to approval)
-            // Keeping stock deduction on creation for now, but Accounting Postponed.
-
-            // Post to Accounting REMOVED from creation.
-            // Accounting entries will be generated upon APPROVAL.
-
-            const result = await tx.invoice.findUnique({
-                where: { id: inv.id },
-                include: { items: true, customer: true, job: true }
-            });
-
-            await logAction({
-                user,
-                action: 'CREATE',
-                module: 'INVOICE',
-                entityId: result?.id,
-                payload: { invoiceNumber: result?.invoiceNumber, total: result?.grandTotal }
-            });
-
-            return result;
+            return inv;
         });
 
-        return NextResponse.json({ invoice });
+        // Audit Logging (Outside Transaction)
+        await logAction({
+            user,
+            action: 'CREATE',
+            module: 'INVOICE',
+            entityId: result.id,
+            payload: { invoiceNumber: result.invoiceNumber, total: result.grandTotal }
+        });
+
+        return NextResponse.json({ invoice: result });
     } catch (error: any) {
         console.error('Create invoice error:', error);
         if (error.code === 'P2002') {
