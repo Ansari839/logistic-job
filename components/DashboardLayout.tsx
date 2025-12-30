@@ -33,7 +33,7 @@ const navItems: NavItem[] = [
     { name: 'Chart of Accounts', href: '/accounts', icon: BookOpen, roles: ['ADMIN', 'ACCOUNTS'] },
     { name: 'Journal Vouchers', href: '/vouchers', icon: ArrowRightLeft, roles: ['ADMIN', 'ACCOUNTS'] },
     { name: 'Payments', href: '/payments', icon: CreditCard, roles: ['ADMIN', 'ACCOUNTS'] },
-    { name: 'Financial Reports', href: '/reports', icon: BarChart2, roles: ['ADMIN', 'ACCOUNTS'] },
+    { name: 'Business Reports', href: '/reports', icon: BarChart2, roles: ['ADMIN', 'ACCOUNTS', 'OPERATOR', 'SALES'] },
     { name: 'Settings', href: '/settings/profile', icon: Settings, roles: ['ADMIN'] },
 ];
 
