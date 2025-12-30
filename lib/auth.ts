@@ -56,3 +56,9 @@ export const clearAuthCookie = async () => {
     const cookieStore = await cookies();
     cookieStore.delete('auth_token');
 };
+
+export const getAuthUser = async (): Promise<AuthUser | null> => {
+    const token = await getAuthToken();
+    if (!token) return null;
+    return verifyToken(token);
+};

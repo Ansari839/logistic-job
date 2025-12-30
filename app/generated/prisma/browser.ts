@@ -83,6 +83,36 @@ export type Invoice = Prisma.InvoiceModel
  */
 export type InvoiceItem = Prisma.InvoiceItemModel
 /**
+ * Model ProductCategory
+ * 
+ */
+export type ProductCategory = Prisma.ProductCategoryModel
+/**
+ * Model Product
+ * 
+ */
+export type Product = Prisma.ProductModel
+/**
+ * Model Warehouse
+ * 
+ */
+export type Warehouse = Prisma.WarehouseModel
+/**
+ * Model StockMovement
+ * 
+ */
+export type StockMovement = Prisma.StockMovementModel
+/**
+ * Model PurchaseInvoice
+ * 
+ */
+export type PurchaseInvoice = Prisma.PurchaseInvoiceModel
+/**
+ * Model PurchaseInvoiceItem
+ * 
+ */
+export type PurchaseInvoiceItem = Prisma.PurchaseInvoiceItemModel
+/**
  * Model Account
  * 
  */

@@ -29,49 +29,64 @@ export type AggregateInvoiceItem = {
 export type InvoiceItemAvgAggregateOutputType = {
   id: number | null
   invoiceId: number | null
+  quantity: number | null
+  rate: number | null
   amount: number | null
   taxPercentage: number | null
   taxAmount: number | null
   total: number | null
+  productId: number | null
 }
 
 export type InvoiceItemSumAggregateOutputType = {
   id: number | null
   invoiceId: number | null
+  quantity: number | null
+  rate: number | null
   amount: number | null
   taxPercentage: number | null
   taxAmount: number | null
   total: number | null
+  productId: number | null
 }
 
 export type InvoiceItemMinAggregateOutputType = {
   id: number | null
   invoiceId: number | null
   description: string | null
+  quantity: number | null
+  rate: number | null
   amount: number | null
   taxPercentage: number | null
   taxAmount: number | null
   total: number | null
+  productId: number | null
 }
 
 export type InvoiceItemMaxAggregateOutputType = {
   id: number | null
   invoiceId: number | null
   description: string | null
+  quantity: number | null
+  rate: number | null
   amount: number | null
   taxPercentage: number | null
   taxAmount: number | null
   total: number | null
+  productId: number | null
 }
 
 export type InvoiceItemCountAggregateOutputType = {
   id: number
   invoiceId: number
   description: number
+  quantity: number
+  rate: number
   amount: number
   taxPercentage: number
   taxAmount: number
   total: number
+  productId: number
   _all: number
 }
 
@@ -79,49 +94,64 @@ export type InvoiceItemCountAggregateOutputType = {
 export type InvoiceItemAvgAggregateInputType = {
   id?: true
   invoiceId?: true
+  quantity?: true
+  rate?: true
   amount?: true
   taxPercentage?: true
   taxAmount?: true
   total?: true
+  productId?: true
 }
 
 export type InvoiceItemSumAggregateInputType = {
   id?: true
   invoiceId?: true
+  quantity?: true
+  rate?: true
   amount?: true
   taxPercentage?: true
   taxAmount?: true
   total?: true
+  productId?: true
 }
 
 export type InvoiceItemMinAggregateInputType = {
   id?: true
   invoiceId?: true
   description?: true
+  quantity?: true
+  rate?: true
   amount?: true
   taxPercentage?: true
   taxAmount?: true
   total?: true
+  productId?: true
 }
 
 export type InvoiceItemMaxAggregateInputType = {
   id?: true
   invoiceId?: true
   description?: true
+  quantity?: true
+  rate?: true
   amount?: true
   taxPercentage?: true
   taxAmount?: true
   total?: true
+  productId?: true
 }
 
 export type InvoiceItemCountAggregateInputType = {
   id?: true
   invoiceId?: true
   description?: true
+  quantity?: true
+  rate?: true
   amount?: true
   taxPercentage?: true
   taxAmount?: true
   total?: true
+  productId?: true
   _all?: true
 }
 
@@ -215,10 +245,13 @@ export type InvoiceItemGroupByOutputType = {
   id: number
   invoiceId: number
   description: string
+  quantity: number
+  rate: number
   amount: number
   taxPercentage: number
   taxAmount: number
   total: number
+  productId: number | null
   _count: InvoiceItemCountAggregateOutputType | null
   _avg: InvoiceItemAvgAggregateOutputType | null
   _sum: InvoiceItemSumAggregateOutputType | null
@@ -248,22 +281,30 @@ export type InvoiceItemWhereInput = {
   id?: Prisma.IntFilter<"InvoiceItem"> | number
   invoiceId?: Prisma.IntFilter<"InvoiceItem"> | number
   description?: Prisma.StringFilter<"InvoiceItem"> | string
+  quantity?: Prisma.FloatFilter<"InvoiceItem"> | number
+  rate?: Prisma.FloatFilter<"InvoiceItem"> | number
   amount?: Prisma.FloatFilter<"InvoiceItem"> | number
   taxPercentage?: Prisma.FloatFilter<"InvoiceItem"> | number
   taxAmount?: Prisma.FloatFilter<"InvoiceItem"> | number
   total?: Prisma.FloatFilter<"InvoiceItem"> | number
+  productId?: Prisma.IntNullableFilter<"InvoiceItem"> | number | null
   invoice?: Prisma.XOR<Prisma.InvoiceScalarRelationFilter, Prisma.InvoiceWhereInput>
+  product?: Prisma.XOR<Prisma.ProductNullableScalarRelationFilter, Prisma.ProductWhereInput> | null
 }
 
 export type InvoiceItemOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   invoiceId?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  quantity?: Prisma.SortOrder
+  rate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   taxPercentage?: Prisma.SortOrder
   taxAmount?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  productId?: Prisma.SortOrderInput | Prisma.SortOrder
   invoice?: Prisma.InvoiceOrderByWithRelationInput
+  product?: Prisma.ProductOrderByWithRelationInput
 }
 
 export type InvoiceItemWhereUniqueInput = Prisma.AtLeast<{
@@ -273,21 +314,28 @@ export type InvoiceItemWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.InvoiceItemWhereInput | Prisma.InvoiceItemWhereInput[]
   invoiceId?: Prisma.IntFilter<"InvoiceItem"> | number
   description?: Prisma.StringFilter<"InvoiceItem"> | string
+  quantity?: Prisma.FloatFilter<"InvoiceItem"> | number
+  rate?: Prisma.FloatFilter<"InvoiceItem"> | number
   amount?: Prisma.FloatFilter<"InvoiceItem"> | number
   taxPercentage?: Prisma.FloatFilter<"InvoiceItem"> | number
   taxAmount?: Prisma.FloatFilter<"InvoiceItem"> | number
   total?: Prisma.FloatFilter<"InvoiceItem"> | number
+  productId?: Prisma.IntNullableFilter<"InvoiceItem"> | number | null
   invoice?: Prisma.XOR<Prisma.InvoiceScalarRelationFilter, Prisma.InvoiceWhereInput>
+  product?: Prisma.XOR<Prisma.ProductNullableScalarRelationFilter, Prisma.ProductWhereInput> | null
 }, "id">
 
 export type InvoiceItemOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   invoiceId?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  quantity?: Prisma.SortOrder
+  rate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   taxPercentage?: Prisma.SortOrder
   taxAmount?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  productId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.InvoiceItemCountOrderByAggregateInput
   _avg?: Prisma.InvoiceItemAvgOrderByAggregateInput
   _max?: Prisma.InvoiceItemMaxOrderByAggregateInput
@@ -302,62 +350,82 @@ export type InvoiceItemScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"InvoiceItem"> | number
   invoiceId?: Prisma.IntWithAggregatesFilter<"InvoiceItem"> | number
   description?: Prisma.StringWithAggregatesFilter<"InvoiceItem"> | string
+  quantity?: Prisma.FloatWithAggregatesFilter<"InvoiceItem"> | number
+  rate?: Prisma.FloatWithAggregatesFilter<"InvoiceItem"> | number
   amount?: Prisma.FloatWithAggregatesFilter<"InvoiceItem"> | number
   taxPercentage?: Prisma.FloatWithAggregatesFilter<"InvoiceItem"> | number
   taxAmount?: Prisma.FloatWithAggregatesFilter<"InvoiceItem"> | number
   total?: Prisma.FloatWithAggregatesFilter<"InvoiceItem"> | number
+  productId?: Prisma.IntNullableWithAggregatesFilter<"InvoiceItem"> | number | null
 }
 
 export type InvoiceItemCreateInput = {
   description: string
+  quantity?: number
+  rate?: number
   amount: number
   taxPercentage?: number
   taxAmount?: number
   total: number
   invoice: Prisma.InvoiceCreateNestedOneWithoutItemsInput
+  product?: Prisma.ProductCreateNestedOneWithoutInvoiceItemsInput
 }
 
 export type InvoiceItemUncheckedCreateInput = {
   id?: number
   invoiceId: number
   description: string
+  quantity?: number
+  rate?: number
   amount: number
   taxPercentage?: number
   taxAmount?: number
   total: number
+  productId?: number | null
 }
 
 export type InvoiceItemUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.FloatFieldUpdateOperationsInput | number
+  rate?: Prisma.FloatFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   taxPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   taxAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   invoice?: Prisma.InvoiceUpdateOneRequiredWithoutItemsNestedInput
+  product?: Prisma.ProductUpdateOneWithoutInvoiceItemsNestedInput
 }
 
 export type InvoiceItemUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceId?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.FloatFieldUpdateOperationsInput | number
+  rate?: Prisma.FloatFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   taxPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   taxAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
+  productId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type InvoiceItemCreateManyInput = {
   id?: number
   invoiceId: number
   description: string
+  quantity?: number
+  rate?: number
   amount: number
   taxPercentage?: number
   taxAmount?: number
   total: number
+  productId?: number | null
 }
 
 export type InvoiceItemUpdateManyMutationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.FloatFieldUpdateOperationsInput | number
+  rate?: Prisma.FloatFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   taxPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   taxAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -368,10 +436,13 @@ export type InvoiceItemUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceId?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.FloatFieldUpdateOperationsInput | number
+  rate?: Prisma.FloatFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   taxPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   taxAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
+  productId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type InvoiceItemListRelationFilter = {
@@ -388,48 +459,63 @@ export type InvoiceItemCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   invoiceId?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  quantity?: Prisma.SortOrder
+  rate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   taxPercentage?: Prisma.SortOrder
   taxAmount?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  productId?: Prisma.SortOrder
 }
 
 export type InvoiceItemAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   invoiceId?: Prisma.SortOrder
+  quantity?: Prisma.SortOrder
+  rate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   taxPercentage?: Prisma.SortOrder
   taxAmount?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  productId?: Prisma.SortOrder
 }
 
 export type InvoiceItemMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   invoiceId?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  quantity?: Prisma.SortOrder
+  rate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   taxPercentage?: Prisma.SortOrder
   taxAmount?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  productId?: Prisma.SortOrder
 }
 
 export type InvoiceItemMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   invoiceId?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  quantity?: Prisma.SortOrder
+  rate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   taxPercentage?: Prisma.SortOrder
   taxAmount?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  productId?: Prisma.SortOrder
 }
 
 export type InvoiceItemSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   invoiceId?: Prisma.SortOrder
+  quantity?: Prisma.SortOrder
+  rate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   taxPercentage?: Prisma.SortOrder
   taxAmount?: Prisma.SortOrder
   total?: Prisma.SortOrder
+  productId?: Prisma.SortOrder
 }
 
 export type InvoiceItemCreateNestedManyWithoutInvoiceInput = {
@@ -474,21 +560,69 @@ export type InvoiceItemUncheckedUpdateManyWithoutInvoiceNestedInput = {
   deleteMany?: Prisma.InvoiceItemScalarWhereInput | Prisma.InvoiceItemScalarWhereInput[]
 }
 
+export type InvoiceItemCreateNestedManyWithoutProductInput = {
+  create?: Prisma.XOR<Prisma.InvoiceItemCreateWithoutProductInput, Prisma.InvoiceItemUncheckedCreateWithoutProductInput> | Prisma.InvoiceItemCreateWithoutProductInput[] | Prisma.InvoiceItemUncheckedCreateWithoutProductInput[]
+  connectOrCreate?: Prisma.InvoiceItemCreateOrConnectWithoutProductInput | Prisma.InvoiceItemCreateOrConnectWithoutProductInput[]
+  createMany?: Prisma.InvoiceItemCreateManyProductInputEnvelope
+  connect?: Prisma.InvoiceItemWhereUniqueInput | Prisma.InvoiceItemWhereUniqueInput[]
+}
+
+export type InvoiceItemUncheckedCreateNestedManyWithoutProductInput = {
+  create?: Prisma.XOR<Prisma.InvoiceItemCreateWithoutProductInput, Prisma.InvoiceItemUncheckedCreateWithoutProductInput> | Prisma.InvoiceItemCreateWithoutProductInput[] | Prisma.InvoiceItemUncheckedCreateWithoutProductInput[]
+  connectOrCreate?: Prisma.InvoiceItemCreateOrConnectWithoutProductInput | Prisma.InvoiceItemCreateOrConnectWithoutProductInput[]
+  createMany?: Prisma.InvoiceItemCreateManyProductInputEnvelope
+  connect?: Prisma.InvoiceItemWhereUniqueInput | Prisma.InvoiceItemWhereUniqueInput[]
+}
+
+export type InvoiceItemUpdateManyWithoutProductNestedInput = {
+  create?: Prisma.XOR<Prisma.InvoiceItemCreateWithoutProductInput, Prisma.InvoiceItemUncheckedCreateWithoutProductInput> | Prisma.InvoiceItemCreateWithoutProductInput[] | Prisma.InvoiceItemUncheckedCreateWithoutProductInput[]
+  connectOrCreate?: Prisma.InvoiceItemCreateOrConnectWithoutProductInput | Prisma.InvoiceItemCreateOrConnectWithoutProductInput[]
+  upsert?: Prisma.InvoiceItemUpsertWithWhereUniqueWithoutProductInput | Prisma.InvoiceItemUpsertWithWhereUniqueWithoutProductInput[]
+  createMany?: Prisma.InvoiceItemCreateManyProductInputEnvelope
+  set?: Prisma.InvoiceItemWhereUniqueInput | Prisma.InvoiceItemWhereUniqueInput[]
+  disconnect?: Prisma.InvoiceItemWhereUniqueInput | Prisma.InvoiceItemWhereUniqueInput[]
+  delete?: Prisma.InvoiceItemWhereUniqueInput | Prisma.InvoiceItemWhereUniqueInput[]
+  connect?: Prisma.InvoiceItemWhereUniqueInput | Prisma.InvoiceItemWhereUniqueInput[]
+  update?: Prisma.InvoiceItemUpdateWithWhereUniqueWithoutProductInput | Prisma.InvoiceItemUpdateWithWhereUniqueWithoutProductInput[]
+  updateMany?: Prisma.InvoiceItemUpdateManyWithWhereWithoutProductInput | Prisma.InvoiceItemUpdateManyWithWhereWithoutProductInput[]
+  deleteMany?: Prisma.InvoiceItemScalarWhereInput | Prisma.InvoiceItemScalarWhereInput[]
+}
+
+export type InvoiceItemUncheckedUpdateManyWithoutProductNestedInput = {
+  create?: Prisma.XOR<Prisma.InvoiceItemCreateWithoutProductInput, Prisma.InvoiceItemUncheckedCreateWithoutProductInput> | Prisma.InvoiceItemCreateWithoutProductInput[] | Prisma.InvoiceItemUncheckedCreateWithoutProductInput[]
+  connectOrCreate?: Prisma.InvoiceItemCreateOrConnectWithoutProductInput | Prisma.InvoiceItemCreateOrConnectWithoutProductInput[]
+  upsert?: Prisma.InvoiceItemUpsertWithWhereUniqueWithoutProductInput | Prisma.InvoiceItemUpsertWithWhereUniqueWithoutProductInput[]
+  createMany?: Prisma.InvoiceItemCreateManyProductInputEnvelope
+  set?: Prisma.InvoiceItemWhereUniqueInput | Prisma.InvoiceItemWhereUniqueInput[]
+  disconnect?: Prisma.InvoiceItemWhereUniqueInput | Prisma.InvoiceItemWhereUniqueInput[]
+  delete?: Prisma.InvoiceItemWhereUniqueInput | Prisma.InvoiceItemWhereUniqueInput[]
+  connect?: Prisma.InvoiceItemWhereUniqueInput | Prisma.InvoiceItemWhereUniqueInput[]
+  update?: Prisma.InvoiceItemUpdateWithWhereUniqueWithoutProductInput | Prisma.InvoiceItemUpdateWithWhereUniqueWithoutProductInput[]
+  updateMany?: Prisma.InvoiceItemUpdateManyWithWhereWithoutProductInput | Prisma.InvoiceItemUpdateManyWithWhereWithoutProductInput[]
+  deleteMany?: Prisma.InvoiceItemScalarWhereInput | Prisma.InvoiceItemScalarWhereInput[]
+}
+
 export type InvoiceItemCreateWithoutInvoiceInput = {
   description: string
+  quantity?: number
+  rate?: number
   amount: number
   taxPercentage?: number
   taxAmount?: number
   total: number
+  product?: Prisma.ProductCreateNestedOneWithoutInvoiceItemsInput
 }
 
 export type InvoiceItemUncheckedCreateWithoutInvoiceInput = {
   id?: number
   description: string
+  quantity?: number
+  rate?: number
   amount: number
   taxPercentage?: number
   taxAmount?: number
   total: number
+  productId?: number | null
 }
 
 export type InvoiceItemCreateOrConnectWithoutInvoiceInput = {
@@ -524,41 +658,152 @@ export type InvoiceItemScalarWhereInput = {
   id?: Prisma.IntFilter<"InvoiceItem"> | number
   invoiceId?: Prisma.IntFilter<"InvoiceItem"> | number
   description?: Prisma.StringFilter<"InvoiceItem"> | string
+  quantity?: Prisma.FloatFilter<"InvoiceItem"> | number
+  rate?: Prisma.FloatFilter<"InvoiceItem"> | number
   amount?: Prisma.FloatFilter<"InvoiceItem"> | number
   taxPercentage?: Prisma.FloatFilter<"InvoiceItem"> | number
   taxAmount?: Prisma.FloatFilter<"InvoiceItem"> | number
   total?: Prisma.FloatFilter<"InvoiceItem"> | number
+  productId?: Prisma.IntNullableFilter<"InvoiceItem"> | number | null
 }
 
-export type InvoiceItemCreateManyInvoiceInput = {
-  id?: number
+export type InvoiceItemCreateWithoutProductInput = {
   description: string
+  quantity?: number
+  rate?: number
+  amount: number
+  taxPercentage?: number
+  taxAmount?: number
+  total: number
+  invoice: Prisma.InvoiceCreateNestedOneWithoutItemsInput
+}
+
+export type InvoiceItemUncheckedCreateWithoutProductInput = {
+  id?: number
+  invoiceId: number
+  description: string
+  quantity?: number
+  rate?: number
   amount: number
   taxPercentage?: number
   taxAmount?: number
   total: number
 }
 
+export type InvoiceItemCreateOrConnectWithoutProductInput = {
+  where: Prisma.InvoiceItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.InvoiceItemCreateWithoutProductInput, Prisma.InvoiceItemUncheckedCreateWithoutProductInput>
+}
+
+export type InvoiceItemCreateManyProductInputEnvelope = {
+  data: Prisma.InvoiceItemCreateManyProductInput | Prisma.InvoiceItemCreateManyProductInput[]
+  skipDuplicates?: boolean
+}
+
+export type InvoiceItemUpsertWithWhereUniqueWithoutProductInput = {
+  where: Prisma.InvoiceItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.InvoiceItemUpdateWithoutProductInput, Prisma.InvoiceItemUncheckedUpdateWithoutProductInput>
+  create: Prisma.XOR<Prisma.InvoiceItemCreateWithoutProductInput, Prisma.InvoiceItemUncheckedCreateWithoutProductInput>
+}
+
+export type InvoiceItemUpdateWithWhereUniqueWithoutProductInput = {
+  where: Prisma.InvoiceItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.InvoiceItemUpdateWithoutProductInput, Prisma.InvoiceItemUncheckedUpdateWithoutProductInput>
+}
+
+export type InvoiceItemUpdateManyWithWhereWithoutProductInput = {
+  where: Prisma.InvoiceItemScalarWhereInput
+  data: Prisma.XOR<Prisma.InvoiceItemUpdateManyMutationInput, Prisma.InvoiceItemUncheckedUpdateManyWithoutProductInput>
+}
+
+export type InvoiceItemCreateManyInvoiceInput = {
+  id?: number
+  description: string
+  quantity?: number
+  rate?: number
+  amount: number
+  taxPercentage?: number
+  taxAmount?: number
+  total: number
+  productId?: number | null
+}
+
 export type InvoiceItemUpdateWithoutInvoiceInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.FloatFieldUpdateOperationsInput | number
+  rate?: Prisma.FloatFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   taxPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   taxAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
+  product?: Prisma.ProductUpdateOneWithoutInvoiceItemsNestedInput
 }
 
 export type InvoiceItemUncheckedUpdateWithoutInvoiceInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.FloatFieldUpdateOperationsInput | number
+  rate?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  productId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type InvoiceItemUncheckedUpdateManyWithoutInvoiceInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.FloatFieldUpdateOperationsInput | number
+  rate?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  productId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type InvoiceItemCreateManyProductInput = {
+  id?: number
+  invoiceId: number
+  description: string
+  quantity?: number
+  rate?: number
+  amount: number
+  taxPercentage?: number
+  taxAmount?: number
+  total: number
+}
+
+export type InvoiceItemUpdateWithoutProductInput = {
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.FloatFieldUpdateOperationsInput | number
+  rate?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxAmount?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  invoice?: Prisma.InvoiceUpdateOneRequiredWithoutItemsNestedInput
+}
+
+export type InvoiceItemUncheckedUpdateWithoutProductInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  invoiceId?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.FloatFieldUpdateOperationsInput | number
+  rate?: Prisma.FloatFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   taxPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   taxAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
-export type InvoiceItemUncheckedUpdateManyWithoutInvoiceInput = {
+export type InvoiceItemUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  invoiceId?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.FloatFieldUpdateOperationsInput | number
+  rate?: Prisma.FloatFieldUpdateOperationsInput | number
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   taxPercentage?: Prisma.FloatFieldUpdateOperationsInput | number
   taxAmount?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -571,69 +816,91 @@ export type InvoiceItemSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   invoiceId?: boolean
   description?: boolean
+  quantity?: boolean
+  rate?: boolean
   amount?: boolean
   taxPercentage?: boolean
   taxAmount?: boolean
   total?: boolean
+  productId?: boolean
   invoice?: boolean | Prisma.InvoiceDefaultArgs<ExtArgs>
+  product?: boolean | Prisma.InvoiceItem$productArgs<ExtArgs>
 }, ExtArgs["result"]["invoiceItem"]>
 
 export type InvoiceItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   invoiceId?: boolean
   description?: boolean
+  quantity?: boolean
+  rate?: boolean
   amount?: boolean
   taxPercentage?: boolean
   taxAmount?: boolean
   total?: boolean
+  productId?: boolean
   invoice?: boolean | Prisma.InvoiceDefaultArgs<ExtArgs>
+  product?: boolean | Prisma.InvoiceItem$productArgs<ExtArgs>
 }, ExtArgs["result"]["invoiceItem"]>
 
 export type InvoiceItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   invoiceId?: boolean
   description?: boolean
+  quantity?: boolean
+  rate?: boolean
   amount?: boolean
   taxPercentage?: boolean
   taxAmount?: boolean
   total?: boolean
+  productId?: boolean
   invoice?: boolean | Prisma.InvoiceDefaultArgs<ExtArgs>
+  product?: boolean | Prisma.InvoiceItem$productArgs<ExtArgs>
 }, ExtArgs["result"]["invoiceItem"]>
 
 export type InvoiceItemSelectScalar = {
   id?: boolean
   invoiceId?: boolean
   description?: boolean
+  quantity?: boolean
+  rate?: boolean
   amount?: boolean
   taxPercentage?: boolean
   taxAmount?: boolean
   total?: boolean
+  productId?: boolean
 }
 
-export type InvoiceItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "invoiceId" | "description" | "amount" | "taxPercentage" | "taxAmount" | "total", ExtArgs["result"]["invoiceItem"]>
+export type InvoiceItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "invoiceId" | "description" | "quantity" | "rate" | "amount" | "taxPercentage" | "taxAmount" | "total" | "productId", ExtArgs["result"]["invoiceItem"]>
 export type InvoiceItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invoice?: boolean | Prisma.InvoiceDefaultArgs<ExtArgs>
+  product?: boolean | Prisma.InvoiceItem$productArgs<ExtArgs>
 }
 export type InvoiceItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invoice?: boolean | Prisma.InvoiceDefaultArgs<ExtArgs>
+  product?: boolean | Prisma.InvoiceItem$productArgs<ExtArgs>
 }
 export type InvoiceItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invoice?: boolean | Prisma.InvoiceDefaultArgs<ExtArgs>
+  product?: boolean | Prisma.InvoiceItem$productArgs<ExtArgs>
 }
 
 export type $InvoiceItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "InvoiceItem"
   objects: {
     invoice: Prisma.$InvoicePayload<ExtArgs>
+    product: Prisma.$ProductPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     invoiceId: number
     description: string
+    quantity: number
+    rate: number
     amount: number
     taxPercentage: number
     taxAmount: number
     total: number
+    productId: number | null
   }, ExtArgs["result"]["invoiceItem"]>
   composites: {}
 }
@@ -1029,6 +1296,7 @@ readonly fields: InvoiceItemFieldRefs;
 export interface Prisma__InvoiceItemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   invoice<T extends Prisma.InvoiceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InvoiceDefaultArgs<ExtArgs>>): Prisma.Prisma__InvoiceClient<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  product<T extends Prisma.InvoiceItem$productArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InvoiceItem$productArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1061,10 +1329,13 @@ export interface InvoiceItemFieldRefs {
   readonly id: Prisma.FieldRef<"InvoiceItem", 'Int'>
   readonly invoiceId: Prisma.FieldRef<"InvoiceItem", 'Int'>
   readonly description: Prisma.FieldRef<"InvoiceItem", 'String'>
+  readonly quantity: Prisma.FieldRef<"InvoiceItem", 'Float'>
+  readonly rate: Prisma.FieldRef<"InvoiceItem", 'Float'>
   readonly amount: Prisma.FieldRef<"InvoiceItem", 'Float'>
   readonly taxPercentage: Prisma.FieldRef<"InvoiceItem", 'Float'>
   readonly taxAmount: Prisma.FieldRef<"InvoiceItem", 'Float'>
   readonly total: Prisma.FieldRef<"InvoiceItem", 'Float'>
+  readonly productId: Prisma.FieldRef<"InvoiceItem", 'Int'>
 }
     
 
@@ -1458,6 +1729,25 @@ export type InvoiceItemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many InvoiceItems to delete.
    */
   limit?: number
+}
+
+/**
+ * InvoiceItem.product
+ */
+export type InvoiceItem$productArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Product
+   */
+  select?: Prisma.ProductSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Product
+   */
+  omit?: Prisma.ProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProductInclude<ExtArgs> | null
+  where?: Prisma.ProductWhereInput
 }
 
 /**

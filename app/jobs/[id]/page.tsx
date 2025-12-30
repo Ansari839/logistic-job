@@ -67,11 +67,13 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
 
     // Invoice Modal State
     const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+    const [inventory, setInventory] = useState<any[]>([]);
     const [invoiceForm, setInvoiceForm] = useState({
         invoiceNumber: '',
         type: 'MASTER',
         currencyCode: 'PKR',
         taxAmount: 0,
+        items: [] as any[]
     });
 
     const fetchJob = async () => {
@@ -100,9 +102,22 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
         }
     };
 
+    const fetchInventory = async () => {
+        try {
+            const res = await fetch('/api/inventory/products');
+            if (res.ok) {
+                const data = await res.json();
+                setInventory(data.products);
+            }
+        } catch (err) {
+            console.error('Fetch inventory failed');
+        }
+    };
+
     useEffect(() => {
         fetchJob();
         fetchVendors();
+        fetchInventory();
     }, [id]);
 
     const handleAddExpense = async (e: React.FormEvent) => {
@@ -135,15 +150,8 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                     ...invoiceForm,
                     jobId: id,
                     customerId: job.customerId,
-                    totalAmount: totalSelling,
-                    grandTotal: totalSelling + Number(invoiceForm.taxAmount),
-                    items: job.expenses.map(exp => ({
-                        description: exp.description,
-                        amount: exp.sellingPrice,
-                        taxPercentage: 0,
-                        taxAmount: 0,
-                        total: exp.sellingPrice
-                    }))
+                    totalAmount: invoiceForm.items.reduce((sum, i) => sum + Number(i.amount), 0),
+                    grandTotal: invoiceForm.items.reduce((sum, i) => sum + Number(i.total), 0) + Number(invoiceForm.taxAmount),
                 }),
             });
             if (res.ok) {
@@ -153,6 +161,41 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
         } catch (err) {
             console.error('Generate invoice failed');
         }
+    };
+
+    const addInvoiceItem = () => {
+        setInvoiceForm({
+            ...invoiceForm,
+            items: [...invoiceForm.items, { description: '', quantity: 1, rate: 0, amount: 0, taxPercentage: 0, taxAmount: 0, total: 0, productId: null }]
+        });
+    };
+
+    const updateInvoiceItem = (index: number, field: string, value: any) => {
+        const next = [...invoiceForm.items];
+        let item = { ...next[index], [field]: value };
+
+        if (field === 'productId' && value) {
+            const prod = inventory.find(p => p.id === parseInt(value));
+            if (prod) {
+                item.description = prod.name;
+                item.rate = prod.sellingPrice;
+            }
+        }
+
+        if (field === 'quantity' || field === 'rate' || field === 'productId') {
+            item.amount = Number(item.quantity) * Number(item.rate);
+            item.taxAmount = (item.amount * Number(item.taxPercentage)) / 100;
+            item.total = item.amount + item.taxAmount;
+        }
+
+        next[index] = item;
+        setInvoiceForm({ ...invoiceForm, items: next });
+    };
+
+    const removeInvoiceItem = (index: number) => {
+        const next = [...invoiceForm.items];
+        next.splice(index, 1);
+        setInvoiceForm({ ...invoiceForm, items: next });
     };
 
     if (loading) return (
@@ -262,8 +305,8 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
                             className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all text-xs font-black uppercase tracking-widest ${activeTab === tab.id
-                                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                                    : 'text-slate-500 hover:text-white hover:bg-slate-800'
+                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
+                                : 'text-slate-500 hover:text-white hover:bg-slate-800'
                                 }`}
                         >
                             <tab.icon size={16} />
@@ -590,23 +633,73 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                             />
                                         </div>
                                     </div>
-                                    <div className="p-4 bg-white/5 rounded-2xl border border-white/5 space-y-2">
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-xs font-bold text-slate-500 uppercase">Subtotal</span>
-                                            <span className="text-white font-black">{totalSelling.toLocaleString()} PKR</span>
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Invoice Items</label>
+                                            <button type="button" onClick={addInvoiceItem} className="text-blue-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-1 hover:text-white transition-all">
+                                                <Plus size={12} /> Add Item
+                                            </button>
                                         </div>
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-xs font-bold text-slate-500 uppercase">Tax Amount</span>
-                                            <input
-                                                type="number"
-                                                className="bg-transparent text-right text-white font-black w-24 focus:outline-none border-b border-white/10"
-                                                value={invoiceForm.taxAmount}
-                                                onChange={e => setInvoiceForm({ ...invoiceForm, taxAmount: Number(e.target.value) })}
-                                            />
+
+                                        <div className="max-h-60 overflow-y-auto space-y-3 pr-2 scrollbar-thin scrollbar-thumb-slate-800">
+                                            {invoiceForm.items.map((item, idx) => (
+                                                <div key={idx} className="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-3 relative group">
+                                                    <button type="button" onClick={() => removeInvoiceItem(idx)} className="absolute top-2 right-2 text-slate-700 hover:text-red-500 transition-colors">
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                    <div className="grid grid-cols-2 gap-3">
+                                                        <select
+                                                            className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-[10px] font-bold text-white col-span-2"
+                                                            value={item.productId || ''}
+                                                            onChange={e => updateInvoiceItem(idx, 'productId', e.target.value)}
+                                                        >
+                                                            <option value="">Manual Entry / Service...</option>
+                                                            {inventory.map(p => <option key={p.id} value={p.id}>{p.name} ({p.unit})</option>)}
+                                                        </select>
+                                                        <input
+                                                            placeholder="Description"
+                                                            className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-[10px] font-bold text-white col-span-2"
+                                                            value={item.description}
+                                                            onChange={e => updateInvoiceItem(idx, 'description', e.target.value)}
+                                                        />
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest ml-1">Qty</span>
+                                                            <input type="number" step="any" className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-[10px] font-bold text-white text-center"
+                                                                value={item.quantity} onChange={e => updateInvoiceItem(idx, 'quantity', e.target.value)} />
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest ml-1">Rate</span>
+                                                            <input type="number" className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-[10px] font-bold text-white text-right"
+                                                                value={item.rate} onChange={e => updateInvoiceItem(idx, 'rate', e.target.value)} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {invoiceForm.items.length === 0 && (
+                                                <div className="text-center py-6 text-slate-600 border border-dashed border-slate-800 rounded-2xl">
+                                                    <p className="text-[10px] font-black uppercase tracking-[0.2em]">No items added</p>
+                                                </div>
+                                            )}
                                         </div>
-                                        <div className="border-t border-white/5 pt-2 flex justify-between items-center">
-                                            <span className="text-xs font-black text-blue-400 uppercase">Grand Total</span>
-                                            <span className="text-xl font-black text-blue-400">{(totalSelling + Number(invoiceForm.taxAmount)).toLocaleString()}</span>
+
+                                        <div className="p-4 bg-blue-600/5 rounded-2xl border border-blue-500/10 space-y-2">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Subtotal</span>
+                                                <span className="text-sm font-black text-white">{invoiceForm.items.reduce((sum, i) => sum + Number(i.amount), 0).toLocaleString()} PKR</span>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">WHT / Tax</span>
+                                                <input
+                                                    type="number"
+                                                    className="bg-transparent text-right text-white font-black w-24 focus:outline-none border-b border-white/10 text-sm"
+                                                    value={invoiceForm.taxAmount}
+                                                    onChange={e => setInvoiceForm({ ...invoiceForm, taxAmount: Number(e.target.value) })}
+                                                />
+                                            </div>
+                                            <div className="border-t border-white/5 pt-2 flex justify-between items-center">
+                                                <span className="text-xs font-black text-blue-400 uppercase tracking-widest italic">Grand Total</span>
+                                                <span className="text-xl font-black text-blue-400">{(invoiceForm.items.reduce((sum, i) => sum + Number(i.total), 0) + Number(invoiceForm.taxAmount)).toLocaleString()}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

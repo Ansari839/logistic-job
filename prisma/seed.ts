@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from "../app/generated/prisma/client";
+import { PrismaClient, Prisma } from "../app/generated/prisma";
 import { PrismaPg } from '@prisma/adapter-pg'
 import bcrypt from 'bcryptjs'
 import 'dotenv/config'
@@ -173,6 +173,7 @@ async function main() {
     { code: '1110', name: 'Cash in Hand', type: 'ASSET', parentCode: '1100' },
     { code: '1120', name: 'Bank Accounts', type: 'ASSET', parentCode: '1100' },
     { code: '1130', name: 'Accounts Receivable', type: 'ASSET', parentCode: '1100' },
+    { code: '1140', name: 'Inventory / Stock', type: 'ASSET', parentCode: '1100' },
 
     // LIABILITIES
     { code: '2000', name: 'Non-Current Liabilities', type: 'LIABILITY' },
@@ -188,11 +189,13 @@ async function main() {
     // REVENUE
     { code: '4000', name: 'Revenue', type: 'REVENUE' },
     { code: '4100', name: 'Service Revenue', type: 'REVENUE', parentCode: '4000' },
+    { code: '4110', name: 'Product Sales', type: 'REVENUE', parentCode: '4000' },
     { code: '4200', name: 'Other Income', type: 'REVENUE', parentCode: '4000' },
 
     // EXPENSE
-    { code: '5000', name: 'Cost of Services', type: 'EXPENSE' },
+    { code: '5000', name: 'Cost of Sales', type: 'EXPENSE' },
     { code: '5100', name: 'Operating Expenses', type: 'EXPENSE' },
+    { code: '5110', name: 'Cost of Goods Sold', type: 'EXPENSE', parentCode: '5000' },
     { code: '5120', name: 'Rent Expense', type: 'EXPENSE', parentCode: '5100' },
   ];
 
@@ -215,6 +218,34 @@ async function main() {
     });
   }
   console.log('Chart of Accounts seeded');
+
+  // 8. Seed Feed Business Data
+  console.log('Seeding Feed Business Data...');
+  const feedCategory = await prisma.productCategory.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      name: 'Animal Feed',
+      description: 'High quality livestock feed',
+      companyId: mainCompany.id,
+    }
+  });
+
+  await prisma.product.upsert({
+    where: { sku: 'FEED-WHEAT-BG' },
+    update: {},
+    create: {
+      name: 'Wheat Feed - 50kg Bag',
+      sku: 'FEED-WHEAT-BG',
+      unit: 'bags',
+      purchasePrice: 1500,
+      sellingPrice: 1850,
+      categoryId: feedCategory.id,
+      companyId: mainCompany.id,
+    }
+  });
+
+  console.log('Feed Business Data seeded');
   console.log('Seeding finished.');
 }
 

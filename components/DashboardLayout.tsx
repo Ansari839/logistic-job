@@ -8,7 +8,8 @@ import { usePathname } from 'next/navigation';
 import {
     LayoutDashboard, Users, BarChart2, Shield, LogOut,
     Package, CreditCard, FileText, Sun, Moon, Menu, X,
-    Building2, BookOpen, ArrowRightLeft, Settings
+    Building2, BookOpen, ArrowRightLeft, Settings,
+    Box, ShoppingBag
 } from 'lucide-react';
 
 interface NavItem {
@@ -27,6 +28,8 @@ const navItems: NavItem[] = [
     { name: 'Jobs', href: '/jobs', icon: Package, roles: ['ADMIN', 'OPERATOR', 'SALES'] },
     { name: 'Invoices', href: '/invoices', icon: FileText, roles: ['ADMIN', 'ACCOUNTS', 'SALES'] },
     { name: 'Vendors', href: '/vendors', icon: Building2, roles: ['ADMIN', 'OPERATOR'] },
+    { name: 'Inventory', href: '/inventory', icon: Box, roles: ['ADMIN', 'OPERATOR', 'SALES'] },
+    { name: 'Purchases', href: '/purchases', icon: ShoppingBag, roles: ['ADMIN', 'ACCOUNTS'] },
     { name: 'Chart of Accounts', href: '/accounts', icon: BookOpen, roles: ['ADMIN', 'ACCOUNTS'] },
     { name: 'Journal Vouchers', href: '/vouchers', icon: ArrowRightLeft, roles: ['ADMIN', 'ACCOUNTS'] },
     { name: 'Payments', href: '/payments', icon: CreditCard, roles: ['ADMIN', 'ACCOUNTS'] },

@@ -60,7 +60,8 @@ export const TransactionType = {
   JOURNAL: 'JOURNAL',
   RECEIPT: 'RECEIPT',
   PAYMENT: 'PAYMENT',
-  INVOICE: 'INVOICE'
+  INVOICE: 'INVOICE',
+  PURCHASE: 'PURCHASE'
 } as const
 
 export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
