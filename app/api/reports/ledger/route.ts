@@ -24,16 +24,16 @@ export async function GET(req: Request) {
 
     const { searchParams } = new URL(req.url);
     const accountId = searchParams.get('accountId');
-    const fromDate = searchParams.get('fromDate');
-    const toDate = searchParams.get('toDate');
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
 
     if (!accountId) {
         return NextResponse.json({ error: 'Account ID is required' }, { status: 400 });
     }
 
     try {
-        const from = fromDate ? new Date(fromDate) : new Date('2000-01-01');
-        const to = toDate ? new Date(toDate) : new Date('2099-12-31');
+        const from = startDate ? new Date(startDate) : new Date('2000-01-01');
+        const to = endDate ? new Date(endDate) : new Date('2099-12-31');
 
         // 1. Calculate opening balance (all entries before fromDate)
         const openingBalanceEntries = await prisma.accountEntry.findMany({

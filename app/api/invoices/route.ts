@@ -203,61 +203,95 @@ export async function PATCH(request: Request) {
             const updated = await prisma.$transaction(async (tx) => {
                 const inv = await tx.invoice.update({
                     where: { id: parseInt(id) },
-                    data: { isApproved: true, approvedById: user.id }
+                    data: { isApproved: true, approvedById: user.id },
+                    include: { customer: true, job: true }
                 });
 
-                const receivableAccount = await tx.account.findUnique({
-                    where: { companyId_code: { companyId: user.companyId as number, code: '1130' } }
-                });
-                const revenueAccount = await tx.account.findUnique({
-                    where: { companyId_code: { companyId: user.companyId as number, code: '4100' } }
-                });
-
-                if (receivableAccount && revenueAccount && inv.grandTotal > 0) {
-                    const transaction = await tx.transaction.create({
-                        data: {
-                            reference: inv.invoiceNumber,
-                            description: `Invoiced Job ${inv.jobId}: ${inv.invoiceNumber}`,
-                            type: 'INVOICE',
+                if (inv.grandTotal > 0) {
+                    // 1. Find Customer Specific Account (e.g. "Customer Name (123x)")
+                    // If not found, fall back to generic Accounts Receivable (1230)
+                    let customerAccount = await tx.account.findFirst({
+                        where: {
                             companyId: user.companyId as number,
-                            entries: {
-                                create: [
-                                    { accountId: receivableAccount.id, debit: inv.grandTotal, description: `Invoice ${inv.invoiceNumber}` },
-                                    { accountId: revenueAccount.id, credit: inv.grandTotal, description: `Service Revenue` }
-                                ]
-                            }
+                            name: inv.customer.name,
+                            parentId: { not: null } // Should be under 1230
                         }
                     });
-                    await tx.invoice.update({
-                        where: { id: inv.id },
-                        data: { transactionId: transaction.id }
+
+                    if (!customerAccount) {
+                        customerAccount = await tx.account.findUnique({
+                            where: { companyId_code: { companyId: user.companyId as number, code: '1230' } }
+                        });
+                    }
+
+                    const revenueAccount = await tx.account.findUnique({
+                        where: { companyId_code: { companyId: user.companyId as number, code: '4100' } }
                     });
+
+                    if (customerAccount && revenueAccount) {
+                        const transaction = await tx.transaction.create({
+                            data: {
+                                reference: inv.invoiceNumber,
+                                description: `Invoiced Job ${inv.job.jobNumber}: ${inv.invoiceNumber} for ${inv.customer.name}`,
+                                type: 'INVOICE',
+                                companyId: user.companyId as number,
+                                entries: {
+                                    create: [
+                                        { accountId: customerAccount.id, debit: inv.grandTotal, description: `Invoice ${inv.invoiceNumber} amount receivable` },
+                                        { accountId: revenueAccount.id, credit: inv.grandTotal, description: `Service Revenue from Job ${inv.job.jobNumber}` }
+                                    ]
+                                }
+                            }
+                        });
+                        await tx.invoice.update({
+                            where: { id: inv.id },
+                            data: { transactionId: transaction.id }
+                        });
+                    }
                 }
 
+                // 2. Handle Job Expenses (Cost of Service vs Vendor Payable)
                 const jobExpenses = await tx.expense.findMany({
-                    where: { jobId: inv.jobId, companyId: user.companyId as number }
+                    where: { jobId: inv.jobId, companyId: user.companyId as number },
+                    include: { vendor: true }
                 });
 
                 const costAccount = await tx.account.findUnique({
-                    where: { companyId_code: { companyId: user.companyId as number, code: '5000' } }
-                });
-                const payableAccount = await tx.account.findUnique({
-                    where: { companyId_code: { companyId: user.companyId as number, code: '2110' } }
+                    where: { companyId_code: { companyId: user.companyId as number, code: '5100' } } // Direct Cost
                 });
 
-                if (costAccount && payableAccount) {
-                    for (const exp of jobExpenses) {
-                        if (exp.costPrice > 0) {
+                for (const exp of jobExpenses) {
+                    if (exp.costPrice > 0) {
+                        // Find Vendor Specific Account (e.g. "Vendor Name (221x)")
+                        // If not found, fall back to generic Accounts Payable (2210)
+                        let vendorAccount;
+                        if (exp.vendor) {
+                            vendorAccount = await tx.account.findFirst({
+                                where: {
+                                    companyId: user.companyId as number,
+                                    name: exp.vendor.name,
+                                    parentId: { not: null } // Should be under 2210
+                                }
+                            });
+                        }
+
+                        if (!vendorAccount) {
+                            vendorAccount = await tx.account.findUnique({
+                                where: { companyId_code: { companyId: user.companyId as number, code: '2210' } }
+                            });
+                        }
+
+                        if (costAccount && vendorAccount) {
                             await tx.transaction.create({
                                 data: {
                                     reference: `EXP-${exp.id}`,
-                                    description: `Job ${inv.jobId} Expense: ${exp.description}`,
+                                    description: `Job ${inv.job.jobNumber} Expense: ${exp.description}`,
                                     type: 'JOURNAL',
                                     companyId: user.companyId as number,
                                     entries: {
                                         create: [
-                                            { accountId: costAccount.id, debit: exp.costPrice, description: `Expense for Job ${inv.jobId}` },
-                                            { accountId: payableAccount.id, credit: exp.costPrice, description: `Payable for ${exp.description}` }
+                                            { accountId: costAccount.id, debit: exp.costPrice, description: `Direct Cost: ${exp.description} for Job ${inv.job.jobNumber}` },
+                                            { accountId: vendorAccount.id, credit: exp.costPrice, description: `Payable to ${exp.vendor?.name || 'Vendor'} for ${exp.description}` }
                                         ]
                                     }
                                 }
@@ -272,7 +306,7 @@ export async function PATCH(request: Request) {
                 });
 
                 return inv;
-            });
+            }, { timeout: 20000 });
 
             await logAction({ user, action: 'APPROVE', module: 'INVOICE', entityId: invoice.id });
             return NextResponse.json({ invoice: updated });

@@ -19,7 +19,7 @@ export default function DashboardPage() {
         <DashboardLayout>
             {/* Welcome Section */}
             <div className="mb-10 relative overflow-hidden p-8 rounded-3xl bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/20">
-                <div className="absolute top-0 right-0 p-8 opacity-10">
+                <div className="absolute top-0 right-0 p-8 opacity-15">
                     <Zap size={120} className="text-blue-400" />
                 </div>
                 <div className="relative z-10">

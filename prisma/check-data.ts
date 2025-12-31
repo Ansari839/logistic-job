@@ -13,12 +13,16 @@ async function main() {
     const jobCount = await prisma.job.count();
     const coaCount = await prisma.account.count();
     const userCount = await prisma.user.count();
+    const customerCount = await prisma.customer.count();
+    const vendorCount = await prisma.vendor.count();
 
     console.log(`DATA CHECK:`);
     console.log(`Users: ${userCount}`);
     console.log(`Jobs: ${jobCount}`);
     console.log(`Expenses: ${expenseCount}`);
     console.log(`COA Accounts: ${coaCount}`);
+    console.log(`Customers: ${customerCount}`);
+    console.log(`Vendors: ${vendorCount}`);
 }
 
 main()

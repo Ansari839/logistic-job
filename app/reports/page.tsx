@@ -42,6 +42,7 @@ const REPORT_CATEGORIES = [
         color: 'emerald',
         reports: [
             { id: 'trial-balance', name: 'Trial Balance', description: 'Balance of all ledger accounts', type: 'financial' },
+            { id: 'ledger-report', name: 'General Ledger', description: 'Detailed transaction history by account', type: 'ledger', apiOverride: '/api/reports/ledger' },
             { id: 'profit-loss', name: 'Profit & Loss Statement', description: 'Revenue and expense performance', type: 'financial' },
             { id: 'outstandings-customer', name: 'Customer Outstanding', description: 'Unpaid balances from customers', type: 'financial', endpoint: 'outstandings', subType: 'CUSTOMER' },
             { id: 'outstandings-vendor', name: 'Vendor Outstanding', description: 'Payables to transport/service vendors', type: 'financial', endpoint: 'outstandings', subType: 'VENDOR' },

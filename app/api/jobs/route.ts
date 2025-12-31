@@ -119,7 +119,8 @@ export async function POST(request: Request) {
                         description: e.name + (e.description ? ` - ${e.description}` : ''),
                         costPrice: parseFloat(e.cost) || 0,
                         sellingPrice: parseFloat(e.selling) || 0,
-                        currencyCode: 'PKR', // Default for now
+                        vendorId: e.vendorId ? parseInt(e.vendorId) : null,
+                        currencyCode: 'PKR',
                         companyId: user.companyId as number
                     }))
                 }
