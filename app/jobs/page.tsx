@@ -6,7 +6,7 @@ import Link from 'next/link';
 import {
     Plus, Search, Filter, MoreHorizontal,
     ArrowUpRight, Package, Calendar, User,
-    FileText, Tag, Ship
+    FileText, Tag, Ship, Hash
 } from 'lucide-react';
 
 interface Job {
@@ -17,6 +17,7 @@ interface Job {
     customer: { name: string; code: string };
     commodity: string | null;
     vessel: string | null;
+    containerNo: string | null;
     invoice: { id: number } | null;
     _count: { expenses: number };
 }
@@ -54,8 +55,8 @@ export default function JobsPage() {
         <DashboardLayout>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-3xl font-black text-white tracking-tighter">Job Operations</h1>
-                    <p className="text-slate-500 text-sm mt-1 uppercase tracking-widest font-bold">Manage shipments & logistics</p>
+                    <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Job Operations</h1>
+                    <p className="text-subtext mt-1">Manage shipments & logistics</p>
                 </div>
                 <Link
                     href="/jobs/new"
@@ -69,21 +70,21 @@ export default function JobsPage() {
             {/* Filters & Search */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-8">
                 <div className="lg:col-span-2 relative">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-subtext" size={18} />
                     <input
                         type="text"
                         placeholder="Search by Job #, Vessel, or Customer..."
-                        className="w-full bg-slate-900/40 border border-slate-800/60 rounded-2xl pl-12 pr-4 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm font-medium"
+                        className="glass-input w-full pl-12 rounded-2xl"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
                 <div className="flex gap-4">
-                    <button className="flex-1 bg-slate-900/40 border border-slate-800/60 rounded-2xl px-4 py-4 text-slate-400 hover:text-white hover:bg-slate-800 transition-all text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2">
+                    <button className="flex-1 glass-panel px-4 py-4 text-subtext hover:text-slate-900 dark:hover:text-white hover:bg-primary/5 transition-all text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-sm rounded-2xl">
                         <Filter size={16} />
                         Filter
                     </button>
-                    <button className="flex-1 bg-slate-900/40 border border-slate-800/60 rounded-2xl px-4 py-4 text-slate-400 hover:text-white hover:bg-slate-800 transition-all text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2">
+                    <button className="flex-1 glass-panel px-4 py-4 text-subtext hover:text-slate-900 dark:hover:text-white hover:bg-primary/5 transition-all text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-sm rounded-2xl">
                         Export CSV
                     </button>
                 </div>
@@ -92,15 +93,15 @@ export default function JobsPage() {
             {/* Jobs Grid/Table */}
             <div className="space-y-4">
                 {loading ? (
-                    <div className="bg-slate-900/40 border border-slate-800/60 rounded-3xl p-20 text-center">
+                    <div className="glass-panel p-20 text-center">
                         <div className="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4" />
-                        <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Loading operations...</p>
+                        <p className="text-subtext font-bold uppercase tracking-widest text-xs">Loading operations...</p>
                     </div>
                 ) : filteredJobs.length === 0 ? (
-                    <div className="bg-slate-900/40 border border-slate-800/60 rounded-3xl p-20 text-center">
-                        <Package className="w-12 h-12 text-slate-700 mx-auto mb-4" />
-                        <h3 className="text-lg font-bold text-slate-300">No shipments found</h3>
-                        <p className="text-slate-500 text-sm mt-1">Start by creating your first logistics job.</p>
+                    <div className="glass-panel p-20 text-center">
+                        <Package className="w-12 h-12 text-subtext opacity-20 mx-auto mb-4" />
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-slate-300">No shipments found</h3>
+                        <p className="text-subtext text-sm mt-1">Start by creating your first logistics job.</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 gap-4">
@@ -108,7 +109,7 @@ export default function JobsPage() {
                             <Link
                                 key={job.id}
                                 href={`/jobs/${job.id}`}
-                                className="group block bg-slate-900/40 hover:bg-slate-800/40 backdrop-blur-sm border border-slate-800/60 hover:border-blue-500/50 rounded-3xl p-6 transition-all duration-300"
+                                className="group block glass-card hover:bg-slate-500/5 hover:border-blue-500/50 p-6"
                             >
                                 <div className="flex flex-col lg:flex-row lg:items-center gap-6">
                                     <div className="w-12 h-12 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-400 border border-blue-500/20 group-hover:scale-110 transition-transform">
@@ -117,40 +118,46 @@ export default function JobsPage() {
 
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-3 mb-1">
-                                            <span className="text-xl font-black text-white tracking-tight">{job.jobNumber}</span>
-                                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest ${job.jobType === 'EXPORT' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
+                                            <span className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{job.jobNumber}</span>
+                                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest ${job.jobType === 'EXPORT' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20'
                                                 }`}>
                                                 {job.jobType}
                                             </span>
                                         </div>
-                                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-slate-500 text-xs font-bold">
+                                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-subtext text-xs font-bold">
                                             <div className="flex items-center gap-1.5">
-                                                <User size={12} className="text-slate-600" />
-                                                <span className="text-slate-300 uppercase">{job.customer.name}</span>
+                                                <User size={12} className="text-subtext opacity-70" />
+                                                <span className="uppercase">{job.customer.name}</span>
                                             </div>
                                             <div className="flex items-center gap-1.5 font-mono">
-                                                <Calendar size={12} className="text-slate-600" />
-                                                {new Date(job.date).toLocaleDateString()}
+                                                <Calendar size={12} className="text-subtext opacity-70" />
+                                                <span>{new Date(job.date).toLocaleDateString()}</span>
                                             </div>
                                             {job.vessel && (
                                                 <div className="flex items-center gap-1.5">
-                                                    <Ship size={12} className="text-slate-600" />
-                                                    <span className="text-blue-400/80">{job.vessel}</span>
+                                                    <Ship size={12} className="text-subtext opacity-70" />
+                                                    <span className="text-blue-600 dark:text-blue-400/80 uppercase">{job.vessel}</span>
+                                                </div>
+                                            )}
+                                            {job.containerNo && (
+                                                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-blue-600/5 text-blue-600 dark:text-blue-400 rounded-lg">
+                                                    <Hash size={12} className="opacity-70" />
+                                                    <span>{job.containerNo.split(',').filter(x => x.trim()).length} Containers</span>
                                                 </div>
                                             )}
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-4 lg:border-l lg:border-slate-800/60 lg:pl-8">
+                                    <div className="flex items-center gap-4 lg:border-l lg:border-border/50 lg:pl-8">
                                         <div className="text-center px-4">
-                                            <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Expenses</p>
-                                            <p className="text-lg font-black text-white">{job._count.expenses}</p>
+                                            <p className="text-subtext mb-1">Expenses</p>
+                                            <p className="text-lg font-black text-slate-900 dark:text-white uppercase">{job._count.expenses}</p>
                                         </div>
                                         <div className="text-center px-4">
-                                            <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Invoice</p>
-                                            <p className="text-lg font-black text-white">{job.invoice ? 1 : 0}</p>
+                                            <p className="text-subtext mb-1">Invoice</p>
+                                            <p className="text-lg font-black text-slate-900 dark:text-white uppercase">{job.invoice ? 1 : 0}</p>
                                         </div>
-                                        <div className="ml-4 p-3 rounded-2xl bg-white/5 opacity-0 group-hover:opacity-100 transition-all text-blue-400">
+                                        <div className="ml-4 p-3 rounded-2xl bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-all text-blue-600 dark:text-blue-400">
                                             <ArrowUpRight size={20} />
                                         </div>
                                     </div>

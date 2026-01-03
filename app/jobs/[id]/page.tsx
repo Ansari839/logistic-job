@@ -79,18 +79,6 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
         currencyCode: 'PKR'
     });
 
-    // Invoice Modal State
-    const [showInvoiceModal, setShowInvoiceModal] = useState(false);
-    const [editingInvoiceId, setEditingInvoiceId] = useState<number | null>(null);
-    const [inventory, setInventory] = useState<any[]>([]);
-    const [invoiceForm, setInvoiceForm] = useState({
-        invoiceNumber: '',
-        status: 'DRAFT',
-        type: 'MASTER',
-        currencyCode: 'PKR',
-        taxAmount: 0,
-        items: [] as any[]
-    });
 
     const fetchJob = async () => {
         try {
@@ -118,22 +106,10 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
         }
     };
 
-    const fetchInventory = async () => {
-        try {
-            const res = await fetch('/api/inventory/products');
-            if (res.ok) {
-                const data = await res.json();
-                setInventory(data.products);
-            }
-        } catch (err) {
-            console.error('Fetch inventory failed');
-        }
-    };
 
     useEffect(() => {
         fetchJob();
         fetchVendors();
-        fetchInventory();
     }, [id]);
 
     const handleAddExpense = async (e: React.FormEvent) => {
@@ -175,103 +151,6 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
         }
     };
 
-    const handleGenerateInvoice = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!job) return;
-
-        try {
-            const method = editingInvoiceId ? 'PATCH' : 'POST';
-            const body = {
-                ...invoiceForm,
-                jobId: id,
-                customerId: job.customerId,
-                totalAmount: invoiceForm.items.reduce((sum, i) => sum + Number(i.amount), 0),
-                grandTotal: invoiceForm.items.reduce((sum, i) => sum + Number(i.total), 0) + Number(invoiceForm.taxAmount),
-            };
-
-            if (editingInvoiceId) {
-                (body as any).id = editingInvoiceId;
-                (body as any).action = 'UPDATE';
-            }
-
-            const res = await fetch(`/api/invoices`, {
-                method: editingInvoiceId ? 'PATCH' : 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
-            });
-            if (res.ok) {
-                const data = await res.json();
-                setShowInvoiceModal(false);
-                setEditingInvoiceId(null);
-                if (!editingInvoiceId) router.push(`/invoices/${data.invoice.id}`);
-                else fetchJob();
-            } else {
-                const data = await res.json().catch(() => ({ error: 'Server returned an invalid response' }));
-                alert(data.error || 'Failed to process invoice');
-            }
-        } catch (err) {
-            console.error('Invoice action failed:', err);
-            alert('A network error occurred while processing the invoice.');
-        }
-    };
-
-    const handleInvoiceAction = async (invoiceId: number, action: string) => {
-        if (action === 'DELETE' && !confirm('Are you sure you want to delete this invoice?')) return;
-        if (action === 'REVERT_TO_DRAFT' && !confirm('WARNING: This will UNLOCK the job and DELETE all associated ledger entries. Proceed?')) return;
-
-        try {
-            const res = await fetch(`/api/invoices`, {
-                method: action === 'DELETE' ? 'DELETE' : 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: invoiceId, action })
-            });
-
-            if (res.ok) {
-                fetchJob();
-            } else {
-                const data = await res.json().catch(() => ({ error: 'Server returned an invalid response' }));
-                alert(data.error || 'Invoice action failed');
-            }
-        } catch (err) {
-            console.error('Invoice action failed:', err);
-            alert('A network error occurred. Please check your connection.');
-        }
-    };
-
-    const addInvoiceItem = () => {
-        setInvoiceForm({
-            ...invoiceForm,
-            items: [...invoiceForm.items, { description: '', quantity: 1, rate: 0, amount: 0, taxPercentage: 0, taxAmount: 0, total: 0, productId: null }]
-        });
-    };
-
-    const updateInvoiceItem = (index: number, field: string, value: any) => {
-        const next = [...invoiceForm.items];
-        let item = { ...next[index], [field]: value };
-
-        if (field === 'productId' && value) {
-            const prod = inventory.find(p => p.id === parseInt(value));
-            if (prod) {
-                item.description = prod.name;
-                item.rate = prod.sellingPrice;
-            }
-        }
-
-        if (field === 'quantity' || field === 'rate' || field === 'productId') {
-            item.amount = Number(item.quantity) * Number(item.rate);
-            item.taxAmount = (item.amount * Number(item.taxPercentage)) / 100;
-            item.total = item.amount + item.taxAmount;
-        }
-
-        next[index] = item;
-        setInvoiceForm({ ...invoiceForm, items: next });
-    };
-
-    const removeInvoiceItem = (index: number) => {
-        const next = [...invoiceForm.items];
-        next.splice(index, 1);
-        setInvoiceForm({ ...invoiceForm, items: next });
-    };
 
     if (loading) return (
         <DashboardLayout>
@@ -307,8 +186,8 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                         <div className="flex items-center gap-4 px-4">
                             <Clock className="text-amber-400" size={24} />
                             <div>
-                                <p className="text-amber-400 font-black uppercase tracking-widest text-xs">Job is Locked (Status: CLOSED)</p>
-                                <p className="text-slate-400 text-sm font-medium">Approved invoice has locked this job. Revert invoice to draft to make changes.</p>
+                                <p className="text-amber-500 font-black uppercase tracking-widest text-[10px]">Job is Locked (Status: CLOSED)</p>
+                                <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Approved invoice has locked this job. Revert invoice to draft to make changes.</p>
                             </div>
                         </div>
                     </div>
@@ -347,12 +226,12 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                             {!isClosed && (
                                 <button
                                     onClick={() => router.push(`/jobs/${id}/edit`)}
-                                    className="bg-slate-900 border border-slate-800 text-slate-400 p-4 rounded-2xl hover:text-white transition-all shadow-xl"
+                                    className="bg-background/80 backdrop-blur-md border border-border text-slate-500 hover:text-slate-900 dark:hover:text-white p-4 rounded-2xl transition-all shadow-xl"
                                 >
                                     <Edit3 size={20} />
                                 </button>
                             )}
-                            <button className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-[2rem] font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-blue-600/20">
+                            <button className="glass-button">
                                 <Share2 size={20} />
                                 Export
                             </button>
@@ -361,46 +240,46 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                 </div>
 
                 {/* Job Title Card */}
-                <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800/60 rounded-[2.5rem] p-8 mb-8">
+                <div className="glass-card p-8 mb-8">
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
                         <div className="flex items-center gap-6">
-                            <div className="w-20 h-20 rounded-[2rem] bg-blue-600/10 flex items-center justify-center text-blue-400 border border-blue-500/20 shadow-xl shadow-blue-600/5">
+                            <div className="w-20 h-20 rounded-[2rem] bg-blue-600/10 flex items-center justify-center text-blue-600 dark:text-blue-400 border border-blue-500/20 shadow-xl shadow-blue-600/5">
                                 <Ship size={40} />
                             </div>
                             <div>
                                 <div className="flex items-center gap-3 mb-1">
-                                    <h1 className="text-4xl font-black text-white tracking-tighter">{job.jobNumber}</h1>
-                                    <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${job.jobType === 'EXPORT' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
+                                    <h1 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tighter">{job.jobNumber}</h1>
+                                    <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${job.jobType === 'EXPORT' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20'
                                         }`}>
                                         {job.jobType}
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-4 text-slate-500 text-sm font-bold uppercase tracking-widest">
-                                    <span className="text-slate-300">{job.customer.name}</span>
-                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
+                                    <span className="text-slate-700 dark:text-slate-300">{job.customer.name}</span>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800" />
                                     <span>{new Date(job.createdAt).toLocaleDateString()}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 lg:border-l lg:border-slate-800/60 lg:pl-12">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 lg:border-l lg:border-border/50 lg:pl-12">
                             <div className="text-center sm:text-left">
-                                <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Profitability</p>
-                                <p className={`text-2xl font-black tracking-tighter ${profit >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                                <p className="text-subtext mb-1">Profitability</p>
+                                <p className={`text-2xl font-black tracking-tighter ${profit >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                                     {profit >= 0 ? '+' : ''}{profit.toLocaleString()} <span className="text-xs">PKR</span>
                                 </p>
                             </div>
                             <div className="text-center sm:text-left">
-                                <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Margin</p>
-                                <p className="text-2xl font-black text-white tracking-tighter">
+                                <p className="text-subtext mb-1">Margin</p>
+                                <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">
                                     {margin.toFixed(1)}%
                                 </p>
                             </div>
                             <div className="hidden sm:block text-center sm:text-left">
-                                <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Status</p>
+                                <p className="text-subtext mb-1">Status</p>
                                 <div className="flex items-center gap-2">
-                                    <div className={`w-3 h-3 rounded-full animate-pulse ${job.status === 'CLOSED' ? 'bg-slate-500' : 'bg-emerald-500'}`} />
-                                    <p className="text-sm font-black text-white uppercase tracking-widest">{job.status}</p>
+                                    <div className={`w-3 h-3 rounded-full animate-pulse ${job.status === 'CLOSED' ? 'bg-slate-400 dark:bg-slate-500' : 'bg-emerald-500'}`} />
+                                    <p className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest">{job.status}</p>
                                 </div>
                             </div>
                         </div>
@@ -431,47 +310,63 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                 {/* Tab Content */}
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {activeTab === 'overview' && (
-                        <div className="bg-slate-900/40 border border-slate-800/60 p-8 rounded-[2rem]">
-                            <h3 className="text-lg font-black text-white uppercase tracking-tight mb-8 flex items-center gap-3">
-                                <FileText size={18} className="text-blue-400" />
+                        <div className="glass-card p-8">
+                            <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight mb-8 flex items-center gap-3">
+                                <FileText size={18} className="text-blue-500" />
                                 Job Sheet Details
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                                 {/* Left Column View */}
                                 <div className="space-y-6">
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Job Number</p><p className="text-white font-mono font-bold">{job.jobNumber}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Customer</p><p className="text-white font-bold">{job.customer.name}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Vessel</p><p className="text-white font-bold">{job.vessel || '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Place</p><p className="text-white font-bold">{job.place || '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Shipper Ref</p><p className="text-white font-bold">{job.shipperRef || '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">G.D No</p><p className="text-white font-mono font-bold">{job.gdNo || '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Form E</p><p className="text-white font-mono font-bold">{job.formE || '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Commodity</p><p className="text-white font-bold">{job.commodity || '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Volume</p><p className="text-white font-bold">{job.volume || '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Container #</p><p className="text-white font-mono font-bold">{job.containerNo || '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">Job Number</p><p className="text-main font-mono">{job.jobNumber}</p></div>
+                                    <div><p className="text-subtext mb-1">Customer</p><p className="text-main">{job.customer.name}</p></div>
+                                    <div><p className="text-subtext mb-1">Vessel</p><p className="text-main">{job.vessel || '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">Place</p><p className="text-main">{job.place || '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">Shipper Ref</p><p className="text-main">{job.shipperRef || '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">G.D No</p><p className="text-main font-mono">{job.gdNo || '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">Form E</p><p className="text-main font-mono">{job.formE || '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">Commodity</p><p className="text-main">{job.commodity || '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">Volume</p><p className="text-main">{job.volume || '-'}</p></div>
+                                    <div>
+                                        <p className="text-subtext mb-2">Container(s)</p>
+                                        {job.containerNo ? (
+                                            <div className="flex flex-wrap gap-2">
+                                                {job.containerNo.split(',').map((c, i) => (
+                                                    <span key={i} className="px-3 py-1 bg-blue-600/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 rounded-lg text-xs font-mono font-bold">
+                                                        {c.trim()}
+                                                    </span>
+                                                ))}
+                                                <span className="px-3 py-1 bg-slate-500/10 border border-slate-500/20 text-slate-500 rounded-lg text-xs font-black uppercase tracking-widest">
+                                                    Total: {job.containerNo.split(',').filter(x => x.trim()).length}
+                                                </span>
+                                            </div>
+                                        ) : (
+                                            <p className="text-main font-mono">-</p>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* Right Column View */}
                                 <div className="space-y-6">
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Job Date</p><p className="text-white font-bold">{job.jobDate ? new Date(job.jobDate).toLocaleDateString() : '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Packages</p><p className="text-white font-bold">{job.packages || '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Type</p><p className="text-white font-bold">{job.jobType}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Weight</p><p className="text-white font-bold">{job.weight || '-'} KG</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">HAWB / House</p><p className="text-white font-bold">{job.hawbBl || '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Handle By</p><p className="text-white font-bold">{job.handledBy || '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">G.D Date</p><p className="text-white font-bold">{job.gdDate ? new Date(job.gdDate).toLocaleDateString() : '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Form E Date</p><p className="text-white font-bold">{job.formEDate ? new Date(job.formEDate).toLocaleDateString() : '-'}</p></div>
-                                    <div><p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Sales Person</p><p className="text-white font-bold">{job.salesPerson || '-'}</p></div>
-                                    <div className="flex justify-between items-center bg-slate-900/40 p-6 rounded-[2rem] border border-white/5">
+                                    <div><p className="text-subtext mb-1">Job Date</p><p className="text-main">{job.jobDate ? new Date(job.jobDate).toLocaleDateString() : '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">Packages</p><p className="text-main">{job.packages || '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">Type</p><p className="text-main">{job.jobType}</p></div>
+                                    <div><p className="text-subtext mb-1">Weight</p><p className="text-main">{job.weight || '-'} KG</p></div>
+                                    <div><p className="text-subtext mb-1">HAWB / House</p><p className="text-main">{job.hawbBl || '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">Handle By</p><p className="text-main">{job.handledBy || '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">G.D Date</p><p className="text-main">{job.gdDate ? new Date(job.gdDate).toLocaleDateString() : '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">Form E Date</p><p className="text-main">{job.formEDate ? new Date(job.formEDate).toLocaleDateString() : '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">Sales Person</p><p className="text-main">{job.salesPerson || '-'}</p></div>
+                                    <div className="flex justify-between items-center bg-slate-500/5 dark:bg-slate-900/40 p-6 rounded-[2rem] border border-border/50">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center border border-orange-500/20 font-black">
+                                            <div className="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-500 flex items-center justify-center border border-orange-500/20 font-black">
                                                 $
                                             </div>
                                             <div>
-                                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Expenses</p>
+                                                <p className="text-subtext mb-1">Expenses</p>
                                                 <button
                                                     onClick={() => setActiveTab('expenses')}
-                                                    className="text-lg font-black text-white hover:text-blue-400 transition-colors"
+                                                    className="text-lg font-black text-slate-900 dark:text-white hover:text-blue-500 transition-colors"
                                                 >
                                                     {job.expenses.length} Entries
                                                 </button>
@@ -484,7 +379,7 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                                     setExpenseForm({ description: '', vendorId: '', costPrice: '', sellingPrice: '', currencyCode: 'PKR' });
                                                     setShowExpenseModal(true);
                                                 }}
-                                                className="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white transition-all hover:scale-110 active:scale-95"
+                                                className="w-10 h-10 rounded-xl bg-background border border-border flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all hover:scale-110 active:scale-95"
                                             >
                                                 <Plus size={20} />
                                             </button>
@@ -496,9 +391,9 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                     )}
 
                     {activeTab === 'expenses' && (
-                        <div className="bg-slate-900/40 border border-slate-800/60 rounded-[2.5rem] overflow-hidden">
-                            <div className="p-8 border-b border-slate-800/60 flex items-center justify-between">
-                                <h3 className="text-lg font-black text-white uppercase tracking-tight">Expense Tracking</h3>
+                        <div className="glass-panel overflow-hidden">
+                            <div className="p-8 border-b border-border/50 flex items-center justify-between">
+                                <h3 className="text-heading text-lg">Expense Tracking</h3>
                                 <button
                                     onClick={() => {
                                         setEditingExpense(null);
@@ -514,30 +409,30 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                             <div className="p-0 overflow-x-auto">
                                 <table className="w-full text-left border-collapse">
                                     <thead>
-                                        <tr className="bg-slate-950/40">
-                                            <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Description</th>
-                                            <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Vendor</th>
-                                            <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Cost</th>
-                                            <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Selling</th>
-                                            <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Profit</th>
-                                            <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
+                                        <tr className="bg-slate-500/5">
+                                            <th className="px-8 py-5 text-subtext">Description</th>
+                                            <th className="px-8 py-5 text-subtext">Vendor</th>
+                                            <th className="px-8 py-5 text-subtext text-right">Cost</th>
+                                            <th className="px-8 py-5 text-subtext text-right">Selling</th>
+                                            <th className="px-8 py-5 text-subtext text-right">Profit</th>
+                                            <th className="px-8 py-5 text-subtext text-right">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-slate-800/60">
+                                    <tbody className="divide-y divide-border/50">
                                         {job.expenses.length === 0 ? (
                                             <tr>
-                                                <td colSpan={5} className="px-8 py-20 text-center text-slate-500 font-bold uppercase tracking-widest text-xs">No expenses booked yet</td>
+                                                <td colSpan={6} className="px-8 py-20 text-center text-slate-500 font-bold uppercase tracking-widest text-xs">No expenses booked yet</td>
                                             </tr>
                                         ) : (
                                             job.expenses.map((exp) => (
-                                                <tr key={exp.id} className="hover:bg-white/5 transition-colors group">
-                                                    <td className="px-8 py-5 font-bold text-white text-sm">{exp.description}</td>
+                                                <tr key={exp.id} className="hover:bg-slate-500/5 transition-colors group">
+                                                    <td className="px-8 py-5 font-bold text-slate-800 dark:text-white text-sm">{exp.description}</td>
                                                     <td className="px-8 py-5">
-                                                        <span className="text-slate-400 text-sm font-medium">{exp.vendor?.name || 'Direct Expense'}</span>
+                                                        <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">{exp.vendor?.name || 'Direct Expense'}</span>
                                                     </td>
-                                                    <td className="px-8 py-5 text-right font-mono text-slate-400 text-sm">{exp.costPrice.toLocaleString()}</td>
-                                                    <td className="px-8 py-5 text-right font-mono text-white text-sm">{exp.sellingPrice.toLocaleString()}</td>
-                                                    <td className="px-8 py-5 text-right font-mono font-bold text-emerald-400 text-sm">
+                                                    <td className="px-8 py-5 text-right font-mono text-slate-500 dark:text-slate-400 text-sm">{exp.costPrice.toLocaleString()}</td>
+                                                    <td className="px-8 py-5 text-right font-mono text-slate-800 dark:text-white text-sm">{exp.sellingPrice.toLocaleString()}</td>
+                                                    <td className="px-8 py-5 text-right font-mono font-bold text-emerald-500 text-sm">
                                                         {(exp.sellingPrice - exp.costPrice).toLocaleString()}
                                                     </td>
                                                     <td className="px-8 py-5 text-right">
@@ -556,20 +451,20 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                                                             });
                                                                             setShowExpenseModal(true);
                                                                         }}
-                                                                        className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-blue-400 transition-colors"
+                                                                        className="p-2 rounded-lg bg-background border border-border text-slate-400 hover:text-blue-500 transition-colors"
                                                                     >
                                                                         <Edit3 size={14} />
                                                                     </button>
                                                                     <button
                                                                         onClick={() => handleDeleteExpense(exp.id)}
-                                                                        className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-red-400 transition-colors"
+                                                                        className="p-2 rounded-lg bg-background border border-border text-slate-400 hover:text-red-500 transition-colors"
                                                                     >
                                                                         <Trash2 size={14} />
                                                                     </button>
                                                                 </>
                                                             )}
                                                             {isClosed && (
-                                                                <span className="p-2 text-slate-600">
+                                                                <span className="p-2 text-slate-300 dark:text-slate-600">
                                                                     <Anchor size={14} />
                                                                 </span>
                                                             )}
@@ -580,12 +475,12 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                         )}
                                     </tbody>
                                     {job.expenses.length > 0 && (
-                                        <tfoot className="bg-slate-950/40 border-t-2 border-slate-800">
+                                        <tfoot className="bg-slate-500/5 border-t-2 border-border/50">
                                             <tr>
-                                                <td colSpan={2} className="px-8 py-6 text-sm font-black text-white uppercase tracking-widest">Grand Total</td>
-                                                <td className="px-8 py-6 text-right font-mono text-slate-400 font-bold">{totalCost.toLocaleString()}</td>
-                                                <td className="px-8 py-6 text-right font-mono text-white font-black">{totalSelling.toLocaleString()}</td>
-                                                <td className="px-8 py-6 text-right font-mono text-emerald-400 font-black">{profit.toLocaleString()}</td>
+                                                <td colSpan={2} className="px-8 py-6 text-sm font-black text-slate-800 dark:text-white uppercase tracking-widest">Grand Total</td>
+                                                <td className="px-8 py-6 text-right font-mono text-slate-500 dark:text-slate-400 font-bold">{totalCost.toLocaleString()}</td>
+                                                <td className="px-8 py-6 text-right font-mono text-slate-900 dark:text-white font-black">{totalSelling.toLocaleString()}</td>
+                                                <td className="px-8 py-6 text-right font-mono text-emerald-500 font-black">{profit.toLocaleString()}</td>
                                                 <td className="px-8 py-6"></td>
                                             </tr>
                                         </tfoot>
@@ -596,131 +491,52 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                     )}
 
                     {activeTab === 'invoices' && (
-                        <div className="space-y-6">
-                            {!isClosed && !job.invoice && (
-                                <div className="flex justify-end gap-3">
-                                    <button
-                                        onClick={() => {
-                                            const jobItems = (job?.expenses || []).map(exp => ({
-                                                description: exp.description,
-                                                quantity: 1,
-                                                rate: exp.sellingPrice,
-                                                amount: exp.sellingPrice,
-                                                taxPercentage: 0,
-                                                taxAmount: 0,
-                                                total: exp.sellingPrice,
-                                                productId: null
-                                            }));
-
-                                            setEditingInvoiceId(null);
-                                            setInvoiceForm({
-                                                invoiceNumber: `INV-${job?.jobNumber?.split('-')[2] || '001'}`,
-                                                status: 'DRAFT',
-                                                type: 'MASTER',
-                                                currencyCode: 'PKR',
-                                                taxAmount: 0,
-                                                items: jobItems
-                                            });
-                                            setShowInvoiceModal(true);
-                                        }}
-                                        className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-3xl font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-blue-600/20"
-                                    >
-                                        <FileText size={20} />
-                                        Generate Invoice
-                                    </button>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {!job.invoice ? (
+                                <div className="col-span-full glass-card p-20 text-center">
+                                    <FileText className="w-12 h-12 text-slate-700 dark:text-slate-600 mx-auto mb-4" />
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-slate-300">No invoice generated</h3>
+                                    <p className="text-subtext text-sm mt-1">Visit the Invoices page to create an invoice for this job.</p>
                                 </div>
-                            )}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {!job.invoice ? (
-                                    <div className="col-span-full bg-slate-900/40 border border-slate-800/60 rounded-[2.5rem] p-20 text-center">
-                                        <FileText className="w-12 h-12 text-slate-700 mx-auto mb-4" />
-                                        <h3 className="text-lg font-bold text-slate-300">No invoice generated</h3>
-                                        <p className="text-slate-500 text-sm mt-1">Generate an invoice from job expenses.</p>
-                                    </div>
-                                ) : (
-                                    [job.invoice].map((inv) => (
-                                        <div key={inv.id} className="bg-slate-900/40 border border-slate-800/60 rounded-[2rem] p-6 hover:border-blue-500/50 transition-all group">
-                                            <div className="flex justify-between items-start mb-6">
-                                                <div>
-                                                    <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Invoice Number</p>
-                                                    <h4 className="text-xl font-black text-white">{inv.invoiceNumber}</h4>
-                                                </div>
-                                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest ${inv.isApproved ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                                                    }`}>
-                                                    {inv.isApproved ? 'Approved' : 'Draft'}
-                                                </span>
+                            ) : (
+                                [job.invoice].map((inv) => (
+                                    <div key={inv.id} className="glass-card p-6 group hover:border-primary/50">
+                                        <div className="flex justify-between items-start mb-6">
+                                            <div>
+                                                <p className="text-subtext mb-1">Invoice Number</p>
+                                                <h4 className="text-xl font-black text-heading italic">{inv.invoiceNumber}</h4>
                                             </div>
-                                            <div className="space-y-4 mb-6">
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-slate-500 font-bold uppercase tracking-tight text-xs">Date</span>
-                                                    <span className="text-slate-300 font-bold">{new Date(inv.date).toLocaleDateString()}</span>
-                                                </div>
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-slate-500 font-bold uppercase tracking-tight text-xs">Total Amount</span>
-                                                    <span className="text-white font-black">{inv.grandTotal.toLocaleString()} {inv.currencyCode}</span>
-                                                </div>
+                                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest ${inv.isApproved ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'}`}>
+                                                {inv.isApproved ? 'Approved' : 'Draft'}
+                                            </span>
+                                        </div>
+                                        <div className="space-y-4 mb-6">
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-tight text-xs">Date</span>
+                                                <span className="text-slate-700 dark:text-slate-300 font-bold">{new Date(inv.date).toLocaleDateString()}</span>
                                             </div>
-                                            <div className="pt-4 border-t border-slate-800/60 flex flex-wrap gap-2">
-                                                <button
-                                                    onClick={() => router.push(`/invoices/${inv.id}`)}
-                                                    className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-widest transition-all"
-                                                >
-                                                    View
-                                                </button>
-                                                {!inv.isApproved && (
-                                                    <>
-                                                        <button
-                                                            onClick={() => {
-                                                                setEditingInvoiceId(inv.id);
-                                                                setInvoiceForm({
-                                                                    invoiceNumber: inv.invoiceNumber,
-                                                                    status: inv.status,
-                                                                    type: 'MASTER',
-                                                                    currencyCode: inv.currencyCode,
-                                                                    taxAmount: 0,
-                                                                    items: (inv as any).items || [] // Note: Need to ensure items are fetched
-                                                                });
-                                                                setShowInvoiceModal(true);
-                                                            }}
-                                                            className="p-3 rounded-xl bg-slate-800 text-slate-400 hover:text-blue-400 transition-all"
-                                                        >
-                                                            <Edit3 size={16} />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleInvoiceAction(inv.id, 'DELETE')}
-                                                            className="p-3 rounded-xl bg-slate-800 text-slate-400 hover:text-red-400 transition-all font-bold"
-                                                        >
-                                                            <Trash2 size={16} />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleInvoiceAction(inv.id, 'APPROVE')}
-                                                            className="p-3 rounded-xl bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/40 transition-all"
-                                                        >
-                                                            <CheckCircle2 size={16} />
-                                                        </button>
-                                                    </>
-                                                )}
-                                                {inv.isApproved && (
-                                                    <button
-                                                        onClick={() => handleInvoiceAction(inv.id, 'REVERT_TO_DRAFT')}
-                                                        className="p-3 rounded-xl bg-amber-600/10 text-amber-400 hover:bg-amber-600/20 transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
-                                                        title="Unlock Job / Revert to Draft"
-                                                    >
-                                                        <Loader2 size={14} className="animate-spin-slow" />
-                                                        Unlock
-                                                    </button>
-                                                )}
-                                                <button
-                                                    onClick={() => router.push(`/invoices/${inv.id}`)}
-                                                    className="p-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 transition-all font-bold"
-                                                >
-                                                    <Printer size={16} />
-                                                </button>
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-tight text-xs">Grand Total</span>
+                                                <span className="text-heading">{inv.grandTotal.toLocaleString()} {inv.currencyCode}</span>
                                             </div>
                                         </div>
-                                    ))
-                                )}
-                            </div>
+                                        <div className="pt-4 border-t border-border/50 flex gap-2">
+                                            <button
+                                                onClick={() => router.push(`/invoices/${inv.id}`)}
+                                                className="flex-1 bg-background/50 dark:bg-white/5 hover:bg-white/10 text-slate-900 dark:text-white font-black py-3 rounded-xl text-xs uppercase tracking-widest transition-all text-center border border-border"
+                                            >
+                                                View Details
+                                            </button>
+                                            <button
+                                                onClick={() => router.push(`/invoices/${inv.id}`)}
+                                                className="p-3 rounded-xl bg-background border border-border text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all"
+                                            >
+                                                <Printer size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                         </div>
                     )}
                 </div>
@@ -729,27 +545,27 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                 {showExpenseModal && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={() => setShowExpenseModal(false)} />
-                        <div className="relative bg-slate-900 border border-slate-800 w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
-                            <div className="p-8 border-b border-white/5">
-                                <h3 className="text-2xl font-black text-white tracking-tighter">{editingExpense ? 'Edit Expense' : 'Book New Expense'}</h3>
-                                <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">{editingExpense ? 'Update Operational Cost' : 'Operational Cost Entry'}</p>
+                        <div className="relative glass-panel w-full max-w-lg shadow-2xl overflow-hidden animate-in zoom-in duration-300">
+                            <div className="p-8 border-b border-border/50">
+                                <h3 className="text-2xl font-black text-heading tracking-tighter">{editingExpense ? 'Edit Expense' : 'Book New Expense'}</h3>
+                                <p className="text-subtext mt-1">{editingExpense ? 'Update Operational Cost' : 'Operational Cost Entry'}</p>
                             </div>
                             <form onSubmit={handleAddExpense} className="p-8 space-y-6">
                                 <div className="space-y-4">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Description</label>
+                                        <label className="text-subtext ml-1">Description</label>
                                         <input
                                             required
-                                            className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="glass-input w-full"
                                             placeholder="e.g. Terminal Handling Charges"
                                             value={expenseForm.description}
                                             onChange={e => setExpenseForm({ ...expenseForm, description: e.target.value })}
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Vendor</label>
+                                        <label className="text-subtext ml-1">Vendor</label>
                                         <select
-                                            className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-bold"
+                                            className="glass-input w-full appearance-none"
                                             value={expenseForm.vendorId}
                                             onChange={e => setExpenseForm({ ...expenseForm, vendorId: e.target.value })}
                                         >
@@ -759,21 +575,21 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Cost Price</label>
+                                            <label className="text-subtext ml-1">Cost Price</label>
                                             <input
                                                 type="number"
                                                 required
-                                                className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                                                className="glass-input w-full font-mono"
                                                 value={expenseForm.costPrice}
                                                 onChange={e => setExpenseForm({ ...expenseForm, costPrice: e.target.value })}
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Selling Price</label>
+                                            <label className="text-subtext ml-1">Selling Price</label>
                                             <input
                                                 type="number"
                                                 required
-                                                className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                                                className="glass-input w-full font-mono"
                                                 value={expenseForm.sellingPrice}
                                                 onChange={e => setExpenseForm({ ...expenseForm, sellingPrice: e.target.value })}
                                             />
@@ -784,7 +600,7 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                     <button
                                         type="button"
                                         onClick={() => setShowExpenseModal(false)}
-                                        className="flex-1 px-6 py-4 rounded-2xl border border-slate-800 text-slate-400 font-bold uppercase tracking-widest text-xs hover:bg-slate-800 hover:text-white transition-all"
+                                        className="flex-1 px-6 py-4 rounded-2xl border border-border text-slate-500 font-bold uppercase tracking-widest text-xs hover:bg-slate-100 dark:hover:bg-slate-800 transition-all font-black"
                                     >
                                         Cancel
                                     </button>
@@ -800,137 +616,7 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                     </div>
                 )}
 
-                {/* Invoice Modal */}
-                {showInvoiceModal && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={() => setShowInvoiceModal(false)} />
-                        <div className="relative bg-slate-900 border border-slate-800 w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
-                            <div className="p-8 border-b border-white/5">
-                                <h3 className="text-2xl font-black text-white tracking-tighter">Generate Invoice</h3>
-                                <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Transform Job to Billing</p>
-                            </div>
-                            <form onSubmit={handleGenerateInvoice} className="p-8 space-y-6">
-                                <div className="space-y-4">
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Invoice Number</label>
-                                        <input
-                                            required
-                                            className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
-                                            value={invoiceForm.invoiceNumber}
-                                            onChange={e => setInvoiceForm({ ...invoiceForm, invoiceNumber: e.target.value })}
-                                        />
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Invoice Type</label>
-                                            <select
-                                                className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs font-black uppercase tracking-widest"
-                                                value={invoiceForm.type}
-                                                onChange={e => setInvoiceForm({ ...invoiceForm, type: e.target.value })}
-                                            >
-                                                <option value="MASTER">Master Invoice</option>
-                                                <option value="PROFORMA">Proforma</option>
-                                            </select>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Currency</label>
-                                            <input
-                                                className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold text-xs"
-                                                value={invoiceForm.currencyCode}
-                                                readOnly
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <div className="flex items-center justify-between">
-                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Invoice Items</label>
-                                            <button type="button" onClick={addInvoiceItem} className="text-blue-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-1 hover:text-white transition-all">
-                                                <Plus size={12} /> Add Item
-                                            </button>
-                                        </div>
-
-                                        <div className="max-h-60 overflow-y-auto space-y-3 pr-2 scrollbar-thin scrollbar-thumb-slate-800">
-                                            {invoiceForm.items.map((item, idx) => (
-                                                <div key={idx} className="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-3 relative group">
-                                                    <button type="button" onClick={() => removeInvoiceItem(idx)} className="absolute top-2 right-2 text-slate-700 hover:text-red-500 transition-colors">
-                                                        <Trash2 size={14} />
-                                                    </button>
-                                                    <div className="grid grid-cols-2 gap-3">
-                                                        <select
-                                                            className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-[10px] font-bold text-white col-span-2"
-                                                            value={item.productId || ''}
-                                                            onChange={e => updateInvoiceItem(idx, 'productId', e.target.value)}
-                                                        >
-                                                            <option value="">Manual Entry / Service...</option>
-                                                            {inventory.map(p => <option key={p.id} value={p.id}>{p.name} ({p.unit})</option>)}
-                                                        </select>
-                                                        <input
-                                                            placeholder="Description"
-                                                            className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-[10px] font-bold text-white col-span-2"
-                                                            value={item.description}
-                                                            onChange={e => updateInvoiceItem(idx, 'description', e.target.value)}
-                                                        />
-                                                        <div className="flex flex-col gap-1">
-                                                            <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest ml-1">Qty</span>
-                                                            <input type="number" step="any" className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-[10px] font-bold text-white text-center"
-                                                                value={item.quantity} onChange={e => updateInvoiceItem(idx, 'quantity', e.target.value)} />
-                                                        </div>
-                                                        <div className="flex flex-col gap-1">
-                                                            <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest ml-1">Rate</span>
-                                                            <input type="number" className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-[10px] font-bold text-white text-right"
-                                                                value={item.rate} onChange={e => updateInvoiceItem(idx, 'rate', e.target.value)} />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                            {invoiceForm.items.length === 0 && (
-                                                <div className="text-center py-6 text-slate-600 border border-dashed border-slate-800 rounded-2xl">
-                                                    <p className="text-[10px] font-black uppercase tracking-[0.2em]">No items added</p>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="p-4 bg-blue-600/5 rounded-2xl border border-blue-500/10 space-y-2">
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Subtotal</span>
-                                                <span className="text-sm font-black text-white">{invoiceForm.items.reduce((sum, i) => sum + Number(i.amount), 0).toLocaleString()} PKR</span>
-                                            </div>
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">WHT / Tax</span>
-                                                <input
-                                                    type="number"
-                                                    className="bg-transparent text-right text-white font-black w-24 focus:outline-none border-b border-white/10 text-sm"
-                                                    value={invoiceForm.taxAmount}
-                                                    onChange={e => setInvoiceForm({ ...invoiceForm, taxAmount: Number(e.target.value) })}
-                                                />
-                                            </div>
-                                            <div className="border-t border-white/5 pt-2 flex justify-between items-center">
-                                                <span className="text-xs font-black text-blue-400 uppercase tracking-widest italic">Grand Total</span>
-                                                <span className="text-xl font-black text-blue-400">{(invoiceForm.items.reduce((sum, i) => sum + Number(i.total), 0) + Number(invoiceForm.taxAmount)).toLocaleString()}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex gap-4 pt-4">
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowInvoiceModal(false)}
-                                        className="flex-1 px-6 py-4 rounded-2xl border border-slate-800 text-slate-400 font-bold uppercase tracking-widest text-xs hover:bg-slate-800 hover:text-white transition-all"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl text-xs uppercase tracking-widest shadow-lg shadow-blue-600/20 transition-all active:scale-95"
-                                    >
-                                        Confirm Invoice
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
             </div>
-        </DashboardLayout>
+        </DashboardLayout >
     );
 }

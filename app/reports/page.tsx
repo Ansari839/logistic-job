@@ -70,11 +70,11 @@ export default function ReportingPage() {
                 {/* Header */}
                 <div className="flex justify-between items-end">
                     <div>
-                        <h1 className="text-4xl font-black text-white tracking-tighter flex items-center gap-3">
-                            <BarChart3 className="text-blue-500" size={36} />
-                            Reporting <span className="text-blue-500">Hub</span>
+                        <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter flex items-center gap-3">
+                            <BarChart3 className="text-blue-600 dark:text-blue-500" size={36} />
+                            Reporting <span className="text-blue-600 dark:text-blue-500">Hub</span>
                         </h1>
-                        <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">
+                        <p className="text-subtext font-bold uppercase tracking-[0.2em] text-[10px] mt-2">
                             Intelligent Analytics & Financial Insights
                         </p>
                     </div>
@@ -86,22 +86,22 @@ export default function ReportingPage() {
                             <div key={category.id} className="space-y-4">
                                 <div className="flex items-center gap-3 px-2">
                                     <div className={`p-2 rounded-xl bg-${category.color}-500/10`}>
-                                        <category.icon className={`text-${category.color}-500`} size={18} />
+                                        <category.icon className={`text-${category.color}-600 dark:text-${category.color}-500`} size={18} />
                                     </div>
-                                    <h2 className="text-sm font-black text-white uppercase tracking-widest italic">{category.title}</h2>
+                                    <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest italic">{category.title}</h2>
                                 </div>
                                 <div className="space-y-3">
                                     {category.reports.map((report) => (
                                         <button
                                             key={report.id}
                                             onClick={() => setSelectedReport(report)}
-                                            className="w-full text-left p-5 bg-slate-900/50 border border-white/5 rounded-3xl hover:bg-slate-800/80 hover:border-blue-500/30 transition-all group relative overflow-hidden"
+                                            className="w-full text-left p-5 glass-panel rounded-3xl hover:bg-primary/5 hover:border-blue-500/30 transition-all group relative overflow-hidden shadow-sm"
                                         >
                                             <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <ChevronRight className="text-blue-500" size={16} />
+                                                <ChevronRight className="text-blue-600 dark:text-blue-500" size={16} />
                                             </div>
-                                            <h3 className="text-white font-bold group-hover:text-blue-400 transition-colors">{report.name}</h3>
-                                            <p className="text-[10px] text-slate-500 mt-1 font-medium leading-relaxed max-w-[80%] uppercase tracking-wider">{report.description}</p>
+                                            <h3 className="text-slate-900 dark:text-white font-bold group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors uppercase italic tracking-tight">{report.name}</h3>
+                                            <p className="text-[10px] text-subtext mt-1 font-medium leading-relaxed max-w-[80%] uppercase tracking-wider">{report.description}</p>
                                         </button>
                                     ))}
                                 </div>
@@ -112,7 +112,7 @@ export default function ReportingPage() {
                     <div className="space-y-6">
                         <button
                             onClick={() => setSelectedReport(null)}
-                            className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-xs font-black uppercase tracking-widest bg-slate-900 px-4 py-2 rounded-full border border-white/5"
+                            className="flex items-center gap-2 text-subtext hover:text-slate-900 dark:hover:text-white transition-colors text-xs font-black uppercase tracking-widest bg-background px-4 py-2 rounded-full border border-border"
                         >
                             ← Back to Hub
                         </button>

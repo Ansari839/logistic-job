@@ -125,8 +125,8 @@ export default function PaymentsPage() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
-                        <h1 className="text-4xl font-black text-white tracking-tighter uppercase italic">Settlements & Payments</h1>
-                        <p className="text-slate-500 text-sm font-bold uppercase tracking-[0.2em] mt-1">Cash Flow Management</p>
+                        <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic">Settlements & Payments</h1>
+                        <p className="text-subtext text-sm font-bold uppercase tracking-[0.2em] mt-1">Cash Flow Management</p>
                     </div>
                     <div className="flex gap-3">
                         <button
@@ -147,69 +147,69 @@ export default function PaymentsPage() {
                 </div>
 
                 {/* History Table */}
-                <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800/60 rounded-[2.5rem] overflow-hidden">
-                    <div className="p-8 border-b border-slate-800/60 flex items-center justify-between">
-                        <h3 className="text-lg font-black text-white uppercase tracking-tight">Recent Transactions</h3>
+                <div className="glass-panel overflow-hidden">
+                    <div className="p-8 border-b border-border flex items-center justify-between">
+                        <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">Recent Transactions</h3>
                         <div className="relative group w-64">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-subtext" size={16} />
                             <input
                                 type="text"
                                 placeholder="Search payments..."
-                                className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 pl-10 pr-4 text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="glass-input w-full rounded-xl py-2 pl-10 pr-4 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-slate-950/40">
-                                    <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Ref / Date</th>
-                                    <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Entity</th>
-                                    <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Mode</th>
-                                    <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Reference</th>
-                                    <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Amount</th>
+                                <tr className="bg-primary/5">
+                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest">Ref / Date</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest">Entity</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest">Mode</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest">Reference</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest text-right">Amount</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-800/60">
+                            <tbody className="divide-y divide-border">
                                 {loading ? (
                                     <tr>
                                         <td colSpan={5} className="px-8 py-20 text-center">
                                             <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4" />
-                                            <p className="text-slate-500 font-black uppercase tracking-widest text-[10px]">Updating Registry...</p>
+                                            <p className="text-subtext font-black uppercase tracking-widest text-[10px]">Updating Registry...</p>
                                         </td>
                                     </tr>
                                 ) : payments.length === 0 ? (
                                     <tr>
                                         <td colSpan={5} className="px-8 py-20 text-center">
-                                            <CreditCard size={48} className="text-slate-800 mx-auto mb-4" />
-                                            <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">No payment history found</p>
+                                            <CreditCard size={48} className="text-subtext opacity-20 mx-auto mb-4" />
+                                            <p className="text-subtext font-bold uppercase tracking-widest text-sm">No payment history found</p>
                                         </td>
                                     </tr>
                                 ) : (
                                     payments.map((p) => (
-                                        <tr key={p.id} className="hover:bg-white/5 transition-colors group">
+                                        <tr key={p.id} className="hover:bg-primary/5 transition-colors group">
                                             <td className="px-8 py-5">
                                                 <div className="flex flex-col">
-                                                    <span className="text-white font-black text-sm">{p.receiptNumber}</span>
-                                                    <span className="text-slate-500 text-[10px] uppercase font-bold tracking-wider">{new Date(p.date).toLocaleDateString()}</span>
+                                                    <span className="text-slate-900 dark:text-white font-black text-sm">{p.receiptNumber}</span>
+                                                    <span className="text-subtext text-[10px] uppercase font-bold tracking-wider">{new Date(p.date).toLocaleDateString()}</span>
                                                 </div>
                                             </td>
                                             <td className="px-8 py-5">
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${p.customer ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
+                                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${p.customer ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'}`}>
                                                         {p.customer ? <User size={14} /> : <Building2 size={14} />}
                                                     </div>
-                                                    <span className="text-slate-300 font-bold text-sm tracking-tight">{p.customer?.name || p.vendor?.name}</span>
+                                                    <span className="text-slate-700 dark:text-slate-300 font-bold text-sm tracking-tight">{p.customer?.name || p.vendor?.name}</span>
                                                 </div>
                                             </td>
                                             <td className="px-8 py-5">
-                                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-950 px-2.5 py-1 rounded-full border border-slate-800">
+                                                <span className="text-[10px] font-black text-subtext uppercase tracking-widest bg-background px-2.5 py-1 rounded-full border border-border">
                                                     {p.mode}
                                                 </span>
                                             </td>
-                                            <td className="px-8 py-5 text-slate-500 font-mono text-xs">{p.reference || '-'}</td>
+                                            <td className="px-8 py-5 text-subtext font-mono text-xs">{p.reference || '-'}</td>
                                             <td className="px-8 py-5 text-right">
-                                                <span className={`text-lg font-black tracking-tighter ${p.customer ? 'text-emerald-400' : 'text-rose-400'}`}>
+                                                <span className={`text-lg font-black tracking-tighter ${p.customer ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                                                     {p.customer ? '+' : '-'}{p.amount.toLocaleString()} <span className="text-[10px] uppercase ml-1">PKR</span>
                                                 </span>
                                             </td>
@@ -224,8 +224,8 @@ export default function PaymentsPage() {
                 {/* Modal */}
                 {showModal && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={() => setShowModal(false)} />
-                        <div className="relative bg-slate-900 border border-slate-800 w-full max-w-xl rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
+                        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setShowModal(false)} />
+                        <div className="relative glass-panel w-full max-w-xl rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
                             <div className={`p-10 ${type === 'RECEIPT' ? 'bg-emerald-600' : 'bg-rose-600'} text-white`}>
                                 <div className="flex justify-between items-start">
                                     <div>
@@ -241,21 +241,21 @@ export default function PaymentsPage() {
                             <form onSubmit={handleSubmit} className="p-10 space-y-8">
                                 <div className="grid grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Reference Number</label>
+                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Reference Number</label>
                                         <input
                                             required
-                                            className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-5 py-4 text-white font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             placeholder={type === 'RECEIPT' ? 'REC-2025-001' : 'PAY-2025-001'}
                                             value={form.receiptNumber}
                                             onChange={e => setForm({ ...form, receiptNumber: e.target.value })}
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Transaction Date</label>
+                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Transaction Date</label>
                                         <input
                                             type="date"
                                             required
-                                            className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold"
+                                            className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold"
                                             value={form.date}
                                             onChange={e => setForm({ ...form, date: e.target.value })}
                                         />
@@ -264,12 +264,12 @@ export default function PaymentsPage() {
 
                                 <div className="space-y-6">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
+                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">
                                             {type === 'RECEIPT' ? 'From Customer' : 'To Vendor'}
                                         </label>
                                         <select
                                             required
-                                            className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-5 py-4 text-white font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             value={type === 'RECEIPT' ? form.customerId : form.vendorId}
                                             onChange={e => setForm({ ...form, [type === 'RECEIPT' ? 'customerId' : 'vendorId']: e.target.value })}
                                         >
@@ -282,20 +282,20 @@ export default function PaymentsPage() {
 
                                     <div className="grid grid-cols-2 gap-6">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Amount (PKR)</label>
+                                            <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Amount (PKR)</label>
                                             <input
                                                 type="number"
                                                 required
-                                                className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-5 py-4 text-white font-black text-xl tracking-tighter focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white font-black text-xl tracking-tighter focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 placeholder="0.00"
                                                 value={form.amount}
                                                 onChange={e => setForm({ ...form, amount: e.target.value })}
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Payment Mode</label>
+                                            <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Payment Mode</label>
                                             <select
-                                                className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-5 py-4 text-white font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 value={form.mode}
                                                 onChange={e => setForm({ ...form, mode: e.target.value })}
                                             >
@@ -308,10 +308,10 @@ export default function PaymentsPage() {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Deposit To / Pay From (Account)</label>
+                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Deposit To / Pay From (Account)</label>
                                         <select
                                             required
-                                            className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-5 py-4 text-white font-black text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white font-black text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             value={form.bankAccountId}
                                             onChange={e => setForm({ ...form, bankAccountId: e.target.value })}
                                         >
@@ -327,7 +327,7 @@ export default function PaymentsPage() {
                                     <button
                                         type="button"
                                         onClick={() => setShowModal(false)}
-                                        className="flex-1 px-8 py-5 rounded-3xl border border-slate-800 text-slate-500 font-black uppercase tracking-widest text-xs hover:bg-slate-800 hover:text-white transition-all"
+                                        className="flex-1 px-8 py-5 rounded-3xl border border-border text-subtext font-black uppercase tracking-widest text-xs hover:bg-primary/5 hover:text-slate-900 dark:hover:text-white transition-all"
                                     >
                                         Dismiss
                                     </button>

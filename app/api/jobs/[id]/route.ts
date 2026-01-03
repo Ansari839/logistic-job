@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
+import { logAction } from '@/lib/security';
 
 const JWT_SECRET = new TextEncoder().encode(
     process.env.JWT_SECRET || 'your-default-secret-key-change-it'
@@ -70,15 +71,16 @@ export async function PATCH(
         const body = await request.json();
         const {
             jobType, customerId, branchId,
-            vessel, place, shipperRef, gdNo, formE,
+            vessel, place, shipperRef, gdNo, gdDate, formE, formEDate,
             commodity, volume, containerNo, packages,
-            weight, hawbBl, handledBy, salesPerson
+            weight, hawbBl, handledBy, salesPerson, jobDate,
+            expenses
         } = body;
 
         // Check ownership and status
         const existingJob = await prisma.job.findUnique({
             where: { id: parseInt(id) },
-            select: { companyId: true, status: true }
+            select: { companyId: true, status: true, jobNumber: true }
         });
 
         if (!existingJob || existingJob.companyId !== user.companyId) {
@@ -89,26 +91,65 @@ export async function PATCH(
             return NextResponse.json({ error: 'Job is locked (Status: CLOSED). Revert invoice to draft to make changes.' }, { status: 400 });
         }
 
-        const job = await prisma.job.update({
-            where: { id: parseInt(id) },
-            data: {
-                jobType,
-                customerId: customerId ? parseInt(customerId) : undefined,
-                branchId: branchId ? parseInt(branchId) : undefined,
-                vessel,
-                place,
-                shipperRef,
-                gdNo,
-                formE,
-                commodity,
-                volume,
-                containerNo,
-                packages: packages ? parseInt(packages) : undefined,
-                weight: weight ? parseFloat(weight) : undefined,
-                hawbBl,
-                handledBy,
-                salesPerson,
+        const job = await prisma.$transaction(async (tx) => {
+            // 1. Update Job Core Data
+            const updatedJob = await tx.job.update({
+                where: { id: parseInt(id) },
+                data: {
+                    jobType: jobType || undefined,
+                    jobDate: jobDate ? new Date(jobDate) : undefined,
+                    customerId: customerId ? parseInt(customerId) : undefined,
+                    branchId: branchId ? parseInt(branchId) : (branchId === null ? null : undefined),
+                    vessel,
+                    place,
+                    shipperRef,
+                    gdNo,
+                    gdDate: gdDate ? new Date(gdDate) : (gdDate === null ? null : undefined),
+                    formE,
+                    formEDate: formEDate ? new Date(formEDate) : (formEDate === null ? null : undefined),
+                    commodity,
+                    volume,
+                    containerNo,
+                    packages: packages ? parseInt(packages) : undefined,
+                    weight: weight ? parseFloat(weight) : undefined,
+                    hawbBl,
+                    handledBy,
+                    salesPerson,
+                }
+            });
+
+            // 2. Sync Expenses if provided
+            if (expenses && Array.isArray(expenses)) {
+                // Delete existing expenses
+                await tx.expense.deleteMany({
+                    where: { jobId: parseInt(id) }
+                });
+
+                // Create new ones
+                if (expenses.length > 0) {
+                    await tx.expense.createMany({
+                        data: expenses.filter((e: any) => e.name || e.cost || e.selling).map((e: any) => ({
+                            jobId: parseInt(id),
+                            description: e.name + (e.description ? ` - ${e.description}` : ''),
+                            costPrice: parseFloat(e.cost) || 0,
+                            sellingPrice: parseFloat(e.selling) || 0,
+                            vendorId: e.vendorId ? parseInt(e.vendorId) : null,
+                            currencyCode: 'PKR',
+                            companyId: user.companyId as number,
+                        }))
+                    });
+                }
             }
+
+            return updatedJob;
+        });
+
+        await logAction({
+            user,
+            action: 'UPDATE',
+            module: 'JOB',
+            entityId: job.id,
+            payload: { jobNumber: job.jobNumber }
         });
 
         return NextResponse.json({ job });
