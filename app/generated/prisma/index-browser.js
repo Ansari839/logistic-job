@@ -238,6 +238,7 @@ exports.Prisma.JobScalarFieldEnum = {
   commodity: 'commodity',
   volume: 'volume',
   containerNo: 'containerNo',
+  podId: 'podId',
   packages: 'packages',
   weight: 'weight',
   hawbBl: 'hawbBl',
@@ -465,6 +466,14 @@ exports.Prisma.FinancialPeriodScalarFieldEnum = {
   companyId: 'companyId'
 };
 
+exports.Prisma.PortScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -569,7 +578,8 @@ exports.Prisma.ModelName = {
   AccountEntry: 'AccountEntry',
   Payment: 'Payment',
   AuditLog: 'AuditLog',
-  FinancialPeriod: 'FinancialPeriod'
+  FinancialPeriod: 'FinancialPeriod',
+  Port: 'Port'
 };
 
 /**

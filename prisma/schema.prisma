@@ -89,6 +89,7 @@ model Company {
   auditLogs         AuditLog[]
   financialPeriods  FinancialPeriod[]
   expensesMaster    ExpenseMaster[]
+  ports             Port[]
 }
 
 model Branch {
@@ -227,6 +228,9 @@ model Job {
   commodity      String?
   volume         String?
   containerNo    String?
+  
+  podId          Int?
+  pod            Port?     @relation(fields: [podId], references: [id])
   
   packages       Int?
   weight         Float?
@@ -578,4 +582,15 @@ model FinancialPeriod {
   company   Company  @relation(fields: [companyId], references: [id])
 
   @@unique([companyId, month, year])
+}
+model Port {
+  id        Int      @id @default(autoincrement())
+  name      String
+  companyId Int
+  company   Company  @relation(fields: [companyId], references: [id])
+  jobs      Job[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([companyId, name])
 }

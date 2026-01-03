@@ -143,6 +143,11 @@ export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
  * 
  */
 export type FinancialPeriod = $Result.DefaultSelection<Prisma.$FinancialPeriodPayload>
+/**
+ * Model Port
+ * 
+ */
+export type Port = $Result.DefaultSelection<Prisma.$PortPayload>
 
 /**
  * Enums
@@ -634,6 +639,16 @@ export class PrismaClient<
     * ```
     */
   get financialPeriod(): Prisma.FinancialPeriodDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.port`: Exposes CRUD operations for the **Port** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Ports
+    * const ports = await prisma.port.findMany()
+    * ```
+    */
+  get port(): Prisma.PortDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1093,7 +1108,8 @@ export namespace Prisma {
     AccountEntry: 'AccountEntry',
     Payment: 'Payment',
     AuditLog: 'AuditLog',
-    FinancialPeriod: 'FinancialPeriod'
+    FinancialPeriod: 'FinancialPeriod',
+    Port: 'Port'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1109,7 +1125,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "company" | "branch" | "currency" | "companyCurrency" | "taxSetting" | "systemSetting" | "user" | "customer" | "vendor" | "job" | "expenseMaster" | "expense" | "invoice" | "invoiceItem" | "productCategory" | "product" | "warehouse" | "stockMovement" | "purchaseInvoice" | "purchaseInvoiceItem" | "account" | "transaction" | "accountEntry" | "payment" | "auditLog" | "financialPeriod"
+      modelProps: "company" | "branch" | "currency" | "companyCurrency" | "taxSetting" | "systemSetting" | "user" | "customer" | "vendor" | "job" | "expenseMaster" | "expense" | "invoice" | "invoiceItem" | "productCategory" | "product" | "warehouse" | "stockMovement" | "purchaseInvoice" | "purchaseInvoiceItem" | "account" | "transaction" | "accountEntry" | "payment" | "auditLog" | "financialPeriod" | "port"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3037,6 +3053,80 @@ export namespace Prisma {
           }
         }
       }
+      Port: {
+        payload: Prisma.$PortPayload<ExtArgs>
+        fields: Prisma.PortFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PortFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PortFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortPayload>
+          }
+          findFirst: {
+            args: Prisma.PortFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PortFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortPayload>
+          }
+          findMany: {
+            args: Prisma.PortFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortPayload>[]
+          }
+          create: {
+            args: Prisma.PortCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortPayload>
+          }
+          createMany: {
+            args: Prisma.PortCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PortCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortPayload>[]
+          }
+          delete: {
+            args: Prisma.PortDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortPayload>
+          }
+          update: {
+            args: Prisma.PortUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortPayload>
+          }
+          deleteMany: {
+            args: Prisma.PortDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PortUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PortUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortPayload>[]
+          }
+          upsert: {
+            args: Prisma.PortUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PortPayload>
+          }
+          aggregate: {
+            args: Prisma.PortAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePort>
+          }
+          groupBy: {
+            args: Prisma.PortGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PortGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PortCountArgs<ExtArgs>
+            result: $Utils.Optional<PortCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3171,6 +3261,7 @@ export namespace Prisma {
     payment?: PaymentOmit
     auditLog?: AuditLogOmit
     financialPeriod?: FinancialPeriodOmit
+    port?: PortOmit
   }
 
   /* Types for Logging */
@@ -3272,6 +3363,7 @@ export namespace Prisma {
     auditLogs: number
     financialPeriods: number
     expensesMaster: number
+    ports: number
   }
 
   export type CompanyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3296,6 +3388,7 @@ export namespace Prisma {
     auditLogs?: boolean | CompanyCountOutputTypeCountAuditLogsArgs
     financialPeriods?: boolean | CompanyCountOutputTypeCountFinancialPeriodsArgs
     expensesMaster?: boolean | CompanyCountOutputTypeCountExpensesMasterArgs
+    ports?: boolean | CompanyCountOutputTypeCountPortsArgs
   }
 
   // Custom InputTypes
@@ -3454,6 +3547,13 @@ export namespace Prisma {
    */
   export type CompanyCountOutputTypeCountExpensesMasterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ExpenseMasterWhereInput
+  }
+
+  /**
+   * CompanyCountOutputType without action
+   */
+  export type CompanyCountOutputTypeCountPortsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PortWhereInput
   }
 
 
@@ -3933,6 +4033,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type PortCountOutputType
+   */
+
+  export type PortCountOutputType = {
+    jobs: number
+  }
+
+  export type PortCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    jobs?: boolean | PortCountOutputTypeCountJobsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PortCountOutputType without action
+   */
+  export type PortCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PortCountOutputType
+     */
+    select?: PortCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PortCountOutputType without action
+   */
+  export type PortCountOutputTypeCountJobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: JobWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -4199,6 +4330,7 @@ export namespace Prisma {
     auditLogs?: boolean | Company$auditLogsArgs<ExtArgs>
     financialPeriods?: boolean | Company$financialPeriodsArgs<ExtArgs>
     expensesMaster?: boolean | Company$expensesMasterArgs<ExtArgs>
+    ports?: boolean | Company$portsArgs<ExtArgs>
     _count?: boolean | CompanyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["company"]>
 
@@ -4267,6 +4399,7 @@ export namespace Prisma {
     auditLogs?: boolean | Company$auditLogsArgs<ExtArgs>
     financialPeriods?: boolean | Company$financialPeriodsArgs<ExtArgs>
     expensesMaster?: boolean | Company$expensesMasterArgs<ExtArgs>
+    ports?: boolean | Company$portsArgs<ExtArgs>
     _count?: boolean | CompanyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CompanyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4296,6 +4429,7 @@ export namespace Prisma {
       auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
       financialPeriods: Prisma.$FinancialPeriodPayload<ExtArgs>[]
       expensesMaster: Prisma.$ExpenseMasterPayload<ExtArgs>[]
+      ports: Prisma.$PortPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4724,6 +4858,7 @@ export namespace Prisma {
     auditLogs<T extends Company$auditLogsArgs<ExtArgs> = {}>(args?: Subset<T, Company$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     financialPeriods<T extends Company$financialPeriodsArgs<ExtArgs> = {}>(args?: Subset<T, Company$financialPeriodsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialPeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     expensesMaster<T extends Company$expensesMasterArgs<ExtArgs> = {}>(args?: Subset<T, Company$expensesMasterArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpenseMasterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    ports<T extends Company$portsArgs<ExtArgs> = {}>(args?: Subset<T, Company$portsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5653,6 +5788,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ExpenseMasterScalarFieldEnum | ExpenseMasterScalarFieldEnum[]
+  }
+
+  /**
+   * Company.ports
+   */
+  export type Company$portsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortInclude<ExtArgs> | null
+    where?: PortWhereInput
+    orderBy?: PortOrderByWithRelationInput | PortOrderByWithRelationInput[]
+    cursor?: PortWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PortScalarFieldEnum | PortScalarFieldEnum[]
   }
 
   /**
@@ -15081,6 +15240,7 @@ export namespace Prisma {
   export type JobAvgAggregateOutputType = {
     id: number | null
     customerId: number | null
+    podId: number | null
     packages: number | null
     weight: number | null
     companyId: number | null
@@ -15090,6 +15250,7 @@ export namespace Prisma {
   export type JobSumAggregateOutputType = {
     id: number | null
     customerId: number | null
+    podId: number | null
     packages: number | null
     weight: number | null
     companyId: number | null
@@ -15114,6 +15275,7 @@ export namespace Prisma {
     commodity: string | null
     volume: string | null
     containerNo: string | null
+    podId: number | null
     packages: number | null
     weight: number | null
     hawbBl: string | null
@@ -15144,6 +15306,7 @@ export namespace Prisma {
     commodity: string | null
     volume: string | null
     containerNo: string | null
+    podId: number | null
     packages: number | null
     weight: number | null
     hawbBl: string | null
@@ -15174,6 +15337,7 @@ export namespace Prisma {
     commodity: number
     volume: number
     containerNo: number
+    podId: number
     packages: number
     weight: number
     hawbBl: number
@@ -15191,6 +15355,7 @@ export namespace Prisma {
   export type JobAvgAggregateInputType = {
     id?: true
     customerId?: true
+    podId?: true
     packages?: true
     weight?: true
     companyId?: true
@@ -15200,6 +15365,7 @@ export namespace Prisma {
   export type JobSumAggregateInputType = {
     id?: true
     customerId?: true
+    podId?: true
     packages?: true
     weight?: true
     companyId?: true
@@ -15224,6 +15390,7 @@ export namespace Prisma {
     commodity?: true
     volume?: true
     containerNo?: true
+    podId?: true
     packages?: true
     weight?: true
     hawbBl?: true
@@ -15254,6 +15421,7 @@ export namespace Prisma {
     commodity?: true
     volume?: true
     containerNo?: true
+    podId?: true
     packages?: true
     weight?: true
     hawbBl?: true
@@ -15284,6 +15452,7 @@ export namespace Prisma {
     commodity?: true
     volume?: true
     containerNo?: true
+    podId?: true
     packages?: true
     weight?: true
     hawbBl?: true
@@ -15401,6 +15570,7 @@ export namespace Prisma {
     commodity: string | null
     volume: string | null
     containerNo: string | null
+    podId: number | null
     packages: number | null
     weight: number | null
     hawbBl: string | null
@@ -15450,6 +15620,7 @@ export namespace Prisma {
     commodity?: boolean
     volume?: boolean
     containerNo?: boolean
+    podId?: boolean
     packages?: boolean
     weight?: boolean
     hawbBl?: boolean
@@ -15461,6 +15632,7 @@ export namespace Prisma {
     updatedAt?: boolean
     deletedAt?: boolean
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
+    pod?: boolean | Job$podArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     branch?: boolean | Job$branchArgs<ExtArgs>
     expenses?: boolean | Job$expensesArgs<ExtArgs>
@@ -15486,6 +15658,7 @@ export namespace Prisma {
     commodity?: boolean
     volume?: boolean
     containerNo?: boolean
+    podId?: boolean
     packages?: boolean
     weight?: boolean
     hawbBl?: boolean
@@ -15497,6 +15670,7 @@ export namespace Prisma {
     updatedAt?: boolean
     deletedAt?: boolean
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
+    pod?: boolean | Job$podArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     branch?: boolean | Job$branchArgs<ExtArgs>
   }, ExtArgs["result"]["job"]>
@@ -15519,6 +15693,7 @@ export namespace Prisma {
     commodity?: boolean
     volume?: boolean
     containerNo?: boolean
+    podId?: boolean
     packages?: boolean
     weight?: boolean
     hawbBl?: boolean
@@ -15530,6 +15705,7 @@ export namespace Prisma {
     updatedAt?: boolean
     deletedAt?: boolean
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
+    pod?: boolean | Job$podArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     branch?: boolean | Job$branchArgs<ExtArgs>
   }, ExtArgs["result"]["job"]>
@@ -15552,6 +15728,7 @@ export namespace Prisma {
     commodity?: boolean
     volume?: boolean
     containerNo?: boolean
+    podId?: boolean
     packages?: boolean
     weight?: boolean
     hawbBl?: boolean
@@ -15564,9 +15741,10 @@ export namespace Prisma {
     deletedAt?: boolean
   }
 
-  export type JobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jobNumber" | "date" | "jobDate" | "jobType" | "status" | "customerId" | "vessel" | "place" | "shipperRef" | "gdNo" | "gdDate" | "formE" | "formEDate" | "commodity" | "volume" | "containerNo" | "packages" | "weight" | "hawbBl" | "handledBy" | "salesPerson" | "companyId" | "branchId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["job"]>
+  export type JobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jobNumber" | "date" | "jobDate" | "jobType" | "status" | "customerId" | "vessel" | "place" | "shipperRef" | "gdNo" | "gdDate" | "formE" | "formEDate" | "commodity" | "volume" | "containerNo" | "podId" | "packages" | "weight" | "hawbBl" | "handledBy" | "salesPerson" | "companyId" | "branchId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["job"]>
   export type JobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
+    pod?: boolean | Job$podArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     branch?: boolean | Job$branchArgs<ExtArgs>
     expenses?: boolean | Job$expensesArgs<ExtArgs>
@@ -15575,11 +15753,13 @@ export namespace Prisma {
   }
   export type JobIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
+    pod?: boolean | Job$podArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     branch?: boolean | Job$branchArgs<ExtArgs>
   }
   export type JobIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
+    pod?: boolean | Job$podArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     branch?: boolean | Job$branchArgs<ExtArgs>
   }
@@ -15588,6 +15768,7 @@ export namespace Prisma {
     name: "Job"
     objects: {
       customer: Prisma.$CustomerPayload<ExtArgs>
+      pod: Prisma.$PortPayload<ExtArgs> | null
       company: Prisma.$CompanyPayload<ExtArgs>
       branch: Prisma.$BranchPayload<ExtArgs> | null
       expenses: Prisma.$ExpensePayload<ExtArgs>[]
@@ -15611,6 +15792,7 @@ export namespace Prisma {
       commodity: string | null
       volume: string | null
       containerNo: string | null
+      podId: number | null
       packages: number | null
       weight: number | null
       hawbBl: string | null
@@ -16016,6 +16198,7 @@ export namespace Prisma {
   export interface Prisma__JobClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     customer<T extends CustomerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CustomerDefaultArgs<ExtArgs>>): Prisma__CustomerClient<$Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    pod<T extends Job$podArgs<ExtArgs> = {}>(args?: Subset<T, Job$podArgs<ExtArgs>>): Prisma__PortClient<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     branch<T extends Job$branchArgs<ExtArgs> = {}>(args?: Subset<T, Job$branchArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     expenses<T extends Job$expensesArgs<ExtArgs> = {}>(args?: Subset<T, Job$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -16066,6 +16249,7 @@ export namespace Prisma {
     readonly commodity: FieldRef<"Job", 'String'>
     readonly volume: FieldRef<"Job", 'String'>
     readonly containerNo: FieldRef<"Job", 'String'>
+    readonly podId: FieldRef<"Job", 'Int'>
     readonly packages: FieldRef<"Job", 'Int'>
     readonly weight: FieldRef<"Job", 'Float'>
     readonly hawbBl: FieldRef<"Job", 'String'>
@@ -16469,6 +16653,25 @@ export namespace Prisma {
      * Limit how many Jobs to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Job.pod
+   */
+  export type Job$podArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortInclude<ExtArgs> | null
+    where?: PortWhereInput
   }
 
   /**
@@ -36087,6 +36290,1132 @@ export namespace Prisma {
 
 
   /**
+   * Model Port
+   */
+
+  export type AggregatePort = {
+    _count: PortCountAggregateOutputType | null
+    _avg: PortAvgAggregateOutputType | null
+    _sum: PortSumAggregateOutputType | null
+    _min: PortMinAggregateOutputType | null
+    _max: PortMaxAggregateOutputType | null
+  }
+
+  export type PortAvgAggregateOutputType = {
+    id: number | null
+    companyId: number | null
+  }
+
+  export type PortSumAggregateOutputType = {
+    id: number | null
+    companyId: number | null
+  }
+
+  export type PortMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    companyId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PortMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    companyId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PortCountAggregateOutputType = {
+    id: number
+    name: number
+    companyId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PortAvgAggregateInputType = {
+    id?: true
+    companyId?: true
+  }
+
+  export type PortSumAggregateInputType = {
+    id?: true
+    companyId?: true
+  }
+
+  export type PortMinAggregateInputType = {
+    id?: true
+    name?: true
+    companyId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PortMaxAggregateInputType = {
+    id?: true
+    name?: true
+    companyId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PortCountAggregateInputType = {
+    id?: true
+    name?: true
+    companyId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PortAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Port to aggregate.
+     */
+    where?: PortWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Ports to fetch.
+     */
+    orderBy?: PortOrderByWithRelationInput | PortOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PortWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Ports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Ports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Ports
+    **/
+    _count?: true | PortCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PortAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PortSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PortMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PortMaxAggregateInputType
+  }
+
+  export type GetPortAggregateType<T extends PortAggregateArgs> = {
+        [P in keyof T & keyof AggregatePort]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePort[P]>
+      : GetScalarType<T[P], AggregatePort[P]>
+  }
+
+
+
+
+  export type PortGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PortWhereInput
+    orderBy?: PortOrderByWithAggregationInput | PortOrderByWithAggregationInput[]
+    by: PortScalarFieldEnum[] | PortScalarFieldEnum
+    having?: PortScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PortCountAggregateInputType | true
+    _avg?: PortAvgAggregateInputType
+    _sum?: PortSumAggregateInputType
+    _min?: PortMinAggregateInputType
+    _max?: PortMaxAggregateInputType
+  }
+
+  export type PortGroupByOutputType = {
+    id: number
+    name: string
+    companyId: number
+    createdAt: Date
+    updatedAt: Date
+    _count: PortCountAggregateOutputType | null
+    _avg: PortAvgAggregateOutputType | null
+    _sum: PortSumAggregateOutputType | null
+    _min: PortMinAggregateOutputType | null
+    _max: PortMaxAggregateOutputType | null
+  }
+
+  type GetPortGroupByPayload<T extends PortGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PortGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PortGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PortGroupByOutputType[P]>
+            : GetScalarType<T[P], PortGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PortSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    companyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    jobs?: boolean | Port$jobsArgs<ExtArgs>
+    _count?: boolean | PortCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["port"]>
+
+  export type PortSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    companyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["port"]>
+
+  export type PortSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    companyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["port"]>
+
+  export type PortSelectScalar = {
+    id?: boolean
+    name?: boolean
+    companyId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PortOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["port"]>
+  export type PortInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    jobs?: boolean | Port$jobsArgs<ExtArgs>
+    _count?: boolean | PortCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PortIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+  }
+  export type PortIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+  }
+
+  export type $PortPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Port"
+    objects: {
+      company: Prisma.$CompanyPayload<ExtArgs>
+      jobs: Prisma.$JobPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      companyId: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["port"]>
+    composites: {}
+  }
+
+  type PortGetPayload<S extends boolean | null | undefined | PortDefaultArgs> = $Result.GetResult<Prisma.$PortPayload, S>
+
+  type PortCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PortFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PortCountAggregateInputType | true
+    }
+
+  export interface PortDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Port'], meta: { name: 'Port' } }
+    /**
+     * Find zero or one Port that matches the filter.
+     * @param {PortFindUniqueArgs} args - Arguments to find a Port
+     * @example
+     * // Get one Port
+     * const port = await prisma.port.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PortFindUniqueArgs>(args: SelectSubset<T, PortFindUniqueArgs<ExtArgs>>): Prisma__PortClient<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Port that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PortFindUniqueOrThrowArgs} args - Arguments to find a Port
+     * @example
+     * // Get one Port
+     * const port = await prisma.port.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PortFindUniqueOrThrowArgs>(args: SelectSubset<T, PortFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PortClient<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Port that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortFindFirstArgs} args - Arguments to find a Port
+     * @example
+     * // Get one Port
+     * const port = await prisma.port.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PortFindFirstArgs>(args?: SelectSubset<T, PortFindFirstArgs<ExtArgs>>): Prisma__PortClient<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Port that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortFindFirstOrThrowArgs} args - Arguments to find a Port
+     * @example
+     * // Get one Port
+     * const port = await prisma.port.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PortFindFirstOrThrowArgs>(args?: SelectSubset<T, PortFindFirstOrThrowArgs<ExtArgs>>): Prisma__PortClient<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Ports that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Ports
+     * const ports = await prisma.port.findMany()
+     * 
+     * // Get first 10 Ports
+     * const ports = await prisma.port.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const portWithIdOnly = await prisma.port.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PortFindManyArgs>(args?: SelectSubset<T, PortFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Port.
+     * @param {PortCreateArgs} args - Arguments to create a Port.
+     * @example
+     * // Create one Port
+     * const Port = await prisma.port.create({
+     *   data: {
+     *     // ... data to create a Port
+     *   }
+     * })
+     * 
+     */
+    create<T extends PortCreateArgs>(args: SelectSubset<T, PortCreateArgs<ExtArgs>>): Prisma__PortClient<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Ports.
+     * @param {PortCreateManyArgs} args - Arguments to create many Ports.
+     * @example
+     * // Create many Ports
+     * const port = await prisma.port.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PortCreateManyArgs>(args?: SelectSubset<T, PortCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Ports and returns the data saved in the database.
+     * @param {PortCreateManyAndReturnArgs} args - Arguments to create many Ports.
+     * @example
+     * // Create many Ports
+     * const port = await prisma.port.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Ports and only return the `id`
+     * const portWithIdOnly = await prisma.port.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PortCreateManyAndReturnArgs>(args?: SelectSubset<T, PortCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Port.
+     * @param {PortDeleteArgs} args - Arguments to delete one Port.
+     * @example
+     * // Delete one Port
+     * const Port = await prisma.port.delete({
+     *   where: {
+     *     // ... filter to delete one Port
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PortDeleteArgs>(args: SelectSubset<T, PortDeleteArgs<ExtArgs>>): Prisma__PortClient<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Port.
+     * @param {PortUpdateArgs} args - Arguments to update one Port.
+     * @example
+     * // Update one Port
+     * const port = await prisma.port.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PortUpdateArgs>(args: SelectSubset<T, PortUpdateArgs<ExtArgs>>): Prisma__PortClient<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Ports.
+     * @param {PortDeleteManyArgs} args - Arguments to filter Ports to delete.
+     * @example
+     * // Delete a few Ports
+     * const { count } = await prisma.port.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PortDeleteManyArgs>(args?: SelectSubset<T, PortDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Ports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Ports
+     * const port = await prisma.port.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PortUpdateManyArgs>(args: SelectSubset<T, PortUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Ports and returns the data updated in the database.
+     * @param {PortUpdateManyAndReturnArgs} args - Arguments to update many Ports.
+     * @example
+     * // Update many Ports
+     * const port = await prisma.port.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Ports and only return the `id`
+     * const portWithIdOnly = await prisma.port.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PortUpdateManyAndReturnArgs>(args: SelectSubset<T, PortUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Port.
+     * @param {PortUpsertArgs} args - Arguments to update or create a Port.
+     * @example
+     * // Update or create a Port
+     * const port = await prisma.port.upsert({
+     *   create: {
+     *     // ... data to create a Port
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Port we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PortUpsertArgs>(args: SelectSubset<T, PortUpsertArgs<ExtArgs>>): Prisma__PortClient<$Result.GetResult<Prisma.$PortPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Ports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortCountArgs} args - Arguments to filter Ports to count.
+     * @example
+     * // Count the number of Ports
+     * const count = await prisma.port.count({
+     *   where: {
+     *     // ... the filter for the Ports we want to count
+     *   }
+     * })
+    **/
+    count<T extends PortCountArgs>(
+      args?: Subset<T, PortCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PortCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Port.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PortAggregateArgs>(args: Subset<T, PortAggregateArgs>): Prisma.PrismaPromise<GetPortAggregateType<T>>
+
+    /**
+     * Group by Port.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PortGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PortGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PortGroupByArgs['orderBy'] }
+        : { orderBy?: PortGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PortGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPortGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Port model
+   */
+  readonly fields: PortFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Port.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PortClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    jobs<T extends Port$jobsArgs<ExtArgs> = {}>(args?: Subset<T, Port$jobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Port model
+   */
+  interface PortFieldRefs {
+    readonly id: FieldRef<"Port", 'Int'>
+    readonly name: FieldRef<"Port", 'String'>
+    readonly companyId: FieldRef<"Port", 'Int'>
+    readonly createdAt: FieldRef<"Port", 'DateTime'>
+    readonly updatedAt: FieldRef<"Port", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Port findUnique
+   */
+  export type PortFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortInclude<ExtArgs> | null
+    /**
+     * Filter, which Port to fetch.
+     */
+    where: PortWhereUniqueInput
+  }
+
+  /**
+   * Port findUniqueOrThrow
+   */
+  export type PortFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortInclude<ExtArgs> | null
+    /**
+     * Filter, which Port to fetch.
+     */
+    where: PortWhereUniqueInput
+  }
+
+  /**
+   * Port findFirst
+   */
+  export type PortFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortInclude<ExtArgs> | null
+    /**
+     * Filter, which Port to fetch.
+     */
+    where?: PortWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Ports to fetch.
+     */
+    orderBy?: PortOrderByWithRelationInput | PortOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Ports.
+     */
+    cursor?: PortWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Ports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Ports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Ports.
+     */
+    distinct?: PortScalarFieldEnum | PortScalarFieldEnum[]
+  }
+
+  /**
+   * Port findFirstOrThrow
+   */
+  export type PortFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortInclude<ExtArgs> | null
+    /**
+     * Filter, which Port to fetch.
+     */
+    where?: PortWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Ports to fetch.
+     */
+    orderBy?: PortOrderByWithRelationInput | PortOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Ports.
+     */
+    cursor?: PortWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Ports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Ports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Ports.
+     */
+    distinct?: PortScalarFieldEnum | PortScalarFieldEnum[]
+  }
+
+  /**
+   * Port findMany
+   */
+  export type PortFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortInclude<ExtArgs> | null
+    /**
+     * Filter, which Ports to fetch.
+     */
+    where?: PortWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Ports to fetch.
+     */
+    orderBy?: PortOrderByWithRelationInput | PortOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Ports.
+     */
+    cursor?: PortWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Ports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Ports.
+     */
+    skip?: number
+    distinct?: PortScalarFieldEnum | PortScalarFieldEnum[]
+  }
+
+  /**
+   * Port create
+   */
+  export type PortCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Port.
+     */
+    data: XOR<PortCreateInput, PortUncheckedCreateInput>
+  }
+
+  /**
+   * Port createMany
+   */
+  export type PortCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Ports.
+     */
+    data: PortCreateManyInput | PortCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Port createManyAndReturn
+   */
+  export type PortCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * The data used to create many Ports.
+     */
+    data: PortCreateManyInput | PortCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Port update
+   */
+  export type PortUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Port.
+     */
+    data: XOR<PortUpdateInput, PortUncheckedUpdateInput>
+    /**
+     * Choose, which Port to update.
+     */
+    where: PortWhereUniqueInput
+  }
+
+  /**
+   * Port updateMany
+   */
+  export type PortUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Ports.
+     */
+    data: XOR<PortUpdateManyMutationInput, PortUncheckedUpdateManyInput>
+    /**
+     * Filter which Ports to update
+     */
+    where?: PortWhereInput
+    /**
+     * Limit how many Ports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Port updateManyAndReturn
+   */
+  export type PortUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * The data used to update Ports.
+     */
+    data: XOR<PortUpdateManyMutationInput, PortUncheckedUpdateManyInput>
+    /**
+     * Filter which Ports to update
+     */
+    where?: PortWhereInput
+    /**
+     * Limit how many Ports to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Port upsert
+   */
+  export type PortUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Port to update in case it exists.
+     */
+    where: PortWhereUniqueInput
+    /**
+     * In case the Port found by the `where` argument doesn't exist, create a new Port with this data.
+     */
+    create: XOR<PortCreateInput, PortUncheckedCreateInput>
+    /**
+     * In case the Port was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PortUpdateInput, PortUncheckedUpdateInput>
+  }
+
+  /**
+   * Port delete
+   */
+  export type PortDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortInclude<ExtArgs> | null
+    /**
+     * Filter which Port to delete.
+     */
+    where: PortWhereUniqueInput
+  }
+
+  /**
+   * Port deleteMany
+   */
+  export type PortDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Ports to delete
+     */
+    where?: PortWhereInput
+    /**
+     * Limit how many Ports to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Port.jobs
+   */
+  export type Port$jobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Job
+     */
+    select?: JobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Job
+     */
+    omit?: JobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobInclude<ExtArgs> | null
+    where?: JobWhereInput
+    orderBy?: JobOrderByWithRelationInput | JobOrderByWithRelationInput[]
+    cursor?: JobWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: JobScalarFieldEnum | JobScalarFieldEnum[]
+  }
+
+  /**
+   * Port without action
+   */
+  export type PortDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Port
+     */
+    select?: PortSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Port
+     */
+    omit?: PortOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PortInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -36245,6 +37574,7 @@ export namespace Prisma {
     commodity: 'commodity',
     volume: 'volume',
     containerNo: 'containerNo',
+    podId: 'podId',
     packages: 'packages',
     weight: 'weight',
     hawbBl: 'hawbBl',
@@ -36523,6 +37853,17 @@ export namespace Prisma {
   export type FinancialPeriodScalarFieldEnum = (typeof FinancialPeriodScalarFieldEnum)[keyof typeof FinancialPeriodScalarFieldEnum]
 
 
+  export const PortScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    companyId: 'companyId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PortScalarFieldEnum = (typeof PortScalarFieldEnum)[keyof typeof PortScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -36797,6 +38138,7 @@ export namespace Prisma {
     auditLogs?: AuditLogListRelationFilter
     financialPeriods?: FinancialPeriodListRelationFilter
     expensesMaster?: ExpenseMasterListRelationFilter
+    ports?: PortListRelationFilter
   }
 
   export type CompanyOrderByWithRelationInput = {
@@ -36832,6 +38174,7 @@ export namespace Prisma {
     auditLogs?: AuditLogOrderByRelationAggregateInput
     financialPeriods?: FinancialPeriodOrderByRelationAggregateInput
     expensesMaster?: ExpenseMasterOrderByRelationAggregateInput
+    ports?: PortOrderByRelationAggregateInput
   }
 
   export type CompanyWhereUniqueInput = Prisma.AtLeast<{
@@ -36870,6 +38213,7 @@ export namespace Prisma {
     auditLogs?: AuditLogListRelationFilter
     financialPeriods?: FinancialPeriodListRelationFilter
     expensesMaster?: ExpenseMasterListRelationFilter
+    ports?: PortListRelationFilter
   }, "id" | "uniqueId">
 
   export type CompanyOrderByWithAggregationInput = {
@@ -37530,6 +38874,7 @@ export namespace Prisma {
     commodity?: StringNullableFilter<"Job"> | string | null
     volume?: StringNullableFilter<"Job"> | string | null
     containerNo?: StringNullableFilter<"Job"> | string | null
+    podId?: IntNullableFilter<"Job"> | number | null
     packages?: IntNullableFilter<"Job"> | number | null
     weight?: FloatNullableFilter<"Job"> | number | null
     hawbBl?: StringNullableFilter<"Job"> | string | null
@@ -37541,6 +38886,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Job"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Job"> | Date | string | null
     customer?: XOR<CustomerScalarRelationFilter, CustomerWhereInput>
+    pod?: XOR<PortNullableScalarRelationFilter, PortWhereInput> | null
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     expenses?: ExpenseListRelationFilter
@@ -37565,6 +38911,7 @@ export namespace Prisma {
     commodity?: SortOrderInput | SortOrder
     volume?: SortOrderInput | SortOrder
     containerNo?: SortOrderInput | SortOrder
+    podId?: SortOrderInput | SortOrder
     packages?: SortOrderInput | SortOrder
     weight?: SortOrderInput | SortOrder
     hawbBl?: SortOrderInput | SortOrder
@@ -37576,6 +38923,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
     customer?: CustomerOrderByWithRelationInput
+    pod?: PortOrderByWithRelationInput
     company?: CompanyOrderByWithRelationInput
     branch?: BranchOrderByWithRelationInput
     expenses?: ExpenseOrderByRelationAggregateInput
@@ -37603,6 +38951,7 @@ export namespace Prisma {
     commodity?: StringNullableFilter<"Job"> | string | null
     volume?: StringNullableFilter<"Job"> | string | null
     containerNo?: StringNullableFilter<"Job"> | string | null
+    podId?: IntNullableFilter<"Job"> | number | null
     packages?: IntNullableFilter<"Job"> | number | null
     weight?: FloatNullableFilter<"Job"> | number | null
     hawbBl?: StringNullableFilter<"Job"> | string | null
@@ -37614,6 +38963,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Job"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Job"> | Date | string | null
     customer?: XOR<CustomerScalarRelationFilter, CustomerWhereInput>
+    pod?: XOR<PortNullableScalarRelationFilter, PortWhereInput> | null
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     expenses?: ExpenseListRelationFilter
@@ -37638,6 +38988,7 @@ export namespace Prisma {
     commodity?: SortOrderInput | SortOrder
     volume?: SortOrderInput | SortOrder
     containerNo?: SortOrderInput | SortOrder
+    podId?: SortOrderInput | SortOrder
     packages?: SortOrderInput | SortOrder
     weight?: SortOrderInput | SortOrder
     hawbBl?: SortOrderInput | SortOrder
@@ -37676,6 +39027,7 @@ export namespace Prisma {
     commodity?: StringNullableWithAggregatesFilter<"Job"> | string | null
     volume?: StringNullableWithAggregatesFilter<"Job"> | string | null
     containerNo?: StringNullableWithAggregatesFilter<"Job"> | string | null
+    podId?: IntNullableWithAggregatesFilter<"Job"> | number | null
     packages?: IntNullableWithAggregatesFilter<"Job"> | number | null
     weight?: FloatNullableWithAggregatesFilter<"Job"> | number | null
     hawbBl?: StringNullableWithAggregatesFilter<"Job"> | string | null
@@ -39137,6 +40489,67 @@ export namespace Prisma {
     companyId?: IntWithAggregatesFilter<"FinancialPeriod"> | number
   }
 
+  export type PortWhereInput = {
+    AND?: PortWhereInput | PortWhereInput[]
+    OR?: PortWhereInput[]
+    NOT?: PortWhereInput | PortWhereInput[]
+    id?: IntFilter<"Port"> | number
+    name?: StringFilter<"Port"> | string
+    companyId?: IntFilter<"Port"> | number
+    createdAt?: DateTimeFilter<"Port"> | Date | string
+    updatedAt?: DateTimeFilter<"Port"> | Date | string
+    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
+    jobs?: JobListRelationFilter
+  }
+
+  export type PortOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    companyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    company?: CompanyOrderByWithRelationInput
+    jobs?: JobOrderByRelationAggregateInput
+  }
+
+  export type PortWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    companyId_name?: PortCompanyIdNameCompoundUniqueInput
+    AND?: PortWhereInput | PortWhereInput[]
+    OR?: PortWhereInput[]
+    NOT?: PortWhereInput | PortWhereInput[]
+    name?: StringFilter<"Port"> | string
+    companyId?: IntFilter<"Port"> | number
+    createdAt?: DateTimeFilter<"Port"> | Date | string
+    updatedAt?: DateTimeFilter<"Port"> | Date | string
+    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
+    jobs?: JobListRelationFilter
+  }, "id" | "companyId_name">
+
+  export type PortOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    companyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PortCountOrderByAggregateInput
+    _avg?: PortAvgOrderByAggregateInput
+    _max?: PortMaxOrderByAggregateInput
+    _min?: PortMinOrderByAggregateInput
+    _sum?: PortSumOrderByAggregateInput
+  }
+
+  export type PortScalarWhereWithAggregatesInput = {
+    AND?: PortScalarWhereWithAggregatesInput | PortScalarWhereWithAggregatesInput[]
+    OR?: PortScalarWhereWithAggregatesInput[]
+    NOT?: PortScalarWhereWithAggregatesInput | PortScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Port"> | number
+    name?: StringWithAggregatesFilter<"Port"> | string
+    companyId?: IntWithAggregatesFilter<"Port"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Port"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Port"> | Date | string
+  }
+
   export type CompanyCreateInput = {
     name: string
     uniqueId: string
@@ -39169,6 +40582,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateInput = {
@@ -39204,6 +40618,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUpdateInput = {
@@ -39238,6 +40653,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateInput = {
@@ -39273,6 +40689,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyCreateManyInput = {
@@ -39950,6 +41367,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     customer: CustomerCreateNestedOneWithoutJobsInput
+    pod?: PortCreateNestedOneWithoutJobsInput
     company: CompanyCreateNestedOneWithoutJobsInput
     branch?: BranchCreateNestedOneWithoutJobsInput
     expenses?: ExpenseCreateNestedManyWithoutJobInput
@@ -39974,6 +41392,7 @@ export namespace Prisma {
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
+    podId?: number | null
     packages?: number | null
     weight?: number | null
     hawbBl?: string | null
@@ -40013,6 +41432,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customer?: CustomerUpdateOneRequiredWithoutJobsNestedInput
+    pod?: PortUpdateOneWithoutJobsNestedInput
     company?: CompanyUpdateOneRequiredWithoutJobsNestedInput
     branch?: BranchUpdateOneWithoutJobsNestedInput
     expenses?: ExpenseUpdateManyWithoutJobNestedInput
@@ -40037,6 +41457,7 @@ export namespace Prisma {
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    podId?: NullableIntFieldUpdateOperationsInput | number | null
     packages?: NullableIntFieldUpdateOperationsInput | number | null
     weight?: NullableFloatFieldUpdateOperationsInput | number | null
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40069,6 +41490,7 @@ export namespace Prisma {
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
+    podId?: number | null
     packages?: number | null
     weight?: number | null
     hawbBl?: string | null
@@ -40125,6 +41547,7 @@ export namespace Prisma {
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    podId?: NullableIntFieldUpdateOperationsInput | number | null
     packages?: NullableIntFieldUpdateOperationsInput | number | null
     weight?: NullableFloatFieldUpdateOperationsInput | number | null
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41612,6 +43035,62 @@ export namespace Prisma {
     companyId?: IntFieldUpdateOperationsInput | number
   }
 
+  export type PortCreateInput = {
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutPortsInput
+    jobs?: JobCreateNestedManyWithoutPodInput
+  }
+
+  export type PortUncheckedCreateInput = {
+    id?: number
+    name: string
+    companyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    jobs?: JobUncheckedCreateNestedManyWithoutPodInput
+  }
+
+  export type PortUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutPortsNestedInput
+    jobs?: JobUpdateManyWithoutPodNestedInput
+  }
+
+  export type PortUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    companyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobs?: JobUncheckedUpdateManyWithoutPodNestedInput
+  }
+
+  export type PortCreateManyInput = {
+    id?: number
+    name: string
+    companyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PortUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PortUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    companyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -41813,6 +43292,12 @@ export namespace Prisma {
     none?: ExpenseMasterWhereInput
   }
 
+  export type PortListRelationFilter = {
+    every?: PortWhereInput
+    some?: PortWhereInput
+    none?: PortWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -41899,6 +43384,10 @@ export namespace Prisma {
   }
 
   export type ExpenseMasterOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PortOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -42555,6 +44044,11 @@ export namespace Prisma {
     isNot?: CustomerWhereInput
   }
 
+  export type PortNullableScalarRelationFilter = {
+    is?: PortWhereInput | null
+    isNot?: PortWhereInput | null
+  }
+
   export type InvoiceNullableScalarRelationFilter = {
     is?: InvoiceWhereInput | null
     isNot?: InvoiceWhereInput | null
@@ -42578,6 +44072,7 @@ export namespace Prisma {
     commodity?: SortOrder
     volume?: SortOrder
     containerNo?: SortOrder
+    podId?: SortOrder
     packages?: SortOrder
     weight?: SortOrder
     hawbBl?: SortOrder
@@ -42593,6 +44088,7 @@ export namespace Prisma {
   export type JobAvgOrderByAggregateInput = {
     id?: SortOrder
     customerId?: SortOrder
+    podId?: SortOrder
     packages?: SortOrder
     weight?: SortOrder
     companyId?: SortOrder
@@ -42617,6 +44113,7 @@ export namespace Prisma {
     commodity?: SortOrder
     volume?: SortOrder
     containerNo?: SortOrder
+    podId?: SortOrder
     packages?: SortOrder
     weight?: SortOrder
     hawbBl?: SortOrder
@@ -42647,6 +44144,7 @@ export namespace Prisma {
     commodity?: SortOrder
     volume?: SortOrder
     containerNo?: SortOrder
+    podId?: SortOrder
     packages?: SortOrder
     weight?: SortOrder
     hawbBl?: SortOrder
@@ -42662,6 +44160,7 @@ export namespace Prisma {
   export type JobSumOrderByAggregateInput = {
     id?: SortOrder
     customerId?: SortOrder
+    podId?: SortOrder
     packages?: SortOrder
     weight?: SortOrder
     companyId?: SortOrder
@@ -43859,6 +45358,45 @@ export namespace Prisma {
     companyId?: SortOrder
   }
 
+  export type PortCompanyIdNameCompoundUniqueInput = {
+    companyId: number
+    name: string
+  }
+
+  export type PortCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    companyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PortAvgOrderByAggregateInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+  }
+
+  export type PortMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    companyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PortMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    companyId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PortSumOrderByAggregateInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+  }
+
   export type UserCreateNestedManyWithoutCompanyInput = {
     create?: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput> | UserCreateWithoutCompanyInput[] | UserUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: UserCreateOrConnectWithoutCompanyInput | UserCreateOrConnectWithoutCompanyInput[]
@@ -44006,6 +45544,13 @@ export namespace Prisma {
     connect?: ExpenseMasterWhereUniqueInput | ExpenseMasterWhereUniqueInput[]
   }
 
+  export type PortCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<PortCreateWithoutCompanyInput, PortUncheckedCreateWithoutCompanyInput> | PortCreateWithoutCompanyInput[] | PortUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: PortCreateOrConnectWithoutCompanyInput | PortCreateOrConnectWithoutCompanyInput[]
+    createMany?: PortCreateManyCompanyInputEnvelope
+    connect?: PortWhereUniqueInput | PortWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutCompanyInput = {
     create?: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput> | UserCreateWithoutCompanyInput[] | UserUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: UserCreateOrConnectWithoutCompanyInput | UserCreateOrConnectWithoutCompanyInput[]
@@ -44151,6 +45696,13 @@ export namespace Prisma {
     connectOrCreate?: ExpenseMasterCreateOrConnectWithoutCompanyInput | ExpenseMasterCreateOrConnectWithoutCompanyInput[]
     createMany?: ExpenseMasterCreateManyCompanyInputEnvelope
     connect?: ExpenseMasterWhereUniqueInput | ExpenseMasterWhereUniqueInput[]
+  }
+
+  export type PortUncheckedCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<PortCreateWithoutCompanyInput, PortUncheckedCreateWithoutCompanyInput> | PortCreateWithoutCompanyInput[] | PortUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: PortCreateOrConnectWithoutCompanyInput | PortCreateOrConnectWithoutCompanyInput[]
+    createMany?: PortCreateManyCompanyInputEnvelope
+    connect?: PortWhereUniqueInput | PortWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -44459,6 +46011,20 @@ export namespace Prisma {
     deleteMany?: ExpenseMasterScalarWhereInput | ExpenseMasterScalarWhereInput[]
   }
 
+  export type PortUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<PortCreateWithoutCompanyInput, PortUncheckedCreateWithoutCompanyInput> | PortCreateWithoutCompanyInput[] | PortUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: PortCreateOrConnectWithoutCompanyInput | PortCreateOrConnectWithoutCompanyInput[]
+    upsert?: PortUpsertWithWhereUniqueWithoutCompanyInput | PortUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: PortCreateManyCompanyInputEnvelope
+    set?: PortWhereUniqueInput | PortWhereUniqueInput[]
+    disconnect?: PortWhereUniqueInput | PortWhereUniqueInput[]
+    delete?: PortWhereUniqueInput | PortWhereUniqueInput[]
+    connect?: PortWhereUniqueInput | PortWhereUniqueInput[]
+    update?: PortUpdateWithWhereUniqueWithoutCompanyInput | PortUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: PortUpdateManyWithWhereWithoutCompanyInput | PortUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: PortScalarWhereInput | PortScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -44759,6 +46325,20 @@ export namespace Prisma {
     update?: ExpenseMasterUpdateWithWhereUniqueWithoutCompanyInput | ExpenseMasterUpdateWithWhereUniqueWithoutCompanyInput[]
     updateMany?: ExpenseMasterUpdateManyWithWhereWithoutCompanyInput | ExpenseMasterUpdateManyWithWhereWithoutCompanyInput[]
     deleteMany?: ExpenseMasterScalarWhereInput | ExpenseMasterScalarWhereInput[]
+  }
+
+  export type PortUncheckedUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<PortCreateWithoutCompanyInput, PortUncheckedCreateWithoutCompanyInput> | PortCreateWithoutCompanyInput[] | PortUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: PortCreateOrConnectWithoutCompanyInput | PortCreateOrConnectWithoutCompanyInput[]
+    upsert?: PortUpsertWithWhereUniqueWithoutCompanyInput | PortUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: PortCreateManyCompanyInputEnvelope
+    set?: PortWhereUniqueInput | PortWhereUniqueInput[]
+    disconnect?: PortWhereUniqueInput | PortWhereUniqueInput[]
+    delete?: PortWhereUniqueInput | PortWhereUniqueInput[]
+    connect?: PortWhereUniqueInput | PortWhereUniqueInput[]
+    update?: PortUpdateWithWhereUniqueWithoutCompanyInput | PortUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: PortUpdateManyWithWhereWithoutCompanyInput | PortUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: PortScalarWhereInput | PortScalarWhereInput[]
   }
 
   export type CompanyCreateNestedOneWithoutBranchesInput = {
@@ -45345,6 +46925,12 @@ export namespace Prisma {
     connect?: CustomerWhereUniqueInput
   }
 
+  export type PortCreateNestedOneWithoutJobsInput = {
+    create?: XOR<PortCreateWithoutJobsInput, PortUncheckedCreateWithoutJobsInput>
+    connectOrCreate?: PortCreateOrConnectWithoutJobsInput
+    connect?: PortWhereUniqueInput
+  }
+
   export type CompanyCreateNestedOneWithoutJobsInput = {
     create?: XOR<CompanyCreateWithoutJobsInput, CompanyUncheckedCreateWithoutJobsInput>
     connectOrCreate?: CompanyCreateOrConnectWithoutJobsInput
@@ -45405,6 +46991,16 @@ export namespace Prisma {
     upsert?: CustomerUpsertWithoutJobsInput
     connect?: CustomerWhereUniqueInput
     update?: XOR<XOR<CustomerUpdateToOneWithWhereWithoutJobsInput, CustomerUpdateWithoutJobsInput>, CustomerUncheckedUpdateWithoutJobsInput>
+  }
+
+  export type PortUpdateOneWithoutJobsNestedInput = {
+    create?: XOR<PortCreateWithoutJobsInput, PortUncheckedCreateWithoutJobsInput>
+    connectOrCreate?: PortCreateOrConnectWithoutJobsInput
+    upsert?: PortUpsertWithoutJobsInput
+    disconnect?: PortWhereInput | boolean
+    delete?: PortWhereInput | boolean
+    connect?: PortWhereUniqueInput
+    update?: XOR<XOR<PortUpdateToOneWithWhereWithoutJobsInput, PortUpdateWithoutJobsInput>, PortUncheckedUpdateWithoutJobsInput>
   }
 
   export type CompanyUpdateOneRequiredWithoutJobsNestedInput = {
@@ -46501,6 +48097,62 @@ export namespace Prisma {
     update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutFinancialPeriodsInput, CompanyUpdateWithoutFinancialPeriodsInput>, CompanyUncheckedUpdateWithoutFinancialPeriodsInput>
   }
 
+  export type CompanyCreateNestedOneWithoutPortsInput = {
+    create?: XOR<CompanyCreateWithoutPortsInput, CompanyUncheckedCreateWithoutPortsInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutPortsInput
+    connect?: CompanyWhereUniqueInput
+  }
+
+  export type JobCreateNestedManyWithoutPodInput = {
+    create?: XOR<JobCreateWithoutPodInput, JobUncheckedCreateWithoutPodInput> | JobCreateWithoutPodInput[] | JobUncheckedCreateWithoutPodInput[]
+    connectOrCreate?: JobCreateOrConnectWithoutPodInput | JobCreateOrConnectWithoutPodInput[]
+    createMany?: JobCreateManyPodInputEnvelope
+    connect?: JobWhereUniqueInput | JobWhereUniqueInput[]
+  }
+
+  export type JobUncheckedCreateNestedManyWithoutPodInput = {
+    create?: XOR<JobCreateWithoutPodInput, JobUncheckedCreateWithoutPodInput> | JobCreateWithoutPodInput[] | JobUncheckedCreateWithoutPodInput[]
+    connectOrCreate?: JobCreateOrConnectWithoutPodInput | JobCreateOrConnectWithoutPodInput[]
+    createMany?: JobCreateManyPodInputEnvelope
+    connect?: JobWhereUniqueInput | JobWhereUniqueInput[]
+  }
+
+  export type CompanyUpdateOneRequiredWithoutPortsNestedInput = {
+    create?: XOR<CompanyCreateWithoutPortsInput, CompanyUncheckedCreateWithoutPortsInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutPortsInput
+    upsert?: CompanyUpsertWithoutPortsInput
+    connect?: CompanyWhereUniqueInput
+    update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutPortsInput, CompanyUpdateWithoutPortsInput>, CompanyUncheckedUpdateWithoutPortsInput>
+  }
+
+  export type JobUpdateManyWithoutPodNestedInput = {
+    create?: XOR<JobCreateWithoutPodInput, JobUncheckedCreateWithoutPodInput> | JobCreateWithoutPodInput[] | JobUncheckedCreateWithoutPodInput[]
+    connectOrCreate?: JobCreateOrConnectWithoutPodInput | JobCreateOrConnectWithoutPodInput[]
+    upsert?: JobUpsertWithWhereUniqueWithoutPodInput | JobUpsertWithWhereUniqueWithoutPodInput[]
+    createMany?: JobCreateManyPodInputEnvelope
+    set?: JobWhereUniqueInput | JobWhereUniqueInput[]
+    disconnect?: JobWhereUniqueInput | JobWhereUniqueInput[]
+    delete?: JobWhereUniqueInput | JobWhereUniqueInput[]
+    connect?: JobWhereUniqueInput | JobWhereUniqueInput[]
+    update?: JobUpdateWithWhereUniqueWithoutPodInput | JobUpdateWithWhereUniqueWithoutPodInput[]
+    updateMany?: JobUpdateManyWithWhereWithoutPodInput | JobUpdateManyWithWhereWithoutPodInput[]
+    deleteMany?: JobScalarWhereInput | JobScalarWhereInput[]
+  }
+
+  export type JobUncheckedUpdateManyWithoutPodNestedInput = {
+    create?: XOR<JobCreateWithoutPodInput, JobUncheckedCreateWithoutPodInput> | JobCreateWithoutPodInput[] | JobUncheckedCreateWithoutPodInput[]
+    connectOrCreate?: JobCreateOrConnectWithoutPodInput | JobCreateOrConnectWithoutPodInput[]
+    upsert?: JobUpsertWithWhereUniqueWithoutPodInput | JobUpsertWithWhereUniqueWithoutPodInput[]
+    createMany?: JobCreateManyPodInputEnvelope
+    set?: JobWhereUniqueInput | JobWhereUniqueInput[]
+    disconnect?: JobWhereUniqueInput | JobWhereUniqueInput[]
+    delete?: JobWhereUniqueInput | JobWhereUniqueInput[]
+    connect?: JobWhereUniqueInput | JobWhereUniqueInput[]
+    update?: JobUpdateWithWhereUniqueWithoutPodInput | JobUpdateWithWhereUniqueWithoutPodInput[]
+    updateMany?: JobUpdateManyWithWhereWithoutPodInput | JobUpdateManyWithWhereWithoutPodInput[]
+    deleteMany?: JobScalarWhereInput | JobScalarWhereInput[]
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -47143,6 +48795,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     customer: CustomerCreateNestedOneWithoutJobsInput
+    pod?: PortCreateNestedOneWithoutJobsInput
     branch?: BranchCreateNestedOneWithoutJobsInput
     expenses?: ExpenseCreateNestedManyWithoutJobInput
     invoice?: InvoiceCreateNestedOneWithoutJobInput
@@ -47166,6 +48819,7 @@ export namespace Prisma {
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
+    podId?: number | null
     packages?: number | null
     weight?: number | null
     hawbBl?: string | null
@@ -47664,6 +49318,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PortCreateWithoutCompanyInput = {
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    jobs?: JobCreateNestedManyWithoutPodInput
+  }
+
+  export type PortUncheckedCreateWithoutCompanyInput = {
+    id?: number
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    jobs?: JobUncheckedCreateNestedManyWithoutPodInput
+  }
+
+  export type PortCreateOrConnectWithoutCompanyInput = {
+    where: PortWhereUniqueInput
+    create: XOR<PortCreateWithoutCompanyInput, PortUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type PortCreateManyCompanyInputEnvelope = {
+    data: PortCreateManyCompanyInput | PortCreateManyCompanyInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithWhereUniqueWithoutCompanyInput = {
     where: UserWhereUniqueInput
     update: XOR<UserUpdateWithoutCompanyInput, UserUncheckedUpdateWithoutCompanyInput>
@@ -47913,6 +49592,7 @@ export namespace Prisma {
     commodity?: StringNullableFilter<"Job"> | string | null
     volume?: StringNullableFilter<"Job"> | string | null
     containerNo?: StringNullableFilter<"Job"> | string | null
+    podId?: IntNullableFilter<"Job"> | number | null
     packages?: IntNullableFilter<"Job"> | number | null
     weight?: FloatNullableFilter<"Job"> | number | null
     hawbBl?: StringNullableFilter<"Job"> | string | null
@@ -48351,6 +50031,33 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ExpenseMaster"> | Date | string
   }
 
+  export type PortUpsertWithWhereUniqueWithoutCompanyInput = {
+    where: PortWhereUniqueInput
+    update: XOR<PortUpdateWithoutCompanyInput, PortUncheckedUpdateWithoutCompanyInput>
+    create: XOR<PortCreateWithoutCompanyInput, PortUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type PortUpdateWithWhereUniqueWithoutCompanyInput = {
+    where: PortWhereUniqueInput
+    data: XOR<PortUpdateWithoutCompanyInput, PortUncheckedUpdateWithoutCompanyInput>
+  }
+
+  export type PortUpdateManyWithWhereWithoutCompanyInput = {
+    where: PortScalarWhereInput
+    data: XOR<PortUpdateManyMutationInput, PortUncheckedUpdateManyWithoutCompanyInput>
+  }
+
+  export type PortScalarWhereInput = {
+    AND?: PortScalarWhereInput | PortScalarWhereInput[]
+    OR?: PortScalarWhereInput[]
+    NOT?: PortScalarWhereInput | PortScalarWhereInput[]
+    id?: IntFilter<"Port"> | number
+    name?: StringFilter<"Port"> | string
+    companyId?: IntFilter<"Port"> | number
+    createdAt?: DateTimeFilter<"Port"> | Date | string
+    updatedAt?: DateTimeFilter<"Port"> | Date | string
+  }
+
   export type CompanyCreateWithoutBranchesInput = {
     name: string
     uniqueId: string
@@ -48382,6 +50089,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutBranchesInput = {
@@ -48416,6 +50124,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutBranchesInput = {
@@ -48477,6 +50186,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     customer: CustomerCreateNestedOneWithoutJobsInput
+    pod?: PortCreateNestedOneWithoutJobsInput
     company: CompanyCreateNestedOneWithoutJobsInput
     expenses?: ExpenseCreateNestedManyWithoutJobInput
     invoice?: InvoiceCreateNestedOneWithoutJobInput
@@ -48500,6 +50210,7 @@ export namespace Prisma {
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
+    podId?: number | null
     packages?: number | null
     weight?: number | null
     hawbBl?: string | null
@@ -48565,6 +50276,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutBranchesInput = {
@@ -48599,6 +50311,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type TaxSettingUpsertWithWhereUniqueWithoutBranchInput = {
@@ -48703,6 +50416,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutCurrenciesInput = {
@@ -48737,6 +50451,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutCurrenciesInput = {
@@ -48804,6 +50519,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutCurrenciesInput = {
@@ -48838,6 +50554,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CurrencyUpsertWithoutCompaniesInput = {
@@ -48895,6 +50612,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutTaxSettingsInput = {
@@ -48929,6 +50647,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutTaxSettingsInput = {
@@ -49002,6 +50721,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutTaxSettingsInput = {
@@ -49036,6 +50756,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type BranchUpsertWithoutTaxSettingsInput = {
@@ -49099,6 +50820,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutSystemSettingsInput = {
@@ -49133,6 +50855,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutSystemSettingsInput = {
@@ -49182,6 +50905,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutSystemSettingsInput = {
@@ -49216,6 +50940,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyCreateWithoutUsersInput = {
@@ -49249,6 +50974,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutUsersInput = {
@@ -49283,6 +51009,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutUsersInput = {
@@ -49363,6 +51090,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutUsersInput = {
@@ -49397,6 +51125,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type AuditLogUpsertWithWhereUniqueWithoutUserInput = {
@@ -49446,6 +51175,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutCustomersInput = {
@@ -49480,6 +51210,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutCustomersInput = {
@@ -49511,6 +51242,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
+    pod?: PortCreateNestedOneWithoutJobsInput
     company: CompanyCreateNestedOneWithoutJobsInput
     branch?: BranchCreateNestedOneWithoutJobsInput
     expenses?: ExpenseCreateNestedManyWithoutJobInput
@@ -49534,6 +51266,7 @@ export namespace Prisma {
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
+    podId?: number | null
     packages?: number | null
     weight?: number | null
     hawbBl?: string | null
@@ -49706,6 +51439,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutCustomersInput = {
@@ -49740,6 +51474,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type JobUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -49821,6 +51556,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutVendorsInput = {
@@ -49855,6 +51591,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutVendorsInput = {
@@ -50027,6 +51764,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutVendorsInput = {
@@ -50061,6 +51799,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type ExpenseUpsertWithWhereUniqueWithoutVendorInput = {
@@ -50143,6 +51882,26 @@ export namespace Prisma {
     create: XOR<CustomerCreateWithoutJobsInput, CustomerUncheckedCreateWithoutJobsInput>
   }
 
+  export type PortCreateWithoutJobsInput = {
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutPortsInput
+  }
+
+  export type PortUncheckedCreateWithoutJobsInput = {
+    id?: number
+    name: string
+    companyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PortCreateOrConnectWithoutJobsInput = {
+    where: PortWhereUniqueInput
+    create: XOR<PortCreateWithoutJobsInput, PortUncheckedCreateWithoutJobsInput>
+  }
+
   export type CompanyCreateWithoutJobsInput = {
     name: string
     uniqueId: string
@@ -50174,6 +51933,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutJobsInput = {
@@ -50208,6 +51968,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutJobsInput = {
@@ -50376,6 +52137,32 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
+  export type PortUpsertWithoutJobsInput = {
+    update: XOR<PortUpdateWithoutJobsInput, PortUncheckedUpdateWithoutJobsInput>
+    create: XOR<PortCreateWithoutJobsInput, PortUncheckedCreateWithoutJobsInput>
+    where?: PortWhereInput
+  }
+
+  export type PortUpdateToOneWithWhereWithoutJobsInput = {
+    where?: PortWhereInput
+    data: XOR<PortUpdateWithoutJobsInput, PortUncheckedUpdateWithoutJobsInput>
+  }
+
+  export type PortUpdateWithoutJobsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutPortsNestedInput
+  }
+
+  export type PortUncheckedUpdateWithoutJobsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    companyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CompanyUpsertWithoutJobsInput = {
     update: XOR<CompanyUpdateWithoutJobsInput, CompanyUncheckedUpdateWithoutJobsInput>
     create: XOR<CompanyCreateWithoutJobsInput, CompanyUncheckedCreateWithoutJobsInput>
@@ -50418,6 +52205,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutJobsInput = {
@@ -50452,6 +52240,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type BranchUpsertWithoutJobsInput = {
@@ -50601,6 +52390,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutExpensesMasterInput = {
@@ -50635,6 +52425,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutExpensesMasterInput = {
@@ -50684,6 +52475,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutExpensesMasterInput = {
@@ -50718,6 +52510,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type JobCreateWithoutExpensesInput = {
@@ -50745,6 +52538,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     customer: CustomerCreateNestedOneWithoutJobsInput
+    pod?: PortCreateNestedOneWithoutJobsInput
     company: CompanyCreateNestedOneWithoutJobsInput
     branch?: BranchCreateNestedOneWithoutJobsInput
     invoice?: InvoiceCreateNestedOneWithoutJobInput
@@ -50768,6 +52562,7 @@ export namespace Prisma {
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
+    podId?: number | null
     packages?: number | null
     weight?: number | null
     hawbBl?: string | null
@@ -50851,6 +52646,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutExpensesInput = {
@@ -50885,6 +52681,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutExpensesInput = {
@@ -50928,6 +52725,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customer?: CustomerUpdateOneRequiredWithoutJobsNestedInput
+    pod?: PortUpdateOneWithoutJobsNestedInput
     company?: CompanyUpdateOneRequiredWithoutJobsNestedInput
     branch?: BranchUpdateOneWithoutJobsNestedInput
     invoice?: InvoiceUpdateOneWithoutJobNestedInput
@@ -50951,6 +52749,7 @@ export namespace Prisma {
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    podId?: NullableIntFieldUpdateOperationsInput | number | null
     packages?: NullableIntFieldUpdateOperationsInput | number | null
     weight?: NullableFloatFieldUpdateOperationsInput | number | null
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51046,6 +52845,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutExpensesInput = {
@@ -51080,6 +52880,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type JobCreateWithoutInvoiceInput = {
@@ -51107,6 +52908,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     customer: CustomerCreateNestedOneWithoutJobsInput
+    pod?: PortCreateNestedOneWithoutJobsInput
     company: CompanyCreateNestedOneWithoutJobsInput
     branch?: BranchCreateNestedOneWithoutJobsInput
     expenses?: ExpenseCreateNestedManyWithoutJobInput
@@ -51130,6 +52932,7 @@ export namespace Prisma {
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
+    podId?: number | null
     packages?: number | null
     weight?: number | null
     hawbBl?: string | null
@@ -51211,6 +53014,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutInvoicesInput = {
@@ -51245,6 +53049,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutInvoicesInput = {
@@ -51355,6 +53160,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customer?: CustomerUpdateOneRequiredWithoutJobsNestedInput
+    pod?: PortUpdateOneWithoutJobsNestedInput
     company?: CompanyUpdateOneRequiredWithoutJobsNestedInput
     branch?: BranchUpdateOneWithoutJobsNestedInput
     expenses?: ExpenseUpdateManyWithoutJobNestedInput
@@ -51378,6 +53184,7 @@ export namespace Prisma {
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    podId?: NullableIntFieldUpdateOperationsInput | number | null
     packages?: NullableIntFieldUpdateOperationsInput | number | null
     weight?: NullableFloatFieldUpdateOperationsInput | number | null
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -51471,6 +53278,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutInvoicesInput = {
@@ -51505,6 +53313,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type InvoiceItemUpsertWithWhereUniqueWithoutInvoiceInput = {
@@ -51826,6 +53635,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutProductCategoriesInput = {
@@ -51860,6 +53670,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutProductCategoriesInput = {
@@ -51952,6 +53763,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutProductCategoriesInput = {
@@ -51986,6 +53798,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type ProductUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -52057,6 +53870,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutProductsInput = {
@@ -52091,6 +53905,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutProductsInput = {
@@ -52263,6 +54078,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutProductsInput = {
@@ -52297,6 +54113,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type StockMovementUpsertWithWhereUniqueWithoutProductInput = {
@@ -52394,6 +54211,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutWarehousesInput = {
@@ -52428,6 +54246,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutWarehousesInput = {
@@ -52506,6 +54325,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutWarehousesInput = {
@@ -52540,6 +54360,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type StockMovementUpsertWithWhereUniqueWithoutWarehouseInput = {
@@ -52649,6 +54470,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutStockMovementsInput = {
@@ -52683,6 +54505,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutStockMovementsInput = {
@@ -52804,6 +54627,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutStockMovementsInput = {
@@ -52838,6 +54662,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type VendorCreateWithoutPurchaseInvoicesInput = {
@@ -52905,6 +54730,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutPurchaseInvoicesInput = {
@@ -52939,6 +54765,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutPurchaseInvoicesInput = {
@@ -53095,6 +54922,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutPurchaseInvoicesInput = {
@@ -53129,6 +54957,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type PurchaseInvoiceItemUpsertWithWhereUniqueWithoutPurchaseInvoiceInput = {
@@ -53463,6 +55292,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutAccountsInput = {
@@ -53497,6 +55327,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutAccountsInput = {
@@ -53625,6 +55456,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutAccountsInput = {
@@ -53659,6 +55491,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type AccountEntryUpsertWithWhereUniqueWithoutAccountInput = {
@@ -53890,6 +55723,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutTransactionsInput = {
@@ -53924,6 +55758,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutTransactionsInput = {
@@ -54149,6 +55984,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutTransactionsInput = {
@@ -54183,6 +56019,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type TransactionCreateWithoutEntriesInput = {
@@ -54456,6 +56293,7 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutPaymentsInput = {
@@ -54490,6 +56328,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutPaymentsInput = {
@@ -54657,6 +56496,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutPaymentsInput = {
@@ -54691,6 +56531,7 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type UserCreateWithoutAuditLogsInput = {
@@ -54760,6 +56601,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutAuditLogsInput = {
@@ -54794,6 +56636,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutAuditLogsInput = {
@@ -54885,6 +56728,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutAuditLogsInput = {
@@ -54919,6 +56763,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyCreateWithoutFinancialPeriodsInput = {
@@ -54952,6 +56797,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutFinancialPeriodsInput = {
@@ -54986,6 +56832,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
     expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutFinancialPeriodsInput = {
@@ -55035,6 +56882,7 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutFinancialPeriodsInput = {
@@ -55069,6 +56917,250 @@ export namespace Prisma {
     purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
     expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyCreateWithoutPortsInput = {
+    name: string
+    uniqueId: string
+    address?: string | null
+    phone?: string | null
+    email?: string | null
+    industry?: string | null
+    logo?: string | null
+    themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutCompanyInput
+    branches?: BranchCreateNestedManyWithoutCompanyInput
+    currencies?: CompanyCurrencyCreateNestedManyWithoutCompanyInput
+    taxSettings?: TaxSettingCreateNestedManyWithoutCompanyInput
+    systemSettings?: SystemSettingCreateNestedManyWithoutCompanyInput
+    customers?: CustomerCreateNestedManyWithoutCompanyInput
+    vendors?: VendorCreateNestedManyWithoutCompanyInput
+    jobs?: JobCreateNestedManyWithoutCompanyInput
+    expenses?: ExpenseCreateNestedManyWithoutCompanyInput
+    invoices?: InvoiceCreateNestedManyWithoutCompanyInput
+    accounts?: AccountCreateNestedManyWithoutCompanyInput
+    transactions?: TransactionCreateNestedManyWithoutCompanyInput
+    payments?: PaymentCreateNestedManyWithoutCompanyInput
+    productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
+    products?: ProductCreateNestedManyWithoutCompanyInput
+    warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
+    stockMovements?: StockMovementCreateNestedManyWithoutCompanyInput
+    purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
+    auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
+    financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyUncheckedCreateWithoutPortsInput = {
+    id?: number
+    name: string
+    uniqueId: string
+    address?: string | null
+    phone?: string | null
+    email?: string | null
+    industry?: string | null
+    logo?: string | null
+    themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutCompanyInput
+    branches?: BranchUncheckedCreateNestedManyWithoutCompanyInput
+    currencies?: CompanyCurrencyUncheckedCreateNestedManyWithoutCompanyInput
+    taxSettings?: TaxSettingUncheckedCreateNestedManyWithoutCompanyInput
+    systemSettings?: SystemSettingUncheckedCreateNestedManyWithoutCompanyInput
+    customers?: CustomerUncheckedCreateNestedManyWithoutCompanyInput
+    vendors?: VendorUncheckedCreateNestedManyWithoutCompanyInput
+    jobs?: JobUncheckedCreateNestedManyWithoutCompanyInput
+    expenses?: ExpenseUncheckedCreateNestedManyWithoutCompanyInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutCompanyInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
+    products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
+    warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutCompanyInput
+    purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+    financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyCreateOrConnectWithoutPortsInput = {
+    where: CompanyWhereUniqueInput
+    create: XOR<CompanyCreateWithoutPortsInput, CompanyUncheckedCreateWithoutPortsInput>
+  }
+
+  export type JobCreateWithoutPodInput = {
+    jobNumber: string
+    date?: Date | string
+    jobDate?: Date | string
+    jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
+    vessel?: string | null
+    place?: string | null
+    shipperRef?: string | null
+    gdNo?: string | null
+    gdDate?: Date | string | null
+    formE?: string | null
+    formEDate?: Date | string | null
+    commodity?: string | null
+    volume?: string | null
+    containerNo?: string | null
+    packages?: number | null
+    weight?: number | null
+    hawbBl?: string | null
+    handledBy?: string | null
+    salesPerson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    customer: CustomerCreateNestedOneWithoutJobsInput
+    company: CompanyCreateNestedOneWithoutJobsInput
+    branch?: BranchCreateNestedOneWithoutJobsInput
+    expenses?: ExpenseCreateNestedManyWithoutJobInput
+    invoice?: InvoiceCreateNestedOneWithoutJobInput
+  }
+
+  export type JobUncheckedCreateWithoutPodInput = {
+    id?: number
+    jobNumber: string
+    date?: Date | string
+    jobDate?: Date | string
+    jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
+    customerId: number
+    vessel?: string | null
+    place?: string | null
+    shipperRef?: string | null
+    gdNo?: string | null
+    gdDate?: Date | string | null
+    formE?: string | null
+    formEDate?: Date | string | null
+    commodity?: string | null
+    volume?: string | null
+    containerNo?: string | null
+    packages?: number | null
+    weight?: number | null
+    hawbBl?: string | null
+    handledBy?: string | null
+    salesPerson?: string | null
+    companyId: number
+    branchId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    expenses?: ExpenseUncheckedCreateNestedManyWithoutJobInput
+    invoice?: InvoiceUncheckedCreateNestedOneWithoutJobInput
+  }
+
+  export type JobCreateOrConnectWithoutPodInput = {
+    where: JobWhereUniqueInput
+    create: XOR<JobCreateWithoutPodInput, JobUncheckedCreateWithoutPodInput>
+  }
+
+  export type JobCreateManyPodInputEnvelope = {
+    data: JobCreateManyPodInput | JobCreateManyPodInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CompanyUpsertWithoutPortsInput = {
+    update: XOR<CompanyUpdateWithoutPortsInput, CompanyUncheckedUpdateWithoutPortsInput>
+    create: XOR<CompanyCreateWithoutPortsInput, CompanyUncheckedCreateWithoutPortsInput>
+    where?: CompanyWhereInput
+  }
+
+  export type CompanyUpdateToOneWithWhereWithoutPortsInput = {
+    where?: CompanyWhereInput
+    data: XOR<CompanyUpdateWithoutPortsInput, CompanyUncheckedUpdateWithoutPortsInput>
+  }
+
+  export type CompanyUpdateWithoutPortsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    uniqueId?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutCompanyNestedInput
+    branches?: BranchUpdateManyWithoutCompanyNestedInput
+    currencies?: CompanyCurrencyUpdateManyWithoutCompanyNestedInput
+    taxSettings?: TaxSettingUpdateManyWithoutCompanyNestedInput
+    systemSettings?: SystemSettingUpdateManyWithoutCompanyNestedInput
+    customers?: CustomerUpdateManyWithoutCompanyNestedInput
+    vendors?: VendorUpdateManyWithoutCompanyNestedInput
+    jobs?: JobUpdateManyWithoutCompanyNestedInput
+    expenses?: ExpenseUpdateManyWithoutCompanyNestedInput
+    invoices?: InvoiceUpdateManyWithoutCompanyNestedInput
+    accounts?: AccountUpdateManyWithoutCompanyNestedInput
+    transactions?: TransactionUpdateManyWithoutCompanyNestedInput
+    payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
+    products?: ProductUpdateManyWithoutCompanyNestedInput
+    warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutCompanyNestedInput
+    purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
+    financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateWithoutPortsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    uniqueId?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutCompanyNestedInput
+    currencies?: CompanyCurrencyUncheckedUpdateManyWithoutCompanyNestedInput
+    taxSettings?: TaxSettingUncheckedUpdateManyWithoutCompanyNestedInput
+    systemSettings?: SystemSettingUncheckedUpdateManyWithoutCompanyNestedInput
+    customers?: CustomerUncheckedUpdateManyWithoutCompanyNestedInput
+    vendors?: VendorUncheckedUpdateManyWithoutCompanyNestedInput
+    jobs?: JobUncheckedUpdateManyWithoutCompanyNestedInput
+    expenses?: ExpenseUncheckedUpdateManyWithoutCompanyNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutCompanyNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+    products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
+    warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
+    purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+    financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type JobUpsertWithWhereUniqueWithoutPodInput = {
+    where: JobWhereUniqueInput
+    update: XOR<JobUpdateWithoutPodInput, JobUncheckedUpdateWithoutPodInput>
+    create: XOR<JobCreateWithoutPodInput, JobUncheckedCreateWithoutPodInput>
+  }
+
+  export type JobUpdateWithWhereUniqueWithoutPodInput = {
+    where: JobWhereUniqueInput
+    data: XOR<JobUpdateWithoutPodInput, JobUncheckedUpdateWithoutPodInput>
+  }
+
+  export type JobUpdateManyWithWhereWithoutPodInput = {
+    where: JobScalarWhereInput
+    data: XOR<JobUpdateManyMutationInput, JobUncheckedUpdateManyWithoutPodInput>
   }
 
   export type UserCreateManyCompanyInput = {
@@ -55161,6 +57253,7 @@ export namespace Prisma {
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
+    podId?: number | null
     packages?: number | null
     weight?: number | null
     hawbBl?: string | null
@@ -55333,6 +57426,13 @@ export namespace Prisma {
   export type ExpenseMasterCreateManyCompanyInput = {
     id?: number
     code: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PortCreateManyCompanyInput = {
+    id?: number
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -55590,6 +57690,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customer?: CustomerUpdateOneRequiredWithoutJobsNestedInput
+    pod?: PortUpdateOneWithoutJobsNestedInput
     branch?: BranchUpdateOneWithoutJobsNestedInput
     expenses?: ExpenseUpdateManyWithoutJobNestedInput
     invoice?: InvoiceUpdateOneWithoutJobNestedInput
@@ -55613,6 +57714,7 @@ export namespace Prisma {
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    podId?: NullableIntFieldUpdateOperationsInput | number | null
     packages?: NullableIntFieldUpdateOperationsInput | number | null
     weight?: NullableFloatFieldUpdateOperationsInput | number | null
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55644,6 +57746,7 @@ export namespace Prisma {
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    podId?: NullableIntFieldUpdateOperationsInput | number | null
     packages?: NullableIntFieldUpdateOperationsInput | number | null
     weight?: NullableFloatFieldUpdateOperationsInput | number | null
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56166,6 +58269,28 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PortUpdateWithoutCompanyInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobs?: JobUpdateManyWithoutPodNestedInput
+  }
+
+  export type PortUncheckedUpdateWithoutCompanyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobs?: JobUncheckedUpdateManyWithoutPodNestedInput
+  }
+
+  export type PortUncheckedUpdateManyWithoutCompanyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TaxSettingCreateManyBranchInput = {
     id?: number
     name: string
@@ -56194,6 +58319,7 @@ export namespace Prisma {
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
+    podId?: number | null
     packages?: number | null
     weight?: number | null
     hawbBl?: string | null
@@ -56259,6 +58385,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customer?: CustomerUpdateOneRequiredWithoutJobsNestedInput
+    pod?: PortUpdateOneWithoutJobsNestedInput
     company?: CompanyUpdateOneRequiredWithoutJobsNestedInput
     expenses?: ExpenseUpdateManyWithoutJobNestedInput
     invoice?: InvoiceUpdateOneWithoutJobNestedInput
@@ -56282,6 +58409,7 @@ export namespace Prisma {
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    podId?: NullableIntFieldUpdateOperationsInput | number | null
     packages?: NullableIntFieldUpdateOperationsInput | number | null
     weight?: NullableFloatFieldUpdateOperationsInput | number | null
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56313,6 +58441,7 @@ export namespace Prisma {
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    podId?: NullableIntFieldUpdateOperationsInput | number | null
     packages?: NullableIntFieldUpdateOperationsInput | number | null
     weight?: NullableFloatFieldUpdateOperationsInput | number | null
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56411,6 +58540,7 @@ export namespace Prisma {
     commodity?: string | null
     volume?: string | null
     containerNo?: string | null
+    podId?: number | null
     packages?: number | null
     weight?: number | null
     hawbBl?: string | null
@@ -56490,6 +58620,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pod?: PortUpdateOneWithoutJobsNestedInput
     company?: CompanyUpdateOneRequiredWithoutJobsNestedInput
     branch?: BranchUpdateOneWithoutJobsNestedInput
     expenses?: ExpenseUpdateManyWithoutJobNestedInput
@@ -56513,6 +58644,7 @@ export namespace Prisma {
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    podId?: NullableIntFieldUpdateOperationsInput | number | null
     packages?: NullableIntFieldUpdateOperationsInput | number | null
     weight?: NullableFloatFieldUpdateOperationsInput | number | null
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56544,6 +58676,7 @@ export namespace Prisma {
     commodity?: NullableStringFieldUpdateOperationsInput | string | null
     volume?: NullableStringFieldUpdateOperationsInput | string | null
     containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    podId?: NullableIntFieldUpdateOperationsInput | number | null
     packages?: NullableIntFieldUpdateOperationsInput | number | null
     weight?: NullableFloatFieldUpdateOperationsInput | number | null
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -57365,6 +59498,129 @@ export namespace Prisma {
     debit?: FloatFieldUpdateOperationsInput | number
     credit?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type JobCreateManyPodInput = {
+    id?: number
+    jobNumber: string
+    date?: Date | string
+    jobDate?: Date | string
+    jobType?: $Enums.JobType
+    status?: $Enums.JobStatus
+    customerId: number
+    vessel?: string | null
+    place?: string | null
+    shipperRef?: string | null
+    gdNo?: string | null
+    gdDate?: Date | string | null
+    formE?: string | null
+    formEDate?: Date | string | null
+    commodity?: string | null
+    volume?: string | null
+    containerNo?: string | null
+    packages?: number | null
+    weight?: number | null
+    hawbBl?: string | null
+    handledBy?: string | null
+    salesPerson?: string | null
+    companyId: number
+    branchId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type JobUpdateWithoutPodInput = {
+    jobNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
+    vessel?: NullableStringFieldUpdateOperationsInput | string | null
+    place?: NullableStringFieldUpdateOperationsInput | string | null
+    shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
+    gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    commodity?: NullableStringFieldUpdateOperationsInput | string | null
+    volume?: NullableStringFieldUpdateOperationsInput | string | null
+    containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    packages?: NullableIntFieldUpdateOperationsInput | number | null
+    weight?: NullableFloatFieldUpdateOperationsInput | number | null
+    hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    customer?: CustomerUpdateOneRequiredWithoutJobsNestedInput
+    company?: CompanyUpdateOneRequiredWithoutJobsNestedInput
+    branch?: BranchUpdateOneWithoutJobsNestedInput
+    expenses?: ExpenseUpdateManyWithoutJobNestedInput
+    invoice?: InvoiceUpdateOneWithoutJobNestedInput
+  }
+
+  export type JobUncheckedUpdateWithoutPodInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    jobNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
+    customerId?: IntFieldUpdateOperationsInput | number
+    vessel?: NullableStringFieldUpdateOperationsInput | string | null
+    place?: NullableStringFieldUpdateOperationsInput | string | null
+    shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
+    gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    commodity?: NullableStringFieldUpdateOperationsInput | string | null
+    volume?: NullableStringFieldUpdateOperationsInput | string | null
+    containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    packages?: NullableIntFieldUpdateOperationsInput | number | null
+    weight?: NullableFloatFieldUpdateOperationsInput | number | null
+    hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expenses?: ExpenseUncheckedUpdateManyWithoutJobNestedInput
+    invoice?: InvoiceUncheckedUpdateOneWithoutJobNestedInput
+  }
+
+  export type JobUncheckedUpdateManyWithoutPodInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    jobNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobType?: EnumJobTypeFieldUpdateOperationsInput | $Enums.JobType
+    status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
+    customerId?: IntFieldUpdateOperationsInput | number
+    vessel?: NullableStringFieldUpdateOperationsInput | string | null
+    place?: NullableStringFieldUpdateOperationsInput | string | null
+    shipperRef?: NullableStringFieldUpdateOperationsInput | string | null
+    gdNo?: NullableStringFieldUpdateOperationsInput | string | null
+    gdDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    formE?: NullableStringFieldUpdateOperationsInput | string | null
+    formEDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    commodity?: NullableStringFieldUpdateOperationsInput | string | null
+    volume?: NullableStringFieldUpdateOperationsInput | string | null
+    containerNo?: NullableStringFieldUpdateOperationsInput | string | null
+    packages?: NullableIntFieldUpdateOperationsInput | number | null
+    weight?: NullableFloatFieldUpdateOperationsInput | number | null
+    hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
+    handledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    branchId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

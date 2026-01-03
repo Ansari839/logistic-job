@@ -21,11 +21,17 @@ interface ExpenseMaster {
     name: string;
 }
 
+interface Port {
+    id: number;
+    name: string;
+}
+
 export default function NewJobPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [expenseMasters, setExpenseMasters] = useState<ExpenseMaster[]>([]);
+    const [ports, setPorts] = useState<Port[]>([]);
 
     const [expenses, setExpenses] = useState([
         { code: '', name: '', description: '', cost: '', selling: '' },
@@ -50,6 +56,7 @@ export default function NewJobPage() {
         hawbBl: '',
         handledBy: '',
         salesPerson: '',
+        podId: '',
         jobDate: new Date().toISOString().split('T')[0],
     });
 
@@ -58,9 +65,10 @@ export default function NewJobPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [custRes, expRes] = await Promise.all([
+                const [custRes, expRes, portRes] = await Promise.all([
                     fetch('/api/customers'),
-                    fetch('/api/settings/expenses-master') // Assuming this endpoint exists or will be needed
+                    fetch('/api/settings/expenses-master'),
+                    fetch('/api/settings/ports')
                 ]);
 
                 if (custRes.ok) {
@@ -72,6 +80,11 @@ export default function NewJobPage() {
                 if (expRes.ok) {
                     const expData = await expRes.json();
                     setExpenseMasters(expData.expensesMaster || []);
+                }
+
+                if (portRes.ok) {
+                    const portData = await portRes.json();
+                    setPorts(portData.ports || []);
                 }
             } catch (err) {
                 console.error('Failed to load form data');
@@ -369,6 +382,21 @@ export default function NewJobPage() {
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-4">
+                                    <label className="text-subtext">POD :</label>
+                                    <select
+                                        name="podId"
+                                        className="sm:col-span-2 glass-input w-full uppercase tracking-widest"
+                                        value={formData.podId}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="">Select POD...</option>
+                                        {ports.map((port) => (
+                                            <option key={port.id} value={port.id}>{port.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-4">
                                     <label className="text-subtext">Weight :</label>
                                     <div className="sm:col-span-2 flex gap-2">
                                         <input
@@ -384,7 +412,7 @@ export default function NewJobPage() {
                                 </div>
 
                                 {[
-                                    { label: 'Hawb / House', name: 'hawbBl' },
+                                    { label: formData.jobType === 'EXPORT' ? 'Booking No.' : 'B/L No.', name: 'hawbBl' },
                                     { label: 'Shpt Handel By', name: 'handledBy' },
                                 ].map((field) => (
                                     <div key={field.name} className="grid grid-cols-1 sm:grid-cols-3 items-center gap-4">
@@ -527,7 +555,7 @@ export default function NewJobPage() {
                         </div>
                     </div>
                 </form>
-            </div>
-        </DashboardLayout>
+            </div >
+        </DashboardLayout >
     );
 }

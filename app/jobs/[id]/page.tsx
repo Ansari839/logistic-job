@@ -57,6 +57,8 @@ interface Job {
     jobDate?: string;
     gdDate?: string;
     formEDate?: string;
+    pod?: { name: string } | null;
+    podId?: number;
     status: 'DRAFT' | 'IN_PROGRESS' | 'CLOSED';
 }
 
@@ -350,9 +352,8 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                 <div className="space-y-6">
                                     <div><p className="text-subtext mb-1">Job Date</p><p className="text-main">{job.jobDate ? new Date(job.jobDate).toLocaleDateString() : '-'}</p></div>
                                     <div><p className="text-subtext mb-1">Packages</p><p className="text-main">{job.packages || '-'}</p></div>
-                                    <div><p className="text-subtext mb-1">Type</p><p className="text-main">{job.jobType}</p></div>
-                                    <div><p className="text-subtext mb-1">Weight</p><p className="text-main">{job.weight || '-'} KG</p></div>
-                                    <div><p className="text-subtext mb-1">HAWB / House</p><p className="text-main">{job.hawbBl || '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">POD</p><p className="text-main">{job.pod?.name || '-'}</p></div>
+                                    <div><p className="text-subtext mb-1">{job.jobType === 'EXPORT' ? 'Booking No.' : 'B/L No.'}</p><p className="text-main">{job.hawbBl || '-'}</p></div>
                                     <div><p className="text-subtext mb-1">Handle By</p><p className="text-main">{job.handledBy || '-'}</p></div>
                                     <div><p className="text-subtext mb-1">G.D Date</p><p className="text-main">{job.gdDate ? new Date(job.gdDate).toLocaleDateString() : '-'}</p></div>
                                     <div><p className="text-subtext mb-1">Form E Date</p><p className="text-main">{job.formEDate ? new Date(job.formEDate).toLocaleDateString() : '-'}</p></div>

@@ -74,7 +74,7 @@ export async function PATCH(
             vessel, place, shipperRef, gdNo, gdDate, formE, formEDate,
             commodity, volume, containerNo, packages,
             weight, hawbBl, handledBy, salesPerson, jobDate,
-            expenses
+            expenses, podId
         } = body;
 
         // Check ownership and status
@@ -115,6 +115,7 @@ export async function PATCH(
                     hawbBl,
                     handledBy,
                     salesPerson,
+                    podId: podId ? parseInt(podId) : (podId === null ? null : undefined),
                 }
             });
 

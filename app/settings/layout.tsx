@@ -11,6 +11,7 @@ const settingsNav = [
     { name: 'Currencies', href: '/settings/currencies', icon: Globe },
     { name: 'Tax Rules', href: '/settings/taxes', icon: Percent },
     { name: 'System Config', href: '/settings/system', icon: SettingsIcon },
+    { name: 'Ports (POD)', href: '/settings/pods', icon: MapPin },
 ];
 
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {

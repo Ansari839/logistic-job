@@ -21,6 +21,11 @@ interface ExpenseMaster {
     name: string;
 }
 
+interface Port {
+    id: number;
+    name: string;
+}
+
 export default function EditJobPage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = use(params);
     const id = resolvedParams.id;
@@ -30,6 +35,7 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
     const [initialLoading, setInitialLoading] = useState(true);
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [expenseMasters, setExpenseMasters] = useState<ExpenseMaster[]>([]);
+    const [ports, setPorts] = useState<Port[]>([]);
 
     const [expenses, setExpenses] = useState<any[]>([]);
 
@@ -52,6 +58,7 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
         hawbBl: '',
         handledBy: '',
         salesPerson: '',
+        podId: '',
         jobDate: '',
     });
 
@@ -61,9 +68,10 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
         const fetchData = async () => {
             try {
                 // 1. Fetch Metadata
-                const [custRes, expMasterRes] = await Promise.all([
+                const [custRes, expMasterRes, portRes] = await Promise.all([
                     fetch('/api/customers'),
-                    fetch('/api/settings/expenses-master')
+                    fetch('/api/settings/expenses-master'),
+                    fetch('/api/settings/ports')
                 ]);
 
                 if (custRes.ok) {
@@ -73,6 +81,10 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                 if (expMasterRes.ok) {
                     const expMData = await expMasterRes.json();
                     setExpenseMasters(expMData.expensesMaster || []);
+                }
+                if (portRes.ok) {
+                    const portData = await portRes.json();
+                    setPorts(portData.ports || []);
                 }
 
                 // 2. Fetch Job Details
@@ -100,6 +112,7 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                         hawbBl: job.hawbBl || '',
                         handledBy: job.handledBy || '',
                         salesPerson: job.salesPerson || '',
+                        podId: job.podId ? job.podId.toString() : '',
                         jobDate: job.jobDate ? new Date(job.jobDate).toISOString().split('T')[0] : '',
                     });
 
@@ -427,7 +440,22 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-4">
-                                    <label className="text-subtext text-nowrap">Weight :</label>
+                                    <label className="text-subtext">POD :</label>
+                                    <select
+                                        name="podId"
+                                        className="sm:col-span-2 glass-input w-full uppercase tracking-widest"
+                                        value={formData.podId}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="">Select POD...</option>
+                                        {ports.map((port) => (
+                                            <option key={port.id} value={port.id}>{port.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-4">
+                                    <label className="text-subtext">Weight :</label>
                                     <div className="sm:col-span-2 flex gap-2">
                                         <input
                                             type="number"
@@ -442,7 +470,7 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                                 </div>
 
                                 {[
-                                    { label: 'Hawb / House', name: 'hawbBl' },
+                                    { label: formData.jobType === 'EXPORT' ? 'Booking No.' : 'B/L No.', name: 'hawbBl' },
                                     { label: 'Shpt Handel By', name: 'handledBy' },
                                 ].map((field) => (
                                     <div key={field.name} className="grid grid-cols-1 sm:grid-cols-3 items-center gap-4">
@@ -584,7 +612,7 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                         </div>
                     </div>
                 </form>
-            </div>
-        </DashboardLayout>
+            </div >
+        </DashboardLayout >
     );
 }

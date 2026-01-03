@@ -54,7 +54,7 @@ export async function POST(request: Request) {
             vessel, place, shipperRef, gdNo, gdDate, formE, formEDate,
             commodity, volume, containerNo, packages,
             weight, hawbBl, handledBy, salesPerson, jobDate,
-            expenses
+            expenses, podId
         } = body;
 
         if (!customerId) {
@@ -114,6 +114,7 @@ export async function POST(request: Request) {
                 hawbBl,
                 handledBy,
                 salesPerson,
+                podId: podId ? parseInt(podId) : null,
                 expenses: {
                     create: expenses?.filter((e: any) => e.name || e.cost || e.selling).map((e: any) => ({
                         description: e.name + (e.description ? ` - ${e.description}` : ''),
