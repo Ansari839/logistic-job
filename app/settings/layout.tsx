@@ -33,8 +33,8 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                             key={item.href}
                             href={item.href}
                             className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${pathname === item.href
-                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                                : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                                ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
+                                : 'text-muted-foreground hover:bg-accent/10 hover:text-foreground'
                                 }`}
                         >
                             <item.icon size={20} />
@@ -44,7 +44,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                 </aside>
 
                 {/* Content Area */}
-                <div className="flex-1 bg-slate-950/50 border border-slate-800 rounded-2xl p-8 min-h-[600px]">
+                <div className="flex-1 glass-card p-8 min-h-[600px]">
                     {children}
                 </div>
             </div>

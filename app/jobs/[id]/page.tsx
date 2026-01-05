@@ -110,9 +110,8 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
 
 
     useEffect(() => {
-        fetchJob();
-        fetchVendors();
-    }, [id]);
+        router.replace(`/jobs/${id}/edit`);
+    }, [id, router]);
 
     const handleAddExpense = async (e: React.FormEvent) => {
         e.preventDefault();

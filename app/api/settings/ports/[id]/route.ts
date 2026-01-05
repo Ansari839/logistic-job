@@ -15,11 +15,20 @@ export async function PATCH(
         const { id } = await params;
         const { name } = await request.json();
 
-        const port = await prisma.port.update({
+        // Check if port belongs to user's company
+        const existingPort = await prisma.port.findFirst({
             where: {
                 id: parseInt(id),
                 companyId: user.companyId as number
-            },
+            }
+        });
+
+        if (!existingPort) {
+            return NextResponse.json({ error: 'Port not found or unauthorized' }, { status: 404 });
+        }
+
+        const port = await prisma.port.update({
+            where: { id: parseInt(id) },
             data: { name }
         });
 
@@ -42,14 +51,23 @@ export async function DELETE(
 
         const { id } = await params;
 
-        await prisma.port.delete({
+        // Check ownership
+        const existingPort = await prisma.port.findFirst({
             where: {
                 id: parseInt(id),
                 companyId: user.companyId as number
             }
         });
 
-        return NextResponse.json({ message: 'Port deleted successfuly' });
+        if (!existingPort) {
+            return NextResponse.json({ error: 'Port not found or unauthorized' }, { status: 404 });
+        }
+
+        await prisma.port.delete({
+            where: { id: parseInt(id) }
+        });
+
+        return NextResponse.json({ message: 'Port deleted successfully' });
     } catch (error) {
         console.error('Error deleting port:', error);
         return NextResponse.json({ error: 'Failed to delete port' }, { status: 500 });

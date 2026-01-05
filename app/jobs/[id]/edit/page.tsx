@@ -161,9 +161,17 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
         const newExpenses = [...expenses];
         newExpenses[index] = { ...newExpenses[index], [field]: value };
 
+        // If selecting from master, auto-fill
         if (field === 'code') {
             const master = expenseMasters.find(m => m.code === value);
-            if (master) newExpenses[index].name = master.name;
+            if (master) {
+                newExpenses[index].name = master.name;
+            }
+        } else if (field === 'name') {
+            const master = expenseMasters.find(m => m.name === value);
+            if (master) {
+                newExpenses[index].code = master.code;
+            }
         }
 
         setExpenses(newExpenses);
@@ -441,17 +449,27 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
 
                                 <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-4">
                                     <label className="text-subtext">POD :</label>
-                                    <select
-                                        name="podId"
-                                        className="sm:col-span-2 glass-input w-full uppercase tracking-widest"
-                                        value={formData.podId}
-                                        onChange={handleChange}
-                                    >
-                                        <option value="">Select POD...</option>
-                                        {ports.map((port) => (
-                                            <option key={port.id} value={port.id}>{port.name}</option>
-                                        ))}
-                                    </select>
+                                    <div className="sm:col-span-2 flex gap-2">
+                                        <select
+                                            name="podId"
+                                            className="glass-input flex-1 uppercase tracking-widest"
+                                            value={formData.podId}
+                                            onChange={handleChange}
+                                        >
+                                            <option value="">Select POD...</option>
+                                            {ports.map((port) => (
+                                                <option key={port.id} value={port.id}>{port.name}</option>
+                                            ))}
+                                        </select>
+                                        <button
+                                            type="button"
+                                            onClick={() => router.push('/settings/pods')}
+                                            className="p-3 bg-background border border-border rounded-xl text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all"
+                                            title="Manage PODs"
+                                        >
+                                            <Book size={16} />
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-4">
@@ -553,6 +571,7 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                                             <td className="px-1 py-1 border-r border-border/50 dark:border-slate-800 bg-slate-500/5 dark:bg-slate-800/30">
                                                 <input
                                                     className="w-full bg-transparent px-3 py-2 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:bg-slate-500/10 rounded-lg transition-all text-center"
+                                                    list="expense-names"
                                                     value={expense.name}
                                                     onChange={(e) => updateExpense(idx, 'name', e.target.value)}
                                                 />
@@ -611,6 +630,12 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                             </div>
                         </div>
                     </div>
+
+                    <datalist id="expense-names">
+                        {expenseMasters.map((em) => (
+                            <option key={em.id} value={em.name} />
+                        ))}
+                    </datalist>
                 </form>
             </div >
         </DashboardLayout >

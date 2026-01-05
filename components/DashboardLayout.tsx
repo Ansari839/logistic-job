@@ -66,7 +66,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }, []);
 
     if (loading) {
-        return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Loading...</div>;
+        return <div className="min-h-screen bg-background flex items-center justify-center text-foreground">Loading...</div>;
     }
 
     if (!user) return null;
@@ -81,7 +81,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     });
 
     return (
-        <div className={`min-h-screen font-sans ${theme === 'dark' ? 'bg-transparent text-slate-100' : 'bg-slate-50/80 text-slate-900'}`}>
+        <div className="min-h-screen font-sans bg-background text-foreground">
             {/* Mobile Backdrop */}
             {isSidebarOpen && (
                 <div
@@ -93,14 +93,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             {/* Sidebar */}
             <aside className={`
         fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out border-r backdrop-blur-md
-        ${theme === 'dark' ? 'bg-slate-950/80 border-slate-800' : 'bg-white/80 border-slate-200'}
+        bg-card/80 border-border
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
                 <div className="p-6 flex justify-between items-center">
                     <h2 className="text-xl font-bold bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent truncate" title={companyName}>
                         {companyName}
                     </h2>
-                    <button className="lg:hidden p-2 rounded-lg hover:bg-slate-800/10" onClick={() => setIsSidebarOpen(false)}>
+                    <button className="lg:hidden p-2 rounded-lg hover:bg-accent/10 text-foreground" onClick={() => setIsSidebarOpen(false)}>
                         <X size={20} />
                     </button>
                 </div>
@@ -112,8 +112,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             href={item.href}
                             onClick={() => setIsSidebarOpen(false)}
                             className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href))
-                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                                : theme === 'dark' ? 'text-slate-400 hover:bg-white/5 hover:text-white' : 'text-slate-500 hover:bg-slate-100'
+                                ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
+                                : 'text-muted-foreground hover:bg-accent/10 hover:text-foreground'
                                 }`}
                         >
                             <item.icon size={20} />
@@ -122,29 +122,28 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     ))}
                 </nav>
 
-                <div className="p-4 border-t border-slate-800">
+                <div className="p-4 border-t border-border">
                     <button
                         onClick={toggleTheme}
-                        className={`w-full flex items-center justify-between px-4 py-2 rounded-lg mb-4 transition-all ${theme === 'dark' ? 'bg-slate-900 text-sky-400' : 'bg-slate-100 text-amber-600'
+                        className={`w-full flex items-center justify-between px-4 py-2 rounded-lg mb-4 transition-all ${theme === 'dark' ? 'bg-secondary text-primary' : 'bg-secondary text-amber-600'
                             }`}
                     >
                         <div className="flex items-center space-x-3">
                             {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
                             <span className="text-sm font-medium">{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
                         </div>
-                        <div className={`w-10 h-5 rounded-full relative p-1 ${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-200'}`}>
-                            <div className={`w-3 h-3 rounded-full bg-white shadow-sm transform transition-transform ${theme === 'dark' ? 'translate-x-5' : 'translate-x-0'}`} />
+                        <div className={`w-10 h-5 rounded-full relative p-1 ${theme === 'dark' ? 'bg-background' : 'bg-input'}`}>
+                            <div className={`w-3 h-3 rounded-full bg-foreground shadow-sm transform transition-transform ${theme === 'dark' ? 'translate-x-5' : 'translate-x-0'}`} />
                         </div>
                     </button>
 
                     <div className="flex items-center space-x-3 px-4 py-2 mb-4">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ring-2 ${theme === 'dark' ? 'bg-slate-800 ring-slate-700' : 'bg-slate-200 ring-slate-100'
-                            }`}>
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ring-2 bg-secondary ring-border text-foreground">
                             {user.name?.charAt(0) || user.email.charAt(0)}
                         </div>
-                        <div className="overflow-hidden">
+                        <div className="overflow-hidden text-foreground">
                             <p className="text-sm font-medium truncate">{user.name || 'User'}</p>
-                            <p className="text-xs text-slate-500 truncate lowercase">{user.role}</p>
+                            <p className="text-xs text-muted-foreground truncate lowercase">{user.role}</p>
                         </div>
                     </div>
                     <button
@@ -159,11 +158,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             {/* Main Content */}
             <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-64'}`}>
-                <header className={`sticky top-0 z-30 flex items-center justify-between p-4 lg:p-8 backdrop-blur-md border-b ${theme === 'dark' ? 'bg-slate-900/80 border-slate-800' : 'bg-white/80 border-slate-200'
-                    }`}>
+                <header className="sticky top-0 z-30 flex items-center justify-between p-4 lg:p-8 backdrop-blur-md border-b bg-background/80 border-border">
                     <div className="flex items-center space-x-4">
                         <button
-                            className="lg:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900"
+                            className="lg:hidden p-2 rounded-xl bg-accent hover:bg-accent/80 text-foreground"
                             onClick={() => setIsSidebarOpen(true)}
                         >
                             <Menu size={24} />
