@@ -79,7 +79,10 @@ export async function GET(request: Request) {
         }
 
         const accounts = await prisma.account.findMany({
-            where: { companyId: user.companyId },
+            where: {
+                companyId: user.companyId,
+                division: user.division
+            },
             include: {
                 parent: { select: { name: true, code: true } },
                 _count: { select: { children: true } }
@@ -96,7 +99,7 @@ export async function GET(request: Request) {
 
 export async function POST(req: Request) {
     const user = await getAuthUser();
-    if (!user || !user.companyId || user.role !== 'ADMIN') {
+    if (!user || !user.companyId) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -110,7 +113,8 @@ export async function POST(req: Request) {
             const newAccount = await tx.account.create({
                 data: {
                     ...accountData,
-                    companyId: user.companyId,
+                    companyId: user.companyId!,
+                    division: user.division,
                 },
             });
 
@@ -125,7 +129,8 @@ export async function POST(req: Request) {
                             email: partnerDetails.email,
                             taxNumber: partnerDetails.taxNumber,
                             accountId: newAccount.id,
-                            companyId: user.companyId
+                            companyId: user.companyId!,
+                            division: user.division
                         }
                     });
                 } else if (partnerDetails.type === 'VENDOR') {
@@ -138,7 +143,8 @@ export async function POST(req: Request) {
                             email: partnerDetails.email,
                             taxNumber: partnerDetails.taxNumber,
                             accountId: newAccount.id,
-                            companyId: user.companyId
+                            companyId: user.companyId!,
+                            division: user.division
                         }
                     });
                 }

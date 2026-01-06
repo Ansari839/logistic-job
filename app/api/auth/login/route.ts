@@ -51,6 +51,7 @@ export async function POST(request: Request) {
             department: user.department,
             region: user.region,
             companyId: user.companyId,
+            division: user.division,
         });
 
         await setAuthCookie(token);

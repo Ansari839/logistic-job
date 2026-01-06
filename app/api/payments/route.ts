@@ -24,7 +24,10 @@ export async function GET(req: Request) {
 
     try {
         const payments = await prisma.payment.findMany({
-            where: { companyId: user.companyId },
+            where: {
+                companyId: user.companyId,
+                division: user.division
+            },
             include: {
                 customer: { select: { name: true } },
                 vendor: { select: { name: true } },
@@ -117,6 +120,7 @@ export async function POST(req: Request) {
                     vendorId: validatedData.vendorId,
                     transactionId: transaction.id,
                     companyId: user.companyId!,
+                    division: user.division,
                 }
             });
 

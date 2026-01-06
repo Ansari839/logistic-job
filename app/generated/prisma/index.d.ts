@@ -12791,6 +12791,7 @@ export namespace Prisma {
     taxNumber: string | null
     accountId: number | null
     companyId: number | null
+    division: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12805,6 +12806,7 @@ export namespace Prisma {
     taxNumber: string | null
     accountId: number | null
     companyId: number | null
+    division: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12819,6 +12821,7 @@ export namespace Prisma {
     taxNumber: number
     accountId: number
     companyId: number
+    division: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -12847,6 +12850,7 @@ export namespace Prisma {
     taxNumber?: true
     accountId?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12861,6 +12865,7 @@ export namespace Prisma {
     taxNumber?: true
     accountId?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12875,6 +12880,7 @@ export namespace Prisma {
     taxNumber?: true
     accountId?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -12976,6 +12982,7 @@ export namespace Prisma {
     taxNumber: string | null
     accountId: number | null
     companyId: number
+    division: string | null
     createdAt: Date
     updatedAt: Date
     _count: CustomerCountAggregateOutputType | null
@@ -13009,6 +13016,7 @@ export namespace Prisma {
     taxNumber?: boolean
     accountId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     account?: boolean | Customer$accountArgs<ExtArgs>
@@ -13029,6 +13037,7 @@ export namespace Prisma {
     taxNumber?: boolean
     accountId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     account?: boolean | Customer$accountArgs<ExtArgs>
@@ -13045,6 +13054,7 @@ export namespace Prisma {
     taxNumber?: boolean
     accountId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     account?: boolean | Customer$accountArgs<ExtArgs>
@@ -13061,11 +13071,12 @@ export namespace Prisma {
     taxNumber?: boolean
     accountId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "code" | "address" | "phone" | "email" | "taxNumber" | "accountId" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
+  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "code" | "address" | "phone" | "email" | "taxNumber" | "accountId" | "companyId" | "division" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
   export type CustomerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     account?: boolean | Customer$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -13102,6 +13113,7 @@ export namespace Prisma {
       taxNumber: string | null
       accountId: number | null
       companyId: number
+      division: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["customer"]>
@@ -13541,6 +13553,7 @@ export namespace Prisma {
     readonly taxNumber: FieldRef<"Customer", 'String'>
     readonly accountId: FieldRef<"Customer", 'Int'>
     readonly companyId: FieldRef<"Customer", 'Int'>
+    readonly division: FieldRef<"Customer", 'String'>
     readonly createdAt: FieldRef<"Customer", 'DateTime'>
     readonly updatedAt: FieldRef<"Customer", 'DateTime'>
   }
@@ -14083,6 +14096,7 @@ export namespace Prisma {
     taxNumber: string | null
     accountId: number | null
     companyId: number | null
+    division: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14098,6 +14112,7 @@ export namespace Prisma {
     taxNumber: string | null
     accountId: number | null
     companyId: number | null
+    division: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14113,6 +14128,7 @@ export namespace Prisma {
     taxNumber: number
     accountId: number
     companyId: number
+    division: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -14142,6 +14158,7 @@ export namespace Prisma {
     taxNumber?: true
     accountId?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14157,6 +14174,7 @@ export namespace Prisma {
     taxNumber?: true
     accountId?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14172,6 +14190,7 @@ export namespace Prisma {
     taxNumber?: true
     accountId?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -14274,6 +14293,7 @@ export namespace Prisma {
     taxNumber: string | null
     accountId: number | null
     companyId: number
+    division: string | null
     createdAt: Date
     updatedAt: Date
     _count: VendorCountAggregateOutputType | null
@@ -14308,6 +14328,7 @@ export namespace Prisma {
     taxNumber?: boolean
     accountId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     account?: boolean | Vendor$accountArgs<ExtArgs>
@@ -14329,6 +14350,7 @@ export namespace Prisma {
     taxNumber?: boolean
     accountId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     account?: boolean | Vendor$accountArgs<ExtArgs>
@@ -14346,6 +14368,7 @@ export namespace Prisma {
     taxNumber?: boolean
     accountId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     account?: boolean | Vendor$accountArgs<ExtArgs>
@@ -14363,11 +14386,12 @@ export namespace Prisma {
     taxNumber?: boolean
     accountId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type VendorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "code" | "type" | "address" | "phone" | "email" | "taxNumber" | "accountId" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["vendor"]>
+  export type VendorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "code" | "type" | "address" | "phone" | "email" | "taxNumber" | "accountId" | "companyId" | "division" | "createdAt" | "updatedAt", ExtArgs["result"]["vendor"]>
   export type VendorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     account?: boolean | Vendor$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -14405,6 +14429,7 @@ export namespace Prisma {
       taxNumber: string | null
       accountId: number | null
       companyId: number
+      division: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["vendor"]>
@@ -14845,6 +14870,7 @@ export namespace Prisma {
     readonly taxNumber: FieldRef<"Vendor", 'String'>
     readonly accountId: FieldRef<"Vendor", 'Int'>
     readonly companyId: FieldRef<"Vendor", 'Int'>
+    readonly division: FieldRef<"Vendor", 'String'>
     readonly createdAt: FieldRef<"Vendor", 'DateTime'>
     readonly updatedAt: FieldRef<"Vendor", 'DateTime'>
   }
@@ -15409,6 +15435,7 @@ export namespace Prisma {
     handledBy: string | null
     salesPerson: string | null
     companyId: number | null
+    division: string | null
     branchId: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -15440,6 +15467,7 @@ export namespace Prisma {
     handledBy: string | null
     salesPerson: string | null
     companyId: number | null
+    division: string | null
     branchId: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -15471,6 +15499,7 @@ export namespace Prisma {
     handledBy: number
     salesPerson: number
     companyId: number
+    division: number
     branchId: number
     createdAt: number
     updatedAt: number
@@ -15524,6 +15553,7 @@ export namespace Prisma {
     handledBy?: true
     salesPerson?: true
     companyId?: true
+    division?: true
     branchId?: true
     createdAt?: true
     updatedAt?: true
@@ -15555,6 +15585,7 @@ export namespace Prisma {
     handledBy?: true
     salesPerson?: true
     companyId?: true
+    division?: true
     branchId?: true
     createdAt?: true
     updatedAt?: true
@@ -15586,6 +15617,7 @@ export namespace Prisma {
     handledBy?: true
     salesPerson?: true
     companyId?: true
+    division?: true
     branchId?: true
     createdAt?: true
     updatedAt?: true
@@ -15704,6 +15736,7 @@ export namespace Prisma {
     handledBy: string | null
     salesPerson: string | null
     companyId: number
+    division: string | null
     branchId: number | null
     createdAt: Date
     updatedAt: Date
@@ -15754,6 +15787,7 @@ export namespace Prisma {
     handledBy?: boolean
     salesPerson?: boolean
     companyId?: boolean
+    division?: boolean
     branchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -15792,6 +15826,7 @@ export namespace Prisma {
     handledBy?: boolean
     salesPerson?: boolean
     companyId?: boolean
+    division?: boolean
     branchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -15827,6 +15862,7 @@ export namespace Prisma {
     handledBy?: boolean
     salesPerson?: boolean
     companyId?: boolean
+    division?: boolean
     branchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -15862,13 +15898,14 @@ export namespace Prisma {
     handledBy?: boolean
     salesPerson?: boolean
     companyId?: boolean
+    division?: boolean
     branchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
   }
 
-  export type JobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jobNumber" | "date" | "jobDate" | "jobType" | "status" | "customerId" | "vessel" | "place" | "shipperRef" | "gdNo" | "gdDate" | "formE" | "formEDate" | "commodity" | "volume" | "containerNo" | "podId" | "packages" | "weight" | "hawbBl" | "handledBy" | "salesPerson" | "companyId" | "branchId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["job"]>
+  export type JobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jobNumber" | "date" | "jobDate" | "jobType" | "status" | "customerId" | "vessel" | "place" | "shipperRef" | "gdNo" | "gdDate" | "formE" | "formEDate" | "commodity" | "volume" | "containerNo" | "podId" | "packages" | "weight" | "hawbBl" | "handledBy" | "salesPerson" | "companyId" | "division" | "branchId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["job"]>
   export type JobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
     pod?: boolean | Job$podArgs<ExtArgs>
@@ -15926,6 +15963,7 @@ export namespace Prisma {
       handledBy: string | null
       salesPerson: string | null
       companyId: number
+      division: string | null
       branchId: number | null
       createdAt: Date
       updatedAt: Date
@@ -16383,6 +16421,7 @@ export namespace Prisma {
     readonly handledBy: FieldRef<"Job", 'String'>
     readonly salesPerson: FieldRef<"Job", 'String'>
     readonly companyId: FieldRef<"Job", 'Int'>
+    readonly division: FieldRef<"Job", 'String'>
     readonly branchId: FieldRef<"Job", 'Int'>
     readonly createdAt: FieldRef<"Job", 'DateTime'>
     readonly updatedAt: FieldRef<"Job", 'DateTime'>
@@ -19285,6 +19324,7 @@ export namespace Prisma {
     isLocked: boolean | null
     lockedAt: Date | null
     companyId: number | null
+    division: string | null
     createdAt: Date | null
     updatedAt: Date | null
     transactionId: number | null
@@ -19315,6 +19355,7 @@ export namespace Prisma {
     isLocked: boolean | null
     lockedAt: Date | null
     companyId: number | null
+    division: string | null
     createdAt: Date | null
     updatedAt: Date | null
     transactionId: number | null
@@ -19345,6 +19386,7 @@ export namespace Prisma {
     isLocked: number
     lockedAt: number
     companyId: number
+    division: number
     createdAt: number
     updatedAt: number
     transactionId: number
@@ -19405,6 +19447,7 @@ export namespace Prisma {
     isLocked?: true
     lockedAt?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
     transactionId?: true
@@ -19435,6 +19478,7 @@ export namespace Prisma {
     isLocked?: true
     lockedAt?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
     transactionId?: true
@@ -19465,6 +19509,7 @@ export namespace Prisma {
     isLocked?: true
     lockedAt?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
     transactionId?: true
@@ -19582,6 +19627,7 @@ export namespace Prisma {
     isLocked: boolean
     lockedAt: Date | null
     companyId: number
+    division: string | null
     createdAt: Date
     updatedAt: Date
     transactionId: number | null
@@ -19631,6 +19677,7 @@ export namespace Prisma {
     isLocked?: boolean
     lockedAt?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     transactionId?: boolean
@@ -19667,6 +19714,7 @@ export namespace Prisma {
     isLocked?: boolean
     lockedAt?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     transactionId?: boolean
@@ -19701,6 +19749,7 @@ export namespace Prisma {
     isLocked?: boolean
     lockedAt?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     transactionId?: boolean
@@ -19735,12 +19784,13 @@ export namespace Prisma {
     isLocked?: boolean
     lockedAt?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     transactionId?: boolean
   }
 
-  export type InvoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "invoiceNumber" | "date" | "jobId" | "customerId" | "type" | "status" | "masterNumber" | "agentCode" | "shippingLine" | "origin" | "destination" | "creditDays" | "vendorType" | "totalAmount" | "taxAmount" | "grandTotal" | "currencyCode" | "exchangeRate" | "isApproved" | "approvedById" | "isLocked" | "lockedAt" | "companyId" | "createdAt" | "updatedAt" | "transactionId", ExtArgs["result"]["invoice"]>
+  export type InvoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "invoiceNumber" | "date" | "jobId" | "customerId" | "type" | "status" | "masterNumber" | "agentCode" | "shippingLine" | "origin" | "destination" | "creditDays" | "vendorType" | "totalAmount" | "taxAmount" | "grandTotal" | "currencyCode" | "exchangeRate" | "isApproved" | "approvedById" | "isLocked" | "lockedAt" | "companyId" | "division" | "createdAt" | "updatedAt" | "transactionId", ExtArgs["result"]["invoice"]>
   export type InvoiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     job?: boolean | JobDefaultArgs<ExtArgs>
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
@@ -19796,6 +19846,7 @@ export namespace Prisma {
       isLocked: boolean
       lockedAt: Date | null
       companyId: number
+      division: string | null
       createdAt: Date
       updatedAt: Date
       transactionId: number | null
@@ -20251,6 +20302,7 @@ export namespace Prisma {
     readonly isLocked: FieldRef<"Invoice", 'Boolean'>
     readonly lockedAt: FieldRef<"Invoice", 'DateTime'>
     readonly companyId: FieldRef<"Invoice", 'Int'>
+    readonly division: FieldRef<"Invoice", 'String'>
     readonly createdAt: FieldRef<"Invoice", 'DateTime'>
     readonly updatedAt: FieldRef<"Invoice", 'DateTime'>
     readonly transactionId: FieldRef<"Invoice", 'Int'>
@@ -29263,6 +29315,7 @@ export namespace Prisma {
     description: string | null
     parentId: number | null
     companyId: number | null
+    division: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -29275,6 +29328,7 @@ export namespace Prisma {
     description: string | null
     parentId: number | null
     companyId: number | null
+    division: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -29287,6 +29341,7 @@ export namespace Prisma {
     description: number
     parentId: number
     companyId: number
+    division: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -29313,6 +29368,7 @@ export namespace Prisma {
     description?: true
     parentId?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -29325,6 +29381,7 @@ export namespace Prisma {
     description?: true
     parentId?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -29337,6 +29394,7 @@ export namespace Prisma {
     description?: true
     parentId?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -29436,6 +29494,7 @@ export namespace Prisma {
     description: string | null
     parentId: number | null
     companyId: number
+    division: string | null
     createdAt: Date
     updatedAt: Date
     _count: AccountCountAggregateOutputType | null
@@ -29467,6 +29526,7 @@ export namespace Prisma {
     description?: boolean
     parentId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     parent?: boolean | Account$parentArgs<ExtArgs>
@@ -29486,6 +29546,7 @@ export namespace Prisma {
     description?: boolean
     parentId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     parent?: boolean | Account$parentArgs<ExtArgs>
@@ -29500,6 +29561,7 @@ export namespace Prisma {
     description?: boolean
     parentId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     parent?: boolean | Account$parentArgs<ExtArgs>
@@ -29514,11 +29576,12 @@ export namespace Prisma {
     description?: boolean
     parentId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "type" | "description" | "parentId" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
+  export type AccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "type" | "description" | "parentId" | "companyId" | "division" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
   export type AccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     parent?: boolean | Account$parentArgs<ExtArgs>
     children?: boolean | Account$childrenArgs<ExtArgs>
@@ -29555,6 +29618,7 @@ export namespace Prisma {
       description: string | null
       parentId: number | null
       companyId: number
+      division: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["account"]>
@@ -29993,6 +30057,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Account", 'String'>
     readonly parentId: FieldRef<"Account", 'Int'>
     readonly companyId: FieldRef<"Account", 'Int'>
+    readonly division: FieldRef<"Account", 'String'>
     readonly createdAt: FieldRef<"Account", 'DateTime'>
     readonly updatedAt: FieldRef<"Account", 'DateTime'>
   }
@@ -32944,6 +33009,7 @@ export namespace Prisma {
     vendorId: number | null
     transactionId: number | null
     companyId: number | null
+    division: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -32959,6 +33025,7 @@ export namespace Prisma {
     vendorId: number | null
     transactionId: number | null
     companyId: number | null
+    division: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -32974,6 +33041,7 @@ export namespace Prisma {
     vendorId: number
     transactionId: number
     companyId: number
+    division: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -33009,6 +33077,7 @@ export namespace Prisma {
     vendorId?: true
     transactionId?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -33024,6 +33093,7 @@ export namespace Prisma {
     vendorId?: true
     transactionId?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -33039,6 +33109,7 @@ export namespace Prisma {
     vendorId?: true
     transactionId?: true
     companyId?: true
+    division?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -33141,6 +33212,7 @@ export namespace Prisma {
     vendorId: number | null
     transactionId: number
     companyId: number
+    division: string | null
     createdAt: Date
     updatedAt: Date
     _count: PaymentCountAggregateOutputType | null
@@ -33175,6 +33247,7 @@ export namespace Prisma {
     vendorId?: boolean
     transactionId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     customer?: boolean | Payment$customerArgs<ExtArgs>
@@ -33194,6 +33267,7 @@ export namespace Prisma {
     vendorId?: boolean
     transactionId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     customer?: boolean | Payment$customerArgs<ExtArgs>
@@ -33213,6 +33287,7 @@ export namespace Prisma {
     vendorId?: boolean
     transactionId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     customer?: boolean | Payment$customerArgs<ExtArgs>
@@ -33232,11 +33307,12 @@ export namespace Prisma {
     vendorId?: boolean
     transactionId?: boolean
     companyId?: boolean
+    division?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "receiptNumber" | "date" | "amount" | "mode" | "reference" | "customerId" | "vendorId" | "transactionId" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["payment"]>
+  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "receiptNumber" | "date" | "amount" | "mode" | "reference" | "customerId" | "vendorId" | "transactionId" | "companyId" | "division" | "createdAt" | "updatedAt", ExtArgs["result"]["payment"]>
   export type PaymentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     customer?: boolean | Payment$customerArgs<ExtArgs>
     vendor?: boolean | Payment$vendorArgs<ExtArgs>
@@ -33275,6 +33351,7 @@ export namespace Prisma {
       vendorId: number | null
       transactionId: number
       companyId: number
+      division: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["payment"]>
@@ -33714,6 +33791,7 @@ export namespace Prisma {
     readonly vendorId: FieldRef<"Payment", 'Int'>
     readonly transactionId: FieldRef<"Payment", 'Int'>
     readonly companyId: FieldRef<"Payment", 'Int'>
+    readonly division: FieldRef<"Payment", 'String'>
     readonly createdAt: FieldRef<"Payment", 'DateTime'>
     readonly updatedAt: FieldRef<"Payment", 'DateTime'>
   }
@@ -37709,6 +37787,7 @@ export namespace Prisma {
     taxNumber: 'taxNumber',
     accountId: 'accountId',
     companyId: 'companyId',
+    division: 'division',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -37727,6 +37806,7 @@ export namespace Prisma {
     taxNumber: 'taxNumber',
     accountId: 'accountId',
     companyId: 'companyId',
+    division: 'division',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -37759,6 +37839,7 @@ export namespace Prisma {
     handledBy: 'handledBy',
     salesPerson: 'salesPerson',
     companyId: 'companyId',
+    division: 'division',
     branchId: 'branchId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -37822,6 +37903,7 @@ export namespace Prisma {
     isLocked: 'isLocked',
     lockedAt: 'lockedAt',
     companyId: 'companyId',
+    division: 'division',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     transactionId: 'transactionId'
@@ -37950,6 +38032,7 @@ export namespace Prisma {
     description: 'description',
     parentId: 'parentId',
     companyId: 'companyId',
+    division: 'division',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -37996,6 +38079,7 @@ export namespace Prisma {
     vendorId: 'vendorId',
     transactionId: 'transactionId',
     companyId: 'companyId',
+    division: 'division',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -38872,6 +38956,7 @@ export namespace Prisma {
     taxNumber?: StringNullableFilter<"Customer"> | string | null
     accountId?: IntNullableFilter<"Customer"> | number | null
     companyId?: IntFilter<"Customer"> | number
+    division?: StringNullableFilter<"Customer"> | string | null
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
     account?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
@@ -38891,6 +38976,7 @@ export namespace Prisma {
     taxNumber?: SortOrderInput | SortOrder
     accountId?: SortOrderInput | SortOrder
     companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     account?: AccountOrderByWithRelationInput
@@ -38913,6 +38999,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Customer"> | string | null
     taxNumber?: StringNullableFilter<"Customer"> | string | null
     companyId?: IntFilter<"Customer"> | number
+    division?: StringNullableFilter<"Customer"> | string | null
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
     account?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
@@ -38932,6 +39019,7 @@ export namespace Prisma {
     taxNumber?: SortOrderInput | SortOrder
     accountId?: SortOrderInput | SortOrder
     companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CustomerCountOrderByAggregateInput
@@ -38954,6 +39042,7 @@ export namespace Prisma {
     taxNumber?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     accountId?: IntNullableWithAggregatesFilter<"Customer"> | number | null
     companyId?: IntWithAggregatesFilter<"Customer"> | number
+    division?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
   }
@@ -38972,6 +39061,7 @@ export namespace Prisma {
     taxNumber?: StringNullableFilter<"Vendor"> | string | null
     accountId?: IntNullableFilter<"Vendor"> | number | null
     companyId?: IntFilter<"Vendor"> | number
+    division?: StringNullableFilter<"Vendor"> | string | null
     createdAt?: DateTimeFilter<"Vendor"> | Date | string
     updatedAt?: DateTimeFilter<"Vendor"> | Date | string
     account?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
@@ -38992,6 +39082,7 @@ export namespace Prisma {
     taxNumber?: SortOrderInput | SortOrder
     accountId?: SortOrderInput | SortOrder
     companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     account?: AccountOrderByWithRelationInput
@@ -39015,6 +39106,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Vendor"> | string | null
     taxNumber?: StringNullableFilter<"Vendor"> | string | null
     companyId?: IntFilter<"Vendor"> | number
+    division?: StringNullableFilter<"Vendor"> | string | null
     createdAt?: DateTimeFilter<"Vendor"> | Date | string
     updatedAt?: DateTimeFilter<"Vendor"> | Date | string
     account?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
@@ -39035,6 +39127,7 @@ export namespace Prisma {
     taxNumber?: SortOrderInput | SortOrder
     accountId?: SortOrderInput | SortOrder
     companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: VendorCountOrderByAggregateInput
@@ -39058,6 +39151,7 @@ export namespace Prisma {
     taxNumber?: StringNullableWithAggregatesFilter<"Vendor"> | string | null
     accountId?: IntNullableWithAggregatesFilter<"Vendor"> | number | null
     companyId?: IntWithAggregatesFilter<"Vendor"> | number
+    division?: StringNullableWithAggregatesFilter<"Vendor"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Vendor"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Vendor"> | Date | string
   }
@@ -39090,6 +39184,7 @@ export namespace Prisma {
     handledBy?: StringNullableFilter<"Job"> | string | null
     salesPerson?: StringNullableFilter<"Job"> | string | null
     companyId?: IntFilter<"Job"> | number
+    division?: StringNullableFilter<"Job"> | string | null
     branchId?: IntNullableFilter<"Job"> | number | null
     createdAt?: DateTimeFilter<"Job"> | Date | string
     updatedAt?: DateTimeFilter<"Job"> | Date | string
@@ -39127,6 +39222,7 @@ export namespace Prisma {
     handledBy?: SortOrderInput | SortOrder
     salesPerson?: SortOrderInput | SortOrder
     companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
     branchId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -39167,6 +39263,7 @@ export namespace Prisma {
     handledBy?: StringNullableFilter<"Job"> | string | null
     salesPerson?: StringNullableFilter<"Job"> | string | null
     companyId?: IntFilter<"Job"> | number
+    division?: StringNullableFilter<"Job"> | string | null
     branchId?: IntNullableFilter<"Job"> | number | null
     createdAt?: DateTimeFilter<"Job"> | Date | string
     updatedAt?: DateTimeFilter<"Job"> | Date | string
@@ -39204,6 +39301,7 @@ export namespace Prisma {
     handledBy?: SortOrderInput | SortOrder
     salesPerson?: SortOrderInput | SortOrder
     companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
     branchId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -39243,6 +39341,7 @@ export namespace Prisma {
     handledBy?: StringNullableWithAggregatesFilter<"Job"> | string | null
     salesPerson?: StringNullableWithAggregatesFilter<"Job"> | string | null
     companyId?: IntWithAggregatesFilter<"Job"> | number
+    division?: StringNullableWithAggregatesFilter<"Job"> | string | null
     branchId?: IntNullableWithAggregatesFilter<"Job"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Job"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Job"> | Date | string
@@ -39433,6 +39532,7 @@ export namespace Prisma {
     isLocked?: BoolFilter<"Invoice"> | boolean
     lockedAt?: DateTimeNullableFilter<"Invoice"> | Date | string | null
     companyId?: IntFilter<"Invoice"> | number
+    division?: StringNullableFilter<"Invoice"> | string | null
     createdAt?: DateTimeFilter<"Invoice"> | Date | string
     updatedAt?: DateTimeFilter<"Invoice"> | Date | string
     transactionId?: IntNullableFilter<"Invoice"> | number | null
@@ -39468,6 +39568,7 @@ export namespace Prisma {
     isLocked?: SortOrder
     lockedAt?: SortOrderInput | SortOrder
     companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     transactionId?: SortOrderInput | SortOrder
@@ -39508,6 +39609,7 @@ export namespace Prisma {
     isLocked?: BoolFilter<"Invoice"> | boolean
     lockedAt?: DateTimeNullableFilter<"Invoice"> | Date | string | null
     companyId?: IntFilter<"Invoice"> | number
+    division?: StringNullableFilter<"Invoice"> | string | null
     createdAt?: DateTimeFilter<"Invoice"> | Date | string
     updatedAt?: DateTimeFilter<"Invoice"> | Date | string
     job?: XOR<JobScalarRelationFilter, JobWhereInput>
@@ -39542,6 +39644,7 @@ export namespace Prisma {
     isLocked?: SortOrder
     lockedAt?: SortOrderInput | SortOrder
     companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     transactionId?: SortOrderInput | SortOrder
@@ -39580,6 +39683,7 @@ export namespace Prisma {
     isLocked?: BoolWithAggregatesFilter<"Invoice"> | boolean
     lockedAt?: DateTimeNullableWithAggregatesFilter<"Invoice"> | Date | string | null
     companyId?: IntWithAggregatesFilter<"Invoice"> | number
+    division?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Invoice"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Invoice"> | Date | string
     transactionId?: IntNullableWithAggregatesFilter<"Invoice"> | number | null
@@ -40212,6 +40316,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Account"> | string | null
     parentId?: IntNullableFilter<"Account"> | number | null
     companyId?: IntFilter<"Account"> | number
+    division?: StringNullableFilter<"Account"> | string | null
     createdAt?: DateTimeFilter<"Account"> | Date | string
     updatedAt?: DateTimeFilter<"Account"> | Date | string
     parent?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
@@ -40230,6 +40335,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     parentId?: SortOrderInput | SortOrder
     companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     parent?: AccountOrderByWithRelationInput
@@ -40252,6 +40358,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Account"> | string | null
     parentId?: IntNullableFilter<"Account"> | number | null
     companyId?: IntFilter<"Account"> | number
+    division?: StringNullableFilter<"Account"> | string | null
     createdAt?: DateTimeFilter<"Account"> | Date | string
     updatedAt?: DateTimeFilter<"Account"> | Date | string
     parent?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
@@ -40270,6 +40377,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     parentId?: SortOrderInput | SortOrder
     companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AccountCountOrderByAggregateInput
@@ -40290,6 +40398,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Account"> | string | null
     parentId?: IntNullableWithAggregatesFilter<"Account"> | number | null
     companyId?: IntWithAggregatesFilter<"Account"> | number
+    division?: StringNullableWithAggregatesFilter<"Account"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Account"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Account"> | Date | string
   }
@@ -40468,6 +40577,7 @@ export namespace Prisma {
     vendorId?: IntNullableFilter<"Payment"> | number | null
     transactionId?: IntFilter<"Payment"> | number
     companyId?: IntFilter<"Payment"> | number
+    division?: StringNullableFilter<"Payment"> | string | null
     createdAt?: DateTimeFilter<"Payment"> | Date | string
     updatedAt?: DateTimeFilter<"Payment"> | Date | string
     customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
@@ -40487,6 +40597,7 @@ export namespace Prisma {
     vendorId?: SortOrderInput | SortOrder
     transactionId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     customer?: CustomerOrderByWithRelationInput
@@ -40510,6 +40621,7 @@ export namespace Prisma {
     customerId?: IntNullableFilter<"Payment"> | number | null
     vendorId?: IntNullableFilter<"Payment"> | number | null
     companyId?: IntFilter<"Payment"> | number
+    division?: StringNullableFilter<"Payment"> | string | null
     createdAt?: DateTimeFilter<"Payment"> | Date | string
     updatedAt?: DateTimeFilter<"Payment"> | Date | string
     customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
@@ -40529,6 +40641,7 @@ export namespace Prisma {
     vendorId?: SortOrderInput | SortOrder
     transactionId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PaymentCountOrderByAggregateInput
@@ -40552,6 +40665,7 @@ export namespace Prisma {
     vendorId?: IntNullableWithAggregatesFilter<"Payment"> | number | null
     transactionId?: IntWithAggregatesFilter<"Payment"> | number
     companyId?: IntWithAggregatesFilter<"Payment"> | number
+    division?: StringNullableWithAggregatesFilter<"Payment"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
   }
@@ -41380,6 +41494,7 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     taxNumber?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     account?: AccountCreateNestedOneWithoutCustomerInput
@@ -41399,6 +41514,7 @@ export namespace Prisma {
     taxNumber?: string | null
     accountId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     jobs?: JobUncheckedCreateNestedManyWithoutCustomerInput
@@ -41413,6 +41529,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: AccountUpdateOneWithoutCustomerNestedInput
@@ -41432,6 +41549,7 @@ export namespace Prisma {
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     jobs?: JobUncheckedUpdateManyWithoutCustomerNestedInput
@@ -41449,6 +41567,7 @@ export namespace Prisma {
     taxNumber?: string | null
     accountId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -41460,6 +41579,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41474,6 +41594,7 @@ export namespace Prisma {
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41486,6 +41607,7 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     taxNumber?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     account?: AccountCreateNestedOneWithoutVendorInput
@@ -41506,6 +41628,7 @@ export namespace Prisma {
     taxNumber?: string | null
     accountId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     expenses?: ExpenseUncheckedCreateNestedManyWithoutVendorInput
@@ -41521,6 +41644,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: AccountUpdateOneWithoutVendorNestedInput
@@ -41541,6 +41665,7 @@ export namespace Prisma {
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expenses?: ExpenseUncheckedUpdateManyWithoutVendorNestedInput
@@ -41559,6 +41684,7 @@ export namespace Prisma {
     taxNumber?: string | null
     accountId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -41571,6 +41697,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41586,6 +41713,7 @@ export namespace Prisma {
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41611,6 +41739,7 @@ export namespace Prisma {
     hawbBl?: string | null
     handledBy?: string | null
     salesPerson?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -41647,6 +41776,7 @@ export namespace Prisma {
     handledBy?: string | null
     salesPerson?: string | null
     companyId: number
+    division?: string | null
     branchId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41676,6 +41806,7 @@ export namespace Prisma {
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -41712,6 +41843,7 @@ export namespace Prisma {
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41745,6 +41877,7 @@ export namespace Prisma {
     handledBy?: string | null
     salesPerson?: string | null
     companyId: number
+    division?: string | null
     branchId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41772,6 +41905,7 @@ export namespace Prisma {
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -41802,6 +41936,7 @@ export namespace Prisma {
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41980,6 +42115,7 @@ export namespace Prisma {
     approvedById?: number | null
     isLocked?: boolean
     lockedAt?: Date | string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     job: JobCreateNestedOneWithoutInvoiceInput
@@ -42014,6 +42150,7 @@ export namespace Prisma {
     isLocked?: boolean
     lockedAt?: Date | string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionId?: number | null
@@ -42041,6 +42178,7 @@ export namespace Prisma {
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     job?: JobUpdateOneRequiredWithoutInvoiceNestedInput
@@ -42075,6 +42213,7 @@ export namespace Prisma {
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -42106,6 +42245,7 @@ export namespace Prisma {
     isLocked?: boolean
     lockedAt?: Date | string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionId?: number | null
@@ -42132,6 +42272,7 @@ export namespace Prisma {
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42161,6 +42302,7 @@ export namespace Prisma {
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -42797,6 +42939,7 @@ export namespace Prisma {
     name: string
     type: $Enums.AccountType
     description?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parent?: AccountCreateNestedOneWithoutChildrenInput
@@ -42815,6 +42958,7 @@ export namespace Prisma {
     description?: string | null
     parentId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
@@ -42828,6 +42972,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parent?: AccountUpdateOneWithoutChildrenNestedInput
@@ -42846,6 +42991,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
@@ -42862,6 +43008,7 @@ export namespace Prisma {
     description?: string | null
     parentId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42871,6 +43018,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42883,6 +43031,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43054,6 +43203,7 @@ export namespace Prisma {
     amount: number
     mode?: $Enums.PaymentMode
     reference?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customer?: CustomerCreateNestedOneWithoutPaymentsInput
@@ -43073,6 +43223,7 @@ export namespace Prisma {
     vendorId?: number | null
     transactionId: number
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -43083,6 +43234,7 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
     reference?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customer?: CustomerUpdateOneWithoutPaymentsNestedInput
@@ -43102,6 +43254,7 @@ export namespace Prisma {
     vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     transactionId?: IntFieldUpdateOperationsInput | number
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43117,6 +43270,7 @@ export namespace Prisma {
     vendorId?: number | null
     transactionId: number
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -43127,6 +43281,7 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
     reference?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43142,6 +43297,7 @@ export namespace Prisma {
     vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     transactionId?: IntFieldUpdateOperationsInput | number
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -44193,6 +44349,7 @@ export namespace Prisma {
     taxNumber?: SortOrder
     accountId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44213,6 +44370,7 @@ export namespace Prisma {
     taxNumber?: SortOrder
     accountId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44227,6 +44385,7 @@ export namespace Prisma {
     taxNumber?: SortOrder
     accountId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44248,6 +44407,7 @@ export namespace Prisma {
     taxNumber?: SortOrder
     accountId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44269,6 +44429,7 @@ export namespace Prisma {
     taxNumber?: SortOrder
     accountId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44284,6 +44445,7 @@ export namespace Prisma {
     taxNumber?: SortOrder
     accountId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44359,6 +44521,7 @@ export namespace Prisma {
     handledBy?: SortOrder
     salesPerson?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     branchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -44400,6 +44563,7 @@ export namespace Prisma {
     handledBy?: SortOrder
     salesPerson?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     branchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -44431,6 +44595,7 @@ export namespace Prisma {
     handledBy?: SortOrder
     salesPerson?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     branchId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -44656,6 +44821,7 @@ export namespace Prisma {
     isLocked?: SortOrder
     lockedAt?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     transactionId?: SortOrder
@@ -44700,6 +44866,7 @@ export namespace Prisma {
     isLocked?: SortOrder
     lockedAt?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     transactionId?: SortOrder
@@ -44730,6 +44897,7 @@ export namespace Prisma {
     isLocked?: SortOrder
     lockedAt?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     transactionId?: SortOrder
@@ -45259,6 +45427,7 @@ export namespace Prisma {
     description?: SortOrder
     parentId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -45277,6 +45446,7 @@ export namespace Prisma {
     description?: SortOrder
     parentId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -45289,6 +45459,7 @@ export namespace Prisma {
     description?: SortOrder
     parentId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -45466,6 +45637,7 @@ export namespace Prisma {
     vendorId?: SortOrder
     transactionId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -45490,6 +45662,7 @@ export namespace Prisma {
     vendorId?: SortOrder
     transactionId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -45505,6 +45678,7 @@ export namespace Prisma {
     vendorId?: SortOrder
     transactionId?: SortOrder
     companyId?: SortOrder
+    division?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -49074,6 +49248,7 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     taxNumber?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     account?: AccountCreateNestedOneWithoutCustomerInput
@@ -49091,6 +49266,7 @@ export namespace Prisma {
     email?: string | null
     taxNumber?: string | null
     accountId?: number | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     jobs?: JobUncheckedCreateNestedManyWithoutCustomerInput
@@ -49116,6 +49292,7 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     taxNumber?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     account?: AccountCreateNestedOneWithoutVendorInput
@@ -49134,6 +49311,7 @@ export namespace Prisma {
     email?: string | null
     taxNumber?: string | null
     accountId?: number | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     expenses?: ExpenseUncheckedCreateNestedManyWithoutVendorInput
@@ -49172,6 +49350,7 @@ export namespace Prisma {
     hawbBl?: string | null
     handledBy?: string | null
     salesPerson?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -49206,6 +49385,7 @@ export namespace Prisma {
     hawbBl?: string | null
     handledBy?: string | null
     salesPerson?: string | null
+    division?: string | null
     branchId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -49280,6 +49460,7 @@ export namespace Prisma {
     approvedById?: number | null
     isLocked?: boolean
     lockedAt?: Date | string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     job: JobCreateNestedOneWithoutInvoiceInput
@@ -49312,6 +49493,7 @@ export namespace Prisma {
     approvedById?: number | null
     isLocked?: boolean
     lockedAt?: Date | string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionId?: number | null
@@ -49333,6 +49515,7 @@ export namespace Prisma {
     name: string
     type: $Enums.AccountType
     description?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parent?: AccountCreateNestedOneWithoutChildrenInput
@@ -49349,6 +49532,7 @@ export namespace Prisma {
     type: $Enums.AccountType
     description?: string | null
     parentId?: number | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
@@ -49412,6 +49596,7 @@ export namespace Prisma {
     amount: number
     mode?: $Enums.PaymentMode
     reference?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customer?: CustomerCreateNestedOneWithoutPaymentsInput
@@ -49429,6 +49614,7 @@ export namespace Prisma {
     customerId?: number | null
     vendorId?: number | null
     transactionId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -49907,6 +50093,7 @@ export namespace Prisma {
     taxNumber?: StringNullableFilter<"Customer"> | string | null
     accountId?: IntNullableFilter<"Customer"> | number | null
     companyId?: IntFilter<"Customer"> | number
+    division?: StringNullableFilter<"Customer"> | string | null
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
   }
@@ -49941,6 +50128,7 @@ export namespace Prisma {
     taxNumber?: StringNullableFilter<"Vendor"> | string | null
     accountId?: IntNullableFilter<"Vendor"> | number | null
     companyId?: IntFilter<"Vendor"> | number
+    division?: StringNullableFilter<"Vendor"> | string | null
     createdAt?: DateTimeFilter<"Vendor"> | Date | string
     updatedAt?: DateTimeFilter<"Vendor"> | Date | string
   }
@@ -49989,6 +50177,7 @@ export namespace Prisma {
     handledBy?: StringNullableFilter<"Job"> | string | null
     salesPerson?: StringNullableFilter<"Job"> | string | null
     companyId?: IntFilter<"Job"> | number
+    division?: StringNullableFilter<"Job"> | string | null
     branchId?: IntNullableFilter<"Job"> | number | null
     createdAt?: DateTimeFilter<"Job"> | Date | string
     updatedAt?: DateTimeFilter<"Job"> | Date | string
@@ -50072,6 +50261,7 @@ export namespace Prisma {
     isLocked?: BoolFilter<"Invoice"> | boolean
     lockedAt?: DateTimeNullableFilter<"Invoice"> | Date | string | null
     companyId?: IntFilter<"Invoice"> | number
+    division?: StringNullableFilter<"Invoice"> | string | null
     createdAt?: DateTimeFilter<"Invoice"> | Date | string
     updatedAt?: DateTimeFilter<"Invoice"> | Date | string
     transactionId?: IntNullableFilter<"Invoice"> | number | null
@@ -50104,6 +50294,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Account"> | string | null
     parentId?: IntNullableFilter<"Account"> | number | null
     companyId?: IntFilter<"Account"> | number
+    division?: StringNullableFilter<"Account"> | string | null
     createdAt?: DateTimeFilter<"Account"> | Date | string
     updatedAt?: DateTimeFilter<"Account"> | Date | string
   }
@@ -50169,6 +50360,7 @@ export namespace Prisma {
     vendorId?: IntNullableFilter<"Payment"> | number | null
     transactionId?: IntFilter<"Payment"> | number
     companyId?: IntFilter<"Payment"> | number
+    division?: StringNullableFilter<"Payment"> | string | null
     createdAt?: DateTimeFilter<"Payment"> | Date | string
     updatedAt?: DateTimeFilter<"Payment"> | Date | string
   }
@@ -50572,6 +50764,7 @@ export namespace Prisma {
     hawbBl?: string | null
     handledBy?: string | null
     salesPerson?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -50607,6 +50800,7 @@ export namespace Prisma {
     handledBy?: string | null
     salesPerson?: string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -51539,6 +51733,7 @@ export namespace Prisma {
     name: string
     type: $Enums.AccountType
     description?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parent?: AccountCreateNestedOneWithoutChildrenInput
@@ -51556,6 +51751,7 @@ export namespace Prisma {
     description?: string | null
     parentId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
@@ -51663,6 +51859,7 @@ export namespace Prisma {
     hawbBl?: string | null
     handledBy?: string | null
     salesPerson?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -51697,6 +51894,7 @@ export namespace Prisma {
     handledBy?: string | null
     salesPerson?: string | null
     companyId: number
+    division?: string | null
     branchId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51736,6 +51934,7 @@ export namespace Prisma {
     approvedById?: number | null
     isLocked?: boolean
     lockedAt?: Date | string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     job: JobCreateNestedOneWithoutInvoiceInput
@@ -51768,6 +51967,7 @@ export namespace Prisma {
     isLocked?: boolean
     lockedAt?: Date | string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionId?: number | null
@@ -51790,6 +51990,7 @@ export namespace Prisma {
     amount: number
     mode?: $Enums.PaymentMode
     reference?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     vendor?: VendorCreateNestedOneWithoutPaymentsInput
@@ -51807,6 +52008,7 @@ export namespace Prisma {
     vendorId?: number | null
     transactionId: number
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51837,6 +52039,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parent?: AccountUpdateOneWithoutChildrenNestedInput
@@ -51854,6 +52057,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
@@ -51994,6 +52198,7 @@ export namespace Prisma {
     name: string
     type: $Enums.AccountType
     description?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parent?: AccountCreateNestedOneWithoutChildrenInput
@@ -52011,6 +52216,7 @@ export namespace Prisma {
     description?: string | null
     parentId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
@@ -52138,6 +52344,7 @@ export namespace Prisma {
     amount: number
     mode?: $Enums.PaymentMode
     reference?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customer?: CustomerCreateNestedOneWithoutPaymentsInput
@@ -52155,6 +52362,7 @@ export namespace Prisma {
     customerId?: number | null
     transactionId: number
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -52236,6 +52444,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parent?: AccountUpdateOneWithoutChildrenNestedInput
@@ -52253,6 +52462,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
@@ -52395,6 +52605,7 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     taxNumber?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     account?: AccountCreateNestedOneWithoutCustomerInput
@@ -52413,6 +52624,7 @@ export namespace Prisma {
     taxNumber?: string | null
     accountId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     invoices?: InvoiceUncheckedCreateNestedManyWithoutCustomerInput
@@ -52598,6 +52810,7 @@ export namespace Prisma {
     approvedById?: number | null
     isLocked?: boolean
     lockedAt?: Date | string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customer: CustomerCreateNestedOneWithoutInvoicesInput
@@ -52630,6 +52843,7 @@ export namespace Prisma {
     isLocked?: boolean
     lockedAt?: Date | string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionId?: number | null
@@ -52659,6 +52873,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: AccountUpdateOneWithoutCustomerNestedInput
@@ -52677,6 +52892,7 @@ export namespace Prisma {
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
@@ -52867,6 +53083,7 @@ export namespace Prisma {
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customer?: CustomerUpdateOneRequiredWithoutInvoicesNestedInput
@@ -52899,6 +53116,7 @@ export namespace Prisma {
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -53080,6 +53298,7 @@ export namespace Prisma {
     hawbBl?: string | null
     handledBy?: string | null
     salesPerson?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -53115,6 +53334,7 @@ export namespace Prisma {
     handledBy?: string | null
     salesPerson?: string | null
     companyId: number
+    division?: string | null
     branchId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53135,6 +53355,7 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     taxNumber?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     account?: AccountCreateNestedOneWithoutVendorInput
@@ -53154,6 +53375,7 @@ export namespace Prisma {
     taxNumber?: string | null
     accountId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutVendorInput
@@ -53271,6 +53493,7 @@ export namespace Prisma {
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53306,6 +53529,7 @@ export namespace Prisma {
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53332,6 +53556,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: AccountUpdateOneWithoutVendorNestedInput
@@ -53351,6 +53576,7 @@ export namespace Prisma {
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutVendorNestedInput
@@ -53458,6 +53684,7 @@ export namespace Prisma {
     hawbBl?: string | null
     handledBy?: string | null
     salesPerson?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -53493,6 +53720,7 @@ export namespace Prisma {
     handledBy?: string | null
     salesPerson?: string | null
     companyId: number
+    division?: string | null
     branchId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53512,6 +53740,7 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     taxNumber?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     account?: AccountCreateNestedOneWithoutCustomerInput
@@ -53530,6 +53759,7 @@ export namespace Prisma {
     taxNumber?: string | null
     accountId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     jobs?: JobUncheckedCreateNestedManyWithoutCustomerInput
@@ -53714,6 +53944,7 @@ export namespace Prisma {
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53749,6 +53980,7 @@ export namespace Prisma {
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53774,6 +54006,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: AccountUpdateOneWithoutCustomerNestedInput
@@ -53792,6 +54025,7 @@ export namespace Prisma {
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     jobs?: JobUncheckedUpdateManyWithoutCustomerNestedInput
@@ -53971,6 +54205,7 @@ export namespace Prisma {
     approvedById?: number | null
     isLocked?: boolean
     lockedAt?: Date | string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     job: JobCreateNestedOneWithoutInvoiceInput
@@ -54004,6 +54239,7 @@ export namespace Prisma {
     isLocked?: boolean
     lockedAt?: Date | string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionId?: number | null
@@ -54084,6 +54320,7 @@ export namespace Prisma {
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     job?: JobUpdateOneRequiredWithoutInvoiceNestedInput
@@ -54117,6 +54354,7 @@ export namespace Prisma {
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -55235,6 +55473,7 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     taxNumber?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     account?: AccountCreateNestedOneWithoutVendorInput
@@ -55254,6 +55493,7 @@ export namespace Prisma {
     taxNumber?: string | null
     accountId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     expenses?: ExpenseUncheckedCreateNestedManyWithoutVendorInput
@@ -55425,6 +55665,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: AccountUpdateOneWithoutVendorNestedInput
@@ -55444,6 +55685,7 @@ export namespace Prisma {
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expenses?: ExpenseUncheckedUpdateManyWithoutVendorNestedInput
@@ -55771,6 +56013,7 @@ export namespace Prisma {
     name: string
     type: $Enums.AccountType
     description?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parent?: AccountCreateNestedOneWithoutChildrenInput
@@ -55788,6 +56031,7 @@ export namespace Prisma {
     description?: string | null
     parentId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
@@ -55805,6 +56049,7 @@ export namespace Prisma {
     name: string
     type: $Enums.AccountType
     description?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: AccountCreateNestedManyWithoutParentInput
@@ -55821,6 +56066,7 @@ export namespace Prisma {
     type: $Enums.AccountType
     description?: string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
@@ -55947,6 +56193,7 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     taxNumber?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     company: CompanyCreateNestedOneWithoutCustomersInput
@@ -55964,6 +56211,7 @@ export namespace Prisma {
     email?: string | null
     taxNumber?: string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     jobs?: JobUncheckedCreateNestedManyWithoutCustomerInput
@@ -55984,6 +56232,7 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     taxNumber?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     company: CompanyCreateNestedOneWithoutVendorsInput
@@ -56002,6 +56251,7 @@ export namespace Prisma {
     email?: string | null
     taxNumber?: string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     expenses?: ExpenseUncheckedCreateNestedManyWithoutVendorInput
@@ -56030,6 +56280,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parent?: AccountUpdateOneWithoutChildrenNestedInput
@@ -56047,6 +56298,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
@@ -56197,6 +56449,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneRequiredWithoutCustomersNestedInput
@@ -56214,6 +56467,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     jobs?: JobUncheckedUpdateManyWithoutCustomerNestedInput
@@ -56240,6 +56494,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneRequiredWithoutVendorsNestedInput
@@ -56258,6 +56513,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expenses?: ExpenseUncheckedUpdateManyWithoutVendorNestedInput
@@ -56313,6 +56569,7 @@ export namespace Prisma {
     approvedById?: number | null
     isLocked?: boolean
     lockedAt?: Date | string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     job: JobCreateNestedOneWithoutInvoiceInput
@@ -56346,6 +56603,7 @@ export namespace Prisma {
     isLocked?: boolean
     lockedAt?: Date | string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: InvoiceItemUncheckedCreateNestedManyWithoutInvoiceInput
@@ -56362,6 +56620,7 @@ export namespace Prisma {
     amount: number
     mode?: $Enums.PaymentMode
     reference?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     customer?: CustomerCreateNestedOneWithoutPaymentsInput
@@ -56379,6 +56638,7 @@ export namespace Prisma {
     customerId?: number | null
     vendorId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -56556,6 +56816,7 @@ export namespace Prisma {
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     job?: JobUpdateOneRequiredWithoutInvoiceNestedInput
@@ -56589,6 +56850,7 @@ export namespace Prisma {
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: InvoiceItemUncheckedUpdateManyWithoutInvoiceNestedInput
@@ -56611,6 +56873,7 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
     reference?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customer?: CustomerUpdateOneWithoutPaymentsNestedInput
@@ -56628,6 +56891,7 @@ export namespace Prisma {
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
     vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -56803,6 +57067,7 @@ export namespace Prisma {
     name: string
     type: $Enums.AccountType
     description?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parent?: AccountCreateNestedOneWithoutChildrenInput
@@ -56820,6 +57085,7 @@ export namespace Prisma {
     description?: string | null
     parentId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
@@ -56888,6 +57154,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parent?: AccountUpdateOneWithoutChildrenNestedInput
@@ -56905,6 +57172,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
@@ -56919,6 +57187,7 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     taxNumber?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     account?: AccountCreateNestedOneWithoutCustomerInput
@@ -56937,6 +57206,7 @@ export namespace Prisma {
     taxNumber?: string | null
     accountId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     jobs?: JobUncheckedCreateNestedManyWithoutCustomerInput
@@ -56956,6 +57226,7 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     taxNumber?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     account?: AccountCreateNestedOneWithoutVendorInput
@@ -56975,6 +57246,7 @@ export namespace Prisma {
     taxNumber?: string | null
     accountId?: number | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     expenses?: ExpenseUncheckedCreateNestedManyWithoutVendorInput
@@ -57112,6 +57384,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: AccountUpdateOneWithoutCustomerNestedInput
@@ -57130,6 +57403,7 @@ export namespace Prisma {
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     jobs?: JobUncheckedUpdateManyWithoutCustomerNestedInput
@@ -57155,6 +57429,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: AccountUpdateOneWithoutVendorNestedInput
@@ -57174,6 +57449,7 @@ export namespace Prisma {
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expenses?: ExpenseUncheckedUpdateManyWithoutVendorNestedInput
@@ -57785,6 +58061,7 @@ export namespace Prisma {
     hawbBl?: string | null
     handledBy?: string | null
     salesPerson?: string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -57819,6 +58096,7 @@ export namespace Prisma {
     handledBy?: string | null
     salesPerson?: string | null
     companyId: number
+    division?: string | null
     branchId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -57992,6 +58270,7 @@ export namespace Prisma {
     email?: string | null
     taxNumber?: string | null
     accountId?: number | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -58006,6 +58285,7 @@ export namespace Prisma {
     email?: string | null
     taxNumber?: string | null
     accountId?: number | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -58034,6 +58314,7 @@ export namespace Prisma {
     hawbBl?: string | null
     handledBy?: string | null
     salesPerson?: string | null
+    division?: string | null
     branchId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -58077,6 +58358,7 @@ export namespace Prisma {
     approvedById?: number | null
     isLocked?: boolean
     lockedAt?: Date | string | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionId?: number | null
@@ -58089,6 +58371,7 @@ export namespace Prisma {
     type: $Enums.AccountType
     description?: string | null
     parentId?: number | null
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -58114,6 +58397,7 @@ export namespace Prisma {
     customerId?: number | null
     vendorId?: number | null
     transactionId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -58371,6 +58655,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: AccountUpdateOneWithoutCustomerNestedInput
@@ -58388,6 +58673,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     jobs?: JobUncheckedUpdateManyWithoutCustomerNestedInput
@@ -58404,6 +58690,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -58416,6 +58703,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     account?: AccountUpdateOneWithoutVendorNestedInput
@@ -58434,6 +58722,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expenses?: ExpenseUncheckedUpdateManyWithoutVendorNestedInput
@@ -58451,6 +58740,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableIntFieldUpdateOperationsInput | number | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -58476,6 +58766,7 @@ export namespace Prisma {
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58510,6 +58801,7 @@ export namespace Prisma {
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58542,6 +58834,7 @@ export namespace Prisma {
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58607,6 +58900,7 @@ export namespace Prisma {
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     job?: JobUpdateOneRequiredWithoutInvoiceNestedInput
@@ -58639,6 +58933,7 @@ export namespace Prisma {
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -58669,6 +58964,7 @@ export namespace Prisma {
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -58679,6 +58975,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parent?: AccountUpdateOneWithoutChildrenNestedInput
@@ -58695,6 +58992,7 @@ export namespace Prisma {
     type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
     description?: NullableStringFieldUpdateOperationsInput | string | null
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
@@ -58710,6 +59008,7 @@ export namespace Prisma {
     type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
     description?: NullableStringFieldUpdateOperationsInput | string | null
     parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -58760,6 +59059,7 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
     reference?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customer?: CustomerUpdateOneWithoutPaymentsNestedInput
@@ -58777,6 +59077,7 @@ export namespace Prisma {
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
     vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     transactionId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -58791,6 +59092,7 @@ export namespace Prisma {
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
     vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     transactionId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -59120,6 +59422,7 @@ export namespace Prisma {
     handledBy?: string | null
     salesPerson?: string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -59175,6 +59478,7 @@ export namespace Prisma {
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59210,6 +59514,7 @@ export namespace Prisma {
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59242,6 +59547,7 @@ export namespace Prisma {
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59341,6 +59647,7 @@ export namespace Prisma {
     handledBy?: string | null
     salesPerson?: string | null
     companyId: number
+    division?: string | null
     branchId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -59371,6 +59678,7 @@ export namespace Prisma {
     isLocked?: boolean
     lockedAt?: Date | string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionId?: number | null
@@ -59386,6 +59694,7 @@ export namespace Prisma {
     vendorId?: number | null
     transactionId: number
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -59411,6 +59720,7 @@ export namespace Prisma {
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59445,6 +59755,7 @@ export namespace Prisma {
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59477,6 +59788,7 @@ export namespace Prisma {
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59504,6 +59816,7 @@ export namespace Prisma {
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     job?: JobUpdateOneRequiredWithoutInvoiceNestedInput
@@ -59536,6 +59849,7 @@ export namespace Prisma {
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -59566,6 +59880,7 @@ export namespace Prisma {
     isLocked?: BoolFieldUpdateOperationsInput | boolean
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -59577,6 +59892,7 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
     reference?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vendor?: VendorUpdateOneWithoutPaymentsNestedInput
@@ -59594,6 +59910,7 @@ export namespace Prisma {
     vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     transactionId?: IntFieldUpdateOperationsInput | number
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -59608,6 +59925,7 @@ export namespace Prisma {
     vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     transactionId?: IntFieldUpdateOperationsInput | number
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -59635,6 +59953,7 @@ export namespace Prisma {
     customerId?: number | null
     transactionId: number
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -59703,6 +60022,7 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
     reference?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customer?: CustomerUpdateOneWithoutPaymentsNestedInput
@@ -59720,6 +60040,7 @@ export namespace Prisma {
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
     transactionId?: IntFieldUpdateOperationsInput | number
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -59734,6 +60055,7 @@ export namespace Prisma {
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
     transactionId?: IntFieldUpdateOperationsInput | number
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -60184,6 +60506,7 @@ export namespace Prisma {
     type: $Enums.AccountType
     description?: string | null
     companyId: number
+    division?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -60202,6 +60525,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUpdateManyWithoutParentNestedInput
@@ -60218,6 +60542,7 @@ export namespace Prisma {
     type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
     description?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
@@ -60233,6 +60558,7 @@ export namespace Prisma {
     type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
     description?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -60322,6 +60648,7 @@ export namespace Prisma {
     handledBy?: string | null
     salesPerson?: string | null
     companyId: number
+    division?: string | null
     branchId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -60349,6 +60676,7 @@ export namespace Prisma {
     hawbBl?: NullableStringFieldUpdateOperationsInput | string | null
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -60383,6 +60711,7 @@ export namespace Prisma {
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60415,6 +60744,7 @@ export namespace Prisma {
     handledBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesPerson?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

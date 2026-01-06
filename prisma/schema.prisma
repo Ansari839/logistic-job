@@ -183,6 +183,7 @@ model Customer {
   
   companyId Int
   company   Company   @relation(fields: [companyId], references: [id])
+  division  String?   @default("logistics")
   jobs      Job[]
   invoices  Invoice[]
   payments  Payment[]
@@ -205,6 +206,7 @@ model Vendor {
   
   companyId Int
   company   Company   @relation(fields: [companyId], references: [id])
+  division  String?   @default("logistics")
   expenses  Expense[]
   payments  Payment[]
   purchaseInvoices PurchaseInvoice[]
@@ -251,6 +253,7 @@ model Job {
   
   companyId      Int
   company        Company   @relation(fields: [companyId], references: [id])
+  division       String?   @default("logistics")
   branchId       Int?
   branch         Branch?   @relation(fields: [branchId], references: [id])
   
@@ -331,6 +334,7 @@ model Invoice {
   
   companyId     Int
   company       Company       @relation(fields: [companyId], references: [id])
+  division      String?       @default("logistics")
   
   items         InvoiceItem[]
   
@@ -494,6 +498,7 @@ model Account {
   
   companyId   Int
   company     Company       @relation(fields: [companyId], references: [id])
+  division    String?       @default("logistics")
   
   entries     AccountEntry[]
   
@@ -564,6 +569,7 @@ model Payment {
   
   companyId     Int
   company       Company     @relation(fields: [companyId], references: [id])
+  division      String?     @default("logistics")
   
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt

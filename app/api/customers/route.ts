@@ -27,7 +27,10 @@ export async function GET() {
 
     try {
         const customers = await prisma.customer.findMany({
-            where: { companyId: user.companyId },
+            where: {
+                companyId: user.companyId,
+                division: user.division
+            },
             orderBy: { name: 'asc' },
         });
 
@@ -98,6 +101,7 @@ export async function POST(request: Request) {
                 email,
                 taxNumber,
                 companyId: user.companyId,
+                division: user.division,
                 accountId: customerAccount.id
             }
         });

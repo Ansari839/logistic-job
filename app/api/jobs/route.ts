@@ -15,6 +15,7 @@ export async function GET(request: Request) {
         const jobs = await prisma.job.findMany({
             where: {
                 companyId: user.companyId as number,
+                division: user.division,
                 deletedAt: null,
                 ...(jobType && { jobType: jobType as any }),
                 ...(customerId && { customerId: parseInt(customerId) }),
@@ -98,6 +99,7 @@ export async function POST(request: Request) {
                 jobDate: dateObj, // manual date
                 customerId: parseInt(customerId),
                 companyId: user.companyId as number,
+                division: user.division,
                 branchId: branchId ? parseInt(branchId) : null,
                 vessel,
                 place,

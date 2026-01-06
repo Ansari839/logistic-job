@@ -11,6 +11,7 @@ interface User {
     branch: string | null;
     department: string | null;
     region: string | null;
+    division: string | null;
 }
 
 interface AuthContextType {

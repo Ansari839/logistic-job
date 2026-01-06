@@ -14,6 +14,7 @@ export async function GET(request: Request) {
         const invoices = await prisma.invoice.findMany({
             where: {
                 companyId: user.companyId as number,
+                division: user.division,
                 ...(jobId && { jobId: parseInt(jobId) }),
             },
             include: {
@@ -58,6 +59,7 @@ export async function POST(request: Request) {
                     grandTotal: parseFloat(grandTotal) || 0,
                     currencyCode: currencyCode || 'PKR',
                     companyId: user.companyId as number,
+                    division: user.division,
                     items: {
                         create: items?.map((item: any) => ({
                             description: item.description,

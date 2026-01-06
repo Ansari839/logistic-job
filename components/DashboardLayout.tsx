@@ -66,8 +66,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             localStorage.setItem('app_division', cookieDiv);
         }
 
-        setActiveDivision(stored);
-        setCompanyName(stored === 'animal-feed' ? 'FeedOS' : 'LogisticOS');
+        const initialDivision = user?.division || stored;
+        setActiveDivision(initialDivision);
+        setCompanyName(initialDivision === 'animal-feed' ? 'FeedOS' : 'LogisticOS');
 
         const fetchCompany = async () => {
             try {

@@ -14,6 +14,7 @@ export interface AuthUser {
     department: string | null;
     region: string | null;
     companyId: number | null;
+    division: string | null;
 }
 
 export const hashPassword = async (password: string) => {

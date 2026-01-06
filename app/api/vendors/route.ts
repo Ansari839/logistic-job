@@ -27,7 +27,10 @@ export async function GET() {
 
     try {
         const vendors = await prisma.vendor.findMany({
-            where: { companyId: user.companyId },
+            where: {
+                companyId: user.companyId,
+                division: user.division
+            },
             orderBy: { name: 'asc' },
         });
 
@@ -78,6 +81,7 @@ export async function POST(request: Request) {
                     email,
                     taxNumber,
                     companyId: user.companyId,
+                    division: user.division,
                     accountId: vendorAccount.id
                 }
             });

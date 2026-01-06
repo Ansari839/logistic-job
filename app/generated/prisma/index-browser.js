@@ -206,6 +206,7 @@ exports.Prisma.CustomerScalarFieldEnum = {
   taxNumber: 'taxNumber',
   accountId: 'accountId',
   companyId: 'companyId',
+  division: 'division',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -221,6 +222,7 @@ exports.Prisma.VendorScalarFieldEnum = {
   taxNumber: 'taxNumber',
   accountId: 'accountId',
   companyId: 'companyId',
+  division: 'division',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -250,6 +252,7 @@ exports.Prisma.JobScalarFieldEnum = {
   handledBy: 'handledBy',
   salesPerson: 'salesPerson',
   companyId: 'companyId',
+  division: 'division',
   branchId: 'branchId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -304,6 +307,7 @@ exports.Prisma.InvoiceScalarFieldEnum = {
   isLocked: 'isLocked',
   lockedAt: 'lockedAt',
   companyId: 'companyId',
+  division: 'division',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   transactionId: 'transactionId'
@@ -408,6 +412,7 @@ exports.Prisma.AccountScalarFieldEnum = {
   description: 'description',
   parentId: 'parentId',
   companyId: 'companyId',
+  division: 'division',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -445,6 +450,7 @@ exports.Prisma.PaymentScalarFieldEnum = {
   vendorId: 'vendorId',
   transactionId: 'transactionId',
   companyId: 'companyId',
+  division: 'division',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
