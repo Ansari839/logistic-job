@@ -11527,6 +11527,7 @@ export namespace Prisma {
     branch: string | null
     department: string | null
     region: string | null
+    division: string | null
     resetToken: string | null
     resetTokenExpiry: Date | null
     createdAt: Date | null
@@ -11543,6 +11544,7 @@ export namespace Prisma {
     branch: string | null
     department: string | null
     region: string | null
+    division: string | null
     resetToken: string | null
     resetTokenExpiry: Date | null
     createdAt: Date | null
@@ -11559,6 +11561,7 @@ export namespace Prisma {
     branch: number
     department: number
     region: number
+    division: number
     resetToken: number
     resetTokenExpiry: number
     createdAt: number
@@ -11587,6 +11590,7 @@ export namespace Prisma {
     branch?: true
     department?: true
     region?: true
+    division?: true
     resetToken?: true
     resetTokenExpiry?: true
     createdAt?: true
@@ -11603,6 +11607,7 @@ export namespace Prisma {
     branch?: true
     department?: true
     region?: true
+    division?: true
     resetToken?: true
     resetTokenExpiry?: true
     createdAt?: true
@@ -11619,6 +11624,7 @@ export namespace Prisma {
     branch?: true
     department?: true
     region?: true
+    division?: true
     resetToken?: true
     resetTokenExpiry?: true
     createdAt?: true
@@ -11722,6 +11728,7 @@ export namespace Prisma {
     branch: string | null
     department: string | null
     region: string | null
+    division: string | null
     resetToken: string | null
     resetTokenExpiry: Date | null
     createdAt: Date
@@ -11757,6 +11764,7 @@ export namespace Prisma {
     branch?: boolean
     department?: boolean
     region?: boolean
+    division?: boolean
     resetToken?: boolean
     resetTokenExpiry?: boolean
     createdAt?: boolean
@@ -11776,6 +11784,7 @@ export namespace Prisma {
     branch?: boolean
     department?: boolean
     region?: boolean
+    division?: boolean
     resetToken?: boolean
     resetTokenExpiry?: boolean
     createdAt?: boolean
@@ -11793,6 +11802,7 @@ export namespace Prisma {
     branch?: boolean
     department?: boolean
     region?: boolean
+    division?: boolean
     resetToken?: boolean
     resetTokenExpiry?: boolean
     createdAt?: boolean
@@ -11810,13 +11820,14 @@ export namespace Prisma {
     branch?: boolean
     department?: boolean
     region?: boolean
+    division?: boolean
     resetToken?: boolean
     resetTokenExpiry?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "password" | "role" | "companyId" | "branch" | "department" | "region" | "resetToken" | "resetTokenExpiry" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "password" | "role" | "companyId" | "branch" | "department" | "region" | "division" | "resetToken" | "resetTokenExpiry" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     company?: boolean | User$companyArgs<ExtArgs>
     auditLogs?: boolean | User$auditLogsArgs<ExtArgs>
@@ -11845,6 +11856,7 @@ export namespace Prisma {
       branch: string | null
       department: string | null
       region: string | null
+      division: string | null
       resetToken: string | null
       resetTokenExpiry: Date | null
       createdAt: Date
@@ -12283,6 +12295,7 @@ export namespace Prisma {
     readonly branch: FieldRef<"User", 'String'>
     readonly department: FieldRef<"User", 'String'>
     readonly region: FieldRef<"User", 'String'>
+    readonly division: FieldRef<"User", 'String'>
     readonly resetToken: FieldRef<"User", 'String'>
     readonly resetTokenExpiry: FieldRef<"User", 'DateTime'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
@@ -37516,6 +37529,7 @@ export namespace Prisma {
     branch: 'branch',
     department: 'department',
     region: 'region',
+    division: 'division',
     resetToken: 'resetToken',
     resetTokenExpiry: 'resetTokenExpiry',
     createdAt: 'createdAt',
@@ -38589,6 +38603,7 @@ export namespace Prisma {
     branch?: StringNullableFilter<"User"> | string | null
     department?: StringNullableFilter<"User"> | string | null
     region?: StringNullableFilter<"User"> | string | null
+    division?: StringNullableFilter<"User"> | string | null
     resetToken?: StringNullableFilter<"User"> | string | null
     resetTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -38607,6 +38622,7 @@ export namespace Prisma {
     branch?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
     region?: SortOrderInput | SortOrder
+    division?: SortOrderInput | SortOrder
     resetToken?: SortOrderInput | SortOrder
     resetTokenExpiry?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -38628,6 +38644,7 @@ export namespace Prisma {
     branch?: StringNullableFilter<"User"> | string | null
     department?: StringNullableFilter<"User"> | string | null
     region?: StringNullableFilter<"User"> | string | null
+    division?: StringNullableFilter<"User"> | string | null
     resetToken?: StringNullableFilter<"User"> | string | null
     resetTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -38646,6 +38663,7 @@ export namespace Prisma {
     branch?: SortOrderInput | SortOrder
     department?: SortOrderInput | SortOrder
     region?: SortOrderInput | SortOrder
+    division?: SortOrderInput | SortOrder
     resetToken?: SortOrderInput | SortOrder
     resetTokenExpiry?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -38670,6 +38688,7 @@ export namespace Prisma {
     branch?: StringNullableWithAggregatesFilter<"User"> | string | null
     department?: StringNullableWithAggregatesFilter<"User"> | string | null
     region?: StringNullableWithAggregatesFilter<"User"> | string | null
+    division?: StringNullableWithAggregatesFilter<"User"> | string | null
     resetToken?: StringNullableWithAggregatesFilter<"User"> | string | null
     resetTokenExpiry?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -41047,6 +41066,7 @@ export namespace Prisma {
     branch?: string | null
     department?: string | null
     region?: string | null
+    division?: string | null
     resetToken?: string | null
     resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
@@ -41065,6 +41085,7 @@ export namespace Prisma {
     branch?: string | null
     department?: string | null
     region?: string | null
+    division?: string | null
     resetToken?: string | null
     resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
@@ -41080,6 +41101,7 @@ export namespace Prisma {
     branch?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     region?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41098,6 +41120,7 @@ export namespace Prisma {
     branch?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     region?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41115,6 +41138,7 @@ export namespace Prisma {
     branch?: string | null
     department?: string | null
     region?: string | null
+    division?: string | null
     resetToken?: string | null
     resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
@@ -41129,6 +41153,7 @@ export namespace Prisma {
     branch?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     region?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41145,6 +41170,7 @@ export namespace Prisma {
     branch?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     region?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43847,6 +43873,7 @@ export namespace Prisma {
     branch?: SortOrder
     department?: SortOrder
     region?: SortOrder
+    division?: SortOrder
     resetToken?: SortOrder
     resetTokenExpiry?: SortOrder
     createdAt?: SortOrder
@@ -43868,6 +43895,7 @@ export namespace Prisma {
     branch?: SortOrder
     department?: SortOrder
     region?: SortOrder
+    division?: SortOrder
     resetToken?: SortOrder
     resetTokenExpiry?: SortOrder
     createdAt?: SortOrder
@@ -43884,6 +43912,7 @@ export namespace Prisma {
     branch?: SortOrder
     department?: SortOrder
     region?: SortOrder
+    division?: SortOrder
     resetToken?: SortOrder
     resetTokenExpiry?: SortOrder
     createdAt?: SortOrder
@@ -48553,6 +48582,7 @@ export namespace Prisma {
     branch?: string | null
     department?: string | null
     region?: string | null
+    division?: string | null
     resetToken?: string | null
     resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
@@ -48569,6 +48599,7 @@ export namespace Prisma {
     branch?: string | null
     department?: string | null
     region?: string | null
+    division?: string | null
     resetToken?: string | null
     resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
@@ -49372,6 +49403,7 @@ export namespace Prisma {
     branch?: StringNullableFilter<"User"> | string | null
     department?: StringNullableFilter<"User"> | string | null
     region?: StringNullableFilter<"User"> | string | null
+    division?: StringNullableFilter<"User"> | string | null
     resetToken?: StringNullableFilter<"User"> | string | null
     resetTokenExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -56542,6 +56574,7 @@ export namespace Prisma {
     branch?: string | null
     department?: string | null
     region?: string | null
+    division?: string | null
     resetToken?: string | null
     resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
@@ -56559,6 +56592,7 @@ export namespace Prisma {
     branch?: string | null
     department?: string | null
     region?: string | null
+    division?: string | null
     resetToken?: string | null
     resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
@@ -56663,6 +56697,7 @@ export namespace Prisma {
     branch?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     region?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56680,6 +56715,7 @@ export namespace Prisma {
     branch?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     region?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57172,6 +57208,7 @@ export namespace Prisma {
     branch?: string | null
     department?: string | null
     region?: string | null
+    division?: string | null
     resetToken?: string | null
     resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
@@ -57446,6 +57483,7 @@ export namespace Prisma {
     branch?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     region?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57462,6 +57500,7 @@ export namespace Prisma {
     branch?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     region?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57478,6 +57517,7 @@ export namespace Prisma {
     branch?: NullableStringFieldUpdateOperationsInput | string | null
     department?: NullableStringFieldUpdateOperationsInput | string | null
     region?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

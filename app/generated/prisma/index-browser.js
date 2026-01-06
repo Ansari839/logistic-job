@@ -189,6 +189,7 @@ exports.Prisma.UserScalarFieldEnum = {
   branch: 'branch',
   department: 'department',
   region: 'region',
+  division: 'division',
   resetToken: 'resetToken',
   resetTokenExpiry: 'resetTokenExpiry',
   createdAt: 'createdAt',

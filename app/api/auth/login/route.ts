@@ -6,12 +6,13 @@ import { z } from 'zod';
 const loginSchema = z.object({
     email: z.string().email(),
     password: z.string().min(6),
+    division: z.string(),
 });
 
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { email, password } = loginSchema.parse(body);
+        const { email, password, division } = loginSchema.parse(body);
 
         const user = await prisma.user.findUnique({
             where: { email },
@@ -21,6 +22,14 @@ export async function POST(request: Request) {
             return NextResponse.json(
                 { error: 'Invalid credentials' },
                 { status: 401 }
+            );
+        }
+
+        // Division Check
+        if (user.division && user.division !== division) {
+            return NextResponse.json(
+                { error: `This account is registered for ${user.division.toUpperCase()} Hub only.` },
+                { status: 403 }
             );
         }
 

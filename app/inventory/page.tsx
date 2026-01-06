@@ -140,7 +140,7 @@ export default function InventoryPage() {
                         </button>
                         <button
                             onClick={() => setShowAddModal(true)}
-                            className="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-[2.5rem] font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-indigo-600/20"
+                            className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-[2.5rem] font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-emerald-600/20"
                         >
                             <Plus size={20} />
                             Register Product
@@ -150,12 +150,12 @@ export default function InventoryPage() {
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="bg-gradient-to-br from-indigo-600/10 to-blue-600/10 dark:from-indigo-600/20 dark:to-blue-600/20 border border-blue-500/20 rounded-[2.5rem] p-6 flex items-center justify-between shadow-sm">
+                    <div className="bg-gradient-to-br from-emerald-600/10 to-teal-600/10 dark:from-emerald-600/20 dark:to-teal-600/20 border border-emerald-500/20 rounded-[2.5rem] p-6 flex items-center justify-between shadow-sm">
                         <div>
-                            <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-1">Total Products</p>
+                            <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mb-1">Total Products</p>
                             <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">{stats.totalItems}</p>
                         </div>
-                        <Package size={32} className="text-indigo-600 dark:text-indigo-400 opacity-50" />
+                        <Package size={32} className="text-emerald-600 dark:text-emerald-400 opacity-50" />
                     </div>
                     <div className="bg-gradient-to-br from-emerald-600/10 to-teal-600/10 dark:from-emerald-600/20 dark:to-teal-600/20 border border-emerald-500/20 rounded-[2.5rem] p-6 flex items-center justify-between shadow-sm">
                         <div>
@@ -179,7 +179,7 @@ export default function InventoryPage() {
                         <div className="relative flex-1 max-w-md">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-subtext" size={18} />
                             <input
-                                className="glass-input w-full rounded-2xl pl-12 pr-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                className="glass-input w-full rounded-2xl pl-12 pr-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 placeholder="Search products, SKU or category..."
                             />
                         </div>

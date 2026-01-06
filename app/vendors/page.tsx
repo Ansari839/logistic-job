@@ -23,11 +23,23 @@ export default function VendorsPage() {
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [activeDivision, setActiveDivision] = useState<string | null>(null);
     const router = useRouter();
 
     useEffect(() => {
+        const getCookie = (name: string) => {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop()?.split(';').shift();
+        };
+
+        const cookieDiv = getCookie('app_division');
+        setActiveDivision(cookieDiv || localStorage.getItem('app_division') || 'logistics');
         fetchVendors();
     }, []);
+
+    const isAnimalFeed = activeDivision === 'animal-feed';
+    const accentColor = isAnimalFeed ? 'emerald' : 'blue';
 
     const fetchVendors = async () => {
         try {
@@ -57,7 +69,7 @@ export default function VendorsPage() {
                         <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic">Vendor Registry</h1>
                         <p className="text-subtext text-sm font-bold uppercase tracking-[0.2em] mt-1">Partner Network Management</p>
                     </div>
-                    <button className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-3xl font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-blue-600/20">
+                    <button className={`bg-${accentColor}-600 hover:bg-${accentColor}-500 text-white px-8 py-4 rounded-3xl font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-${accentColor}-600/20`}>
                         <Plus size={20} />
                         Add New Vendor
                     </button>
@@ -66,11 +78,11 @@ export default function VendorsPage() {
                 {/* Search Bar */}
                 <div className="glass-panel p-4 rounded-[2.5rem] flex flex-col lg:flex-row gap-4 items-center">
                     <div className="relative flex-1 group w-full">
-                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-subtext transition-colors group-focus-within:text-blue-500" size={20} />
+                        <Search className={`absolute left-5 top-1/2 -translate-y-1/2 text-subtext transition-colors group-focus-within:text-${accentColor}-500`} size={20} />
                         <input
                             type="text"
                             placeholder="Search by Vendor Name or Code..."
-                            className="glass-input w-full rounded-3xl py-4 pl-14 pr-6 text-slate-900 dark:text-white text-sm font-bold placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all"
+                            className={`glass-input w-full rounded-3xl py-4 pl-14 pr-6 text-slate-900 dark:text-white text-sm font-bold placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-${accentColor}-500/40 transition-all`}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -91,13 +103,13 @@ export default function VendorsPage() {
                         <div className="col-span-full glass-panel p-20 text-center">
                             <Users className="w-16 h-16 text-subtext opacity-20 mx-auto mb-4" />
                             <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">No Vendors Found</h3>
-                            <p className="text-subtext font-bold max-w-sm mx-auto">Start building your logistics partner network by adding your first vendor.</p>
+                            <p className="text-subtext font-bold max-w-sm mx-auto">Start building your network by adding your first vendor.</p>
                         </div>
                     ) : (
                         filteredVendors.map((v) => (
                             <div
                                 key={v.id}
-                                className="glass-card shadow-sm hover:border-blue-500/40 p-8 transition-all group relative overflow-hidden"
+                                className={`glass-card shadow-sm hover:border-${accentColor}-500/40 p-8 transition-all group relative overflow-hidden`}
                             >
                                 <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <button className="bg-primary/5 hover:bg-primary/10 p-3 rounded-2xl text-slate-900 dark:text-white transition-all border border-border">
@@ -105,7 +117,7 @@ export default function VendorsPage() {
                                     </button>
                                 </div>
 
-                                <div className="w-16 h-16 rounded-2xl bg-indigo-600/10 flex items-center justify-center text-indigo-400 border border-indigo-500/20 mb-6">
+                                <div className={`w-16 h-16 rounded-2xl bg-${accentColor}-600/10 flex items-center justify-center text-${accentColor}-400 border border-${accentColor}-500/20 mb-6`}>
                                     <Building2 size={32} />
                                 </div>
 

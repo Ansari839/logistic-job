@@ -161,6 +161,7 @@ model User {
   branch           String?
   department       String?
   region           String?
+  division         String?    @default("logistics")
   resetToken       String?
   resetTokenExpiry DateTime?
   createdAt        DateTime   @default(now())

@@ -13,9 +13,26 @@ export async function middleware(request: NextRequest) {
     // Paths that don't require authentication
     const publicPaths = ['/login', '/forgot-password', '/reset-password', '/api/auth/login', '/api/auth/forgot-password', '/api/auth/reset-password'];
 
-    if (publicPaths.some(path => pathname.startsWith(path))) {
-        // If user is already logged in and tries to access login, redirect to dashboard
-        if (token && (pathname === '/login' || pathname === '/forgot-password')) {
+    // Check if it's the root path or a public path
+    const isPublicPath = pathname === '/' || publicPaths.some(path => pathname.startsWith(path));
+
+    if (isPublicPath) {
+        // If user is already logged in and tries to access login or root
+        if (token && (pathname === '/login' || pathname === '/forgot-password' || pathname === '/')) {
+            const division = request.nextUrl.searchParams.get('division');
+
+            // If they are on root and just want to go to dashboard, let them or redirect
+            if (pathname === '/') {
+                return NextResponse.next();
+            }
+
+            // If they are on login/forgot-password with a division, update the division cookie and go to dashboard
+            if (division) {
+                const response = NextResponse.redirect(new URL('/dashboard', request.url));
+                response.cookies.set('app_division', division, { maxAge: 31536000, path: '/' });
+                return response;
+            }
+
             return NextResponse.redirect(new URL('/dashboard', request.url));
         }
         return NextResponse.next();
