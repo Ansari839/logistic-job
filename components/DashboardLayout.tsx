@@ -28,6 +28,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
     { name: 'Overview', href: '/dashboard', icon: LayoutDashboard, division: 'both' },
+    { name: 'Users', href: '/users', icon: Users, roles: ['ADMIN'], division: 'both' },
     { name: 'Jobs', href: '/jobs', icon: Package, roles: ['ADMIN', 'OPERATOR', 'SALES'], division: 'logistics' },
     { name: 'Invoices', href: '/invoices', icon: FileText, roles: ['ADMIN', 'ACCOUNTS', 'SALES'], division: 'logistics' },
     { name: 'Inventory', href: '/inventory', icon: Box, roles: ['ADMIN', 'OPERATOR', 'SALES'], division: 'animal-feed' },
@@ -37,7 +38,6 @@ const navItems: NavItem[] = [
     { name: 'Payments', href: '/payments', icon: CreditCard, roles: ['ADMIN', 'ACCOUNTS'], division: 'both' },
     { name: 'Business Reports', href: '/reports', icon: BarChart2, roles: ['ADMIN', 'ACCOUNTS', 'OPERATOR', 'SALES'], division: 'both' },
     { name: 'Audit Logs', href: '/settings/audit-logs', icon: HistoryIcon, roles: ['ADMIN'], division: 'both' },
-    { name: 'Financial Periods', href: '/settings/financial-periods', icon: LockIcon, roles: ['ADMIN'], division: 'both' },
     { name: 'System Settings', href: '/settings/system', icon: Settings, roles: ['ADMIN'], division: 'both' },
 ];
 

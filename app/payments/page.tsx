@@ -3,11 +3,16 @@
 import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import {
-    CreditCard, Plus, Search, Filter,
-    ArrowDownLeft, ArrowUpRight, Clock,
-    CheckCircle2, AlertCircle, DollarSign,
-    Building2, User, Calendar, Hash, Loader2
+    CreditCard, Plus, Search, X,
+    ArrowDownLeft, ArrowUpRight, Trash2,
+    Building2, User, Loader2
 } from 'lucide-react';
+
+interface Account {
+    id: number;
+    code: string;
+    name: string;
+}
 
 interface Payment {
     id: number;
@@ -18,35 +23,48 @@ interface Payment {
     reference: string | null;
     customer?: { name: string };
     vendor?: { name: string };
-    transaction: { reference: string };
+    transaction: {
+        reference: string;
+        entries: {
+            id: number;
+            debit: number;
+            credit: number;
+            description: string | null;
+            account: { name: string; code: string };
+        }[];
+    };
 }
 
 export default function PaymentsPage() {
     const [payments, setPayments] = useState<Payment[]>([]);
+    const [accounts, setAccounts] = useState<Account[]>([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [selectedVoucher, setSelectedVoucher] = useState<Payment | null>(null);
     const [type, setType] = useState<'RECEIPT' | 'PAYMENT'>('RECEIPT');
 
-    // Form State
+    // JV-Style Form State
     const [form, setForm] = useState({
         receiptNumber: '',
         date: new Date().toISOString().split('T')[0],
-        amount: '',
         mode: 'CASH',
         reference: '',
         customerId: '',
         vendorId: '',
-        bankAccountId: '',
+        entries: [
+            { accountId: '', debit: 0, credit: 0, description: '' },
+            { accountId: '', debit: 0, credit: 0, description: '' },
+        ]
     });
 
-    const [entities, setEntities] = useState<{ customers: any[], vendors: any[], accounts: any[] }>({
+    const [entities, setEntities] = useState<{ customers: any[], vendors: any[] }>({
         customers: [],
-        vendors: [],
-        accounts: []
+        vendors: []
     });
 
     useEffect(() => {
         fetchPayments();
+        fetchAccounts();
         fetchEntities();
     }, []);
 
@@ -64,59 +82,107 @@ export default function PaymentsPage() {
         }
     };
 
+    const fetchAccounts = async () => {
+        try {
+            const res = await fetch('/api/accounts');
+            if (res.ok) {
+                const data = await res.json();
+                setAccounts(data.accounts);
+            }
+        } catch (err) {
+            console.error('Fetch accounts failed');
+        }
+    };
+
     const fetchEntities = async () => {
         try {
-            const [custRes, vendRes, accRes] = await Promise.all([
+            const [custRes, vendRes] = await Promise.all([
                 fetch('/api/customers'),
-                fetch('/api/vendors'),
-                fetch('/api/accounts')
+                fetch('/api/vendors')
             ]);
-            const [cust, vend, acc] = await Promise.all([
+            const [cust, vend] = await Promise.all([
                 custRes.json(),
-                vendRes.json(),
-                accRes.json()
+                vendRes.json()
             ]);
             setEntities({
                 customers: cust.customers,
-                vendors: vend.vendors,
-                accounts: acc.accounts.filter((a: any) => a.code.startsWith('1110') || a.code.startsWith('1120')) // Cash or Bank
+                vendors: vend.vendors
             });
         } catch (err) {
             console.error('Fetch entities failed');
         }
     };
 
+    const addEntry = () => {
+        setForm({
+            ...form,
+            entries: [...form.entries, { accountId: '', debit: 0, credit: 0, description: '' }]
+        });
+    };
+
+    const removeEntry = (index: number) => {
+        if (form.entries.length <= 2) return;
+        const next = [...form.entries];
+        next.splice(index, 1);
+        setForm({ ...form, entries: next });
+    };
+
+    const updateEntry = (index: number, field: string, value: any) => {
+        const next = [...form.entries];
+        next[index] = { ...next[index], [field]: value };
+        setForm({ ...form, entries: next });
+    };
+
+    const totalDebit = form.entries.reduce((sum, e) => sum + Number(e.debit), 0);
+    const totalCredit = form.entries.reduce((sum, e) => sum + Number(e.credit), 0);
+    const isBalanced = Math.abs(totalDebit - totalCredit) < 0.01 && totalDebit > 0;
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!isBalanced) return;
+
         try {
+            // Calculate total amount from entries
+            const amount = type === 'RECEIPT' ? totalDebit : totalCredit;
+
             const res = await fetch('/api/payments', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    ...form,
-                    amount: Number(form.amount),
+                    receiptNumber: form.receiptNumber,
+                    date: form.date,
+                    amount,
+                    mode: form.mode,
+                    reference: form.reference,
                     customerId: type === 'RECEIPT' ? Number(form.customerId) : null,
                     vendorId: type === 'PAYMENT' ? Number(form.vendorId) : null,
-                    bankAccountId: Number(form.bankAccountId)
+                    bankAccountId: Number(form.entries[0].accountId), // First entry is bank/cash
                 }),
             });
+
             if (res.ok) {
                 setShowModal(false);
                 fetchPayments();
-                setForm({
-                    receiptNumber: '',
-                    date: new Date().toISOString().split('T')[0],
-                    amount: '',
-                    mode: 'CASH',
-                    reference: '',
-                    customerId: '',
-                    vendorId: '',
-                    bankAccountId: '',
-                });
+                resetForm();
             }
         } catch (err) {
             console.error('Submit payment failed');
         }
+    };
+
+    const resetForm = () => {
+        setForm({
+            receiptNumber: '',
+            date: new Date().toISOString().split('T')[0],
+            mode: 'CASH',
+            reference: '',
+            customerId: '',
+            vendorId: '',
+            entries: [
+                { accountId: '', debit: 0, credit: 0, description: '' },
+                { accountId: '', debit: 0, credit: 0, description: '' },
+            ]
+        });
     };
 
     return (
@@ -125,7 +191,7 @@ export default function PaymentsPage() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
-                        <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic">Settlements & Payments</h1>
+                        <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic">Payment Vouchers</h1>
                         <p className="text-subtext text-sm font-bold uppercase tracking-[0.2em] mt-1">Cash Flow Management</p>
                     </div>
                     <div className="flex gap-3">
@@ -134,39 +200,40 @@ export default function PaymentsPage() {
                             className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-[2rem] font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-emerald-600/20"
                         >
                             <ArrowDownLeft size={20} />
-                            Customer Receipt
+                            Receipt Voucher
                         </button>
                         <button
                             onClick={() => { setType('PAYMENT'); setShowModal(true); }}
                             className="bg-rose-600 hover:bg-rose-500 text-white px-8 py-4 rounded-[2rem] font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-rose-600/20"
                         >
                             <ArrowUpRight size={20} />
-                            Vendor Payment
+                            Payment Voucher
                         </button>
                     </div>
                 </div>
 
-                {/* History Table */}
+                {/* Simple Voucher List */}
                 <div className="glass-panel overflow-hidden">
                     <div className="p-8 border-b border-border flex items-center justify-between">
-                        <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">Recent Transactions</h3>
+                        <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">Voucher History</h3>
                         <div className="relative group w-64">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-subtext" size={16} />
                             <input
                                 type="text"
-                                placeholder="Search payments..."
+                                placeholder="Search vouchers..."
                                 className="glass-input w-full rounded-xl py-2 pl-10 pr-4 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                     </div>
+
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-primary/5">
-                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest">Ref / Date</th>
-                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest">Entity</th>
-                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest">Mode</th>
-                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest">Reference</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest">Voucher No.</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest">Date</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest">Party</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest">Type</th>
                                     <th className="px-8 py-5 text-[10px] font-black text-subtext uppercase tracking-widest text-right">Amount</th>
                                 </tr>
                             </thead>
@@ -174,43 +241,46 @@ export default function PaymentsPage() {
                                 {loading ? (
                                     <tr>
                                         <td colSpan={5} className="px-8 py-20 text-center">
-                                            <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4" />
-                                            <p className="text-subtext font-black uppercase tracking-widest text-[10px]">Updating Registry...</p>
+                                            <Loader2 className="animate-spin w-8 h-8 text-blue-600 mx-auto mb-4" />
+                                            <p className="text-subtext font-black uppercase tracking-widest text-[10px]">Loading Vouchers...</p>
                                         </td>
                                     </tr>
                                 ) : payments.length === 0 ? (
                                     <tr>
                                         <td colSpan={5} className="px-8 py-20 text-center">
                                             <CreditCard size={48} className="text-subtext opacity-20 mx-auto mb-4" />
-                                            <p className="text-subtext font-bold uppercase tracking-widest text-sm">No payment history found</p>
+                                            <p className="text-subtext font-bold uppercase tracking-widest text-sm">No vouchers found</p>
                                         </td>
                                     </tr>
                                 ) : (
                                     payments.map((p) => (
-                                        <tr key={p.id} className="hover:bg-primary/5 transition-colors group">
+                                        <tr
+                                            key={p.id}
+                                            onClick={() => setSelectedVoucher(p)}
+                                            className="hover:bg-primary/5 transition-colors cursor-pointer group"
+                                        >
                                             <td className="px-8 py-5">
-                                                <div className="flex flex-col">
-                                                    <span className="text-slate-900 dark:text-white font-black text-sm">{p.receiptNumber}</span>
-                                                    <span className="text-subtext text-[10px] uppercase font-bold tracking-wider">{new Date(p.date).toLocaleDateString()}</span>
-                                                </div>
+                                                <span className="text-slate-900 dark:text-white font-black text-sm">{p.receiptNumber}</span>
+                                            </td>
+                                            <td className="px-8 py-5">
+                                                <span className="text-subtext text-xs font-bold">{new Date(p.date).toLocaleDateString()}</span>
                                             </td>
                                             <td className="px-8 py-5">
                                                 <div className="flex items-center gap-3">
                                                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${p.customer ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'}`}>
                                                         {p.customer ? <User size={14} /> : <Building2 size={14} />}
                                                     </div>
-                                                    <span className="text-slate-700 dark:text-slate-300 font-bold text-sm tracking-tight">{p.customer?.name || p.vendor?.name}</span>
+                                                    <span className="text-slate-700 dark:text-slate-300 font-bold text-sm">{p.customer?.name || p.vendor?.name}</span>
                                                 </div>
                                             </td>
                                             <td className="px-8 py-5">
-                                                <span className="text-[10px] font-black text-subtext uppercase tracking-widest bg-background px-2.5 py-1 rounded-full border border-border">
-                                                    {p.mode}
+                                                <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${p.customer ? 'text-emerald-300 bg-emerald-500/10 border border-emerald-500/20' : 'text-rose-300 bg-rose-500/10 border border-rose-500/20'}`}>
+                                                    {p.customer ? 'Receipt' : 'Payment'}
                                                 </span>
                                             </td>
-                                            <td className="px-8 py-5 text-subtext font-mono text-xs">{p.reference || '-'}</td>
                                             <td className="px-8 py-5 text-right">
                                                 <span className={`text-lg font-black tracking-tighter ${p.customer ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
-                                                    {p.customer ? '+' : '-'}{p.amount.toLocaleString()} <span className="text-[10px] uppercase ml-1">PKR</span>
+                                                    {p.amount.toLocaleString()} <span className="text-[10px] uppercase ml-1">PKR</span>
                                                 </span>
                                             </td>
                                         </tr>
@@ -221,124 +291,224 @@ export default function PaymentsPage() {
                     </div>
                 </div>
 
-                {/* Modal */}
+                {/* JV-Style Form Modal */}
                 {showModal && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setShowModal(false)} />
-                        <div className="relative glass-panel w-full max-w-xl rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
-                            <div className={`p-10 ${type === 'RECEIPT' ? 'bg-emerald-600' : 'bg-rose-600'} text-white`}>
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <h3 className="text-3xl font-black tracking-tighter uppercase italic">{type === 'RECEIPT' ? 'Cash Receipt' : 'Vendor Payout'}</h3>
-                                        <p className="text-white/70 text-xs font-bold uppercase tracking-widest mt-1">Transaction Authorization Panel</p>
+                        <div className="absolute inset-0 bg-background/90 backdrop-blur-md" onClick={() => setShowModal(false)} />
+                        <div className="relative glass-panel w-full max-w-5xl rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
+                            <div className={`p-8 border-b border-border ${type === 'RECEIPT' ? 'bg-emerald-600' : 'bg-rose-600'} text-white flex justify-between items-center`}>
+                                <div>
+                                    <h3 className="text-3xl font-black italic tracking-tighter uppercase">{type === 'RECEIPT' ? 'Receipt Voucher' : 'Payment Voucher'}</h3>
+                                    <p className="text-white/70 text-xs font-bold uppercase tracking-widest">Double-Entry Voucher System</p>
+                                </div>
+                                <div className="text-right">
+                                    <div className={`text-2xl font-black tracking-tighter ${isBalanced ? 'text-white' : 'text-white/50'}`}>
+                                        {totalDebit.toLocaleString()} <span className="text-xs italic uppercase">Total</span>
                                     </div>
-                                    <div className="w-16 h-16 rounded-3xl bg-white/20 flex items-center justify-center">
-                                        {type === 'RECEIPT' ? <ArrowDownLeft size={32} /> : <ArrowUpRight size={32} />}
-                                    </div>
+                                    {!isBalanced && totalDebit > 0 && <span className="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded font-black uppercase">Out of Balance</span>}
+                                    {isBalanced && <span className="text-[10px] bg-white text-emerald-600 px-2 py-0.5 rounded font-black uppercase">Balanced</span>}
                                 </div>
                             </div>
 
-                            <form onSubmit={handleSubmit} className="p-10 space-y-8">
-                                <div className="grid grid-cols-2 gap-6">
+                            <form onSubmit={handleSubmit} className="flex flex-col h-[70vh]">
+                                <div className="p-8 grid grid-cols-2 md:grid-cols-3 gap-6 border-b border-border">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Reference Number</label>
+                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Voucher No.</label>
                                         <input
                                             required
                                             className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            placeholder={type === 'RECEIPT' ? 'REC-2025-001' : 'PAY-2025-001'}
+                                            placeholder={type === 'RECEIPT' ? 'RV-001' : 'PV-001'}
                                             value={form.receiptNumber}
                                             onChange={e => setForm({ ...form, receiptNumber: e.target.value })}
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Transaction Date</label>
+                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Date</label>
                                         <input
                                             type="date"
                                             required
-                                            className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold"
+                                            className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             value={form.date}
                                             onChange={e => setForm({ ...form, date: e.target.value })}
                                         />
                                     </div>
-                                </div>
-
-                                <div className="space-y-6">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">
-                                            {type === 'RECEIPT' ? 'From Customer' : 'To Vendor'}
-                                        </label>
+                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">{type === 'RECEIPT' ? 'From Customer' : 'To Vendor'}</label>
                                         <select
                                             required
                                             className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             value={type === 'RECEIPT' ? form.customerId : form.vendorId}
                                             onChange={e => setForm({ ...form, [type === 'RECEIPT' ? 'customerId' : 'vendorId']: e.target.value })}
                                         >
-                                            <option value="">Select {type === 'RECEIPT' ? 'Customer' : 'Vendor'}...</option>
+                                            <option value="">Select...</option>
                                             {(type === 'RECEIPT' ? entities.customers : entities.vendors).map(e => (
-                                                <option key={e.id} value={e.id}>{e.name} ({e.code})</option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-6">
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Amount (PKR)</label>
-                                            <input
-                                                type="number"
-                                                required
-                                                className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white font-black text-xl tracking-tighter focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                placeholder="0.00"
-                                                value={form.amount}
-                                                onChange={e => setForm({ ...form, amount: e.target.value })}
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Payment Mode</label>
-                                            <select
-                                                className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                value={form.mode}
-                                                onChange={e => setForm({ ...form, mode: e.target.value })}
-                                            >
-                                                <option value="CASH">Cash</option>
-                                                <option value="BANK">Bank Transfer</option>
-                                                <option value="CHEQUE">Cheque</option>
-                                                <option value="ONLINE">Online Portal</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Deposit To / Pay From (Account)</label>
-                                        <select
-                                            required
-                                            className="glass-input w-full rounded-2xl px-5 py-4 text-slate-900 dark:text-white font-black text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            value={form.bankAccountId}
-                                            onChange={e => setForm({ ...form, bankAccountId: e.target.value })}
-                                        >
-                                            <option value="">Choose Bank/Cash account...</option>
-                                            {entities.accounts.map(a => (
-                                                <option key={a.id} value={a.id}>{a.code} - {a.name}</option>
+                                                <option key={e.id} value={e.id}>{e.name}</option>
                                             ))}
                                         </select>
                                     </div>
                                 </div>
 
-                                <div className="flex gap-4 pt-4">
+                                <div className="flex-1 overflow-y-auto p-8 space-y-4">
+                                    {form.entries.map((entry, index) => (
+                                        <div key={index} className="grid grid-cols-12 gap-4 items-center animate-in slide-in-from-left-2 duration-200">
+                                            <div className="col-span-4">
+                                                <select
+                                                    className="glass-input w-full rounded-xl px-4 py-3 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    value={entry.accountId}
+                                                    onChange={e => updateEntry(index, 'accountId', e.target.value)}
+                                                >
+                                                    <option value="">Select Account...</option>
+                                                    {accounts.map(a => <option key={a.id} value={a.id}>{a.code} - {a.name}</option>)}
+                                                </select>
+                                            </div>
+                                            <div className="col-span-3">
+                                                <input
+                                                    className="glass-input w-full rounded-xl px-4 py-3 text-xs font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    placeholder="Description"
+                                                    value={entry.description}
+                                                    onChange={e => updateEntry(index, 'description', e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <input
+                                                    type="number"
+                                                    className="glass-input w-full rounded-xl px-4 py-3 text-xs font-black text-slate-900 dark:text-white text-right focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    placeholder="Debit"
+                                                    value={entry.debit || ''}
+                                                    onChange={e => updateEntry(index, 'debit', e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <input
+                                                    type="number"
+                                                    className="glass-input w-full rounded-xl px-4 py-3 text-xs font-black text-slate-900 dark:text-white text-right focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    placeholder="Credit"
+                                                    value={entry.credit || ''}
+                                                    onChange={e => updateEntry(index, 'credit', e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="col-span-1 flex justify-end">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeEntry(index)}
+                                                    className="p-2 text-subtext hover:text-rose-500 transition-colors"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+
                                     <button
                                         type="button"
-                                        onClick={() => setShowModal(false)}
-                                        className="flex-1 px-8 py-5 rounded-3xl border border-border text-subtext font-black uppercase tracking-widest text-xs hover:bg-primary/5 hover:text-slate-900 dark:hover:text-white transition-all"
+                                        onClick={addEntry}
+                                        className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-black uppercase tracking-widest text-[10px] px-4 py-2 rounded-xl hover:bg-blue-500/10 transition-all border border-blue-500/20"
                                     >
-                                        Dismiss
+                                        <Plus size={14} />
+                                        Add Entry Line
+                                    </button>
+                                </div>
+
+                                <div className="p-8 border-t border-border flex gap-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => { setShowModal(false); resetForm(); }}
+                                        className="flex-1 px-8 py-5 rounded-3xl border border-border text-subtext font-black uppercase tracking-widest text-xs hover:bg-primary/5 transition-all"
+                                    >
+                                        Cancel
                                     </button>
                                     <button
                                         type="submit"
-                                        className={`flex-1 ${type === 'RECEIPT' ? 'bg-emerald-600 shadow-emerald-600/20' : 'bg-rose-600 shadow-rose-600/20'} text-white font-black py-5 rounded-3xl text-sm uppercase tracking-widest shadow-xl transition-all active:scale-95`}
+                                        disabled={!isBalanced}
+                                        className={`flex-1 ${isBalanced ? (type === 'RECEIPT' ? 'bg-emerald-600 shadow-emerald-600/20' : 'bg-rose-600 shadow-rose-600/20') : 'bg-primary/10 text-subtext cursor-not-allowed'} text-white font-black py-5 rounded-3xl text-sm uppercase tracking-widest shadow-xl transition-all active:scale-95`}
                                     >
-                                        Confirm & Post
+                                        Post Voucher
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                )}
+
+                {/* Voucher Detail Modal */}
+                {selectedVoucher && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <div className="absolute inset-0 bg-background/90 backdrop-blur-md" onClick={() => setSelectedVoucher(null)} />
+                        <div className="relative glass-panel w-full max-w-4xl rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
+                            <div className={`p-8 border-b border-border ${selectedVoucher.customer ? 'bg-emerald-600' : 'bg-rose-600'} text-white flex justify-between items-center`}>
+                                <div>
+                                    <h3 className="text-3xl font-black italic tracking-tighter uppercase">{selectedVoucher.receiptNumber}</h3>
+                                    <p className="text-white/70 text-xs font-bold uppercase tracking-widest">{selectedVoucher.customer ? 'Receipt Voucher' : 'Payment Voucher'}</p>
+                                </div>
+                                <button
+                                    onClick={() => setSelectedVoucher(null)}
+                                    className="w-12 h-12 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                                >
+                                    <X size={24} />
+                                </button>
+                            </div>
+
+                            <div className="p-8 space-y-6">
+                                <div className="grid grid-cols-3 gap-6">
+                                    <div>
+                                        <p className="text-[10px] text-subtext font-black uppercase tracking-widest mb-1">Date</p>
+                                        <p className="text-sm font-bold text-slate-900 dark:text-white">{new Date(selectedVoucher.date).toLocaleDateString()}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] text-subtext font-black uppercase tracking-widest mb-1">Party</p>
+                                        <p className="text-sm font-bold text-slate-900 dark:text-white">{selectedVoucher.customer?.name || selectedVoucher.vendor?.name}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] text-subtext font-black uppercase tracking-widest mb-1">Mode</p>
+                                        <p className="text-sm font-bold text-slate-900 dark:text-white">{selectedVoucher.mode}</p>
+                                    </div>
+                                </div>
+
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead>
+                                            <tr className="bg-primary/5">
+                                                <th className="px-6 py-4 text-[10px] font-black text-subtext uppercase tracking-widest">Account</th>
+                                                <th className="px-6 py-4 text-[10px] font-black text-subtext uppercase tracking-widest">Description</th>
+                                                <th className="px-6 py-4 text-[10px] font-black text-subtext uppercase tracking-widest text-right">Debit</th>
+                                                <th className="px-6 py-4 text-[10px] font-black text-subtext uppercase tracking-widest text-right">Credit</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-border">
+                                            {selectedVoucher.transaction.entries.map((entry: any) => (
+                                                <tr key={entry.id}>
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex flex-col">
+                                                            <span className="text-sm font-bold text-slate-900 dark:text-white">{entry.account.name}</span>
+                                                            <span className="text-[10px] font-bold text-subtext font-mono">{entry.account.code}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-xs font-medium text-subtext">{entry.description || '-'}</td>
+                                                    <td className="px-6 py-4 text-right font-black text-sm text-slate-900 dark:text-white">
+                                                        {entry.debit > 0 ? entry.debit.toLocaleString() : '-'}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-right font-black text-sm text-slate-900 dark:text-white">
+                                                        {entry.credit > 0 ? entry.credit.toLocaleString() : '-'}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr className="bg-primary/5 border-t-2 border-border">
+                                                <td colSpan={2} className="px-6 py-4 text-right font-black text-sm text-slate-900 dark:text-white uppercase tracking-wider">
+                                                    Total
+                                                </td>
+                                                <td className="px-6 py-4 text-right font-black text-lg text-blue-600 dark:text-blue-400">
+                                                    {selectedVoucher.amount.toLocaleString()}
+                                                </td>
+                                                <td className="px-6 py-4 text-right font-black text-lg text-blue-600 dark:text-blue-400">
+                                                    {selectedVoucher.amount.toLocaleString()}
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}

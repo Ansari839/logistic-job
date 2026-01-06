@@ -148,6 +148,16 @@ export type FinancialPeriod = $Result.DefaultSelection<Prisma.$FinancialPeriodPa
  * 
  */
 export type Port = $Result.DefaultSelection<Prisma.$PortPayload>
+/**
+ * Model Voucher
+ * 
+ */
+export type Voucher = $Result.DefaultSelection<Prisma.$VoucherPayload>
+/**
+ * Model VoucherEntry
+ * 
+ */
+export type VoucherEntry = $Result.DefaultSelection<Prisma.$VoucherEntryPayload>
 
 /**
  * Enums
@@ -229,6 +239,15 @@ export const JobStatus: {
 
 export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]
 
+
+export const VoucherType: {
+  PAYMENT: 'PAYMENT',
+  RECEIPT: 'RECEIPT',
+  JOURNAL: 'JOURNAL'
+};
+
+export type VoucherType = (typeof VoucherType)[keyof typeof VoucherType]
+
 }
 
 export type Role = $Enums.Role
@@ -262,6 +281,10 @@ export const PaymentMode: typeof $Enums.PaymentMode
 export type JobStatus = $Enums.JobStatus
 
 export const JobStatus: typeof $Enums.JobStatus
+
+export type VoucherType = $Enums.VoucherType
+
+export const VoucherType: typeof $Enums.VoucherType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -649,6 +672,26 @@ export class PrismaClient<
     * ```
     */
   get port(): Prisma.PortDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.voucher`: Exposes CRUD operations for the **Voucher** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Vouchers
+    * const vouchers = await prisma.voucher.findMany()
+    * ```
+    */
+  get voucher(): Prisma.VoucherDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.voucherEntry`: Exposes CRUD operations for the **VoucherEntry** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more VoucherEntries
+    * const voucherEntries = await prisma.voucherEntry.findMany()
+    * ```
+    */
+  get voucherEntry(): Prisma.VoucherEntryDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1109,7 +1152,9 @@ export namespace Prisma {
     Payment: 'Payment',
     AuditLog: 'AuditLog',
     FinancialPeriod: 'FinancialPeriod',
-    Port: 'Port'
+    Port: 'Port',
+    Voucher: 'Voucher',
+    VoucherEntry: 'VoucherEntry'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1125,7 +1170,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "company" | "branch" | "currency" | "companyCurrency" | "taxSetting" | "systemSetting" | "user" | "customer" | "vendor" | "job" | "expenseMaster" | "expense" | "invoice" | "invoiceItem" | "productCategory" | "product" | "warehouse" | "stockMovement" | "purchaseInvoice" | "purchaseInvoiceItem" | "account" | "transaction" | "accountEntry" | "payment" | "auditLog" | "financialPeriod" | "port"
+      modelProps: "company" | "branch" | "currency" | "companyCurrency" | "taxSetting" | "systemSetting" | "user" | "customer" | "vendor" | "job" | "expenseMaster" | "expense" | "invoice" | "invoiceItem" | "productCategory" | "product" | "warehouse" | "stockMovement" | "purchaseInvoice" | "purchaseInvoiceItem" | "account" | "transaction" | "accountEntry" | "payment" | "auditLog" | "financialPeriod" | "port" | "voucher" | "voucherEntry"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3127,6 +3172,154 @@ export namespace Prisma {
           }
         }
       }
+      Voucher: {
+        payload: Prisma.$VoucherPayload<ExtArgs>
+        fields: Prisma.VoucherFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VoucherFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VoucherFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherPayload>
+          }
+          findFirst: {
+            args: Prisma.VoucherFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VoucherFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherPayload>
+          }
+          findMany: {
+            args: Prisma.VoucherFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherPayload>[]
+          }
+          create: {
+            args: Prisma.VoucherCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherPayload>
+          }
+          createMany: {
+            args: Prisma.VoucherCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.VoucherCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherPayload>[]
+          }
+          delete: {
+            args: Prisma.VoucherDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherPayload>
+          }
+          update: {
+            args: Prisma.VoucherUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherPayload>
+          }
+          deleteMany: {
+            args: Prisma.VoucherDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VoucherUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.VoucherUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherPayload>[]
+          }
+          upsert: {
+            args: Prisma.VoucherUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherPayload>
+          }
+          aggregate: {
+            args: Prisma.VoucherAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVoucher>
+          }
+          groupBy: {
+            args: Prisma.VoucherGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VoucherGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VoucherCountArgs<ExtArgs>
+            result: $Utils.Optional<VoucherCountAggregateOutputType> | number
+          }
+        }
+      }
+      VoucherEntry: {
+        payload: Prisma.$VoucherEntryPayload<ExtArgs>
+        fields: Prisma.VoucherEntryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VoucherEntryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherEntryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VoucherEntryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherEntryPayload>
+          }
+          findFirst: {
+            args: Prisma.VoucherEntryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherEntryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VoucherEntryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherEntryPayload>
+          }
+          findMany: {
+            args: Prisma.VoucherEntryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherEntryPayload>[]
+          }
+          create: {
+            args: Prisma.VoucherEntryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherEntryPayload>
+          }
+          createMany: {
+            args: Prisma.VoucherEntryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.VoucherEntryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherEntryPayload>[]
+          }
+          delete: {
+            args: Prisma.VoucherEntryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherEntryPayload>
+          }
+          update: {
+            args: Prisma.VoucherEntryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherEntryPayload>
+          }
+          deleteMany: {
+            args: Prisma.VoucherEntryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VoucherEntryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.VoucherEntryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherEntryPayload>[]
+          }
+          upsert: {
+            args: Prisma.VoucherEntryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VoucherEntryPayload>
+          }
+          aggregate: {
+            args: Prisma.VoucherEntryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVoucherEntry>
+          }
+          groupBy: {
+            args: Prisma.VoucherEntryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VoucherEntryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VoucherEntryCountArgs<ExtArgs>
+            result: $Utils.Optional<VoucherEntryCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3262,6 +3455,8 @@ export namespace Prisma {
     auditLog?: AuditLogOmit
     financialPeriod?: FinancialPeriodOmit
     port?: PortOmit
+    voucher?: VoucherOmit
+    voucherEntry?: VoucherEntryOmit
   }
 
   /* Types for Logging */
@@ -3355,6 +3550,7 @@ export namespace Prisma {
     accounts: number
     transactions: number
     payments: number
+    vouchers: number
     productCategories: number
     products: number
     warehouses: number
@@ -3380,6 +3576,7 @@ export namespace Prisma {
     accounts?: boolean | CompanyCountOutputTypeCountAccountsArgs
     transactions?: boolean | CompanyCountOutputTypeCountTransactionsArgs
     payments?: boolean | CompanyCountOutputTypeCountPaymentsArgs
+    vouchers?: boolean | CompanyCountOutputTypeCountVouchersArgs
     productCategories?: boolean | CompanyCountOutputTypeCountProductCategoriesArgs
     products?: boolean | CompanyCountOutputTypeCountProductsArgs
     warehouses?: boolean | CompanyCountOutputTypeCountWarehousesArgs
@@ -3491,6 +3688,13 @@ export namespace Prisma {
    */
   export type CompanyCountOutputTypeCountPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PaymentWhereInput
+  }
+
+  /**
+   * CompanyCountOutputType without action
+   */
+  export type CompanyCountOutputTypeCountVouchersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VoucherWhereInput
   }
 
   /**
@@ -3634,10 +3838,12 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     auditLogs: number
+    postedVouchers: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
+    postedVouchers?: boolean | UserCountOutputTypeCountPostedVouchersArgs
   }
 
   // Custom InputTypes
@@ -3656,6 +3862,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AuditLogWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPostedVouchersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VoucherWhereInput
   }
 
 
@@ -3968,11 +4181,13 @@ export namespace Prisma {
   export type AccountCountOutputType = {
     children: number
     entries: number
+    voucherEntries: number
   }
 
   export type AccountCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     children?: boolean | AccountCountOutputTypeCountChildrenArgs
     entries?: boolean | AccountCountOutputTypeCountEntriesArgs
+    voucherEntries?: boolean | AccountCountOutputTypeCountVoucherEntriesArgs
   }
 
   // Custom InputTypes
@@ -3998,6 +4213,13 @@ export namespace Prisma {
    */
   export type AccountCountOutputTypeCountEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AccountEntryWhereInput
+  }
+
+  /**
+   * AccountCountOutputType without action
+   */
+  export type AccountCountOutputTypeCountVoucherEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VoucherEntryWhereInput
   }
 
 
@@ -4064,6 +4286,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type VoucherCountOutputType
+   */
+
+  export type VoucherCountOutputType = {
+    entries: number
+  }
+
+  export type VoucherCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    entries?: boolean | VoucherCountOutputTypeCountEntriesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * VoucherCountOutputType without action
+   */
+  export type VoucherCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherCountOutputType
+     */
+    select?: VoucherCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * VoucherCountOutputType without action
+   */
+  export type VoucherCountOutputTypeCountEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VoucherEntryWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -4092,10 +4345,20 @@ export namespace Prisma {
     name: string | null
     uniqueId: string | null
     address: string | null
+    city: string | null
+    state: string | null
+    postalCode: string | null
+    country: string | null
     phone: string | null
     email: string | null
+    website: string | null
+    taxNumber: string | null
+    registrationNo: string | null
     industry: string | null
     logo: string | null
+    tagline: string | null
+    fiscalYearStart: Date | null
+    fiscalYearEnd: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4105,10 +4368,20 @@ export namespace Prisma {
     name: string | null
     uniqueId: string | null
     address: string | null
+    city: string | null
+    state: string | null
+    postalCode: string | null
+    country: string | null
     phone: string | null
     email: string | null
+    website: string | null
+    taxNumber: string | null
+    registrationNo: string | null
     industry: string | null
     logo: string | null
+    tagline: string | null
+    fiscalYearStart: Date | null
+    fiscalYearEnd: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4118,11 +4391,21 @@ export namespace Prisma {
     name: number
     uniqueId: number
     address: number
+    city: number
+    state: number
+    postalCode: number
+    country: number
     phone: number
     email: number
+    website: number
+    taxNumber: number
+    registrationNo: number
     industry: number
     logo: number
+    tagline: number
     themeConfig: number
+    fiscalYearStart: number
+    fiscalYearEnd: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4142,10 +4425,20 @@ export namespace Prisma {
     name?: true
     uniqueId?: true
     address?: true
+    city?: true
+    state?: true
+    postalCode?: true
+    country?: true
     phone?: true
     email?: true
+    website?: true
+    taxNumber?: true
+    registrationNo?: true
     industry?: true
     logo?: true
+    tagline?: true
+    fiscalYearStart?: true
+    fiscalYearEnd?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4155,10 +4448,20 @@ export namespace Prisma {
     name?: true
     uniqueId?: true
     address?: true
+    city?: true
+    state?: true
+    postalCode?: true
+    country?: true
     phone?: true
     email?: true
+    website?: true
+    taxNumber?: true
+    registrationNo?: true
     industry?: true
     logo?: true
+    tagline?: true
+    fiscalYearStart?: true
+    fiscalYearEnd?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4168,11 +4471,21 @@ export namespace Prisma {
     name?: true
     uniqueId?: true
     address?: true
+    city?: true
+    state?: true
+    postalCode?: true
+    country?: true
     phone?: true
     email?: true
+    website?: true
+    taxNumber?: true
+    registrationNo?: true
     industry?: true
     logo?: true
+    tagline?: true
     themeConfig?: true
+    fiscalYearStart?: true
+    fiscalYearEnd?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4269,11 +4582,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address: string | null
+    city: string | null
+    state: string | null
+    postalCode: string | null
+    country: string | null
     phone: string | null
     email: string | null
+    website: string | null
+    taxNumber: string | null
+    registrationNo: string | null
     industry: string | null
     logo: string | null
+    tagline: string | null
     themeConfig: JsonValue | null
+    fiscalYearStart: Date | null
+    fiscalYearEnd: Date | null
     createdAt: Date
     updatedAt: Date
     _count: CompanyCountAggregateOutputType | null
@@ -4302,11 +4625,21 @@ export namespace Prisma {
     name?: boolean
     uniqueId?: boolean
     address?: boolean
+    city?: boolean
+    state?: boolean
+    postalCode?: boolean
+    country?: boolean
     phone?: boolean
     email?: boolean
+    website?: boolean
+    taxNumber?: boolean
+    registrationNo?: boolean
     industry?: boolean
     logo?: boolean
+    tagline?: boolean
     themeConfig?: boolean
+    fiscalYearStart?: boolean
+    fiscalYearEnd?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     users?: boolean | Company$usersArgs<ExtArgs>
@@ -4322,6 +4655,7 @@ export namespace Prisma {
     accounts?: boolean | Company$accountsArgs<ExtArgs>
     transactions?: boolean | Company$transactionsArgs<ExtArgs>
     payments?: boolean | Company$paymentsArgs<ExtArgs>
+    vouchers?: boolean | Company$vouchersArgs<ExtArgs>
     productCategories?: boolean | Company$productCategoriesArgs<ExtArgs>
     products?: boolean | Company$productsArgs<ExtArgs>
     warehouses?: boolean | Company$warehousesArgs<ExtArgs>
@@ -4339,11 +4673,21 @@ export namespace Prisma {
     name?: boolean
     uniqueId?: boolean
     address?: boolean
+    city?: boolean
+    state?: boolean
+    postalCode?: boolean
+    country?: boolean
     phone?: boolean
     email?: boolean
+    website?: boolean
+    taxNumber?: boolean
+    registrationNo?: boolean
     industry?: boolean
     logo?: boolean
+    tagline?: boolean
     themeConfig?: boolean
+    fiscalYearStart?: boolean
+    fiscalYearEnd?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["company"]>
@@ -4353,11 +4697,21 @@ export namespace Prisma {
     name?: boolean
     uniqueId?: boolean
     address?: boolean
+    city?: boolean
+    state?: boolean
+    postalCode?: boolean
+    country?: boolean
     phone?: boolean
     email?: boolean
+    website?: boolean
+    taxNumber?: boolean
+    registrationNo?: boolean
     industry?: boolean
     logo?: boolean
+    tagline?: boolean
     themeConfig?: boolean
+    fiscalYearStart?: boolean
+    fiscalYearEnd?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["company"]>
@@ -4367,16 +4721,26 @@ export namespace Prisma {
     name?: boolean
     uniqueId?: boolean
     address?: boolean
+    city?: boolean
+    state?: boolean
+    postalCode?: boolean
+    country?: boolean
     phone?: boolean
     email?: boolean
+    website?: boolean
+    taxNumber?: boolean
+    registrationNo?: boolean
     industry?: boolean
     logo?: boolean
+    tagline?: boolean
     themeConfig?: boolean
+    fiscalYearStart?: boolean
+    fiscalYearEnd?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "uniqueId" | "address" | "phone" | "email" | "industry" | "logo" | "themeConfig" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "uniqueId" | "address" | "city" | "state" | "postalCode" | "country" | "phone" | "email" | "website" | "taxNumber" | "registrationNo" | "industry" | "logo" | "tagline" | "themeConfig" | "fiscalYearStart" | "fiscalYearEnd" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
   export type CompanyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Company$usersArgs<ExtArgs>
     branches?: boolean | Company$branchesArgs<ExtArgs>
@@ -4391,6 +4755,7 @@ export namespace Prisma {
     accounts?: boolean | Company$accountsArgs<ExtArgs>
     transactions?: boolean | Company$transactionsArgs<ExtArgs>
     payments?: boolean | Company$paymentsArgs<ExtArgs>
+    vouchers?: boolean | Company$vouchersArgs<ExtArgs>
     productCategories?: boolean | Company$productCategoriesArgs<ExtArgs>
     products?: boolean | Company$productsArgs<ExtArgs>
     warehouses?: boolean | Company$warehousesArgs<ExtArgs>
@@ -4421,6 +4786,7 @@ export namespace Prisma {
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       transactions: Prisma.$TransactionPayload<ExtArgs>[]
       payments: Prisma.$PaymentPayload<ExtArgs>[]
+      vouchers: Prisma.$VoucherPayload<ExtArgs>[]
       productCategories: Prisma.$ProductCategoryPayload<ExtArgs>[]
       products: Prisma.$ProductPayload<ExtArgs>[]
       warehouses: Prisma.$WarehousePayload<ExtArgs>[]
@@ -4436,11 +4802,21 @@ export namespace Prisma {
       name: string
       uniqueId: string
       address: string | null
+      city: string | null
+      state: string | null
+      postalCode: string | null
+      country: string | null
       phone: string | null
       email: string | null
+      website: string | null
+      taxNumber: string | null
+      registrationNo: string | null
       industry: string | null
       logo: string | null
+      tagline: string | null
       themeConfig: Prisma.JsonValue | null
+      fiscalYearStart: Date | null
+      fiscalYearEnd: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["company"]>
@@ -4850,6 +5226,7 @@ export namespace Prisma {
     accounts<T extends Company$accountsArgs<ExtArgs> = {}>(args?: Subset<T, Company$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transactions<T extends Company$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Company$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     payments<T extends Company$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Company$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    vouchers<T extends Company$vouchersArgs<ExtArgs> = {}>(args?: Subset<T, Company$vouchersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     productCategories<T extends Company$productCategoriesArgs<ExtArgs> = {}>(args?: Subset<T, Company$productCategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     products<T extends Company$productsArgs<ExtArgs> = {}>(args?: Subset<T, Company$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     warehouses<T extends Company$warehousesArgs<ExtArgs> = {}>(args?: Subset<T, Company$warehousesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WarehousePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4892,11 +5269,21 @@ export namespace Prisma {
     readonly name: FieldRef<"Company", 'String'>
     readonly uniqueId: FieldRef<"Company", 'String'>
     readonly address: FieldRef<"Company", 'String'>
+    readonly city: FieldRef<"Company", 'String'>
+    readonly state: FieldRef<"Company", 'String'>
+    readonly postalCode: FieldRef<"Company", 'String'>
+    readonly country: FieldRef<"Company", 'String'>
     readonly phone: FieldRef<"Company", 'String'>
     readonly email: FieldRef<"Company", 'String'>
+    readonly website: FieldRef<"Company", 'String'>
+    readonly taxNumber: FieldRef<"Company", 'String'>
+    readonly registrationNo: FieldRef<"Company", 'String'>
     readonly industry: FieldRef<"Company", 'String'>
     readonly logo: FieldRef<"Company", 'String'>
+    readonly tagline: FieldRef<"Company", 'String'>
     readonly themeConfig: FieldRef<"Company", 'Json'>
+    readonly fiscalYearStart: FieldRef<"Company", 'DateTime'>
+    readonly fiscalYearEnd: FieldRef<"Company", 'DateTime'>
     readonly createdAt: FieldRef<"Company", 'DateTime'>
     readonly updatedAt: FieldRef<"Company", 'DateTime'>
   }
@@ -5596,6 +5983,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PaymentScalarFieldEnum | PaymentScalarFieldEnum[]
+  }
+
+  /**
+   * Company.vouchers
+   */
+  export type Company$vouchersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherInclude<ExtArgs> | null
+    where?: VoucherWhereInput
+    orderBy?: VoucherOrderByWithRelationInput | VoucherOrderByWithRelationInput[]
+    cursor?: VoucherWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: VoucherScalarFieldEnum | VoucherScalarFieldEnum[]
   }
 
   /**
@@ -11771,6 +12182,7 @@ export namespace Prisma {
     updatedAt?: boolean
     company?: boolean | User$companyArgs<ExtArgs>
     auditLogs?: boolean | User$auditLogsArgs<ExtArgs>
+    postedVouchers?: boolean | User$postedVouchersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -11831,6 +12243,7 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     company?: boolean | User$companyArgs<ExtArgs>
     auditLogs?: boolean | User$auditLogsArgs<ExtArgs>
+    postedVouchers?: boolean | User$postedVouchersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11845,6 +12258,7 @@ export namespace Prisma {
     objects: {
       company: Prisma.$CompanyPayload<ExtArgs> | null
       auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+      postedVouchers: Prisma.$VoucherPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -12257,6 +12671,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     company<T extends User$companyArgs<ExtArgs> = {}>(args?: Subset<T, User$companyArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     auditLogs<T extends User$auditLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    postedVouchers<T extends User$postedVouchersArgs<ExtArgs> = {}>(args?: Subset<T, User$postedVouchersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12736,6 +13151,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * User.postedVouchers
+   */
+  export type User$postedVouchersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherInclude<ExtArgs> | null
+    where?: VoucherWhereInput
+    orderBy?: VoucherOrderByWithRelationInput | VoucherOrderByWithRelationInput[]
+    cursor?: VoucherWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: VoucherScalarFieldEnum | VoucherScalarFieldEnum[]
   }
 
   /**
@@ -29533,6 +29972,7 @@ export namespace Prisma {
     children?: boolean | Account$childrenArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     entries?: boolean | Account$entriesArgs<ExtArgs>
+    voucherEntries?: boolean | Account$voucherEntriesArgs<ExtArgs>
     customer?: boolean | Account$customerArgs<ExtArgs>
     vendor?: boolean | Account$vendorArgs<ExtArgs>
     _count?: boolean | AccountCountOutputTypeDefaultArgs<ExtArgs>
@@ -29587,6 +30027,7 @@ export namespace Prisma {
     children?: boolean | Account$childrenArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     entries?: boolean | Account$entriesArgs<ExtArgs>
+    voucherEntries?: boolean | Account$voucherEntriesArgs<ExtArgs>
     customer?: boolean | Account$customerArgs<ExtArgs>
     vendor?: boolean | Account$vendorArgs<ExtArgs>
     _count?: boolean | AccountCountOutputTypeDefaultArgs<ExtArgs>
@@ -29607,6 +30048,7 @@ export namespace Prisma {
       children: Prisma.$AccountPayload<ExtArgs>[]
       company: Prisma.$CompanyPayload<ExtArgs>
       entries: Prisma.$AccountEntryPayload<ExtArgs>[]
+      voucherEntries: Prisma.$VoucherEntryPayload<ExtArgs>[]
       customer: Prisma.$CustomerPayload<ExtArgs> | null
       vendor: Prisma.$VendorPayload<ExtArgs> | null
     }
@@ -30019,6 +30461,7 @@ export namespace Prisma {
     children<T extends Account$childrenArgs<ExtArgs> = {}>(args?: Subset<T, Account$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     entries<T extends Account$entriesArgs<ExtArgs> = {}>(args?: Subset<T, Account$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    voucherEntries<T extends Account$voucherEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Account$voucherEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     customer<T extends Account$customerArgs<ExtArgs> = {}>(args?: Subset<T, Account$customerArgs<ExtArgs>>): Prisma__CustomerClient<$Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     vendor<T extends Account$vendorArgs<ExtArgs> = {}>(args?: Subset<T, Account$vendorArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
@@ -30520,6 +30963,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AccountEntryScalarFieldEnum | AccountEntryScalarFieldEnum[]
+  }
+
+  /**
+   * Account.voucherEntries
+   */
+  export type Account$voucherEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryInclude<ExtArgs> | null
+    where?: VoucherEntryWhereInput
+    orderBy?: VoucherEntryOrderByWithRelationInput | VoucherEntryOrderByWithRelationInput[]
+    cursor?: VoucherEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: VoucherEntryScalarFieldEnum | VoucherEntryScalarFieldEnum[]
   }
 
   /**
@@ -37667,6 +38134,2409 @@ export namespace Prisma {
 
 
   /**
+   * Model Voucher
+   */
+
+  export type AggregateVoucher = {
+    _count: VoucherCountAggregateOutputType | null
+    _avg: VoucherAvgAggregateOutputType | null
+    _sum: VoucherSumAggregateOutputType | null
+    _min: VoucherMinAggregateOutputType | null
+    _max: VoucherMaxAggregateOutputType | null
+  }
+
+  export type VoucherAvgAggregateOutputType = {
+    id: number | null
+    companyId: number | null
+    postedById: number | null
+  }
+
+  export type VoucherSumAggregateOutputType = {
+    id: number | null
+    companyId: number | null
+    postedById: number | null
+  }
+
+  export type VoucherMinAggregateOutputType = {
+    id: number | null
+    voucherNumber: string | null
+    voucherType: $Enums.VoucherType | null
+    date: Date | null
+    description: string | null
+    companyId: number | null
+    division: string | null
+    isPosted: boolean | null
+    postedAt: Date | null
+    postedById: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VoucherMaxAggregateOutputType = {
+    id: number | null
+    voucherNumber: string | null
+    voucherType: $Enums.VoucherType | null
+    date: Date | null
+    description: string | null
+    companyId: number | null
+    division: string | null
+    isPosted: boolean | null
+    postedAt: Date | null
+    postedById: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VoucherCountAggregateOutputType = {
+    id: number
+    voucherNumber: number
+    voucherType: number
+    date: number
+    description: number
+    companyId: number
+    division: number
+    isPosted: number
+    postedAt: number
+    postedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type VoucherAvgAggregateInputType = {
+    id?: true
+    companyId?: true
+    postedById?: true
+  }
+
+  export type VoucherSumAggregateInputType = {
+    id?: true
+    companyId?: true
+    postedById?: true
+  }
+
+  export type VoucherMinAggregateInputType = {
+    id?: true
+    voucherNumber?: true
+    voucherType?: true
+    date?: true
+    description?: true
+    companyId?: true
+    division?: true
+    isPosted?: true
+    postedAt?: true
+    postedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VoucherMaxAggregateInputType = {
+    id?: true
+    voucherNumber?: true
+    voucherType?: true
+    date?: true
+    description?: true
+    companyId?: true
+    division?: true
+    isPosted?: true
+    postedAt?: true
+    postedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VoucherCountAggregateInputType = {
+    id?: true
+    voucherNumber?: true
+    voucherType?: true
+    date?: true
+    description?: true
+    companyId?: true
+    division?: true
+    isPosted?: true
+    postedAt?: true
+    postedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type VoucherAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Voucher to aggregate.
+     */
+    where?: VoucherWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Vouchers to fetch.
+     */
+    orderBy?: VoucherOrderByWithRelationInput | VoucherOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VoucherWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Vouchers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Vouchers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Vouchers
+    **/
+    _count?: true | VoucherCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: VoucherAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: VoucherSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VoucherMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VoucherMaxAggregateInputType
+  }
+
+  export type GetVoucherAggregateType<T extends VoucherAggregateArgs> = {
+        [P in keyof T & keyof AggregateVoucher]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVoucher[P]>
+      : GetScalarType<T[P], AggregateVoucher[P]>
+  }
+
+
+
+
+  export type VoucherGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VoucherWhereInput
+    orderBy?: VoucherOrderByWithAggregationInput | VoucherOrderByWithAggregationInput[]
+    by: VoucherScalarFieldEnum[] | VoucherScalarFieldEnum
+    having?: VoucherScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VoucherCountAggregateInputType | true
+    _avg?: VoucherAvgAggregateInputType
+    _sum?: VoucherSumAggregateInputType
+    _min?: VoucherMinAggregateInputType
+    _max?: VoucherMaxAggregateInputType
+  }
+
+  export type VoucherGroupByOutputType = {
+    id: number
+    voucherNumber: string
+    voucherType: $Enums.VoucherType
+    date: Date
+    description: string | null
+    companyId: number
+    division: string | null
+    isPosted: boolean
+    postedAt: Date | null
+    postedById: number | null
+    createdAt: Date
+    updatedAt: Date
+    _count: VoucherCountAggregateOutputType | null
+    _avg: VoucherAvgAggregateOutputType | null
+    _sum: VoucherSumAggregateOutputType | null
+    _min: VoucherMinAggregateOutputType | null
+    _max: VoucherMaxAggregateOutputType | null
+  }
+
+  type GetVoucherGroupByPayload<T extends VoucherGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VoucherGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VoucherGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VoucherGroupByOutputType[P]>
+            : GetScalarType<T[P], VoucherGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VoucherSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    voucherNumber?: boolean
+    voucherType?: boolean
+    date?: boolean
+    description?: boolean
+    companyId?: boolean
+    division?: boolean
+    isPosted?: boolean
+    postedAt?: boolean
+    postedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    entries?: boolean | Voucher$entriesArgs<ExtArgs>
+    postedBy?: boolean | Voucher$postedByArgs<ExtArgs>
+    _count?: boolean | VoucherCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["voucher"]>
+
+  export type VoucherSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    voucherNumber?: boolean
+    voucherType?: boolean
+    date?: boolean
+    description?: boolean
+    companyId?: boolean
+    division?: boolean
+    isPosted?: boolean
+    postedAt?: boolean
+    postedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    postedBy?: boolean | Voucher$postedByArgs<ExtArgs>
+  }, ExtArgs["result"]["voucher"]>
+
+  export type VoucherSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    voucherNumber?: boolean
+    voucherType?: boolean
+    date?: boolean
+    description?: boolean
+    companyId?: boolean
+    division?: boolean
+    isPosted?: boolean
+    postedAt?: boolean
+    postedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    postedBy?: boolean | Voucher$postedByArgs<ExtArgs>
+  }, ExtArgs["result"]["voucher"]>
+
+  export type VoucherSelectScalar = {
+    id?: boolean
+    voucherNumber?: boolean
+    voucherType?: boolean
+    date?: boolean
+    description?: boolean
+    companyId?: boolean
+    division?: boolean
+    isPosted?: boolean
+    postedAt?: boolean
+    postedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type VoucherOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "voucherNumber" | "voucherType" | "date" | "description" | "companyId" | "division" | "isPosted" | "postedAt" | "postedById" | "createdAt" | "updatedAt", ExtArgs["result"]["voucher"]>
+  export type VoucherInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    entries?: boolean | Voucher$entriesArgs<ExtArgs>
+    postedBy?: boolean | Voucher$postedByArgs<ExtArgs>
+    _count?: boolean | VoucherCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type VoucherIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    postedBy?: boolean | Voucher$postedByArgs<ExtArgs>
+  }
+  export type VoucherIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    postedBy?: boolean | Voucher$postedByArgs<ExtArgs>
+  }
+
+  export type $VoucherPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Voucher"
+    objects: {
+      company: Prisma.$CompanyPayload<ExtArgs>
+      entries: Prisma.$VoucherEntryPayload<ExtArgs>[]
+      postedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      voucherNumber: string
+      voucherType: $Enums.VoucherType
+      date: Date
+      description: string | null
+      companyId: number
+      division: string | null
+      isPosted: boolean
+      postedAt: Date | null
+      postedById: number | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["voucher"]>
+    composites: {}
+  }
+
+  type VoucherGetPayload<S extends boolean | null | undefined | VoucherDefaultArgs> = $Result.GetResult<Prisma.$VoucherPayload, S>
+
+  type VoucherCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VoucherFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: VoucherCountAggregateInputType | true
+    }
+
+  export interface VoucherDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Voucher'], meta: { name: 'Voucher' } }
+    /**
+     * Find zero or one Voucher that matches the filter.
+     * @param {VoucherFindUniqueArgs} args - Arguments to find a Voucher
+     * @example
+     * // Get one Voucher
+     * const voucher = await prisma.voucher.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VoucherFindUniqueArgs>(args: SelectSubset<T, VoucherFindUniqueArgs<ExtArgs>>): Prisma__VoucherClient<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Voucher that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VoucherFindUniqueOrThrowArgs} args - Arguments to find a Voucher
+     * @example
+     * // Get one Voucher
+     * const voucher = await prisma.voucher.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VoucherFindUniqueOrThrowArgs>(args: SelectSubset<T, VoucherFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VoucherClient<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Voucher that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherFindFirstArgs} args - Arguments to find a Voucher
+     * @example
+     * // Get one Voucher
+     * const voucher = await prisma.voucher.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VoucherFindFirstArgs>(args?: SelectSubset<T, VoucherFindFirstArgs<ExtArgs>>): Prisma__VoucherClient<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Voucher that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherFindFirstOrThrowArgs} args - Arguments to find a Voucher
+     * @example
+     * // Get one Voucher
+     * const voucher = await prisma.voucher.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VoucherFindFirstOrThrowArgs>(args?: SelectSubset<T, VoucherFindFirstOrThrowArgs<ExtArgs>>): Prisma__VoucherClient<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Vouchers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Vouchers
+     * const vouchers = await prisma.voucher.findMany()
+     * 
+     * // Get first 10 Vouchers
+     * const vouchers = await prisma.voucher.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const voucherWithIdOnly = await prisma.voucher.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VoucherFindManyArgs>(args?: SelectSubset<T, VoucherFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Voucher.
+     * @param {VoucherCreateArgs} args - Arguments to create a Voucher.
+     * @example
+     * // Create one Voucher
+     * const Voucher = await prisma.voucher.create({
+     *   data: {
+     *     // ... data to create a Voucher
+     *   }
+     * })
+     * 
+     */
+    create<T extends VoucherCreateArgs>(args: SelectSubset<T, VoucherCreateArgs<ExtArgs>>): Prisma__VoucherClient<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Vouchers.
+     * @param {VoucherCreateManyArgs} args - Arguments to create many Vouchers.
+     * @example
+     * // Create many Vouchers
+     * const voucher = await prisma.voucher.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VoucherCreateManyArgs>(args?: SelectSubset<T, VoucherCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Vouchers and returns the data saved in the database.
+     * @param {VoucherCreateManyAndReturnArgs} args - Arguments to create many Vouchers.
+     * @example
+     * // Create many Vouchers
+     * const voucher = await prisma.voucher.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Vouchers and only return the `id`
+     * const voucherWithIdOnly = await prisma.voucher.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends VoucherCreateManyAndReturnArgs>(args?: SelectSubset<T, VoucherCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Voucher.
+     * @param {VoucherDeleteArgs} args - Arguments to delete one Voucher.
+     * @example
+     * // Delete one Voucher
+     * const Voucher = await prisma.voucher.delete({
+     *   where: {
+     *     // ... filter to delete one Voucher
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VoucherDeleteArgs>(args: SelectSubset<T, VoucherDeleteArgs<ExtArgs>>): Prisma__VoucherClient<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Voucher.
+     * @param {VoucherUpdateArgs} args - Arguments to update one Voucher.
+     * @example
+     * // Update one Voucher
+     * const voucher = await prisma.voucher.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VoucherUpdateArgs>(args: SelectSubset<T, VoucherUpdateArgs<ExtArgs>>): Prisma__VoucherClient<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Vouchers.
+     * @param {VoucherDeleteManyArgs} args - Arguments to filter Vouchers to delete.
+     * @example
+     * // Delete a few Vouchers
+     * const { count } = await prisma.voucher.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VoucherDeleteManyArgs>(args?: SelectSubset<T, VoucherDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Vouchers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Vouchers
+     * const voucher = await prisma.voucher.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VoucherUpdateManyArgs>(args: SelectSubset<T, VoucherUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Vouchers and returns the data updated in the database.
+     * @param {VoucherUpdateManyAndReturnArgs} args - Arguments to update many Vouchers.
+     * @example
+     * // Update many Vouchers
+     * const voucher = await prisma.voucher.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Vouchers and only return the `id`
+     * const voucherWithIdOnly = await prisma.voucher.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends VoucherUpdateManyAndReturnArgs>(args: SelectSubset<T, VoucherUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Voucher.
+     * @param {VoucherUpsertArgs} args - Arguments to update or create a Voucher.
+     * @example
+     * // Update or create a Voucher
+     * const voucher = await prisma.voucher.upsert({
+     *   create: {
+     *     // ... data to create a Voucher
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Voucher we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VoucherUpsertArgs>(args: SelectSubset<T, VoucherUpsertArgs<ExtArgs>>): Prisma__VoucherClient<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Vouchers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherCountArgs} args - Arguments to filter Vouchers to count.
+     * @example
+     * // Count the number of Vouchers
+     * const count = await prisma.voucher.count({
+     *   where: {
+     *     // ... the filter for the Vouchers we want to count
+     *   }
+     * })
+    **/
+    count<T extends VoucherCountArgs>(
+      args?: Subset<T, VoucherCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VoucherCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Voucher.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VoucherAggregateArgs>(args: Subset<T, VoucherAggregateArgs>): Prisma.PrismaPromise<GetVoucherAggregateType<T>>
+
+    /**
+     * Group by Voucher.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VoucherGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VoucherGroupByArgs['orderBy'] }
+        : { orderBy?: VoucherGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VoucherGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVoucherGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Voucher model
+   */
+  readonly fields: VoucherFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Voucher.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VoucherClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    entries<T extends Voucher$entriesArgs<ExtArgs> = {}>(args?: Subset<T, Voucher$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    postedBy<T extends Voucher$postedByArgs<ExtArgs> = {}>(args?: Subset<T, Voucher$postedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Voucher model
+   */
+  interface VoucherFieldRefs {
+    readonly id: FieldRef<"Voucher", 'Int'>
+    readonly voucherNumber: FieldRef<"Voucher", 'String'>
+    readonly voucherType: FieldRef<"Voucher", 'VoucherType'>
+    readonly date: FieldRef<"Voucher", 'DateTime'>
+    readonly description: FieldRef<"Voucher", 'String'>
+    readonly companyId: FieldRef<"Voucher", 'Int'>
+    readonly division: FieldRef<"Voucher", 'String'>
+    readonly isPosted: FieldRef<"Voucher", 'Boolean'>
+    readonly postedAt: FieldRef<"Voucher", 'DateTime'>
+    readonly postedById: FieldRef<"Voucher", 'Int'>
+    readonly createdAt: FieldRef<"Voucher", 'DateTime'>
+    readonly updatedAt: FieldRef<"Voucher", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Voucher findUnique
+   */
+  export type VoucherFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherInclude<ExtArgs> | null
+    /**
+     * Filter, which Voucher to fetch.
+     */
+    where: VoucherWhereUniqueInput
+  }
+
+  /**
+   * Voucher findUniqueOrThrow
+   */
+  export type VoucherFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherInclude<ExtArgs> | null
+    /**
+     * Filter, which Voucher to fetch.
+     */
+    where: VoucherWhereUniqueInput
+  }
+
+  /**
+   * Voucher findFirst
+   */
+  export type VoucherFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherInclude<ExtArgs> | null
+    /**
+     * Filter, which Voucher to fetch.
+     */
+    where?: VoucherWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Vouchers to fetch.
+     */
+    orderBy?: VoucherOrderByWithRelationInput | VoucherOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Vouchers.
+     */
+    cursor?: VoucherWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Vouchers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Vouchers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Vouchers.
+     */
+    distinct?: VoucherScalarFieldEnum | VoucherScalarFieldEnum[]
+  }
+
+  /**
+   * Voucher findFirstOrThrow
+   */
+  export type VoucherFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherInclude<ExtArgs> | null
+    /**
+     * Filter, which Voucher to fetch.
+     */
+    where?: VoucherWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Vouchers to fetch.
+     */
+    orderBy?: VoucherOrderByWithRelationInput | VoucherOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Vouchers.
+     */
+    cursor?: VoucherWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Vouchers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Vouchers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Vouchers.
+     */
+    distinct?: VoucherScalarFieldEnum | VoucherScalarFieldEnum[]
+  }
+
+  /**
+   * Voucher findMany
+   */
+  export type VoucherFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherInclude<ExtArgs> | null
+    /**
+     * Filter, which Vouchers to fetch.
+     */
+    where?: VoucherWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Vouchers to fetch.
+     */
+    orderBy?: VoucherOrderByWithRelationInput | VoucherOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Vouchers.
+     */
+    cursor?: VoucherWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Vouchers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Vouchers.
+     */
+    skip?: number
+    distinct?: VoucherScalarFieldEnum | VoucherScalarFieldEnum[]
+  }
+
+  /**
+   * Voucher create
+   */
+  export type VoucherCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Voucher.
+     */
+    data: XOR<VoucherCreateInput, VoucherUncheckedCreateInput>
+  }
+
+  /**
+   * Voucher createMany
+   */
+  export type VoucherCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Vouchers.
+     */
+    data: VoucherCreateManyInput | VoucherCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Voucher createManyAndReturn
+   */
+  export type VoucherCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * The data used to create many Vouchers.
+     */
+    data: VoucherCreateManyInput | VoucherCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Voucher update
+   */
+  export type VoucherUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Voucher.
+     */
+    data: XOR<VoucherUpdateInput, VoucherUncheckedUpdateInput>
+    /**
+     * Choose, which Voucher to update.
+     */
+    where: VoucherWhereUniqueInput
+  }
+
+  /**
+   * Voucher updateMany
+   */
+  export type VoucherUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Vouchers.
+     */
+    data: XOR<VoucherUpdateManyMutationInput, VoucherUncheckedUpdateManyInput>
+    /**
+     * Filter which Vouchers to update
+     */
+    where?: VoucherWhereInput
+    /**
+     * Limit how many Vouchers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Voucher updateManyAndReturn
+   */
+  export type VoucherUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * The data used to update Vouchers.
+     */
+    data: XOR<VoucherUpdateManyMutationInput, VoucherUncheckedUpdateManyInput>
+    /**
+     * Filter which Vouchers to update
+     */
+    where?: VoucherWhereInput
+    /**
+     * Limit how many Vouchers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Voucher upsert
+   */
+  export type VoucherUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Voucher to update in case it exists.
+     */
+    where: VoucherWhereUniqueInput
+    /**
+     * In case the Voucher found by the `where` argument doesn't exist, create a new Voucher with this data.
+     */
+    create: XOR<VoucherCreateInput, VoucherUncheckedCreateInput>
+    /**
+     * In case the Voucher was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VoucherUpdateInput, VoucherUncheckedUpdateInput>
+  }
+
+  /**
+   * Voucher delete
+   */
+  export type VoucherDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherInclude<ExtArgs> | null
+    /**
+     * Filter which Voucher to delete.
+     */
+    where: VoucherWhereUniqueInput
+  }
+
+  /**
+   * Voucher deleteMany
+   */
+  export type VoucherDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Vouchers to delete
+     */
+    where?: VoucherWhereInput
+    /**
+     * Limit how many Vouchers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Voucher.entries
+   */
+  export type Voucher$entriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryInclude<ExtArgs> | null
+    where?: VoucherEntryWhereInput
+    orderBy?: VoucherEntryOrderByWithRelationInput | VoucherEntryOrderByWithRelationInput[]
+    cursor?: VoucherEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: VoucherEntryScalarFieldEnum | VoucherEntryScalarFieldEnum[]
+  }
+
+  /**
+   * Voucher.postedBy
+   */
+  export type Voucher$postedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Voucher without action
+   */
+  export type VoucherDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Voucher
+     */
+    select?: VoucherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Voucher
+     */
+    omit?: VoucherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model VoucherEntry
+   */
+
+  export type AggregateVoucherEntry = {
+    _count: VoucherEntryCountAggregateOutputType | null
+    _avg: VoucherEntryAvgAggregateOutputType | null
+    _sum: VoucherEntrySumAggregateOutputType | null
+    _min: VoucherEntryMinAggregateOutputType | null
+    _max: VoucherEntryMaxAggregateOutputType | null
+  }
+
+  export type VoucherEntryAvgAggregateOutputType = {
+    id: number | null
+    voucherId: number | null
+    accountId: number | null
+    debit: number | null
+    credit: number | null
+  }
+
+  export type VoucherEntrySumAggregateOutputType = {
+    id: number | null
+    voucherId: number | null
+    accountId: number | null
+    debit: number | null
+    credit: number | null
+  }
+
+  export type VoucherEntryMinAggregateOutputType = {
+    id: number | null
+    voucherId: number | null
+    accountId: number | null
+    debit: number | null
+    credit: number | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VoucherEntryMaxAggregateOutputType = {
+    id: number | null
+    voucherId: number | null
+    accountId: number | null
+    debit: number | null
+    credit: number | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VoucherEntryCountAggregateOutputType = {
+    id: number
+    voucherId: number
+    accountId: number
+    debit: number
+    credit: number
+    description: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type VoucherEntryAvgAggregateInputType = {
+    id?: true
+    voucherId?: true
+    accountId?: true
+    debit?: true
+    credit?: true
+  }
+
+  export type VoucherEntrySumAggregateInputType = {
+    id?: true
+    voucherId?: true
+    accountId?: true
+    debit?: true
+    credit?: true
+  }
+
+  export type VoucherEntryMinAggregateInputType = {
+    id?: true
+    voucherId?: true
+    accountId?: true
+    debit?: true
+    credit?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VoucherEntryMaxAggregateInputType = {
+    id?: true
+    voucherId?: true
+    accountId?: true
+    debit?: true
+    credit?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VoucherEntryCountAggregateInputType = {
+    id?: true
+    voucherId?: true
+    accountId?: true
+    debit?: true
+    credit?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type VoucherEntryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VoucherEntry to aggregate.
+     */
+    where?: VoucherEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VoucherEntries to fetch.
+     */
+    orderBy?: VoucherEntryOrderByWithRelationInput | VoucherEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VoucherEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VoucherEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VoucherEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned VoucherEntries
+    **/
+    _count?: true | VoucherEntryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: VoucherEntryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: VoucherEntrySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VoucherEntryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VoucherEntryMaxAggregateInputType
+  }
+
+  export type GetVoucherEntryAggregateType<T extends VoucherEntryAggregateArgs> = {
+        [P in keyof T & keyof AggregateVoucherEntry]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVoucherEntry[P]>
+      : GetScalarType<T[P], AggregateVoucherEntry[P]>
+  }
+
+
+
+
+  export type VoucherEntryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VoucherEntryWhereInput
+    orderBy?: VoucherEntryOrderByWithAggregationInput | VoucherEntryOrderByWithAggregationInput[]
+    by: VoucherEntryScalarFieldEnum[] | VoucherEntryScalarFieldEnum
+    having?: VoucherEntryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VoucherEntryCountAggregateInputType | true
+    _avg?: VoucherEntryAvgAggregateInputType
+    _sum?: VoucherEntrySumAggregateInputType
+    _min?: VoucherEntryMinAggregateInputType
+    _max?: VoucherEntryMaxAggregateInputType
+  }
+
+  export type VoucherEntryGroupByOutputType = {
+    id: number
+    voucherId: number
+    accountId: number
+    debit: number
+    credit: number
+    description: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: VoucherEntryCountAggregateOutputType | null
+    _avg: VoucherEntryAvgAggregateOutputType | null
+    _sum: VoucherEntrySumAggregateOutputType | null
+    _min: VoucherEntryMinAggregateOutputType | null
+    _max: VoucherEntryMaxAggregateOutputType | null
+  }
+
+  type GetVoucherEntryGroupByPayload<T extends VoucherEntryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VoucherEntryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VoucherEntryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VoucherEntryGroupByOutputType[P]>
+            : GetScalarType<T[P], VoucherEntryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VoucherEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    voucherId?: boolean
+    accountId?: boolean
+    debit?: boolean
+    credit?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    voucher?: boolean | VoucherDefaultArgs<ExtArgs>
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["voucherEntry"]>
+
+  export type VoucherEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    voucherId?: boolean
+    accountId?: boolean
+    debit?: boolean
+    credit?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    voucher?: boolean | VoucherDefaultArgs<ExtArgs>
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["voucherEntry"]>
+
+  export type VoucherEntrySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    voucherId?: boolean
+    accountId?: boolean
+    debit?: boolean
+    credit?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    voucher?: boolean | VoucherDefaultArgs<ExtArgs>
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["voucherEntry"]>
+
+  export type VoucherEntrySelectScalar = {
+    id?: boolean
+    voucherId?: boolean
+    accountId?: boolean
+    debit?: boolean
+    credit?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type VoucherEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "voucherId" | "accountId" | "debit" | "credit" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["voucherEntry"]>
+  export type VoucherEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    voucher?: boolean | VoucherDefaultArgs<ExtArgs>
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+  }
+  export type VoucherEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    voucher?: boolean | VoucherDefaultArgs<ExtArgs>
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+  }
+  export type VoucherEntryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    voucher?: boolean | VoucherDefaultArgs<ExtArgs>
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+  }
+
+  export type $VoucherEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "VoucherEntry"
+    objects: {
+      voucher: Prisma.$VoucherPayload<ExtArgs>
+      account: Prisma.$AccountPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      voucherId: number
+      accountId: number
+      debit: number
+      credit: number
+      description: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["voucherEntry"]>
+    composites: {}
+  }
+
+  type VoucherEntryGetPayload<S extends boolean | null | undefined | VoucherEntryDefaultArgs> = $Result.GetResult<Prisma.$VoucherEntryPayload, S>
+
+  type VoucherEntryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VoucherEntryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: VoucherEntryCountAggregateInputType | true
+    }
+
+  export interface VoucherEntryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['VoucherEntry'], meta: { name: 'VoucherEntry' } }
+    /**
+     * Find zero or one VoucherEntry that matches the filter.
+     * @param {VoucherEntryFindUniqueArgs} args - Arguments to find a VoucherEntry
+     * @example
+     * // Get one VoucherEntry
+     * const voucherEntry = await prisma.voucherEntry.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VoucherEntryFindUniqueArgs>(args: SelectSubset<T, VoucherEntryFindUniqueArgs<ExtArgs>>): Prisma__VoucherEntryClient<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one VoucherEntry that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VoucherEntryFindUniqueOrThrowArgs} args - Arguments to find a VoucherEntry
+     * @example
+     * // Get one VoucherEntry
+     * const voucherEntry = await prisma.voucherEntry.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VoucherEntryFindUniqueOrThrowArgs>(args: SelectSubset<T, VoucherEntryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VoucherEntryClient<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VoucherEntry that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherEntryFindFirstArgs} args - Arguments to find a VoucherEntry
+     * @example
+     * // Get one VoucherEntry
+     * const voucherEntry = await prisma.voucherEntry.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VoucherEntryFindFirstArgs>(args?: SelectSubset<T, VoucherEntryFindFirstArgs<ExtArgs>>): Prisma__VoucherEntryClient<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VoucherEntry that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherEntryFindFirstOrThrowArgs} args - Arguments to find a VoucherEntry
+     * @example
+     * // Get one VoucherEntry
+     * const voucherEntry = await prisma.voucherEntry.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VoucherEntryFindFirstOrThrowArgs>(args?: SelectSubset<T, VoucherEntryFindFirstOrThrowArgs<ExtArgs>>): Prisma__VoucherEntryClient<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more VoucherEntries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherEntryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all VoucherEntries
+     * const voucherEntries = await prisma.voucherEntry.findMany()
+     * 
+     * // Get first 10 VoucherEntries
+     * const voucherEntries = await prisma.voucherEntry.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const voucherEntryWithIdOnly = await prisma.voucherEntry.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VoucherEntryFindManyArgs>(args?: SelectSubset<T, VoucherEntryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a VoucherEntry.
+     * @param {VoucherEntryCreateArgs} args - Arguments to create a VoucherEntry.
+     * @example
+     * // Create one VoucherEntry
+     * const VoucherEntry = await prisma.voucherEntry.create({
+     *   data: {
+     *     // ... data to create a VoucherEntry
+     *   }
+     * })
+     * 
+     */
+    create<T extends VoucherEntryCreateArgs>(args: SelectSubset<T, VoucherEntryCreateArgs<ExtArgs>>): Prisma__VoucherEntryClient<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many VoucherEntries.
+     * @param {VoucherEntryCreateManyArgs} args - Arguments to create many VoucherEntries.
+     * @example
+     * // Create many VoucherEntries
+     * const voucherEntry = await prisma.voucherEntry.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VoucherEntryCreateManyArgs>(args?: SelectSubset<T, VoucherEntryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many VoucherEntries and returns the data saved in the database.
+     * @param {VoucherEntryCreateManyAndReturnArgs} args - Arguments to create many VoucherEntries.
+     * @example
+     * // Create many VoucherEntries
+     * const voucherEntry = await prisma.voucherEntry.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many VoucherEntries and only return the `id`
+     * const voucherEntryWithIdOnly = await prisma.voucherEntry.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends VoucherEntryCreateManyAndReturnArgs>(args?: SelectSubset<T, VoucherEntryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a VoucherEntry.
+     * @param {VoucherEntryDeleteArgs} args - Arguments to delete one VoucherEntry.
+     * @example
+     * // Delete one VoucherEntry
+     * const VoucherEntry = await prisma.voucherEntry.delete({
+     *   where: {
+     *     // ... filter to delete one VoucherEntry
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VoucherEntryDeleteArgs>(args: SelectSubset<T, VoucherEntryDeleteArgs<ExtArgs>>): Prisma__VoucherEntryClient<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one VoucherEntry.
+     * @param {VoucherEntryUpdateArgs} args - Arguments to update one VoucherEntry.
+     * @example
+     * // Update one VoucherEntry
+     * const voucherEntry = await prisma.voucherEntry.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VoucherEntryUpdateArgs>(args: SelectSubset<T, VoucherEntryUpdateArgs<ExtArgs>>): Prisma__VoucherEntryClient<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more VoucherEntries.
+     * @param {VoucherEntryDeleteManyArgs} args - Arguments to filter VoucherEntries to delete.
+     * @example
+     * // Delete a few VoucherEntries
+     * const { count } = await prisma.voucherEntry.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VoucherEntryDeleteManyArgs>(args?: SelectSubset<T, VoucherEntryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VoucherEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherEntryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many VoucherEntries
+     * const voucherEntry = await prisma.voucherEntry.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VoucherEntryUpdateManyArgs>(args: SelectSubset<T, VoucherEntryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VoucherEntries and returns the data updated in the database.
+     * @param {VoucherEntryUpdateManyAndReturnArgs} args - Arguments to update many VoucherEntries.
+     * @example
+     * // Update many VoucherEntries
+     * const voucherEntry = await prisma.voucherEntry.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more VoucherEntries and only return the `id`
+     * const voucherEntryWithIdOnly = await prisma.voucherEntry.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends VoucherEntryUpdateManyAndReturnArgs>(args: SelectSubset<T, VoucherEntryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one VoucherEntry.
+     * @param {VoucherEntryUpsertArgs} args - Arguments to update or create a VoucherEntry.
+     * @example
+     * // Update or create a VoucherEntry
+     * const voucherEntry = await prisma.voucherEntry.upsert({
+     *   create: {
+     *     // ... data to create a VoucherEntry
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the VoucherEntry we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VoucherEntryUpsertArgs>(args: SelectSubset<T, VoucherEntryUpsertArgs<ExtArgs>>): Prisma__VoucherEntryClient<$Result.GetResult<Prisma.$VoucherEntryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of VoucherEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherEntryCountArgs} args - Arguments to filter VoucherEntries to count.
+     * @example
+     * // Count the number of VoucherEntries
+     * const count = await prisma.voucherEntry.count({
+     *   where: {
+     *     // ... the filter for the VoucherEntries we want to count
+     *   }
+     * })
+    **/
+    count<T extends VoucherEntryCountArgs>(
+      args?: Subset<T, VoucherEntryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VoucherEntryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a VoucherEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherEntryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VoucherEntryAggregateArgs>(args: Subset<T, VoucherEntryAggregateArgs>): Prisma.PrismaPromise<GetVoucherEntryAggregateType<T>>
+
+    /**
+     * Group by VoucherEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VoucherEntryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VoucherEntryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VoucherEntryGroupByArgs['orderBy'] }
+        : { orderBy?: VoucherEntryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VoucherEntryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVoucherEntryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the VoucherEntry model
+   */
+  readonly fields: VoucherEntryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for VoucherEntry.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VoucherEntryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    voucher<T extends VoucherDefaultArgs<ExtArgs> = {}>(args?: Subset<T, VoucherDefaultArgs<ExtArgs>>): Prisma__VoucherClient<$Result.GetResult<Prisma.$VoucherPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    account<T extends AccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AccountDefaultArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the VoucherEntry model
+   */
+  interface VoucherEntryFieldRefs {
+    readonly id: FieldRef<"VoucherEntry", 'Int'>
+    readonly voucherId: FieldRef<"VoucherEntry", 'Int'>
+    readonly accountId: FieldRef<"VoucherEntry", 'Int'>
+    readonly debit: FieldRef<"VoucherEntry", 'Float'>
+    readonly credit: FieldRef<"VoucherEntry", 'Float'>
+    readonly description: FieldRef<"VoucherEntry", 'String'>
+    readonly createdAt: FieldRef<"VoucherEntry", 'DateTime'>
+    readonly updatedAt: FieldRef<"VoucherEntry", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * VoucherEntry findUnique
+   */
+  export type VoucherEntryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which VoucherEntry to fetch.
+     */
+    where: VoucherEntryWhereUniqueInput
+  }
+
+  /**
+   * VoucherEntry findUniqueOrThrow
+   */
+  export type VoucherEntryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which VoucherEntry to fetch.
+     */
+    where: VoucherEntryWhereUniqueInput
+  }
+
+  /**
+   * VoucherEntry findFirst
+   */
+  export type VoucherEntryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which VoucherEntry to fetch.
+     */
+    where?: VoucherEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VoucherEntries to fetch.
+     */
+    orderBy?: VoucherEntryOrderByWithRelationInput | VoucherEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VoucherEntries.
+     */
+    cursor?: VoucherEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VoucherEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VoucherEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VoucherEntries.
+     */
+    distinct?: VoucherEntryScalarFieldEnum | VoucherEntryScalarFieldEnum[]
+  }
+
+  /**
+   * VoucherEntry findFirstOrThrow
+   */
+  export type VoucherEntryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which VoucherEntry to fetch.
+     */
+    where?: VoucherEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VoucherEntries to fetch.
+     */
+    orderBy?: VoucherEntryOrderByWithRelationInput | VoucherEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VoucherEntries.
+     */
+    cursor?: VoucherEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VoucherEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VoucherEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VoucherEntries.
+     */
+    distinct?: VoucherEntryScalarFieldEnum | VoucherEntryScalarFieldEnum[]
+  }
+
+  /**
+   * VoucherEntry findMany
+   */
+  export type VoucherEntryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which VoucherEntries to fetch.
+     */
+    where?: VoucherEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VoucherEntries to fetch.
+     */
+    orderBy?: VoucherEntryOrderByWithRelationInput | VoucherEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing VoucherEntries.
+     */
+    cursor?: VoucherEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VoucherEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VoucherEntries.
+     */
+    skip?: number
+    distinct?: VoucherEntryScalarFieldEnum | VoucherEntryScalarFieldEnum[]
+  }
+
+  /**
+   * VoucherEntry create
+   */
+  export type VoucherEntryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a VoucherEntry.
+     */
+    data: XOR<VoucherEntryCreateInput, VoucherEntryUncheckedCreateInput>
+  }
+
+  /**
+   * VoucherEntry createMany
+   */
+  export type VoucherEntryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many VoucherEntries.
+     */
+    data: VoucherEntryCreateManyInput | VoucherEntryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * VoucherEntry createManyAndReturn
+   */
+  export type VoucherEntryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * The data used to create many VoucherEntries.
+     */
+    data: VoucherEntryCreateManyInput | VoucherEntryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * VoucherEntry update
+   */
+  export type VoucherEntryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a VoucherEntry.
+     */
+    data: XOR<VoucherEntryUpdateInput, VoucherEntryUncheckedUpdateInput>
+    /**
+     * Choose, which VoucherEntry to update.
+     */
+    where: VoucherEntryWhereUniqueInput
+  }
+
+  /**
+   * VoucherEntry updateMany
+   */
+  export type VoucherEntryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update VoucherEntries.
+     */
+    data: XOR<VoucherEntryUpdateManyMutationInput, VoucherEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which VoucherEntries to update
+     */
+    where?: VoucherEntryWhereInput
+    /**
+     * Limit how many VoucherEntries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * VoucherEntry updateManyAndReturn
+   */
+  export type VoucherEntryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * The data used to update VoucherEntries.
+     */
+    data: XOR<VoucherEntryUpdateManyMutationInput, VoucherEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which VoucherEntries to update
+     */
+    where?: VoucherEntryWhereInput
+    /**
+     * Limit how many VoucherEntries to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * VoucherEntry upsert
+   */
+  export type VoucherEntryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the VoucherEntry to update in case it exists.
+     */
+    where: VoucherEntryWhereUniqueInput
+    /**
+     * In case the VoucherEntry found by the `where` argument doesn't exist, create a new VoucherEntry with this data.
+     */
+    create: XOR<VoucherEntryCreateInput, VoucherEntryUncheckedCreateInput>
+    /**
+     * In case the VoucherEntry was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VoucherEntryUpdateInput, VoucherEntryUncheckedUpdateInput>
+  }
+
+  /**
+   * VoucherEntry delete
+   */
+  export type VoucherEntryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryInclude<ExtArgs> | null
+    /**
+     * Filter which VoucherEntry to delete.
+     */
+    where: VoucherEntryWhereUniqueInput
+  }
+
+  /**
+   * VoucherEntry deleteMany
+   */
+  export type VoucherEntryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VoucherEntries to delete
+     */
+    where?: VoucherEntryWhereInput
+    /**
+     * Limit how many VoucherEntries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * VoucherEntry without action
+   */
+  export type VoucherEntryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VoucherEntry
+     */
+    select?: VoucherEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VoucherEntry
+     */
+    omit?: VoucherEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VoucherEntryInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -37685,11 +40555,21 @@ export namespace Prisma {
     name: 'name',
     uniqueId: 'uniqueId',
     address: 'address',
+    city: 'city',
+    state: 'state',
+    postalCode: 'postalCode',
+    country: 'country',
     phone: 'phone',
     email: 'email',
+    website: 'website',
+    taxNumber: 'taxNumber',
+    registrationNo: 'registrationNo',
     industry: 'industry',
     logo: 'logo',
+    tagline: 'tagline',
     themeConfig: 'themeConfig',
+    fiscalYearStart: 'fiscalYearStart',
+    fiscalYearEnd: 'fiscalYearEnd',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -38126,6 +41006,38 @@ export namespace Prisma {
   export type PortScalarFieldEnum = (typeof PortScalarFieldEnum)[keyof typeof PortScalarFieldEnum]
 
 
+  export const VoucherScalarFieldEnum: {
+    id: 'id',
+    voucherNumber: 'voucherNumber',
+    voucherType: 'voucherType',
+    date: 'date',
+    description: 'description',
+    companyId: 'companyId',
+    division: 'division',
+    isPosted: 'isPosted',
+    postedAt: 'postedAt',
+    postedById: 'postedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type VoucherScalarFieldEnum = (typeof VoucherScalarFieldEnum)[keyof typeof VoucherScalarFieldEnum]
+
+
+  export const VoucherEntryScalarFieldEnum: {
+    id: 'id',
+    voucherId: 'voucherId',
+    accountId: 'accountId',
+    debit: 'debit',
+    credit: 'credit',
+    description: 'description',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type VoucherEntryScalarFieldEnum = (typeof VoucherEntryScalarFieldEnum)[keyof typeof VoucherEntryScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -38359,6 +41271,20 @@ export namespace Prisma {
    */
   export type ListEnumPaymentModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMode[]'>
     
+
+
+  /**
+   * Reference to a field of type 'VoucherType'
+   */
+  export type EnumVoucherTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VoucherType'>
+    
+
+
+  /**
+   * Reference to a field of type 'VoucherType[]'
+   */
+  export type ListEnumVoucherTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VoucherType[]'>
+    
   /**
    * Deep Input Types
    */
@@ -38372,11 +41298,21 @@ export namespace Prisma {
     name?: StringFilter<"Company"> | string
     uniqueId?: StringFilter<"Company"> | string
     address?: StringNullableFilter<"Company"> | string | null
+    city?: StringNullableFilter<"Company"> | string | null
+    state?: StringNullableFilter<"Company"> | string | null
+    postalCode?: StringNullableFilter<"Company"> | string | null
+    country?: StringNullableFilter<"Company"> | string | null
     phone?: StringNullableFilter<"Company"> | string | null
     email?: StringNullableFilter<"Company"> | string | null
+    website?: StringNullableFilter<"Company"> | string | null
+    taxNumber?: StringNullableFilter<"Company"> | string | null
+    registrationNo?: StringNullableFilter<"Company"> | string | null
     industry?: StringNullableFilter<"Company"> | string | null
     logo?: StringNullableFilter<"Company"> | string | null
+    tagline?: StringNullableFilter<"Company"> | string | null
     themeConfig?: JsonNullableFilter<"Company">
+    fiscalYearStart?: DateTimeNullableFilter<"Company"> | Date | string | null
+    fiscalYearEnd?: DateTimeNullableFilter<"Company"> | Date | string | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -38392,6 +41328,7 @@ export namespace Prisma {
     accounts?: AccountListRelationFilter
     transactions?: TransactionListRelationFilter
     payments?: PaymentListRelationFilter
+    vouchers?: VoucherListRelationFilter
     productCategories?: ProductCategoryListRelationFilter
     products?: ProductListRelationFilter
     warehouses?: WarehouseListRelationFilter
@@ -38408,11 +41345,21 @@ export namespace Prisma {
     name?: SortOrder
     uniqueId?: SortOrder
     address?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    postalCode?: SortOrderInput | SortOrder
+    country?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
+    taxNumber?: SortOrderInput | SortOrder
+    registrationNo?: SortOrderInput | SortOrder
     industry?: SortOrderInput | SortOrder
     logo?: SortOrderInput | SortOrder
+    tagline?: SortOrderInput | SortOrder
     themeConfig?: SortOrderInput | SortOrder
+    fiscalYearStart?: SortOrderInput | SortOrder
+    fiscalYearEnd?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     users?: UserOrderByRelationAggregateInput
@@ -38428,6 +41375,7 @@ export namespace Prisma {
     accounts?: AccountOrderByRelationAggregateInput
     transactions?: TransactionOrderByRelationAggregateInput
     payments?: PaymentOrderByRelationAggregateInput
+    vouchers?: VoucherOrderByRelationAggregateInput
     productCategories?: ProductCategoryOrderByRelationAggregateInput
     products?: ProductOrderByRelationAggregateInput
     warehouses?: WarehouseOrderByRelationAggregateInput
@@ -38447,11 +41395,21 @@ export namespace Prisma {
     NOT?: CompanyWhereInput | CompanyWhereInput[]
     name?: StringFilter<"Company"> | string
     address?: StringNullableFilter<"Company"> | string | null
+    city?: StringNullableFilter<"Company"> | string | null
+    state?: StringNullableFilter<"Company"> | string | null
+    postalCode?: StringNullableFilter<"Company"> | string | null
+    country?: StringNullableFilter<"Company"> | string | null
     phone?: StringNullableFilter<"Company"> | string | null
     email?: StringNullableFilter<"Company"> | string | null
+    website?: StringNullableFilter<"Company"> | string | null
+    taxNumber?: StringNullableFilter<"Company"> | string | null
+    registrationNo?: StringNullableFilter<"Company"> | string | null
     industry?: StringNullableFilter<"Company"> | string | null
     logo?: StringNullableFilter<"Company"> | string | null
+    tagline?: StringNullableFilter<"Company"> | string | null
     themeConfig?: JsonNullableFilter<"Company">
+    fiscalYearStart?: DateTimeNullableFilter<"Company"> | Date | string | null
+    fiscalYearEnd?: DateTimeNullableFilter<"Company"> | Date | string | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -38467,6 +41425,7 @@ export namespace Prisma {
     accounts?: AccountListRelationFilter
     transactions?: TransactionListRelationFilter
     payments?: PaymentListRelationFilter
+    vouchers?: VoucherListRelationFilter
     productCategories?: ProductCategoryListRelationFilter
     products?: ProductListRelationFilter
     warehouses?: WarehouseListRelationFilter
@@ -38483,11 +41442,21 @@ export namespace Prisma {
     name?: SortOrder
     uniqueId?: SortOrder
     address?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    postalCode?: SortOrderInput | SortOrder
+    country?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
+    taxNumber?: SortOrderInput | SortOrder
+    registrationNo?: SortOrderInput | SortOrder
     industry?: SortOrderInput | SortOrder
     logo?: SortOrderInput | SortOrder
+    tagline?: SortOrderInput | SortOrder
     themeConfig?: SortOrderInput | SortOrder
+    fiscalYearStart?: SortOrderInput | SortOrder
+    fiscalYearEnd?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CompanyCountOrderByAggregateInput
@@ -38505,11 +41474,21 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Company"> | string
     uniqueId?: StringWithAggregatesFilter<"Company"> | string
     address?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    city?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    state?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    postalCode?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    country?: StringNullableWithAggregatesFilter<"Company"> | string | null
     phone?: StringNullableWithAggregatesFilter<"Company"> | string | null
     email?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    website?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    taxNumber?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    registrationNo?: StringNullableWithAggregatesFilter<"Company"> | string | null
     industry?: StringNullableWithAggregatesFilter<"Company"> | string | null
     logo?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    tagline?: StringNullableWithAggregatesFilter<"Company"> | string | null
     themeConfig?: JsonNullableWithAggregatesFilter<"Company">
+    fiscalYearStart?: DateTimeNullableWithAggregatesFilter<"Company"> | Date | string | null
+    fiscalYearEnd?: DateTimeNullableWithAggregatesFilter<"Company"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
   }
@@ -38858,6 +41837,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     auditLogs?: AuditLogListRelationFilter
+    postedVouchers?: VoucherListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -38877,6 +41857,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     company?: CompanyOrderByWithRelationInput
     auditLogs?: AuditLogOrderByRelationAggregateInput
+    postedVouchers?: VoucherOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -38899,6 +41880,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     auditLogs?: AuditLogListRelationFilter
+    postedVouchers?: VoucherListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -40323,6 +43305,7 @@ export namespace Prisma {
     children?: AccountListRelationFilter
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     entries?: AccountEntryListRelationFilter
+    voucherEntries?: VoucherEntryListRelationFilter
     customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
     vendor?: XOR<VendorNullableScalarRelationFilter, VendorWhereInput> | null
   }
@@ -40342,6 +43325,7 @@ export namespace Prisma {
     children?: AccountOrderByRelationAggregateInput
     company?: CompanyOrderByWithRelationInput
     entries?: AccountEntryOrderByRelationAggregateInput
+    voucherEntries?: VoucherEntryOrderByRelationAggregateInput
     customer?: CustomerOrderByWithRelationInput
     vendor?: VendorOrderByWithRelationInput
   }
@@ -40365,6 +43349,7 @@ export namespace Prisma {
     children?: AccountListRelationFilter
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     entries?: AccountEntryListRelationFilter
+    voucherEntries?: VoucherEntryListRelationFilter
     customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
     vendor?: XOR<VendorNullableScalarRelationFilter, VendorWhereInput> | null
   }, "id" | "companyId_code">
@@ -40879,15 +43864,199 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Port"> | Date | string
   }
 
+  export type VoucherWhereInput = {
+    AND?: VoucherWhereInput | VoucherWhereInput[]
+    OR?: VoucherWhereInput[]
+    NOT?: VoucherWhereInput | VoucherWhereInput[]
+    id?: IntFilter<"Voucher"> | number
+    voucherNumber?: StringFilter<"Voucher"> | string
+    voucherType?: EnumVoucherTypeFilter<"Voucher"> | $Enums.VoucherType
+    date?: DateTimeFilter<"Voucher"> | Date | string
+    description?: StringNullableFilter<"Voucher"> | string | null
+    companyId?: IntFilter<"Voucher"> | number
+    division?: StringNullableFilter<"Voucher"> | string | null
+    isPosted?: BoolFilter<"Voucher"> | boolean
+    postedAt?: DateTimeNullableFilter<"Voucher"> | Date | string | null
+    postedById?: IntNullableFilter<"Voucher"> | number | null
+    createdAt?: DateTimeFilter<"Voucher"> | Date | string
+    updatedAt?: DateTimeFilter<"Voucher"> | Date | string
+    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
+    entries?: VoucherEntryListRelationFilter
+    postedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type VoucherOrderByWithRelationInput = {
+    id?: SortOrder
+    voucherNumber?: SortOrder
+    voucherType?: SortOrder
+    date?: SortOrder
+    description?: SortOrderInput | SortOrder
+    companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
+    isPosted?: SortOrder
+    postedAt?: SortOrderInput | SortOrder
+    postedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    company?: CompanyOrderByWithRelationInput
+    entries?: VoucherEntryOrderByRelationAggregateInput
+    postedBy?: UserOrderByWithRelationInput
+  }
+
+  export type VoucherWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    companyId_voucherNumber?: VoucherCompanyIdVoucherNumberCompoundUniqueInput
+    AND?: VoucherWhereInput | VoucherWhereInput[]
+    OR?: VoucherWhereInput[]
+    NOT?: VoucherWhereInput | VoucherWhereInput[]
+    voucherNumber?: StringFilter<"Voucher"> | string
+    voucherType?: EnumVoucherTypeFilter<"Voucher"> | $Enums.VoucherType
+    date?: DateTimeFilter<"Voucher"> | Date | string
+    description?: StringNullableFilter<"Voucher"> | string | null
+    companyId?: IntFilter<"Voucher"> | number
+    division?: StringNullableFilter<"Voucher"> | string | null
+    isPosted?: BoolFilter<"Voucher"> | boolean
+    postedAt?: DateTimeNullableFilter<"Voucher"> | Date | string | null
+    postedById?: IntNullableFilter<"Voucher"> | number | null
+    createdAt?: DateTimeFilter<"Voucher"> | Date | string
+    updatedAt?: DateTimeFilter<"Voucher"> | Date | string
+    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
+    entries?: VoucherEntryListRelationFilter
+    postedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "companyId_voucherNumber">
+
+  export type VoucherOrderByWithAggregationInput = {
+    id?: SortOrder
+    voucherNumber?: SortOrder
+    voucherType?: SortOrder
+    date?: SortOrder
+    description?: SortOrderInput | SortOrder
+    companyId?: SortOrder
+    division?: SortOrderInput | SortOrder
+    isPosted?: SortOrder
+    postedAt?: SortOrderInput | SortOrder
+    postedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: VoucherCountOrderByAggregateInput
+    _avg?: VoucherAvgOrderByAggregateInput
+    _max?: VoucherMaxOrderByAggregateInput
+    _min?: VoucherMinOrderByAggregateInput
+    _sum?: VoucherSumOrderByAggregateInput
+  }
+
+  export type VoucherScalarWhereWithAggregatesInput = {
+    AND?: VoucherScalarWhereWithAggregatesInput | VoucherScalarWhereWithAggregatesInput[]
+    OR?: VoucherScalarWhereWithAggregatesInput[]
+    NOT?: VoucherScalarWhereWithAggregatesInput | VoucherScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Voucher"> | number
+    voucherNumber?: StringWithAggregatesFilter<"Voucher"> | string
+    voucherType?: EnumVoucherTypeWithAggregatesFilter<"Voucher"> | $Enums.VoucherType
+    date?: DateTimeWithAggregatesFilter<"Voucher"> | Date | string
+    description?: StringNullableWithAggregatesFilter<"Voucher"> | string | null
+    companyId?: IntWithAggregatesFilter<"Voucher"> | number
+    division?: StringNullableWithAggregatesFilter<"Voucher"> | string | null
+    isPosted?: BoolWithAggregatesFilter<"Voucher"> | boolean
+    postedAt?: DateTimeNullableWithAggregatesFilter<"Voucher"> | Date | string | null
+    postedById?: IntNullableWithAggregatesFilter<"Voucher"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"Voucher"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Voucher"> | Date | string
+  }
+
+  export type VoucherEntryWhereInput = {
+    AND?: VoucherEntryWhereInput | VoucherEntryWhereInput[]
+    OR?: VoucherEntryWhereInput[]
+    NOT?: VoucherEntryWhereInput | VoucherEntryWhereInput[]
+    id?: IntFilter<"VoucherEntry"> | number
+    voucherId?: IntFilter<"VoucherEntry"> | number
+    accountId?: IntFilter<"VoucherEntry"> | number
+    debit?: FloatFilter<"VoucherEntry"> | number
+    credit?: FloatFilter<"VoucherEntry"> | number
+    description?: StringNullableFilter<"VoucherEntry"> | string | null
+    createdAt?: DateTimeFilter<"VoucherEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"VoucherEntry"> | Date | string
+    voucher?: XOR<VoucherScalarRelationFilter, VoucherWhereInput>
+    account?: XOR<AccountScalarRelationFilter, AccountWhereInput>
+  }
+
+  export type VoucherEntryOrderByWithRelationInput = {
+    id?: SortOrder
+    voucherId?: SortOrder
+    accountId?: SortOrder
+    debit?: SortOrder
+    credit?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    voucher?: VoucherOrderByWithRelationInput
+    account?: AccountOrderByWithRelationInput
+  }
+
+  export type VoucherEntryWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: VoucherEntryWhereInput | VoucherEntryWhereInput[]
+    OR?: VoucherEntryWhereInput[]
+    NOT?: VoucherEntryWhereInput | VoucherEntryWhereInput[]
+    voucherId?: IntFilter<"VoucherEntry"> | number
+    accountId?: IntFilter<"VoucherEntry"> | number
+    debit?: FloatFilter<"VoucherEntry"> | number
+    credit?: FloatFilter<"VoucherEntry"> | number
+    description?: StringNullableFilter<"VoucherEntry"> | string | null
+    createdAt?: DateTimeFilter<"VoucherEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"VoucherEntry"> | Date | string
+    voucher?: XOR<VoucherScalarRelationFilter, VoucherWhereInput>
+    account?: XOR<AccountScalarRelationFilter, AccountWhereInput>
+  }, "id">
+
+  export type VoucherEntryOrderByWithAggregationInput = {
+    id?: SortOrder
+    voucherId?: SortOrder
+    accountId?: SortOrder
+    debit?: SortOrder
+    credit?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: VoucherEntryCountOrderByAggregateInput
+    _avg?: VoucherEntryAvgOrderByAggregateInput
+    _max?: VoucherEntryMaxOrderByAggregateInput
+    _min?: VoucherEntryMinOrderByAggregateInput
+    _sum?: VoucherEntrySumOrderByAggregateInput
+  }
+
+  export type VoucherEntryScalarWhereWithAggregatesInput = {
+    AND?: VoucherEntryScalarWhereWithAggregatesInput | VoucherEntryScalarWhereWithAggregatesInput[]
+    OR?: VoucherEntryScalarWhereWithAggregatesInput[]
+    NOT?: VoucherEntryScalarWhereWithAggregatesInput | VoucherEntryScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"VoucherEntry"> | number
+    voucherId?: IntWithAggregatesFilter<"VoucherEntry"> | number
+    accountId?: IntWithAggregatesFilter<"VoucherEntry"> | number
+    debit?: FloatWithAggregatesFilter<"VoucherEntry"> | number
+    credit?: FloatWithAggregatesFilter<"VoucherEntry"> | number
+    description?: StringNullableWithAggregatesFilter<"VoucherEntry"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"VoucherEntry"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"VoucherEntry"> | Date | string
+  }
+
   export type CompanyCreateInput = {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -40903,6 +44072,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -40919,11 +44089,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -40939,6 +44119,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -40954,11 +44135,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -40974,6 +44165,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -40990,11 +44182,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -41010,6 +44212,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -41026,11 +44229,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -41039,11 +44252,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41053,11 +44276,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41383,6 +44616,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     company?: CompanyCreateNestedOneWithoutUsersInput
     auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    postedVouchers?: VoucherCreateNestedManyWithoutPostedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -41401,6 +44635,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    postedVouchers?: VoucherUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type UserUpdateInput = {
@@ -41418,6 +44653,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneWithoutUsersNestedInput
     auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    postedVouchers?: VoucherUpdateManyWithoutPostedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -41436,6 +44672,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    postedVouchers?: VoucherUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -42946,6 +46183,7 @@ export namespace Prisma {
     children?: AccountCreateNestedManyWithoutParentInput
     company: CompanyCreateNestedOneWithoutAccountsInput
     entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    voucherEntries?: VoucherEntryCreateNestedManyWithoutAccountInput
     customer?: CustomerCreateNestedOneWithoutAccountInput
     vendor?: VendorCreateNestedOneWithoutAccountInput
   }
@@ -42963,6 +46201,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
     entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    voucherEntries?: VoucherEntryUncheckedCreateNestedManyWithoutAccountInput
     customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
     vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
   }
@@ -42979,6 +46218,7 @@ export namespace Prisma {
     children?: AccountUpdateManyWithoutParentNestedInput
     company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
     entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    voucherEntries?: VoucherEntryUpdateManyWithoutAccountNestedInput
     customer?: CustomerUpdateOneWithoutAccountNestedInput
     vendor?: VendorUpdateOneWithoutAccountNestedInput
   }
@@ -42996,6 +46236,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
     entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    voucherEntries?: VoucherEntryUncheckedUpdateManyWithoutAccountNestedInput
     customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
     vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
   }
@@ -43503,6 +46744,182 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type VoucherCreateInput = {
+    voucherNumber: string
+    voucherType: $Enums.VoucherType
+    date?: Date | string
+    description?: string | null
+    division?: string | null
+    isPosted?: boolean
+    postedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutVouchersInput
+    entries?: VoucherEntryCreateNestedManyWithoutVoucherInput
+    postedBy?: UserCreateNestedOneWithoutPostedVouchersInput
+  }
+
+  export type VoucherUncheckedCreateInput = {
+    id?: number
+    voucherNumber: string
+    voucherType: $Enums.VoucherType
+    date?: Date | string
+    description?: string | null
+    companyId: number
+    division?: string | null
+    isPosted?: boolean
+    postedAt?: Date | string | null
+    postedById?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    entries?: VoucherEntryUncheckedCreateNestedManyWithoutVoucherInput
+  }
+
+  export type VoucherUpdateInput = {
+    voucherNumber?: StringFieldUpdateOperationsInput | string
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    isPosted?: BoolFieldUpdateOperationsInput | boolean
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutVouchersNestedInput
+    entries?: VoucherEntryUpdateManyWithoutVoucherNestedInput
+    postedBy?: UserUpdateOneWithoutPostedVouchersNestedInput
+  }
+
+  export type VoucherUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherNumber?: StringFieldUpdateOperationsInput | string
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    isPosted?: BoolFieldUpdateOperationsInput | boolean
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: VoucherEntryUncheckedUpdateManyWithoutVoucherNestedInput
+  }
+
+  export type VoucherCreateManyInput = {
+    id?: number
+    voucherNumber: string
+    voucherType: $Enums.VoucherType
+    date?: Date | string
+    description?: string | null
+    companyId: number
+    division?: string | null
+    isPosted?: boolean
+    postedAt?: Date | string | null
+    postedById?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VoucherUpdateManyMutationInput = {
+    voucherNumber?: StringFieldUpdateOperationsInput | string
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    isPosted?: BoolFieldUpdateOperationsInput | boolean
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VoucherUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherNumber?: StringFieldUpdateOperationsInput | string
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    isPosted?: BoolFieldUpdateOperationsInput | boolean
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VoucherEntryCreateInput = {
+    debit?: number
+    credit?: number
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    voucher: VoucherCreateNestedOneWithoutEntriesInput
+    account: AccountCreateNestedOneWithoutVoucherEntriesInput
+  }
+
+  export type VoucherEntryUncheckedCreateInput = {
+    id?: number
+    voucherId: number
+    accountId: number
+    debit?: number
+    credit?: number
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VoucherEntryUpdateInput = {
+    debit?: FloatFieldUpdateOperationsInput | number
+    credit?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    voucher?: VoucherUpdateOneRequiredWithoutEntriesNestedInput
+    account?: AccountUpdateOneRequiredWithoutVoucherEntriesNestedInput
+  }
+
+  export type VoucherEntryUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherId?: IntFieldUpdateOperationsInput | number
+    accountId?: IntFieldUpdateOperationsInput | number
+    debit?: FloatFieldUpdateOperationsInput | number
+    credit?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VoucherEntryCreateManyInput = {
+    id?: number
+    voucherId: number
+    accountId: number
+    debit?: number
+    credit?: number
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VoucherEntryUpdateManyMutationInput = {
+    debit?: FloatFieldUpdateOperationsInput | number
+    credit?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VoucherEntryUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherId?: IntFieldUpdateOperationsInput | number
+    accountId?: IntFieldUpdateOperationsInput | number
+    debit?: FloatFieldUpdateOperationsInput | number
+    credit?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -43565,6 +46982,17 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -43654,6 +47082,12 @@ export namespace Prisma {
     every?: PaymentWhereInput
     some?: PaymentWhereInput
     none?: PaymentWhereInput
+  }
+
+  export type VoucherListRelationFilter = {
+    every?: VoucherWhereInput
+    some?: VoucherWhereInput
+    none?: VoucherWhereInput
   }
 
   export type ProductCategoryListRelationFilter = {
@@ -43767,6 +47201,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type VoucherOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ProductCategoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -43808,11 +47246,21 @@ export namespace Prisma {
     name?: SortOrder
     uniqueId?: SortOrder
     address?: SortOrder
+    city?: SortOrder
+    state?: SortOrder
+    postalCode?: SortOrder
+    country?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    website?: SortOrder
+    taxNumber?: SortOrder
+    registrationNo?: SortOrder
     industry?: SortOrder
     logo?: SortOrder
+    tagline?: SortOrder
     themeConfig?: SortOrder
+    fiscalYearStart?: SortOrder
+    fiscalYearEnd?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -43826,10 +47274,20 @@ export namespace Prisma {
     name?: SortOrder
     uniqueId?: SortOrder
     address?: SortOrder
+    city?: SortOrder
+    state?: SortOrder
+    postalCode?: SortOrder
+    country?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    website?: SortOrder
+    taxNumber?: SortOrder
+    registrationNo?: SortOrder
     industry?: SortOrder
     logo?: SortOrder
+    tagline?: SortOrder
+    fiscalYearStart?: SortOrder
+    fiscalYearEnd?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -43839,10 +47297,20 @@ export namespace Prisma {
     name?: SortOrder
     uniqueId?: SortOrder
     address?: SortOrder
+    city?: SortOrder
+    state?: SortOrder
+    postalCode?: SortOrder
+    country?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    website?: SortOrder
+    taxNumber?: SortOrder
+    registrationNo?: SortOrder
     industry?: SortOrder
     logo?: SortOrder
+    tagline?: SortOrder
+    fiscalYearStart?: SortOrder
+    fiscalYearEnd?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -43927,6 +47395,20 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedJsonNullableFilter<$PrismaModel>
     _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -44233,17 +47715,6 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type CompanyNullableScalarRelationFilter = {
     is?: CompanyWhereInput | null
     isNot?: CompanyWhereInput | null
@@ -44318,20 +47789,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type AccountNullableScalarRelationFilter = {
@@ -45405,12 +48862,22 @@ export namespace Prisma {
     none?: AccountEntryWhereInput
   }
 
+  export type VoucherEntryListRelationFilter = {
+    every?: VoucherEntryWhereInput
+    some?: VoucherEntryWhereInput
+    none?: VoucherEntryWhereInput
+  }
+
   export type CustomerNullableScalarRelationFilter = {
     is?: CustomerWhereInput | null
     isNot?: CustomerWhereInput | null
   }
 
   export type AccountEntryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type VoucherEntryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -45846,6 +49313,144 @@ export namespace Prisma {
     companyId?: SortOrder
   }
 
+  export type EnumVoucherTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.VoucherType | EnumVoucherTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.VoucherType[] | ListEnumVoucherTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.VoucherType[] | ListEnumVoucherTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumVoucherTypeFilter<$PrismaModel> | $Enums.VoucherType
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type VoucherCompanyIdVoucherNumberCompoundUniqueInput = {
+    companyId: number
+    voucherNumber: string
+  }
+
+  export type VoucherCountOrderByAggregateInput = {
+    id?: SortOrder
+    voucherNumber?: SortOrder
+    voucherType?: SortOrder
+    date?: SortOrder
+    description?: SortOrder
+    companyId?: SortOrder
+    division?: SortOrder
+    isPosted?: SortOrder
+    postedAt?: SortOrder
+    postedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VoucherAvgOrderByAggregateInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+    postedById?: SortOrder
+  }
+
+  export type VoucherMaxOrderByAggregateInput = {
+    id?: SortOrder
+    voucherNumber?: SortOrder
+    voucherType?: SortOrder
+    date?: SortOrder
+    description?: SortOrder
+    companyId?: SortOrder
+    division?: SortOrder
+    isPosted?: SortOrder
+    postedAt?: SortOrder
+    postedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VoucherMinOrderByAggregateInput = {
+    id?: SortOrder
+    voucherNumber?: SortOrder
+    voucherType?: SortOrder
+    date?: SortOrder
+    description?: SortOrder
+    companyId?: SortOrder
+    division?: SortOrder
+    isPosted?: SortOrder
+    postedAt?: SortOrder
+    postedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VoucherSumOrderByAggregateInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+    postedById?: SortOrder
+  }
+
+  export type EnumVoucherTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.VoucherType | EnumVoucherTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.VoucherType[] | ListEnumVoucherTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.VoucherType[] | ListEnumVoucherTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumVoucherTypeWithAggregatesFilter<$PrismaModel> | $Enums.VoucherType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumVoucherTypeFilter<$PrismaModel>
+    _max?: NestedEnumVoucherTypeFilter<$PrismaModel>
+  }
+
+  export type VoucherScalarRelationFilter = {
+    is?: VoucherWhereInput
+    isNot?: VoucherWhereInput
+  }
+
+  export type VoucherEntryCountOrderByAggregateInput = {
+    id?: SortOrder
+    voucherId?: SortOrder
+    accountId?: SortOrder
+    debit?: SortOrder
+    credit?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VoucherEntryAvgOrderByAggregateInput = {
+    id?: SortOrder
+    voucherId?: SortOrder
+    accountId?: SortOrder
+    debit?: SortOrder
+    credit?: SortOrder
+  }
+
+  export type VoucherEntryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    voucherId?: SortOrder
+    accountId?: SortOrder
+    debit?: SortOrder
+    credit?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VoucherEntryMinOrderByAggregateInput = {
+    id?: SortOrder
+    voucherId?: SortOrder
+    accountId?: SortOrder
+    debit?: SortOrder
+    credit?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VoucherEntrySumOrderByAggregateInput = {
+    id?: SortOrder
+    voucherId?: SortOrder
+    accountId?: SortOrder
+    debit?: SortOrder
+    credit?: SortOrder
+  }
+
   export type UserCreateNestedManyWithoutCompanyInput = {
     create?: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput> | UserCreateWithoutCompanyInput[] | UserUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: UserCreateOrConnectWithoutCompanyInput | UserCreateOrConnectWithoutCompanyInput[]
@@ -45935,6 +49540,13 @@ export namespace Prisma {
     connectOrCreate?: PaymentCreateOrConnectWithoutCompanyInput | PaymentCreateOrConnectWithoutCompanyInput[]
     createMany?: PaymentCreateManyCompanyInputEnvelope
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+  }
+
+  export type VoucherCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<VoucherCreateWithoutCompanyInput, VoucherUncheckedCreateWithoutCompanyInput> | VoucherCreateWithoutCompanyInput[] | VoucherUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: VoucherCreateOrConnectWithoutCompanyInput | VoucherCreateOrConnectWithoutCompanyInput[]
+    createMany?: VoucherCreateManyCompanyInputEnvelope
+    connect?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
   }
 
   export type ProductCategoryCreateNestedManyWithoutCompanyInput = {
@@ -46091,6 +49703,13 @@ export namespace Prisma {
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
   }
 
+  export type VoucherUncheckedCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<VoucherCreateWithoutCompanyInput, VoucherUncheckedCreateWithoutCompanyInput> | VoucherCreateWithoutCompanyInput[] | VoucherUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: VoucherCreateOrConnectWithoutCompanyInput | VoucherCreateOrConnectWithoutCompanyInput[]
+    createMany?: VoucherCreateManyCompanyInputEnvelope
+    connect?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+  }
+
   export type ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput = {
     create?: XOR<ProductCategoryCreateWithoutCompanyInput, ProductCategoryUncheckedCreateWithoutCompanyInput> | ProductCategoryCreateWithoutCompanyInput[] | ProductCategoryUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: ProductCategoryCreateOrConnectWithoutCompanyInput | ProductCategoryCreateOrConnectWithoutCompanyInput[]
@@ -46160,6 +49779,10 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -46346,6 +49969,20 @@ export namespace Prisma {
     update?: PaymentUpdateWithWhereUniqueWithoutCompanyInput | PaymentUpdateWithWhereUniqueWithoutCompanyInput[]
     updateMany?: PaymentUpdateManyWithWhereWithoutCompanyInput | PaymentUpdateManyWithWhereWithoutCompanyInput[]
     deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
+  }
+
+  export type VoucherUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<VoucherCreateWithoutCompanyInput, VoucherUncheckedCreateWithoutCompanyInput> | VoucherCreateWithoutCompanyInput[] | VoucherUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: VoucherCreateOrConnectWithoutCompanyInput | VoucherCreateOrConnectWithoutCompanyInput[]
+    upsert?: VoucherUpsertWithWhereUniqueWithoutCompanyInput | VoucherUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: VoucherCreateManyCompanyInputEnvelope
+    set?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    disconnect?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    delete?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    connect?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    update?: VoucherUpdateWithWhereUniqueWithoutCompanyInput | VoucherUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: VoucherUpdateManyWithWhereWithoutCompanyInput | VoucherUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: VoucherScalarWhereInput | VoucherScalarWhereInput[]
   }
 
   export type ProductCategoryUpdateManyWithoutCompanyNestedInput = {
@@ -46662,6 +50299,20 @@ export namespace Prisma {
     update?: PaymentUpdateWithWhereUniqueWithoutCompanyInput | PaymentUpdateWithWhereUniqueWithoutCompanyInput[]
     updateMany?: PaymentUpdateManyWithWhereWithoutCompanyInput | PaymentUpdateManyWithWhereWithoutCompanyInput[]
     deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
+  }
+
+  export type VoucherUncheckedUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<VoucherCreateWithoutCompanyInput, VoucherUncheckedCreateWithoutCompanyInput> | VoucherCreateWithoutCompanyInput[] | VoucherUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: VoucherCreateOrConnectWithoutCompanyInput | VoucherCreateOrConnectWithoutCompanyInput[]
+    upsert?: VoucherUpsertWithWhereUniqueWithoutCompanyInput | VoucherUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: VoucherCreateManyCompanyInputEnvelope
+    set?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    disconnect?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    delete?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    connect?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    update?: VoucherUpdateWithWhereUniqueWithoutCompanyInput | VoucherUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: VoucherUpdateManyWithWhereWithoutCompanyInput | VoucherUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: VoucherScalarWhereInput | VoucherScalarWhereInput[]
   }
 
   export type ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput = {
@@ -47035,6 +50686,13 @@ export namespace Prisma {
     connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
   }
 
+  export type VoucherCreateNestedManyWithoutPostedByInput = {
+    create?: XOR<VoucherCreateWithoutPostedByInput, VoucherUncheckedCreateWithoutPostedByInput> | VoucherCreateWithoutPostedByInput[] | VoucherUncheckedCreateWithoutPostedByInput[]
+    connectOrCreate?: VoucherCreateOrConnectWithoutPostedByInput | VoucherCreateOrConnectWithoutPostedByInput[]
+    createMany?: VoucherCreateManyPostedByInputEnvelope
+    connect?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+  }
+
   export type AuditLogUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AuditLogCreateWithoutUserInput, AuditLogUncheckedCreateWithoutUserInput> | AuditLogCreateWithoutUserInput[] | AuditLogUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AuditLogCreateOrConnectWithoutUserInput | AuditLogCreateOrConnectWithoutUserInput[]
@@ -47042,12 +50700,15 @@ export namespace Prisma {
     connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
   }
 
-  export type EnumRoleFieldUpdateOperationsInput = {
-    set?: $Enums.Role
+  export type VoucherUncheckedCreateNestedManyWithoutPostedByInput = {
+    create?: XOR<VoucherCreateWithoutPostedByInput, VoucherUncheckedCreateWithoutPostedByInput> | VoucherCreateWithoutPostedByInput[] | VoucherUncheckedCreateWithoutPostedByInput[]
+    connectOrCreate?: VoucherCreateOrConnectWithoutPostedByInput | VoucherCreateOrConnectWithoutPostedByInput[]
+    createMany?: VoucherCreateManyPostedByInputEnvelope
+    connect?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
+  export type EnumRoleFieldUpdateOperationsInput = {
+    set?: $Enums.Role
   }
 
   export type CompanyUpdateOneWithoutUsersNestedInput = {
@@ -47074,6 +50735,20 @@ export namespace Prisma {
     deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
   }
 
+  export type VoucherUpdateManyWithoutPostedByNestedInput = {
+    create?: XOR<VoucherCreateWithoutPostedByInput, VoucherUncheckedCreateWithoutPostedByInput> | VoucherCreateWithoutPostedByInput[] | VoucherUncheckedCreateWithoutPostedByInput[]
+    connectOrCreate?: VoucherCreateOrConnectWithoutPostedByInput | VoucherCreateOrConnectWithoutPostedByInput[]
+    upsert?: VoucherUpsertWithWhereUniqueWithoutPostedByInput | VoucherUpsertWithWhereUniqueWithoutPostedByInput[]
+    createMany?: VoucherCreateManyPostedByInputEnvelope
+    set?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    disconnect?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    delete?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    connect?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    update?: VoucherUpdateWithWhereUniqueWithoutPostedByInput | VoucherUpdateWithWhereUniqueWithoutPostedByInput[]
+    updateMany?: VoucherUpdateManyWithWhereWithoutPostedByInput | VoucherUpdateManyWithWhereWithoutPostedByInput[]
+    deleteMany?: VoucherScalarWhereInput | VoucherScalarWhereInput[]
+  }
+
   export type AuditLogUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AuditLogCreateWithoutUserInput, AuditLogUncheckedCreateWithoutUserInput> | AuditLogCreateWithoutUserInput[] | AuditLogUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AuditLogCreateOrConnectWithoutUserInput | AuditLogCreateOrConnectWithoutUserInput[]
@@ -47086,6 +50761,20 @@ export namespace Prisma {
     update?: AuditLogUpdateWithWhereUniqueWithoutUserInput | AuditLogUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: AuditLogUpdateManyWithWhereWithoutUserInput | AuditLogUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+  }
+
+  export type VoucherUncheckedUpdateManyWithoutPostedByNestedInput = {
+    create?: XOR<VoucherCreateWithoutPostedByInput, VoucherUncheckedCreateWithoutPostedByInput> | VoucherCreateWithoutPostedByInput[] | VoucherUncheckedCreateWithoutPostedByInput[]
+    connectOrCreate?: VoucherCreateOrConnectWithoutPostedByInput | VoucherCreateOrConnectWithoutPostedByInput[]
+    upsert?: VoucherUpsertWithWhereUniqueWithoutPostedByInput | VoucherUpsertWithWhereUniqueWithoutPostedByInput[]
+    createMany?: VoucherCreateManyPostedByInputEnvelope
+    set?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    disconnect?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    delete?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    connect?: VoucherWhereUniqueInput | VoucherWhereUniqueInput[]
+    update?: VoucherUpdateWithWhereUniqueWithoutPostedByInput | VoucherUpdateWithWhereUniqueWithoutPostedByInput[]
+    updateMany?: VoucherUpdateManyWithWhereWithoutPostedByInput | VoucherUpdateManyWithWhereWithoutPostedByInput[]
+    deleteMany?: VoucherScalarWhereInput | VoucherScalarWhereInput[]
   }
 
   export type AccountCreateNestedOneWithoutCustomerInput = {
@@ -48196,6 +51885,13 @@ export namespace Prisma {
     connect?: AccountEntryWhereUniqueInput | AccountEntryWhereUniqueInput[]
   }
 
+  export type VoucherEntryCreateNestedManyWithoutAccountInput = {
+    create?: XOR<VoucherEntryCreateWithoutAccountInput, VoucherEntryUncheckedCreateWithoutAccountInput> | VoucherEntryCreateWithoutAccountInput[] | VoucherEntryUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: VoucherEntryCreateOrConnectWithoutAccountInput | VoucherEntryCreateOrConnectWithoutAccountInput[]
+    createMany?: VoucherEntryCreateManyAccountInputEnvelope
+    connect?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+  }
+
   export type CustomerCreateNestedOneWithoutAccountInput = {
     create?: XOR<CustomerCreateWithoutAccountInput, CustomerUncheckedCreateWithoutAccountInput>
     connectOrCreate?: CustomerCreateOrConnectWithoutAccountInput
@@ -48220,6 +51916,13 @@ export namespace Prisma {
     connectOrCreate?: AccountEntryCreateOrConnectWithoutAccountInput | AccountEntryCreateOrConnectWithoutAccountInput[]
     createMany?: AccountEntryCreateManyAccountInputEnvelope
     connect?: AccountEntryWhereUniqueInput | AccountEntryWhereUniqueInput[]
+  }
+
+  export type VoucherEntryUncheckedCreateNestedManyWithoutAccountInput = {
+    create?: XOR<VoucherEntryCreateWithoutAccountInput, VoucherEntryUncheckedCreateWithoutAccountInput> | VoucherEntryCreateWithoutAccountInput[] | VoucherEntryUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: VoucherEntryCreateOrConnectWithoutAccountInput | VoucherEntryCreateOrConnectWithoutAccountInput[]
+    createMany?: VoucherEntryCreateManyAccountInputEnvelope
+    connect?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
   }
 
   export type CustomerUncheckedCreateNestedOneWithoutAccountInput = {
@@ -48284,6 +51987,20 @@ export namespace Prisma {
     deleteMany?: AccountEntryScalarWhereInput | AccountEntryScalarWhereInput[]
   }
 
+  export type VoucherEntryUpdateManyWithoutAccountNestedInput = {
+    create?: XOR<VoucherEntryCreateWithoutAccountInput, VoucherEntryUncheckedCreateWithoutAccountInput> | VoucherEntryCreateWithoutAccountInput[] | VoucherEntryUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: VoucherEntryCreateOrConnectWithoutAccountInput | VoucherEntryCreateOrConnectWithoutAccountInput[]
+    upsert?: VoucherEntryUpsertWithWhereUniqueWithoutAccountInput | VoucherEntryUpsertWithWhereUniqueWithoutAccountInput[]
+    createMany?: VoucherEntryCreateManyAccountInputEnvelope
+    set?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    disconnect?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    delete?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    connect?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    update?: VoucherEntryUpdateWithWhereUniqueWithoutAccountInput | VoucherEntryUpdateWithWhereUniqueWithoutAccountInput[]
+    updateMany?: VoucherEntryUpdateManyWithWhereWithoutAccountInput | VoucherEntryUpdateManyWithWhereWithoutAccountInput[]
+    deleteMany?: VoucherEntryScalarWhereInput | VoucherEntryScalarWhereInput[]
+  }
+
   export type CustomerUpdateOneWithoutAccountNestedInput = {
     create?: XOR<CustomerCreateWithoutAccountInput, CustomerUncheckedCreateWithoutAccountInput>
     connectOrCreate?: CustomerCreateOrConnectWithoutAccountInput
@@ -48330,6 +52047,20 @@ export namespace Prisma {
     update?: AccountEntryUpdateWithWhereUniqueWithoutAccountInput | AccountEntryUpdateWithWhereUniqueWithoutAccountInput[]
     updateMany?: AccountEntryUpdateManyWithWhereWithoutAccountInput | AccountEntryUpdateManyWithWhereWithoutAccountInput[]
     deleteMany?: AccountEntryScalarWhereInput | AccountEntryScalarWhereInput[]
+  }
+
+  export type VoucherEntryUncheckedUpdateManyWithoutAccountNestedInput = {
+    create?: XOR<VoucherEntryCreateWithoutAccountInput, VoucherEntryUncheckedCreateWithoutAccountInput> | VoucherEntryCreateWithoutAccountInput[] | VoucherEntryUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: VoucherEntryCreateOrConnectWithoutAccountInput | VoucherEntryCreateOrConnectWithoutAccountInput[]
+    upsert?: VoucherEntryUpsertWithWhereUniqueWithoutAccountInput | VoucherEntryUpsertWithWhereUniqueWithoutAccountInput[]
+    createMany?: VoucherEntryCreateManyAccountInputEnvelope
+    set?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    disconnect?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    delete?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    connect?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    update?: VoucherEntryUpdateWithWhereUniqueWithoutAccountInput | VoucherEntryUpdateWithWhereUniqueWithoutAccountInput[]
+    updateMany?: VoucherEntryUpdateManyWithWhereWithoutAccountInput | VoucherEntryUpdateManyWithWhereWithoutAccountInput[]
+    deleteMany?: VoucherEntryScalarWhereInput | VoucherEntryScalarWhereInput[]
   }
 
   export type CustomerUncheckedUpdateOneWithoutAccountNestedInput = {
@@ -48698,6 +52429,110 @@ export namespace Prisma {
     deleteMany?: JobScalarWhereInput | JobScalarWhereInput[]
   }
 
+  export type CompanyCreateNestedOneWithoutVouchersInput = {
+    create?: XOR<CompanyCreateWithoutVouchersInput, CompanyUncheckedCreateWithoutVouchersInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutVouchersInput
+    connect?: CompanyWhereUniqueInput
+  }
+
+  export type VoucherEntryCreateNestedManyWithoutVoucherInput = {
+    create?: XOR<VoucherEntryCreateWithoutVoucherInput, VoucherEntryUncheckedCreateWithoutVoucherInput> | VoucherEntryCreateWithoutVoucherInput[] | VoucherEntryUncheckedCreateWithoutVoucherInput[]
+    connectOrCreate?: VoucherEntryCreateOrConnectWithoutVoucherInput | VoucherEntryCreateOrConnectWithoutVoucherInput[]
+    createMany?: VoucherEntryCreateManyVoucherInputEnvelope
+    connect?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedOneWithoutPostedVouchersInput = {
+    create?: XOR<UserCreateWithoutPostedVouchersInput, UserUncheckedCreateWithoutPostedVouchersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPostedVouchersInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type VoucherEntryUncheckedCreateNestedManyWithoutVoucherInput = {
+    create?: XOR<VoucherEntryCreateWithoutVoucherInput, VoucherEntryUncheckedCreateWithoutVoucherInput> | VoucherEntryCreateWithoutVoucherInput[] | VoucherEntryUncheckedCreateWithoutVoucherInput[]
+    connectOrCreate?: VoucherEntryCreateOrConnectWithoutVoucherInput | VoucherEntryCreateOrConnectWithoutVoucherInput[]
+    createMany?: VoucherEntryCreateManyVoucherInputEnvelope
+    connect?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+  }
+
+  export type EnumVoucherTypeFieldUpdateOperationsInput = {
+    set?: $Enums.VoucherType
+  }
+
+  export type CompanyUpdateOneRequiredWithoutVouchersNestedInput = {
+    create?: XOR<CompanyCreateWithoutVouchersInput, CompanyUncheckedCreateWithoutVouchersInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutVouchersInput
+    upsert?: CompanyUpsertWithoutVouchersInput
+    connect?: CompanyWhereUniqueInput
+    update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutVouchersInput, CompanyUpdateWithoutVouchersInput>, CompanyUncheckedUpdateWithoutVouchersInput>
+  }
+
+  export type VoucherEntryUpdateManyWithoutVoucherNestedInput = {
+    create?: XOR<VoucherEntryCreateWithoutVoucherInput, VoucherEntryUncheckedCreateWithoutVoucherInput> | VoucherEntryCreateWithoutVoucherInput[] | VoucherEntryUncheckedCreateWithoutVoucherInput[]
+    connectOrCreate?: VoucherEntryCreateOrConnectWithoutVoucherInput | VoucherEntryCreateOrConnectWithoutVoucherInput[]
+    upsert?: VoucherEntryUpsertWithWhereUniqueWithoutVoucherInput | VoucherEntryUpsertWithWhereUniqueWithoutVoucherInput[]
+    createMany?: VoucherEntryCreateManyVoucherInputEnvelope
+    set?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    disconnect?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    delete?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    connect?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    update?: VoucherEntryUpdateWithWhereUniqueWithoutVoucherInput | VoucherEntryUpdateWithWhereUniqueWithoutVoucherInput[]
+    updateMany?: VoucherEntryUpdateManyWithWhereWithoutVoucherInput | VoucherEntryUpdateManyWithWhereWithoutVoucherInput[]
+    deleteMany?: VoucherEntryScalarWhereInput | VoucherEntryScalarWhereInput[]
+  }
+
+  export type UserUpdateOneWithoutPostedVouchersNestedInput = {
+    create?: XOR<UserCreateWithoutPostedVouchersInput, UserUncheckedCreateWithoutPostedVouchersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPostedVouchersInput
+    upsert?: UserUpsertWithoutPostedVouchersInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPostedVouchersInput, UserUpdateWithoutPostedVouchersInput>, UserUncheckedUpdateWithoutPostedVouchersInput>
+  }
+
+  export type VoucherEntryUncheckedUpdateManyWithoutVoucherNestedInput = {
+    create?: XOR<VoucherEntryCreateWithoutVoucherInput, VoucherEntryUncheckedCreateWithoutVoucherInput> | VoucherEntryCreateWithoutVoucherInput[] | VoucherEntryUncheckedCreateWithoutVoucherInput[]
+    connectOrCreate?: VoucherEntryCreateOrConnectWithoutVoucherInput | VoucherEntryCreateOrConnectWithoutVoucherInput[]
+    upsert?: VoucherEntryUpsertWithWhereUniqueWithoutVoucherInput | VoucherEntryUpsertWithWhereUniqueWithoutVoucherInput[]
+    createMany?: VoucherEntryCreateManyVoucherInputEnvelope
+    set?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    disconnect?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    delete?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    connect?: VoucherEntryWhereUniqueInput | VoucherEntryWhereUniqueInput[]
+    update?: VoucherEntryUpdateWithWhereUniqueWithoutVoucherInput | VoucherEntryUpdateWithWhereUniqueWithoutVoucherInput[]
+    updateMany?: VoucherEntryUpdateManyWithWhereWithoutVoucherInput | VoucherEntryUpdateManyWithWhereWithoutVoucherInput[]
+    deleteMany?: VoucherEntryScalarWhereInput | VoucherEntryScalarWhereInput[]
+  }
+
+  export type VoucherCreateNestedOneWithoutEntriesInput = {
+    create?: XOR<VoucherCreateWithoutEntriesInput, VoucherUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: VoucherCreateOrConnectWithoutEntriesInput
+    connect?: VoucherWhereUniqueInput
+  }
+
+  export type AccountCreateNestedOneWithoutVoucherEntriesInput = {
+    create?: XOR<AccountCreateWithoutVoucherEntriesInput, AccountUncheckedCreateWithoutVoucherEntriesInput>
+    connectOrCreate?: AccountCreateOrConnectWithoutVoucherEntriesInput
+    connect?: AccountWhereUniqueInput
+  }
+
+  export type VoucherUpdateOneRequiredWithoutEntriesNestedInput = {
+    create?: XOR<VoucherCreateWithoutEntriesInput, VoucherUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: VoucherCreateOrConnectWithoutEntriesInput
+    upsert?: VoucherUpsertWithoutEntriesInput
+    connect?: VoucherWhereUniqueInput
+    update?: XOR<XOR<VoucherUpdateToOneWithWhereWithoutEntriesInput, VoucherUpdateWithoutEntriesInput>, VoucherUncheckedUpdateWithoutEntriesInput>
+  }
+
+  export type AccountUpdateOneRequiredWithoutVoucherEntriesNestedInput = {
+    create?: XOR<AccountCreateWithoutVoucherEntriesInput, AccountUncheckedCreateWithoutVoucherEntriesInput>
+    connectOrCreate?: AccountCreateOrConnectWithoutVoucherEntriesInput
+    upsert?: AccountUpsertWithoutVoucherEntriesInput
+    connect?: AccountWhereUniqueInput
+    update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutVoucherEntriesInput, AccountUpdateWithoutVoucherEntriesInput>, AccountUncheckedUpdateWithoutVoucherEntriesInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -48735,6 +52570,17 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -48843,6 +52689,20 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -48920,17 +52780,6 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
     in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
@@ -48939,20 +52788,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumJobTypeFilter<$PrismaModel = never> = {
@@ -49090,6 +52925,23 @@ export namespace Prisma {
     _max?: NestedEnumPaymentModeFilter<$PrismaModel>
   }
 
+  export type NestedEnumVoucherTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.VoucherType | EnumVoucherTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.VoucherType[] | ListEnumVoucherTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.VoucherType[] | ListEnumVoucherTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumVoucherTypeFilter<$PrismaModel> | $Enums.VoucherType
+  }
+
+  export type NestedEnumVoucherTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.VoucherType | EnumVoucherTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.VoucherType[] | ListEnumVoucherTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.VoucherType[] | ListEnumVoucherTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumVoucherTypeWithAggregatesFilter<$PrismaModel> | $Enums.VoucherType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumVoucherTypeFilter<$PrismaModel>
+    _max?: NestedEnumVoucherTypeFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutCompanyInput = {
     email: string
     name?: string | null
@@ -49104,6 +52956,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    postedVouchers?: VoucherCreateNestedManyWithoutPostedByInput
   }
 
   export type UserUncheckedCreateWithoutCompanyInput = {
@@ -49121,6 +52974,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    postedVouchers?: VoucherUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type UserCreateOrConnectWithoutCompanyInput = {
@@ -49521,6 +53375,7 @@ export namespace Prisma {
     parent?: AccountCreateNestedOneWithoutChildrenInput
     children?: AccountCreateNestedManyWithoutParentInput
     entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    voucherEntries?: VoucherEntryCreateNestedManyWithoutAccountInput
     customer?: CustomerCreateNestedOneWithoutAccountInput
     vendor?: VendorCreateNestedOneWithoutAccountInput
   }
@@ -49537,6 +53392,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
     entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    voucherEntries?: VoucherEntryUncheckedCreateNestedManyWithoutAccountInput
     customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
     vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
   }
@@ -49626,6 +53482,45 @@ export namespace Prisma {
 
   export type PaymentCreateManyCompanyInputEnvelope = {
     data: PaymentCreateManyCompanyInput | PaymentCreateManyCompanyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type VoucherCreateWithoutCompanyInput = {
+    voucherNumber: string
+    voucherType: $Enums.VoucherType
+    date?: Date | string
+    description?: string | null
+    division?: string | null
+    isPosted?: boolean
+    postedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    entries?: VoucherEntryCreateNestedManyWithoutVoucherInput
+    postedBy?: UserCreateNestedOneWithoutPostedVouchersInput
+  }
+
+  export type VoucherUncheckedCreateWithoutCompanyInput = {
+    id?: number
+    voucherNumber: string
+    voucherType: $Enums.VoucherType
+    date?: Date | string
+    description?: string | null
+    division?: string | null
+    isPosted?: boolean
+    postedAt?: Date | string | null
+    postedById?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    entries?: VoucherEntryUncheckedCreateNestedManyWithoutVoucherInput
+  }
+
+  export type VoucherCreateOrConnectWithoutCompanyInput = {
+    where: VoucherWhereUniqueInput
+    create: XOR<VoucherCreateWithoutCompanyInput, VoucherUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type VoucherCreateManyCompanyInputEnvelope = {
+    data: VoucherCreateManyCompanyInput | VoucherCreateManyCompanyInput[]
     skipDuplicates?: boolean
   }
 
@@ -50365,6 +54260,40 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Payment"> | Date | string
   }
 
+  export type VoucherUpsertWithWhereUniqueWithoutCompanyInput = {
+    where: VoucherWhereUniqueInput
+    update: XOR<VoucherUpdateWithoutCompanyInput, VoucherUncheckedUpdateWithoutCompanyInput>
+    create: XOR<VoucherCreateWithoutCompanyInput, VoucherUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type VoucherUpdateWithWhereUniqueWithoutCompanyInput = {
+    where: VoucherWhereUniqueInput
+    data: XOR<VoucherUpdateWithoutCompanyInput, VoucherUncheckedUpdateWithoutCompanyInput>
+  }
+
+  export type VoucherUpdateManyWithWhereWithoutCompanyInput = {
+    where: VoucherScalarWhereInput
+    data: XOR<VoucherUpdateManyMutationInput, VoucherUncheckedUpdateManyWithoutCompanyInput>
+  }
+
+  export type VoucherScalarWhereInput = {
+    AND?: VoucherScalarWhereInput | VoucherScalarWhereInput[]
+    OR?: VoucherScalarWhereInput[]
+    NOT?: VoucherScalarWhereInput | VoucherScalarWhereInput[]
+    id?: IntFilter<"Voucher"> | number
+    voucherNumber?: StringFilter<"Voucher"> | string
+    voucherType?: EnumVoucherTypeFilter<"Voucher"> | $Enums.VoucherType
+    date?: DateTimeFilter<"Voucher"> | Date | string
+    description?: StringNullableFilter<"Voucher"> | string | null
+    companyId?: IntFilter<"Voucher"> | number
+    division?: StringNullableFilter<"Voucher"> | string | null
+    isPosted?: BoolFilter<"Voucher"> | boolean
+    postedAt?: DateTimeNullableFilter<"Voucher"> | Date | string | null
+    postedById?: IntNullableFilter<"Voucher"> | number | null
+    createdAt?: DateTimeFilter<"Voucher"> | Date | string
+    updatedAt?: DateTimeFilter<"Voucher"> | Date | string
+  }
+
   export type ProductCategoryUpsertWithWhereUniqueWithoutCompanyInput = {
     where: ProductCategoryWhereUniqueInput
     update: XOR<ProductCategoryUpdateWithoutCompanyInput, ProductCategoryUncheckedUpdateWithoutCompanyInput>
@@ -50644,11 +54573,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -50663,6 +54602,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -50679,11 +54619,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -50698,6 +54648,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -50833,11 +54784,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -50852,6 +54813,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -50868,11 +54830,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -50887,6 +54859,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -50973,11 +54946,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -50992,6 +54975,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -51008,11 +54992,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -51027,6 +55021,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -51076,11 +55071,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -51095,6 +55100,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -51111,11 +55117,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51130,6 +55146,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51169,11 +55186,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -51188,6 +55215,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -51204,11 +55232,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -51223,6 +55261,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -51278,11 +55317,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -51297,6 +55346,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -51313,11 +55363,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51332,6 +55392,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51377,11 +55438,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -51396,6 +55467,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -51412,11 +55484,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -51431,6 +55513,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -51462,11 +55545,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -51481,6 +55574,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -51497,11 +55591,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51516,6 +55620,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51531,11 +55636,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     branches?: BranchCreateNestedManyWithoutCompanyInput
@@ -51550,6 +55665,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -51566,11 +55682,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     branches?: BranchUncheckedCreateNestedManyWithoutCompanyInput
@@ -51585,6 +55711,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -51632,6 +55759,45 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type VoucherCreateWithoutPostedByInput = {
+    voucherNumber: string
+    voucherType: $Enums.VoucherType
+    date?: Date | string
+    description?: string | null
+    division?: string | null
+    isPosted?: boolean
+    postedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutVouchersInput
+    entries?: VoucherEntryCreateNestedManyWithoutVoucherInput
+  }
+
+  export type VoucherUncheckedCreateWithoutPostedByInput = {
+    id?: number
+    voucherNumber: string
+    voucherType: $Enums.VoucherType
+    date?: Date | string
+    description?: string | null
+    companyId: number
+    division?: string | null
+    isPosted?: boolean
+    postedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    entries?: VoucherEntryUncheckedCreateNestedManyWithoutVoucherInput
+  }
+
+  export type VoucherCreateOrConnectWithoutPostedByInput = {
+    where: VoucherWhereUniqueInput
+    create: XOR<VoucherCreateWithoutPostedByInput, VoucherUncheckedCreateWithoutPostedByInput>
+  }
+
+  export type VoucherCreateManyPostedByInputEnvelope = {
+    data: VoucherCreateManyPostedByInput | VoucherCreateManyPostedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CompanyUpsertWithoutUsersInput = {
     update: XOR<CompanyUpdateWithoutUsersInput, CompanyUncheckedUpdateWithoutUsersInput>
     create: XOR<CompanyCreateWithoutUsersInput, CompanyUncheckedCreateWithoutUsersInput>
@@ -51647,11 +55813,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     branches?: BranchUpdateManyWithoutCompanyNestedInput
@@ -51666,6 +55842,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -51682,11 +55859,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     branches?: BranchUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51701,6 +55888,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51728,6 +55916,22 @@ export namespace Prisma {
     data: XOR<AuditLogUpdateManyMutationInput, AuditLogUncheckedUpdateManyWithoutUserInput>
   }
 
+  export type VoucherUpsertWithWhereUniqueWithoutPostedByInput = {
+    where: VoucherWhereUniqueInput
+    update: XOR<VoucherUpdateWithoutPostedByInput, VoucherUncheckedUpdateWithoutPostedByInput>
+    create: XOR<VoucherCreateWithoutPostedByInput, VoucherUncheckedCreateWithoutPostedByInput>
+  }
+
+  export type VoucherUpdateWithWhereUniqueWithoutPostedByInput = {
+    where: VoucherWhereUniqueInput
+    data: XOR<VoucherUpdateWithoutPostedByInput, VoucherUncheckedUpdateWithoutPostedByInput>
+  }
+
+  export type VoucherUpdateManyWithWhereWithoutPostedByInput = {
+    where: VoucherScalarWhereInput
+    data: XOR<VoucherUpdateManyMutationInput, VoucherUncheckedUpdateManyWithoutPostedByInput>
+  }
+
   export type AccountCreateWithoutCustomerInput = {
     code: string
     name: string
@@ -51740,6 +55944,7 @@ export namespace Prisma {
     children?: AccountCreateNestedManyWithoutParentInput
     company: CompanyCreateNestedOneWithoutAccountsInput
     entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    voucherEntries?: VoucherEntryCreateNestedManyWithoutAccountInput
     vendor?: VendorCreateNestedOneWithoutAccountInput
   }
 
@@ -51756,6 +55961,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
     entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    voucherEntries?: VoucherEntryUncheckedCreateNestedManyWithoutAccountInput
     vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
   }
 
@@ -51768,11 +55974,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -51787,6 +56003,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -51803,11 +56020,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -51822,6 +56049,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -52046,6 +56274,7 @@ export namespace Prisma {
     children?: AccountUpdateManyWithoutParentNestedInput
     company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
     entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    voucherEntries?: VoucherEntryUpdateManyWithoutAccountNestedInput
     vendor?: VendorUpdateOneWithoutAccountNestedInput
   }
 
@@ -52062,6 +56291,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
     entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    voucherEntries?: VoucherEntryUncheckedUpdateManyWithoutAccountNestedInput
     vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
   }
 
@@ -52080,11 +56310,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -52099,6 +56339,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -52115,11 +56356,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -52134,6 +56385,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -52205,6 +56457,7 @@ export namespace Prisma {
     children?: AccountCreateNestedManyWithoutParentInput
     company: CompanyCreateNestedOneWithoutAccountsInput
     entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    voucherEntries?: VoucherEntryCreateNestedManyWithoutAccountInput
     customer?: CustomerCreateNestedOneWithoutAccountInput
   }
 
@@ -52221,6 +56474,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
     entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    voucherEntries?: VoucherEntryUncheckedCreateNestedManyWithoutAccountInput
     customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
   }
 
@@ -52233,11 +56487,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -52252,6 +56516,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -52268,11 +56533,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -52287,6 +56562,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -52451,6 +56727,7 @@ export namespace Prisma {
     children?: AccountUpdateManyWithoutParentNestedInput
     company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
     entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    voucherEntries?: VoucherEntryUpdateManyWithoutAccountNestedInput
     customer?: CustomerUpdateOneWithoutAccountNestedInput
   }
 
@@ -52467,6 +56744,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
     entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    voucherEntries?: VoucherEntryUncheckedUpdateManyWithoutAccountNestedInput
     customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
   }
 
@@ -52485,11 +56763,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -52504,6 +56792,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -52520,11 +56809,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -52539,6 +56838,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -52660,11 +56960,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -52679,6 +56989,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -52695,11 +57006,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -52714,6 +57035,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -52940,11 +57262,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -52959,6 +57291,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -52975,11 +57308,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -52994,6 +57337,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53127,11 +57471,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -53147,6 +57501,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -53162,11 +57517,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -53182,6 +57547,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -53212,11 +57578,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -53232,6 +57608,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -53247,11 +57624,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53267,6 +57654,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53391,11 +57779,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -53410,6 +57808,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -53426,11 +57825,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -53445,6 +57854,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -53598,11 +58008,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -53617,6 +58037,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -53633,11 +58054,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53652,6 +58083,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53775,11 +58207,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -53794,6 +58236,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -53810,11 +58253,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -53829,6 +58282,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -54047,11 +58501,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -54066,6 +58530,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -54082,11 +58547,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -54101,6 +58576,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -54408,11 +58884,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -54428,6 +58914,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
     stockMovements?: StockMovementCreateNestedManyWithoutCompanyInput
@@ -54443,11 +58930,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -54463,6 +58960,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
     stockMovements?: StockMovementUncheckedCreateNestedManyWithoutCompanyInput
@@ -54536,11 +59034,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -54556,6 +59064,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
     stockMovements?: StockMovementUpdateManyWithoutCompanyNestedInput
@@ -54571,11 +59080,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -54591,6 +59110,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
     stockMovements?: StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
@@ -54643,11 +59163,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -54663,6 +59193,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
     stockMovements?: StockMovementCreateNestedManyWithoutCompanyInput
@@ -54678,11 +59209,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -54698,6 +59239,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
     stockMovements?: StockMovementUncheckedCreateNestedManyWithoutCompanyInput
@@ -54851,11 +59393,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -54871,6 +59423,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
     stockMovements?: StockMovementUpdateManyWithoutCompanyNestedInput
@@ -54886,11 +59439,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -54906,6 +59469,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
     stockMovements?: StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
@@ -54984,11 +59548,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -55004,6 +59578,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     stockMovements?: StockMovementCreateNestedManyWithoutCompanyInput
@@ -55019,11 +59594,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -55039,6 +59624,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     stockMovements?: StockMovementUncheckedCreateNestedManyWithoutCompanyInput
@@ -55098,11 +59684,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -55118,6 +59714,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     stockMovements?: StockMovementUpdateManyWithoutCompanyNestedInput
@@ -55133,11 +59730,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55153,6 +59760,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     stockMovements?: StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55243,11 +59851,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -55263,6 +59881,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -55278,11 +59897,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -55298,6 +59927,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -55400,11 +60030,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -55420,6 +60060,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -55435,11 +60076,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55455,6 +60106,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55509,11 +60161,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -55529,6 +60191,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -55544,11 +60207,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -55564,6 +60237,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -55707,11 +60381,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -55727,6 +60411,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -55742,11 +60427,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55762,6 +60457,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -56019,6 +60715,7 @@ export namespace Prisma {
     parent?: AccountCreateNestedOneWithoutChildrenInput
     company: CompanyCreateNestedOneWithoutAccountsInput
     entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    voucherEntries?: VoucherEntryCreateNestedManyWithoutAccountInput
     customer?: CustomerCreateNestedOneWithoutAccountInput
     vendor?: VendorCreateNestedOneWithoutAccountInput
   }
@@ -56035,6 +60732,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    voucherEntries?: VoucherEntryUncheckedCreateNestedManyWithoutAccountInput
     customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
     vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
   }
@@ -56055,6 +60753,7 @@ export namespace Prisma {
     children?: AccountCreateNestedManyWithoutParentInput
     company: CompanyCreateNestedOneWithoutAccountsInput
     entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    voucherEntries?: VoucherEntryCreateNestedManyWithoutAccountInput
     customer?: CustomerCreateNestedOneWithoutAccountInput
     vendor?: VendorCreateNestedOneWithoutAccountInput
   }
@@ -56071,6 +60770,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
     entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    voucherEntries?: VoucherEntryUncheckedCreateNestedManyWithoutAccountInput
     customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
     vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
   }
@@ -56089,11 +60789,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -56108,6 +60818,7 @@ export namespace Prisma {
     invoices?: InvoiceCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -56124,11 +60835,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -56143,6 +60864,7 @@ export namespace Prisma {
     invoices?: InvoiceUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -56183,6 +60905,35 @@ export namespace Prisma {
 
   export type AccountEntryCreateManyAccountInputEnvelope = {
     data: AccountEntryCreateManyAccountInput | AccountEntryCreateManyAccountInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type VoucherEntryCreateWithoutAccountInput = {
+    debit?: number
+    credit?: number
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    voucher: VoucherCreateNestedOneWithoutEntriesInput
+  }
+
+  export type VoucherEntryUncheckedCreateWithoutAccountInput = {
+    id?: number
+    voucherId: number
+    debit?: number
+    credit?: number
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VoucherEntryCreateOrConnectWithoutAccountInput = {
+    where: VoucherEntryWhereUniqueInput
+    create: XOR<VoucherEntryCreateWithoutAccountInput, VoucherEntryUncheckedCreateWithoutAccountInput>
+  }
+
+  export type VoucherEntryCreateManyAccountInputEnvelope = {
+    data: VoucherEntryCreateManyAccountInput | VoucherEntryCreateManyAccountInput[]
     skipDuplicates?: boolean
   }
 
@@ -56286,6 +61037,7 @@ export namespace Prisma {
     parent?: AccountUpdateOneWithoutChildrenNestedInput
     company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
     entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    voucherEntries?: VoucherEntryUpdateManyWithoutAccountNestedInput
     customer?: CustomerUpdateOneWithoutAccountNestedInput
     vendor?: VendorUpdateOneWithoutAccountNestedInput
   }
@@ -56302,6 +61054,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    voucherEntries?: VoucherEntryUncheckedUpdateManyWithoutAccountNestedInput
     customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
     vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
   }
@@ -56337,11 +61090,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -56356,6 +61119,7 @@ export namespace Prisma {
     invoices?: InvoiceUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -56372,11 +61136,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -56391,6 +61165,7 @@ export namespace Prisma {
     invoices?: InvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -56429,6 +61204,36 @@ export namespace Prisma {
     debit?: FloatFilter<"AccountEntry"> | number
     credit?: FloatFilter<"AccountEntry"> | number
     createdAt?: DateTimeFilter<"AccountEntry"> | Date | string
+  }
+
+  export type VoucherEntryUpsertWithWhereUniqueWithoutAccountInput = {
+    where: VoucherEntryWhereUniqueInput
+    update: XOR<VoucherEntryUpdateWithoutAccountInput, VoucherEntryUncheckedUpdateWithoutAccountInput>
+    create: XOR<VoucherEntryCreateWithoutAccountInput, VoucherEntryUncheckedCreateWithoutAccountInput>
+  }
+
+  export type VoucherEntryUpdateWithWhereUniqueWithoutAccountInput = {
+    where: VoucherEntryWhereUniqueInput
+    data: XOR<VoucherEntryUpdateWithoutAccountInput, VoucherEntryUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type VoucherEntryUpdateManyWithWhereWithoutAccountInput = {
+    where: VoucherEntryScalarWhereInput
+    data: XOR<VoucherEntryUpdateManyMutationInput, VoucherEntryUncheckedUpdateManyWithoutAccountInput>
+  }
+
+  export type VoucherEntryScalarWhereInput = {
+    AND?: VoucherEntryScalarWhereInput | VoucherEntryScalarWhereInput[]
+    OR?: VoucherEntryScalarWhereInput[]
+    NOT?: VoucherEntryScalarWhereInput | VoucherEntryScalarWhereInput[]
+    id?: IntFilter<"VoucherEntry"> | number
+    voucherId?: IntFilter<"VoucherEntry"> | number
+    accountId?: IntFilter<"VoucherEntry"> | number
+    debit?: FloatFilter<"VoucherEntry"> | number
+    credit?: FloatFilter<"VoucherEntry"> | number
+    description?: StringNullableFilter<"VoucherEntry"> | string | null
+    createdAt?: DateTimeFilter<"VoucherEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"VoucherEntry"> | Date | string
   }
 
   export type CustomerUpsertWithoutAccountInput = {
@@ -56698,11 +61503,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -56717,6 +61532,7 @@ export namespace Prisma {
     invoices?: InvoiceCreateNestedManyWithoutCompanyInput
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -56733,11 +61549,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -56752,6 +61578,7 @@ export namespace Prisma {
     invoices?: InvoiceUncheckedCreateNestedManyWithoutCompanyInput
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -56963,11 +61790,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -56982,6 +61819,7 @@ export namespace Prisma {
     invoices?: InvoiceUpdateManyWithoutCompanyNestedInput
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -56998,11 +61836,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57017,6 +61865,7 @@ export namespace Prisma {
     invoices?: InvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57073,6 +61922,7 @@ export namespace Prisma {
     parent?: AccountCreateNestedOneWithoutChildrenInput
     children?: AccountCreateNestedManyWithoutParentInput
     company: CompanyCreateNestedOneWithoutAccountsInput
+    voucherEntries?: VoucherEntryCreateNestedManyWithoutAccountInput
     customer?: CustomerCreateNestedOneWithoutAccountInput
     vendor?: VendorCreateNestedOneWithoutAccountInput
   }
@@ -57089,6 +61939,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
+    voucherEntries?: VoucherEntryUncheckedCreateNestedManyWithoutAccountInput
     customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
     vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
   }
@@ -57160,6 +62011,7 @@ export namespace Prisma {
     parent?: AccountUpdateOneWithoutChildrenNestedInput
     children?: AccountUpdateManyWithoutParentNestedInput
     company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
+    voucherEntries?: VoucherEntryUpdateManyWithoutAccountNestedInput
     customer?: CustomerUpdateOneWithoutAccountNestedInput
     vendor?: VendorUpdateOneWithoutAccountNestedInput
   }
@@ -57176,6 +62028,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
+    voucherEntries?: VoucherEntryUncheckedUpdateManyWithoutAccountNestedInput
     customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
     vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
   }
@@ -57296,11 +62149,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -57315,6 +62178,7 @@ export namespace Prisma {
     invoices?: InvoiceCreateNestedManyWithoutCompanyInput
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -57331,11 +62195,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -57350,6 +62224,7 @@ export namespace Prisma {
     invoices?: InvoiceUncheckedCreateNestedManyWithoutCompanyInput
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -57511,11 +62386,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -57530,6 +62415,7 @@ export namespace Prisma {
     invoices?: InvoiceUpdateManyWithoutCompanyNestedInput
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -57546,11 +62432,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57565,6 +62461,7 @@ export namespace Prisma {
     invoices?: InvoiceUncheckedUpdateManyWithoutCompanyNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57590,6 +62487,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     company?: CompanyCreateNestedOneWithoutUsersInput
+    postedVouchers?: VoucherCreateNestedManyWithoutPostedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -57607,6 +62505,7 @@ export namespace Prisma {
     resetTokenExpiry?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    postedVouchers?: VoucherUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -57618,11 +62517,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -57638,6 +62547,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -57653,11 +62563,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -57673,6 +62593,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -57713,6 +62634,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneWithoutUsersNestedInput
+    postedVouchers?: VoucherUpdateManyWithoutPostedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -57730,6 +62652,7 @@ export namespace Prisma {
     resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    postedVouchers?: VoucherUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type CompanyUpsertWithoutAuditLogsInput = {
@@ -57747,11 +62670,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -57767,6 +62700,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -57782,11 +62716,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57802,6 +62746,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57816,11 +62761,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -57836,6 +62791,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -57851,11 +62807,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -57871,6 +62837,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -57901,11 +62868,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -57921,6 +62898,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -57936,11 +62914,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57956,6 +62944,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57970,11 +62959,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -57990,6 +62989,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutCompanyInput
     transactions?: TransactionCreateNestedManyWithoutCompanyInput
     payments?: PaymentCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
     products?: ProductCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
@@ -58005,11 +63005,21 @@ export namespace Prisma {
     name: string
     uniqueId: string
     address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
     phone?: string | null
     email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
     industry?: string | null
     logo?: string | null
+    tagline?: string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -58025,6 +63035,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
     payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    vouchers?: VoucherUncheckedCreateNestedManyWithoutCompanyInput
     productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
     products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
     warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
@@ -58130,11 +63141,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -58150,6 +63171,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
     products?: ProductUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
@@ -58165,11 +63187,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     uniqueId?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
     themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -58185,6 +63217,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    vouchers?: VoucherUncheckedUpdateManyWithoutCompanyNestedInput
     productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
     products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
     warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
@@ -58209,6 +63242,491 @@ export namespace Prisma {
   export type JobUpdateManyWithWhereWithoutPodInput = {
     where: JobScalarWhereInput
     data: XOR<JobUpdateManyMutationInput, JobUncheckedUpdateManyWithoutPodInput>
+  }
+
+  export type CompanyCreateWithoutVouchersInput = {
+    name: string
+    uniqueId: string
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    phone?: string | null
+    email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
+    industry?: string | null
+    logo?: string | null
+    tagline?: string | null
+    themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutCompanyInput
+    branches?: BranchCreateNestedManyWithoutCompanyInput
+    currencies?: CompanyCurrencyCreateNestedManyWithoutCompanyInput
+    taxSettings?: TaxSettingCreateNestedManyWithoutCompanyInput
+    systemSettings?: SystemSettingCreateNestedManyWithoutCompanyInput
+    customers?: CustomerCreateNestedManyWithoutCompanyInput
+    vendors?: VendorCreateNestedManyWithoutCompanyInput
+    jobs?: JobCreateNestedManyWithoutCompanyInput
+    expenses?: ExpenseCreateNestedManyWithoutCompanyInput
+    invoices?: InvoiceCreateNestedManyWithoutCompanyInput
+    accounts?: AccountCreateNestedManyWithoutCompanyInput
+    transactions?: TransactionCreateNestedManyWithoutCompanyInput
+    payments?: PaymentCreateNestedManyWithoutCompanyInput
+    productCategories?: ProductCategoryCreateNestedManyWithoutCompanyInput
+    products?: ProductCreateNestedManyWithoutCompanyInput
+    warehouses?: WarehouseCreateNestedManyWithoutCompanyInput
+    stockMovements?: StockMovementCreateNestedManyWithoutCompanyInput
+    purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutCompanyInput
+    auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
+    financialPeriods?: FinancialPeriodCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterCreateNestedManyWithoutCompanyInput
+    ports?: PortCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyUncheckedCreateWithoutVouchersInput = {
+    id?: number
+    name: string
+    uniqueId: string
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    country?: string | null
+    phone?: string | null
+    email?: string | null
+    website?: string | null
+    taxNumber?: string | null
+    registrationNo?: string | null
+    industry?: string | null
+    logo?: string | null
+    tagline?: string | null
+    themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: Date | string | null
+    fiscalYearEnd?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutCompanyInput
+    branches?: BranchUncheckedCreateNestedManyWithoutCompanyInput
+    currencies?: CompanyCurrencyUncheckedCreateNestedManyWithoutCompanyInput
+    taxSettings?: TaxSettingUncheckedCreateNestedManyWithoutCompanyInput
+    systemSettings?: SystemSettingUncheckedCreateNestedManyWithoutCompanyInput
+    customers?: CustomerUncheckedCreateNestedManyWithoutCompanyInput
+    vendors?: VendorUncheckedCreateNestedManyWithoutCompanyInput
+    jobs?: JobUncheckedCreateNestedManyWithoutCompanyInput
+    expenses?: ExpenseUncheckedCreateNestedManyWithoutCompanyInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutCompanyInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutCompanyInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCompanyInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutCompanyInput
+    productCategories?: ProductCategoryUncheckedCreateNestedManyWithoutCompanyInput
+    products?: ProductUncheckedCreateNestedManyWithoutCompanyInput
+    warehouses?: WarehouseUncheckedCreateNestedManyWithoutCompanyInput
+    stockMovements?: StockMovementUncheckedCreateNestedManyWithoutCompanyInput
+    purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutCompanyInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+    financialPeriods?: FinancialPeriodUncheckedCreateNestedManyWithoutCompanyInput
+    expensesMaster?: ExpenseMasterUncheckedCreateNestedManyWithoutCompanyInput
+    ports?: PortUncheckedCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyCreateOrConnectWithoutVouchersInput = {
+    where: CompanyWhereUniqueInput
+    create: XOR<CompanyCreateWithoutVouchersInput, CompanyUncheckedCreateWithoutVouchersInput>
+  }
+
+  export type VoucherEntryCreateWithoutVoucherInput = {
+    debit?: number
+    credit?: number
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    account: AccountCreateNestedOneWithoutVoucherEntriesInput
+  }
+
+  export type VoucherEntryUncheckedCreateWithoutVoucherInput = {
+    id?: number
+    accountId: number
+    debit?: number
+    credit?: number
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VoucherEntryCreateOrConnectWithoutVoucherInput = {
+    where: VoucherEntryWhereUniqueInput
+    create: XOR<VoucherEntryCreateWithoutVoucherInput, VoucherEntryUncheckedCreateWithoutVoucherInput>
+  }
+
+  export type VoucherEntryCreateManyVoucherInputEnvelope = {
+    data: VoucherEntryCreateManyVoucherInput | VoucherEntryCreateManyVoucherInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutPostedVouchersInput = {
+    email: string
+    name?: string | null
+    password: string
+    role?: $Enums.Role
+    branch?: string | null
+    department?: string | null
+    region?: string | null
+    division?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPostedVouchersInput = {
+    id?: number
+    email: string
+    name?: string | null
+    password: string
+    role?: $Enums.Role
+    companyId?: number | null
+    branch?: string | null
+    department?: string | null
+    region?: string | null
+    division?: string | null
+    resetToken?: string | null
+    resetTokenExpiry?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPostedVouchersInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPostedVouchersInput, UserUncheckedCreateWithoutPostedVouchersInput>
+  }
+
+  export type CompanyUpsertWithoutVouchersInput = {
+    update: XOR<CompanyUpdateWithoutVouchersInput, CompanyUncheckedUpdateWithoutVouchersInput>
+    create: XOR<CompanyCreateWithoutVouchersInput, CompanyUncheckedCreateWithoutVouchersInput>
+    where?: CompanyWhereInput
+  }
+
+  export type CompanyUpdateToOneWithWhereWithoutVouchersInput = {
+    where?: CompanyWhereInput
+    data: XOR<CompanyUpdateWithoutVouchersInput, CompanyUncheckedUpdateWithoutVouchersInput>
+  }
+
+  export type CompanyUpdateWithoutVouchersInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    uniqueId?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutCompanyNestedInput
+    branches?: BranchUpdateManyWithoutCompanyNestedInput
+    currencies?: CompanyCurrencyUpdateManyWithoutCompanyNestedInput
+    taxSettings?: TaxSettingUpdateManyWithoutCompanyNestedInput
+    systemSettings?: SystemSettingUpdateManyWithoutCompanyNestedInput
+    customers?: CustomerUpdateManyWithoutCompanyNestedInput
+    vendors?: VendorUpdateManyWithoutCompanyNestedInput
+    jobs?: JobUpdateManyWithoutCompanyNestedInput
+    expenses?: ExpenseUpdateManyWithoutCompanyNestedInput
+    invoices?: InvoiceUpdateManyWithoutCompanyNestedInput
+    accounts?: AccountUpdateManyWithoutCompanyNestedInput
+    transactions?: TransactionUpdateManyWithoutCompanyNestedInput
+    payments?: PaymentUpdateManyWithoutCompanyNestedInput
+    productCategories?: ProductCategoryUpdateManyWithoutCompanyNestedInput
+    products?: ProductUpdateManyWithoutCompanyNestedInput
+    warehouses?: WarehouseUpdateManyWithoutCompanyNestedInput
+    stockMovements?: StockMovementUpdateManyWithoutCompanyNestedInput
+    purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutCompanyNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
+    financialPeriods?: FinancialPeriodUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUpdateManyWithoutCompanyNestedInput
+    ports?: PortUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateWithoutVouchersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    uniqueId?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registrationNo?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    tagline?: NullableStringFieldUpdateOperationsInput | string | null
+    themeConfig?: NullableJsonNullValueInput | InputJsonValue
+    fiscalYearStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalYearEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutCompanyNestedInput
+    currencies?: CompanyCurrencyUncheckedUpdateManyWithoutCompanyNestedInput
+    taxSettings?: TaxSettingUncheckedUpdateManyWithoutCompanyNestedInput
+    systemSettings?: SystemSettingUncheckedUpdateManyWithoutCompanyNestedInput
+    customers?: CustomerUncheckedUpdateManyWithoutCompanyNestedInput
+    vendors?: VendorUncheckedUpdateManyWithoutCompanyNestedInput
+    jobs?: JobUncheckedUpdateManyWithoutCompanyNestedInput
+    expenses?: ExpenseUncheckedUpdateManyWithoutCompanyNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutCompanyNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutCompanyNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCompanyNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutCompanyNestedInput
+    productCategories?: ProductCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+    products?: ProductUncheckedUpdateManyWithoutCompanyNestedInput
+    warehouses?: WarehouseUncheckedUpdateManyWithoutCompanyNestedInput
+    stockMovements?: StockMovementUncheckedUpdateManyWithoutCompanyNestedInput
+    purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutCompanyNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+    financialPeriods?: FinancialPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+    expensesMaster?: ExpenseMasterUncheckedUpdateManyWithoutCompanyNestedInput
+    ports?: PortUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type VoucherEntryUpsertWithWhereUniqueWithoutVoucherInput = {
+    where: VoucherEntryWhereUniqueInput
+    update: XOR<VoucherEntryUpdateWithoutVoucherInput, VoucherEntryUncheckedUpdateWithoutVoucherInput>
+    create: XOR<VoucherEntryCreateWithoutVoucherInput, VoucherEntryUncheckedCreateWithoutVoucherInput>
+  }
+
+  export type VoucherEntryUpdateWithWhereUniqueWithoutVoucherInput = {
+    where: VoucherEntryWhereUniqueInput
+    data: XOR<VoucherEntryUpdateWithoutVoucherInput, VoucherEntryUncheckedUpdateWithoutVoucherInput>
+  }
+
+  export type VoucherEntryUpdateManyWithWhereWithoutVoucherInput = {
+    where: VoucherEntryScalarWhereInput
+    data: XOR<VoucherEntryUpdateManyMutationInput, VoucherEntryUncheckedUpdateManyWithoutVoucherInput>
+  }
+
+  export type UserUpsertWithoutPostedVouchersInput = {
+    update: XOR<UserUpdateWithoutPostedVouchersInput, UserUncheckedUpdateWithoutPostedVouchersInput>
+    create: XOR<UserCreateWithoutPostedVouchersInput, UserUncheckedCreateWithoutPostedVouchersInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPostedVouchersInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPostedVouchersInput, UserUncheckedUpdateWithoutPostedVouchersInput>
+  }
+
+  export type UserUpdateWithoutPostedVouchersInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    branch?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPostedVouchersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    branch?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type VoucherCreateWithoutEntriesInput = {
+    voucherNumber: string
+    voucherType: $Enums.VoucherType
+    date?: Date | string
+    description?: string | null
+    division?: string | null
+    isPosted?: boolean
+    postedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutVouchersInput
+    postedBy?: UserCreateNestedOneWithoutPostedVouchersInput
+  }
+
+  export type VoucherUncheckedCreateWithoutEntriesInput = {
+    id?: number
+    voucherNumber: string
+    voucherType: $Enums.VoucherType
+    date?: Date | string
+    description?: string | null
+    companyId: number
+    division?: string | null
+    isPosted?: boolean
+    postedAt?: Date | string | null
+    postedById?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VoucherCreateOrConnectWithoutEntriesInput = {
+    where: VoucherWhereUniqueInput
+    create: XOR<VoucherCreateWithoutEntriesInput, VoucherUncheckedCreateWithoutEntriesInput>
+  }
+
+  export type AccountCreateWithoutVoucherEntriesInput = {
+    code: string
+    name: string
+    type: $Enums.AccountType
+    description?: string | null
+    division?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: AccountCreateNestedOneWithoutChildrenInput
+    children?: AccountCreateNestedManyWithoutParentInput
+    company: CompanyCreateNestedOneWithoutAccountsInput
+    entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    customer?: CustomerCreateNestedOneWithoutAccountInput
+    vendor?: VendorCreateNestedOneWithoutAccountInput
+  }
+
+  export type AccountUncheckedCreateWithoutVoucherEntriesInput = {
+    id?: number
+    code: string
+    name: string
+    type: $Enums.AccountType
+    description?: string | null
+    parentId?: number | null
+    companyId: number
+    division?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: AccountUncheckedCreateNestedManyWithoutParentInput
+    entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
+    vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
+  }
+
+  export type AccountCreateOrConnectWithoutVoucherEntriesInput = {
+    where: AccountWhereUniqueInput
+    create: XOR<AccountCreateWithoutVoucherEntriesInput, AccountUncheckedCreateWithoutVoucherEntriesInput>
+  }
+
+  export type VoucherUpsertWithoutEntriesInput = {
+    update: XOR<VoucherUpdateWithoutEntriesInput, VoucherUncheckedUpdateWithoutEntriesInput>
+    create: XOR<VoucherCreateWithoutEntriesInput, VoucherUncheckedCreateWithoutEntriesInput>
+    where?: VoucherWhereInput
+  }
+
+  export type VoucherUpdateToOneWithWhereWithoutEntriesInput = {
+    where?: VoucherWhereInput
+    data: XOR<VoucherUpdateWithoutEntriesInput, VoucherUncheckedUpdateWithoutEntriesInput>
+  }
+
+  export type VoucherUpdateWithoutEntriesInput = {
+    voucherNumber?: StringFieldUpdateOperationsInput | string
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    isPosted?: BoolFieldUpdateOperationsInput | boolean
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutVouchersNestedInput
+    postedBy?: UserUpdateOneWithoutPostedVouchersNestedInput
+  }
+
+  export type VoucherUncheckedUpdateWithoutEntriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherNumber?: StringFieldUpdateOperationsInput | string
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    isPosted?: BoolFieldUpdateOperationsInput | boolean
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AccountUpsertWithoutVoucherEntriesInput = {
+    update: XOR<AccountUpdateWithoutVoucherEntriesInput, AccountUncheckedUpdateWithoutVoucherEntriesInput>
+    create: XOR<AccountCreateWithoutVoucherEntriesInput, AccountUncheckedCreateWithoutVoucherEntriesInput>
+    where?: AccountWhereInput
+  }
+
+  export type AccountUpdateToOneWithWhereWithoutVoucherEntriesInput = {
+    where?: AccountWhereInput
+    data: XOR<AccountUpdateWithoutVoucherEntriesInput, AccountUncheckedUpdateWithoutVoucherEntriesInput>
+  }
+
+  export type AccountUpdateWithoutVoucherEntriesInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: AccountUpdateOneWithoutChildrenNestedInput
+    children?: AccountUpdateManyWithoutParentNestedInput
+    company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
+    entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    customer?: CustomerUpdateOneWithoutAccountNestedInput
+    vendor?: VendorUpdateOneWithoutAccountNestedInput
+  }
+
+  export type AccountUncheckedUpdateWithoutVoucherEntriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: AccountUncheckedUpdateManyWithoutParentNestedInput
+    entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
+    vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
   }
 
   export type UserCreateManyCompanyInput = {
@@ -58402,6 +63920,20 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type VoucherCreateManyCompanyInput = {
+    id?: number
+    voucherNumber: string
+    voucherType: $Enums.VoucherType
+    date?: Date | string
+    description?: string | null
+    division?: string | null
+    isPosted?: boolean
+    postedAt?: Date | string | null
+    postedById?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ProductCategoryCreateManyCompanyInput = {
     id?: number
     name: string
@@ -58511,6 +64043,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    postedVouchers?: VoucherUpdateManyWithoutPostedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompanyInput = {
@@ -58528,6 +64061,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    postedVouchers?: VoucherUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutCompanyInput = {
@@ -58981,6 +64515,7 @@ export namespace Prisma {
     parent?: AccountUpdateOneWithoutChildrenNestedInput
     children?: AccountUpdateManyWithoutParentNestedInput
     entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    voucherEntries?: VoucherEntryUpdateManyWithoutAccountNestedInput
     customer?: CustomerUpdateOneWithoutAccountNestedInput
     vendor?: VendorUpdateOneWithoutAccountNestedInput
   }
@@ -58997,6 +64532,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
     entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    voucherEntries?: VoucherEntryUncheckedUpdateManyWithoutAccountNestedInput
     customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
     vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
   }
@@ -59093,6 +64629,49 @@ export namespace Prisma {
     vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     transactionId?: IntFieldUpdateOperationsInput | number
     division?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VoucherUpdateWithoutCompanyInput = {
+    voucherNumber?: StringFieldUpdateOperationsInput | string
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    isPosted?: BoolFieldUpdateOperationsInput | boolean
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: VoucherEntryUpdateManyWithoutVoucherNestedInput
+    postedBy?: UserUpdateOneWithoutPostedVouchersNestedInput
+  }
+
+  export type VoucherUncheckedUpdateWithoutCompanyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherNumber?: StringFieldUpdateOperationsInput | string
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    isPosted?: BoolFieldUpdateOperationsInput | boolean
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: VoucherEntryUncheckedUpdateManyWithoutVoucherNestedInput
+  }
+
+  export type VoucherUncheckedUpdateManyWithoutCompanyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherNumber?: StringFieldUpdateOperationsInput | string
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    isPosted?: BoolFieldUpdateOperationsInput | boolean
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postedById?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -59591,6 +65170,20 @@ export namespace Prisma {
     companyId: number
   }
 
+  export type VoucherCreateManyPostedByInput = {
+    id?: number
+    voucherNumber: string
+    voucherType: $Enums.VoucherType
+    date?: Date | string
+    description?: string | null
+    companyId: number
+    division?: string | null
+    isPosted?: boolean
+    postedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type AuditLogUpdateWithoutUserInput = {
     action?: StringFieldUpdateOperationsInput | string
     module?: StringFieldUpdateOperationsInput | string
@@ -59621,6 +65214,49 @@ export namespace Prisma {
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type VoucherUpdateWithoutPostedByInput = {
+    voucherNumber?: StringFieldUpdateOperationsInput | string
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    isPosted?: BoolFieldUpdateOperationsInput | boolean
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutVouchersNestedInput
+    entries?: VoucherEntryUpdateManyWithoutVoucherNestedInput
+  }
+
+  export type VoucherUncheckedUpdateWithoutPostedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherNumber?: StringFieldUpdateOperationsInput | string
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    isPosted?: BoolFieldUpdateOperationsInput | boolean
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: VoucherEntryUncheckedUpdateManyWithoutVoucherNestedInput
+  }
+
+  export type VoucherUncheckedUpdateManyWithoutPostedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherNumber?: StringFieldUpdateOperationsInput | string
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    isPosted?: BoolFieldUpdateOperationsInput | boolean
+    postedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type JobCreateManyCustomerInput = {
@@ -60520,6 +66156,16 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type VoucherEntryCreateManyAccountInput = {
+    id?: number
+    voucherId: number
+    debit?: number
+    credit?: number
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type AccountUpdateWithoutParentInput = {
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -60531,6 +66177,7 @@ export namespace Prisma {
     children?: AccountUpdateManyWithoutParentNestedInput
     company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
     entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    voucherEntries?: VoucherEntryUpdateManyWithoutAccountNestedInput
     customer?: CustomerUpdateOneWithoutAccountNestedInput
     vendor?: VendorUpdateOneWithoutAccountNestedInput
   }
@@ -60547,6 +66194,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
     entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    voucherEntries?: VoucherEntryUncheckedUpdateManyWithoutAccountNestedInput
     customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
     vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
   }
@@ -60587,6 +66235,35 @@ export namespace Prisma {
     debit?: FloatFieldUpdateOperationsInput | number
     credit?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VoucherEntryUpdateWithoutAccountInput = {
+    debit?: FloatFieldUpdateOperationsInput | number
+    credit?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    voucher?: VoucherUpdateOneRequiredWithoutEntriesNestedInput
+  }
+
+  export type VoucherEntryUncheckedUpdateWithoutAccountInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherId?: IntFieldUpdateOperationsInput | number
+    debit?: FloatFieldUpdateOperationsInput | number
+    credit?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VoucherEntryUncheckedUpdateManyWithoutAccountInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherId?: IntFieldUpdateOperationsInput | number
+    debit?: FloatFieldUpdateOperationsInput | number
+    credit?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AccountEntryCreateManyTransactionInput = {
@@ -60749,6 +66426,45 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type VoucherEntryCreateManyVoucherInput = {
+    id?: number
+    accountId: number
+    debit?: number
+    credit?: number
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VoucherEntryUpdateWithoutVoucherInput = {
+    debit?: FloatFieldUpdateOperationsInput | number
+    credit?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: AccountUpdateOneRequiredWithoutVoucherEntriesNestedInput
+  }
+
+  export type VoucherEntryUncheckedUpdateWithoutVoucherInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    accountId?: IntFieldUpdateOperationsInput | number
+    debit?: FloatFieldUpdateOperationsInput | number
+    credit?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VoucherEntryUncheckedUpdateManyWithoutVoucherInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    accountId?: IntFieldUpdateOperationsInput | number
+    debit?: FloatFieldUpdateOperationsInput | number
+    credit?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

@@ -58,14 +58,34 @@ model Company {
   id             Int             @id @default(autoincrement())
   name           String
   uniqueId       String          @unique // For multi-tenant mapping
+  
+  // Contact Information
   address        String?
+  city           String?
+  state          String?
+  postalCode     String?
+  country        String?
   phone          String?
   email          String?
+  website        String?
+  
+  // Business Information
+  taxNumber      String?         // NTN
+  registrationNo String?         // Company Registration Number
   industry       String?
+  
+  // Branding
   logo           String?
+  tagline        String?
   themeConfig    Json?           // { primaryColor: string, darkMode: boolean, etc. }
+  
+  // Fiscal Year Settings
+  fiscalYearStart DateTime?      // e.g., 2024-07-01
+  fiscalYearEnd   DateTime?      // e.g., 2025-06-30
+  
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
+  
   users          User[]
   branches       Branch[]
   currencies     CompanyCurrency[]
@@ -79,6 +99,7 @@ model Company {
   accounts       Account[]
   transactions   Transaction[]
   payments       Payment[]
+  vouchers       Voucher[]
   
   // Animal Feed Module
   productCategories ProductCategory[]
@@ -167,6 +188,7 @@ model User {
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   auditLogs        AuditLog[]
+  postedVouchers   Voucher[]
 }
 
 model Customer {
@@ -501,6 +523,7 @@ model Account {
   division    String?       @default("logistics")
   
   entries     AccountEntry[]
+  voucherEntries VoucherEntry[]
   
   customer    Customer?
   vendor      Vendor?
@@ -613,4 +636,50 @@ model Port {
   updatedAt DateTime @updatedAt
 
   @@unique([companyId, name])
+}
+
+enum VoucherType {
+  PAYMENT
+  RECEIPT
+  JOURNAL
+}
+
+model Voucher {
+  id              Int             @id @default(autoincrement())
+  voucherNumber   String
+  voucherType     VoucherType
+  date            DateTime        @default(now())
+  description     String?
+  
+  companyId       Int
+  company         Company         @relation(fields: [companyId], references: [id])
+  division        String?         @default("logistics")
+  
+  entries         VoucherEntry[]
+  
+  isPosted        Boolean         @default(false)
+  postedAt        DateTime?
+  postedById      Int?
+  postedBy        User?           @relation(fields: [postedById], references: [id])
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  @@unique([companyId, voucherNumber])
+}
+
+model VoucherEntry {
+  id          Int      @id @default(autoincrement())
+  voucherId   Int
+  voucher     Voucher  @relation(fields: [voucherId], references: [id], onDelete: Cascade)
+  
+  accountId   Int
+  account     Account  @relation(fields: [accountId], references: [id])
+  
+  debit       Float    @default(0)
+  credit      Float    @default(0)
+  description String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

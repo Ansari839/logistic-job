@@ -125,11 +125,21 @@ exports.Prisma.CompanyScalarFieldEnum = {
   name: 'name',
   uniqueId: 'uniqueId',
   address: 'address',
+  city: 'city',
+  state: 'state',
+  postalCode: 'postalCode',
+  country: 'country',
   phone: 'phone',
   email: 'email',
+  website: 'website',
+  taxNumber: 'taxNumber',
+  registrationNo: 'registrationNo',
   industry: 'industry',
   logo: 'logo',
+  tagline: 'tagline',
   themeConfig: 'themeConfig',
+  fiscalYearStart: 'fiscalYearStart',
+  fiscalYearEnd: 'fiscalYearEnd',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -485,6 +495,32 @@ exports.Prisma.PortScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.VoucherScalarFieldEnum = {
+  id: 'id',
+  voucherNumber: 'voucherNumber',
+  voucherType: 'voucherType',
+  date: 'date',
+  description: 'description',
+  companyId: 'companyId',
+  division: 'division',
+  isPosted: 'isPosted',
+  postedAt: 'postedAt',
+  postedById: 'postedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.VoucherEntryScalarFieldEnum = {
+  id: 'id',
+  voucherId: 'voucherId',
+  accountId: 'accountId',
+  debit: 'debit',
+  credit: 'credit',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -563,6 +599,12 @@ exports.PaymentMode = exports.$Enums.PaymentMode = {
   ONLINE: 'ONLINE'
 };
 
+exports.VoucherType = exports.$Enums.VoucherType = {
+  PAYMENT: 'PAYMENT',
+  RECEIPT: 'RECEIPT',
+  JOURNAL: 'JOURNAL'
+};
+
 exports.Prisma.ModelName = {
   Company: 'Company',
   Branch: 'Branch',
@@ -590,7 +632,9 @@ exports.Prisma.ModelName = {
   Payment: 'Payment',
   AuditLog: 'AuditLog',
   FinancialPeriod: 'FinancialPeriod',
-  Port: 'Port'
+  Port: 'Port',
+  Voucher: 'Voucher',
+  VoucherEntry: 'VoucherEntry'
 };
 
 /**
