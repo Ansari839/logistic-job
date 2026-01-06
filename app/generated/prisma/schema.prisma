@@ -170,12 +170,17 @@ model User {
 }
 
 model Customer {
-  id        Int       @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   name      String
-  code      String    @unique
+  code      String  @unique
   address   String?
   phone     String?
   email     String?
+  taxNumber String? // NTN
+
+  accountId Int?     @unique // Linked ledger account (Accounts Receivable)
+  account   Account? @relation(fields: [accountId], references: [id])
+
   companyId Int
   company   Company   @relation(fields: [companyId], references: [id])
   jobs      Job[]
@@ -186,13 +191,18 @@ model Customer {
 }
 
 model Vendor {
-  id               Int               @id @default(autoincrement())
-  name             String
-  code             String            @unique
-  type             String? // TRANSPORT, PORT, CLEARING
-  address          String?
-  phone            String?
-  email            String?
+  id        Int     @id @default(autoincrement())
+  name      String
+  code      String  @unique
+  type      String? // TRANSPORT, PORT, CLEARING
+  address   String?
+  phone     String?
+  email     String?
+  taxNumber String? // NTN
+
+  accountId Int?     @unique // Linked ledger account (Accounts Payable)
+  account   Account? @relation(fields: [accountId], references: [id])
+
   companyId        Int
   company          Company           @relation(fields: [companyId], references: [id])
   expenses         Expense[]
@@ -486,6 +496,9 @@ model Account {
   company   Company @relation(fields: [companyId], references: [id])
 
   entries AccountEntry[]
+
+  customer Customer?
+  vendor   Vendor?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

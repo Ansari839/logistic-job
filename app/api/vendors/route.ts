@@ -44,22 +44,43 @@ export async function POST(request: Request) {
 
     try {
         const body = await request.json();
-        const { name, code, type, address, phone, email } = body;
+        const { name, code, type, address, phone, email, taxNumber } = body;
 
         if (!name || !code) {
             return NextResponse.json({ error: 'Name and Code are required' }, { status: 400 });
         }
 
-        const vendor = await prisma.vendor.create({
-            data: {
-                name,
-                code,
-                type,
-                address,
-                phone,
-                email,
-                companyId: user.companyId,
-            }
+        // 1. Transaction to create Vendor and its Ledger Account
+        const vendor = await prisma.$transaction(async (tx) => {
+            // Find parent account for Accounts Payable (2210)
+            const parentAccount = await tx.account.findUnique({
+                where: { companyId_code: { companyId: user.companyId, code: '2210' } }
+            });
+
+            // Create sub-account for this vendor
+            const vendorAccount = await tx.account.create({
+                data: {
+                    name: `${name} (Vendor)`,
+                    code: `${parentAccount?.code || '2210'}-${code}`,
+                    type: 'LIABILITY',
+                    companyId: user.companyId,
+                    parentId: parentAccount?.id
+                }
+            });
+
+            return tx.vendor.create({
+                data: {
+                    name,
+                    code,
+                    type,
+                    address,
+                    phone,
+                    email,
+                    taxNumber,
+                    companyId: user.companyId,
+                    accountId: vendorAccount.id
+                }
+            });
         });
 
         return NextResponse.json({ vendor });

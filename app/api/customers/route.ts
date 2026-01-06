@@ -44,12 +44,51 @@ export async function POST(request: Request) {
 
     try {
         const body = await request.json();
-        const { name, code, address, phone, email } = body;
+        console.log("POST /api/customers - Body:", body);
+        const { name, code, address, phone, email, taxNumber } = body;
+
+        console.log("User Company ID:", user.companyId);
 
         if (!name || !code) {
+            console.log("Validation failed: Name or Code missing");
             return NextResponse.json({ error: 'Name and Code are required' }, { status: 400 });
         }
 
+        console.log("Starting sequential operations (no transaction)...");
+
+        // 1. Find parent account
+        console.log("Finding parent account...");
+        const parentAccount = await prisma.account.findUnique({
+            where: { companyId_code: { companyId: user.companyId, code: '1230' } }
+        });
+        console.log("Parent account found:", parentAccount?.id);
+
+        // 2. Create sub-account
+        const accountCode = `${parentAccount?.code || '1230'}-${code}`;
+        console.log("Creating sub-account:", accountCode);
+
+        let customerAccount;
+        try {
+            customerAccount = await prisma.account.create({
+                data: {
+                    name: `${name} (Customer)`,
+                    code: accountCode,
+                    type: 'ASSET',
+                    companyId: user.companyId,
+                    parentId: parentAccount?.id
+                }
+            });
+            console.log("Sub-account created:", customerAccount.id);
+        } catch (accError: any) {
+            console.error("Account creation failed:", accError);
+            if (accError.code === 'P2002') {
+                return NextResponse.json({ error: 'Account Code already exists.' }, { status: 400 });
+            }
+            throw accError;
+        }
+
+        // 3. Create Customer
+        console.log("Creating Customer record...");
         const customer = await prisma.customer.create({
             data: {
                 name,
@@ -57,16 +96,19 @@ export async function POST(request: Request) {
                 address,
                 phone,
                 email,
+                taxNumber,
                 companyId: user.companyId,
+                accountId: customerAccount.id
             }
         });
+        console.log("Transaction successful. Customer ID:", customer.id);
 
         return NextResponse.json({ customer });
     } catch (error: any) {
-        console.error('Create customer error:', error);
+        console.error('Create customer error detailed:', error);
         if (error.code === 'P2002') {
-            return NextResponse.json({ error: 'Customer Code already exists' }, { status: 400 });
+            return NextResponse.json({ error: 'Customer Code or Account already exists' }, { status: 400 });
         }
-        return NextResponse.json({ error: 'Failed to create customer' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to create customer: ' + (error.message || 'Unknown error') }, { status: 500 });
     }
 }

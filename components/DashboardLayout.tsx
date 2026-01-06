@@ -30,7 +30,6 @@ const navItems: NavItem[] = [
     { name: 'Overview', href: '/dashboard', icon: LayoutDashboard, division: 'both' },
     { name: 'Jobs', href: '/jobs', icon: Package, roles: ['ADMIN', 'OPERATOR', 'SALES'], division: 'logistics' },
     { name: 'Invoices', href: '/invoices', icon: FileText, roles: ['ADMIN', 'ACCOUNTS', 'SALES'], division: 'logistics' },
-    { name: 'Vendors', href: '/vendors', icon: Building2, roles: ['ADMIN', 'OPERATOR'], division: 'both' },
     { name: 'Inventory', href: '/inventory', icon: Box, roles: ['ADMIN', 'OPERATOR', 'SALES'], division: 'animal-feed' },
     { name: 'Purchases', href: '/purchases', icon: ShoppingBag, roles: ['ADMIN', 'ACCOUNTS'], division: 'animal-feed' },
     { name: 'Chart of Accounts', href: '/accounts', icon: BookOpen, roles: ['ADMIN', 'ACCOUNTS'], division: 'both' },

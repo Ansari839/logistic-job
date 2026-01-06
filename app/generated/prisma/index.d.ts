@@ -12771,11 +12771,13 @@ export namespace Prisma {
 
   export type CustomerAvgAggregateOutputType = {
     id: number | null
+    accountId: number | null
     companyId: number | null
   }
 
   export type CustomerSumAggregateOutputType = {
     id: number | null
+    accountId: number | null
     companyId: number | null
   }
 
@@ -12786,6 +12788,8 @@ export namespace Prisma {
     address: string | null
     phone: string | null
     email: string | null
+    taxNumber: string | null
+    accountId: number | null
     companyId: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -12798,6 +12802,8 @@ export namespace Prisma {
     address: string | null
     phone: string | null
     email: string | null
+    taxNumber: string | null
+    accountId: number | null
     companyId: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -12810,6 +12816,8 @@ export namespace Prisma {
     address: number
     phone: number
     email: number
+    taxNumber: number
+    accountId: number
     companyId: number
     createdAt: number
     updatedAt: number
@@ -12819,11 +12827,13 @@ export namespace Prisma {
 
   export type CustomerAvgAggregateInputType = {
     id?: true
+    accountId?: true
     companyId?: true
   }
 
   export type CustomerSumAggregateInputType = {
     id?: true
+    accountId?: true
     companyId?: true
   }
 
@@ -12834,6 +12844,8 @@ export namespace Prisma {
     address?: true
     phone?: true
     email?: true
+    taxNumber?: true
+    accountId?: true
     companyId?: true
     createdAt?: true
     updatedAt?: true
@@ -12846,6 +12858,8 @@ export namespace Prisma {
     address?: true
     phone?: true
     email?: true
+    taxNumber?: true
+    accountId?: true
     companyId?: true
     createdAt?: true
     updatedAt?: true
@@ -12858,6 +12872,8 @@ export namespace Prisma {
     address?: true
     phone?: true
     email?: true
+    taxNumber?: true
+    accountId?: true
     companyId?: true
     createdAt?: true
     updatedAt?: true
@@ -12957,6 +12973,8 @@ export namespace Prisma {
     address: string | null
     phone: string | null
     email: string | null
+    taxNumber: string | null
+    accountId: number | null
     companyId: number
     createdAt: Date
     updatedAt: Date
@@ -12988,9 +13006,12 @@ export namespace Prisma {
     address?: boolean
     phone?: boolean
     email?: boolean
+    taxNumber?: boolean
+    accountId?: boolean
     companyId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    account?: boolean | Customer$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     jobs?: boolean | Customer$jobsArgs<ExtArgs>
     invoices?: boolean | Customer$invoicesArgs<ExtArgs>
@@ -13005,9 +13026,12 @@ export namespace Prisma {
     address?: boolean
     phone?: boolean
     email?: boolean
+    taxNumber?: boolean
+    accountId?: boolean
     companyId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    account?: boolean | Customer$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["customer"]>
 
@@ -13018,9 +13042,12 @@ export namespace Prisma {
     address?: boolean
     phone?: boolean
     email?: boolean
+    taxNumber?: boolean
+    accountId?: boolean
     companyId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    account?: boolean | Customer$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["customer"]>
 
@@ -13031,13 +13058,16 @@ export namespace Prisma {
     address?: boolean
     phone?: boolean
     email?: boolean
+    taxNumber?: boolean
+    accountId?: boolean
     companyId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "code" | "address" | "phone" | "email" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
+  export type CustomerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "code" | "address" | "phone" | "email" | "taxNumber" | "accountId" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
   export type CustomerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    account?: boolean | Customer$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     jobs?: boolean | Customer$jobsArgs<ExtArgs>
     invoices?: boolean | Customer$invoicesArgs<ExtArgs>
@@ -13045,15 +13075,18 @@ export namespace Prisma {
     _count?: boolean | CustomerCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CustomerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    account?: boolean | Customer$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
   }
   export type CustomerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    account?: boolean | Customer$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
   }
 
   export type $CustomerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Customer"
     objects: {
+      account: Prisma.$AccountPayload<ExtArgs> | null
       company: Prisma.$CompanyPayload<ExtArgs>
       jobs: Prisma.$JobPayload<ExtArgs>[]
       invoices: Prisma.$InvoicePayload<ExtArgs>[]
@@ -13066,6 +13099,8 @@ export namespace Prisma {
       address: string | null
       phone: string | null
       email: string | null
+      taxNumber: string | null
+      accountId: number | null
       companyId: number
       createdAt: Date
       updatedAt: Date
@@ -13463,6 +13498,7 @@ export namespace Prisma {
    */
   export interface Prisma__CustomerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    account<T extends Customer$accountArgs<ExtArgs> = {}>(args?: Subset<T, Customer$accountArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     jobs<T extends Customer$jobsArgs<ExtArgs> = {}>(args?: Subset<T, Customer$jobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     invoices<T extends Customer$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Customer$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -13502,6 +13538,8 @@ export namespace Prisma {
     readonly address: FieldRef<"Customer", 'String'>
     readonly phone: FieldRef<"Customer", 'String'>
     readonly email: FieldRef<"Customer", 'String'>
+    readonly taxNumber: FieldRef<"Customer", 'String'>
+    readonly accountId: FieldRef<"Customer", 'Int'>
     readonly companyId: FieldRef<"Customer", 'Int'>
     readonly createdAt: FieldRef<"Customer", 'DateTime'>
     readonly updatedAt: FieldRef<"Customer", 'DateTime'>
@@ -13901,6 +13939,25 @@ export namespace Prisma {
   }
 
   /**
+   * Customer.account
+   */
+  export type Customer$accountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Account
+     */
+    select?: AccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Account
+     */
+    omit?: AccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
+    where?: AccountWhereInput
+  }
+
+  /**
    * Customer.jobs
    */
   export type Customer$jobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14005,11 +14062,13 @@ export namespace Prisma {
 
   export type VendorAvgAggregateOutputType = {
     id: number | null
+    accountId: number | null
     companyId: number | null
   }
 
   export type VendorSumAggregateOutputType = {
     id: number | null
+    accountId: number | null
     companyId: number | null
   }
 
@@ -14021,6 +14080,8 @@ export namespace Prisma {
     address: string | null
     phone: string | null
     email: string | null
+    taxNumber: string | null
+    accountId: number | null
     companyId: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -14034,6 +14095,8 @@ export namespace Prisma {
     address: string | null
     phone: string | null
     email: string | null
+    taxNumber: string | null
+    accountId: number | null
     companyId: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -14047,6 +14110,8 @@ export namespace Prisma {
     address: number
     phone: number
     email: number
+    taxNumber: number
+    accountId: number
     companyId: number
     createdAt: number
     updatedAt: number
@@ -14056,11 +14121,13 @@ export namespace Prisma {
 
   export type VendorAvgAggregateInputType = {
     id?: true
+    accountId?: true
     companyId?: true
   }
 
   export type VendorSumAggregateInputType = {
     id?: true
+    accountId?: true
     companyId?: true
   }
 
@@ -14072,6 +14139,8 @@ export namespace Prisma {
     address?: true
     phone?: true
     email?: true
+    taxNumber?: true
+    accountId?: true
     companyId?: true
     createdAt?: true
     updatedAt?: true
@@ -14085,6 +14154,8 @@ export namespace Prisma {
     address?: true
     phone?: true
     email?: true
+    taxNumber?: true
+    accountId?: true
     companyId?: true
     createdAt?: true
     updatedAt?: true
@@ -14098,6 +14169,8 @@ export namespace Prisma {
     address?: true
     phone?: true
     email?: true
+    taxNumber?: true
+    accountId?: true
     companyId?: true
     createdAt?: true
     updatedAt?: true
@@ -14198,6 +14271,8 @@ export namespace Prisma {
     address: string | null
     phone: string | null
     email: string | null
+    taxNumber: string | null
+    accountId: number | null
     companyId: number
     createdAt: Date
     updatedAt: Date
@@ -14230,9 +14305,12 @@ export namespace Prisma {
     address?: boolean
     phone?: boolean
     email?: boolean
+    taxNumber?: boolean
+    accountId?: boolean
     companyId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    account?: boolean | Vendor$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     expenses?: boolean | Vendor$expensesArgs<ExtArgs>
     payments?: boolean | Vendor$paymentsArgs<ExtArgs>
@@ -14248,9 +14326,12 @@ export namespace Prisma {
     address?: boolean
     phone?: boolean
     email?: boolean
+    taxNumber?: boolean
+    accountId?: boolean
     companyId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    account?: boolean | Vendor$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["vendor"]>
 
@@ -14262,9 +14343,12 @@ export namespace Prisma {
     address?: boolean
     phone?: boolean
     email?: boolean
+    taxNumber?: boolean
+    accountId?: boolean
     companyId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    account?: boolean | Vendor$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["vendor"]>
 
@@ -14276,13 +14360,16 @@ export namespace Prisma {
     address?: boolean
     phone?: boolean
     email?: boolean
+    taxNumber?: boolean
+    accountId?: boolean
     companyId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type VendorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "code" | "type" | "address" | "phone" | "email" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["vendor"]>
+  export type VendorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "code" | "type" | "address" | "phone" | "email" | "taxNumber" | "accountId" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["vendor"]>
   export type VendorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    account?: boolean | Vendor$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     expenses?: boolean | Vendor$expensesArgs<ExtArgs>
     payments?: boolean | Vendor$paymentsArgs<ExtArgs>
@@ -14290,15 +14377,18 @@ export namespace Prisma {
     _count?: boolean | VendorCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type VendorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    account?: boolean | Vendor$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
   }
   export type VendorIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    account?: boolean | Vendor$accountArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
   }
 
   export type $VendorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Vendor"
     objects: {
+      account: Prisma.$AccountPayload<ExtArgs> | null
       company: Prisma.$CompanyPayload<ExtArgs>
       expenses: Prisma.$ExpensePayload<ExtArgs>[]
       payments: Prisma.$PaymentPayload<ExtArgs>[]
@@ -14312,6 +14402,8 @@ export namespace Prisma {
       address: string | null
       phone: string | null
       email: string | null
+      taxNumber: string | null
+      accountId: number | null
       companyId: number
       createdAt: Date
       updatedAt: Date
@@ -14709,6 +14801,7 @@ export namespace Prisma {
    */
   export interface Prisma__VendorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    account<T extends Vendor$accountArgs<ExtArgs> = {}>(args?: Subset<T, Vendor$accountArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     expenses<T extends Vendor$expensesArgs<ExtArgs> = {}>(args?: Subset<T, Vendor$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     payments<T extends Vendor$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Vendor$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -14749,6 +14842,8 @@ export namespace Prisma {
     readonly address: FieldRef<"Vendor", 'String'>
     readonly phone: FieldRef<"Vendor", 'String'>
     readonly email: FieldRef<"Vendor", 'String'>
+    readonly taxNumber: FieldRef<"Vendor", 'String'>
+    readonly accountId: FieldRef<"Vendor", 'Int'>
     readonly companyId: FieldRef<"Vendor", 'Int'>
     readonly createdAt: FieldRef<"Vendor", 'DateTime'>
     readonly updatedAt: FieldRef<"Vendor", 'DateTime'>
@@ -15145,6 +15240,25 @@ export namespace Prisma {
      * Limit how many Vendors to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Vendor.account
+   */
+  export type Vendor$accountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Account
+     */
+    select?: AccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Account
+     */
+    omit?: AccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
+    where?: AccountWhereInput
   }
 
   /**
@@ -29359,6 +29473,8 @@ export namespace Prisma {
     children?: boolean | Account$childrenArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     entries?: boolean | Account$entriesArgs<ExtArgs>
+    customer?: boolean | Account$customerArgs<ExtArgs>
+    vendor?: boolean | Account$vendorArgs<ExtArgs>
     _count?: boolean | AccountCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
@@ -29408,6 +29524,8 @@ export namespace Prisma {
     children?: boolean | Account$childrenArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     entries?: boolean | Account$entriesArgs<ExtArgs>
+    customer?: boolean | Account$customerArgs<ExtArgs>
+    vendor?: boolean | Account$vendorArgs<ExtArgs>
     _count?: boolean | AccountCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AccountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -29426,6 +29544,8 @@ export namespace Prisma {
       children: Prisma.$AccountPayload<ExtArgs>[]
       company: Prisma.$CompanyPayload<ExtArgs>
       entries: Prisma.$AccountEntryPayload<ExtArgs>[]
+      customer: Prisma.$CustomerPayload<ExtArgs> | null
+      vendor: Prisma.$VendorPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -29835,6 +29955,8 @@ export namespace Prisma {
     children<T extends Account$childrenArgs<ExtArgs> = {}>(args?: Subset<T, Account$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     entries<T extends Account$entriesArgs<ExtArgs> = {}>(args?: Subset<T, Account$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    customer<T extends Account$customerArgs<ExtArgs> = {}>(args?: Subset<T, Account$customerArgs<ExtArgs>>): Prisma__CustomerClient<$Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    vendor<T extends Account$vendorArgs<ExtArgs> = {}>(args?: Subset<T, Account$vendorArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -30333,6 +30455,44 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AccountEntryScalarFieldEnum | AccountEntryScalarFieldEnum[]
+  }
+
+  /**
+   * Account.customer
+   */
+  export type Account$customerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Customer
+     */
+    select?: CustomerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Customer
+     */
+    omit?: CustomerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CustomerInclude<ExtArgs> | null
+    where?: CustomerWhereInput
+  }
+
+  /**
+   * Account.vendor
+   */
+  export type Account$vendorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vendor
+     */
+    select?: VendorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vendor
+     */
+    omit?: VendorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorInclude<ExtArgs> | null
+    where?: VendorWhereInput
   }
 
   /**
@@ -37546,6 +37706,8 @@ export namespace Prisma {
     address: 'address',
     phone: 'phone',
     email: 'email',
+    taxNumber: 'taxNumber',
+    accountId: 'accountId',
     companyId: 'companyId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -37562,6 +37724,8 @@ export namespace Prisma {
     address: 'address',
     phone: 'phone',
     email: 'email',
+    taxNumber: 'taxNumber',
+    accountId: 'accountId',
     companyId: 'companyId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -38705,9 +38869,12 @@ export namespace Prisma {
     address?: StringNullableFilter<"Customer"> | string | null
     phone?: StringNullableFilter<"Customer"> | string | null
     email?: StringNullableFilter<"Customer"> | string | null
+    taxNumber?: StringNullableFilter<"Customer"> | string | null
+    accountId?: IntNullableFilter<"Customer"> | number | null
     companyId?: IntFilter<"Customer"> | number
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
+    account?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     jobs?: JobListRelationFilter
     invoices?: InvoiceListRelationFilter
@@ -38721,9 +38888,12 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
+    taxNumber?: SortOrderInput | SortOrder
+    accountId?: SortOrderInput | SortOrder
     companyId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    account?: AccountOrderByWithRelationInput
     company?: CompanyOrderByWithRelationInput
     jobs?: JobOrderByRelationAggregateInput
     invoices?: InvoiceOrderByRelationAggregateInput
@@ -38733,6 +38903,7 @@ export namespace Prisma {
   export type CustomerWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     code?: string
+    accountId?: number
     AND?: CustomerWhereInput | CustomerWhereInput[]
     OR?: CustomerWhereInput[]
     NOT?: CustomerWhereInput | CustomerWhereInput[]
@@ -38740,14 +38911,16 @@ export namespace Prisma {
     address?: StringNullableFilter<"Customer"> | string | null
     phone?: StringNullableFilter<"Customer"> | string | null
     email?: StringNullableFilter<"Customer"> | string | null
+    taxNumber?: StringNullableFilter<"Customer"> | string | null
     companyId?: IntFilter<"Customer"> | number
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
+    account?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     jobs?: JobListRelationFilter
     invoices?: InvoiceListRelationFilter
     payments?: PaymentListRelationFilter
-  }, "id" | "code">
+  }, "id" | "code" | "accountId">
 
   export type CustomerOrderByWithAggregationInput = {
     id?: SortOrder
@@ -38756,6 +38929,8 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
+    taxNumber?: SortOrderInput | SortOrder
+    accountId?: SortOrderInput | SortOrder
     companyId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -38776,6 +38951,8 @@ export namespace Prisma {
     address?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     phone?: StringNullableWithAggregatesFilter<"Customer"> | string | null
     email?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    taxNumber?: StringNullableWithAggregatesFilter<"Customer"> | string | null
+    accountId?: IntNullableWithAggregatesFilter<"Customer"> | number | null
     companyId?: IntWithAggregatesFilter<"Customer"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Customer"> | Date | string
@@ -38792,9 +38969,12 @@ export namespace Prisma {
     address?: StringNullableFilter<"Vendor"> | string | null
     phone?: StringNullableFilter<"Vendor"> | string | null
     email?: StringNullableFilter<"Vendor"> | string | null
+    taxNumber?: StringNullableFilter<"Vendor"> | string | null
+    accountId?: IntNullableFilter<"Vendor"> | number | null
     companyId?: IntFilter<"Vendor"> | number
     createdAt?: DateTimeFilter<"Vendor"> | Date | string
     updatedAt?: DateTimeFilter<"Vendor"> | Date | string
+    account?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     expenses?: ExpenseListRelationFilter
     payments?: PaymentListRelationFilter
@@ -38809,9 +38989,12 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
+    taxNumber?: SortOrderInput | SortOrder
+    accountId?: SortOrderInput | SortOrder
     companyId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    account?: AccountOrderByWithRelationInput
     company?: CompanyOrderByWithRelationInput
     expenses?: ExpenseOrderByRelationAggregateInput
     payments?: PaymentOrderByRelationAggregateInput
@@ -38821,6 +39004,7 @@ export namespace Prisma {
   export type VendorWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     code?: string
+    accountId?: number
     AND?: VendorWhereInput | VendorWhereInput[]
     OR?: VendorWhereInput[]
     NOT?: VendorWhereInput | VendorWhereInput[]
@@ -38829,14 +39013,16 @@ export namespace Prisma {
     address?: StringNullableFilter<"Vendor"> | string | null
     phone?: StringNullableFilter<"Vendor"> | string | null
     email?: StringNullableFilter<"Vendor"> | string | null
+    taxNumber?: StringNullableFilter<"Vendor"> | string | null
     companyId?: IntFilter<"Vendor"> | number
     createdAt?: DateTimeFilter<"Vendor"> | Date | string
     updatedAt?: DateTimeFilter<"Vendor"> | Date | string
+    account?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     expenses?: ExpenseListRelationFilter
     payments?: PaymentListRelationFilter
     purchaseInvoices?: PurchaseInvoiceListRelationFilter
-  }, "id" | "code">
+  }, "id" | "code" | "accountId">
 
   export type VendorOrderByWithAggregationInput = {
     id?: SortOrder
@@ -38846,6 +39032,8 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
+    taxNumber?: SortOrderInput | SortOrder
+    accountId?: SortOrderInput | SortOrder
     companyId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -38867,6 +39055,8 @@ export namespace Prisma {
     address?: StringNullableWithAggregatesFilter<"Vendor"> | string | null
     phone?: StringNullableWithAggregatesFilter<"Vendor"> | string | null
     email?: StringNullableWithAggregatesFilter<"Vendor"> | string | null
+    taxNumber?: StringNullableWithAggregatesFilter<"Vendor"> | string | null
+    accountId?: IntNullableWithAggregatesFilter<"Vendor"> | number | null
     companyId?: IntWithAggregatesFilter<"Vendor"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Vendor"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Vendor"> | Date | string
@@ -40028,6 +40218,8 @@ export namespace Prisma {
     children?: AccountListRelationFilter
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     entries?: AccountEntryListRelationFilter
+    customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
+    vendor?: XOR<VendorNullableScalarRelationFilter, VendorWhereInput> | null
   }
 
   export type AccountOrderByWithRelationInput = {
@@ -40044,6 +40236,8 @@ export namespace Prisma {
     children?: AccountOrderByRelationAggregateInput
     company?: CompanyOrderByWithRelationInput
     entries?: AccountEntryOrderByRelationAggregateInput
+    customer?: CustomerOrderByWithRelationInput
+    vendor?: VendorOrderByWithRelationInput
   }
 
   export type AccountWhereUniqueInput = Prisma.AtLeast<{
@@ -40064,6 +40258,8 @@ export namespace Prisma {
     children?: AccountListRelationFilter
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     entries?: AccountEntryListRelationFilter
+    customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
+    vendor?: XOR<VendorNullableScalarRelationFilter, VendorWhereInput> | null
   }, "id" | "companyId_code">
 
   export type AccountOrderByWithAggregationInput = {
@@ -41183,8 +41379,10 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    account?: AccountCreateNestedOneWithoutCustomerInput
     company: CompanyCreateNestedOneWithoutCustomersInput
     jobs?: JobCreateNestedManyWithoutCustomerInput
     invoices?: InvoiceCreateNestedManyWithoutCustomerInput
@@ -41198,6 +41396,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     companyId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41212,8 +41412,10 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: AccountUpdateOneWithoutCustomerNestedInput
     company?: CompanyUpdateOneRequiredWithoutCustomersNestedInput
     jobs?: JobUpdateManyWithoutCustomerNestedInput
     invoices?: InvoiceUpdateManyWithoutCustomerNestedInput
@@ -41227,6 +41429,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41242,6 +41446,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     companyId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41253,6 +41459,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41264,6 +41471,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41276,8 +41485,10 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    account?: AccountCreateNestedOneWithoutVendorInput
     company: CompanyCreateNestedOneWithoutVendorsInput
     expenses?: ExpenseCreateNestedManyWithoutVendorInput
     payments?: PaymentCreateNestedManyWithoutVendorInput
@@ -41292,6 +41503,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     companyId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41307,8 +41520,10 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: AccountUpdateOneWithoutVendorNestedInput
     company?: CompanyUpdateOneRequiredWithoutVendorsNestedInput
     expenses?: ExpenseUpdateManyWithoutVendorNestedInput
     payments?: PaymentUpdateManyWithoutVendorNestedInput
@@ -41323,6 +41538,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41339,6 +41556,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     companyId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41351,6 +41570,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41363,6 +41583,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42581,6 +42803,8 @@ export namespace Prisma {
     children?: AccountCreateNestedManyWithoutParentInput
     company: CompanyCreateNestedOneWithoutAccountsInput
     entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    customer?: CustomerCreateNestedOneWithoutAccountInput
+    vendor?: VendorCreateNestedOneWithoutAccountInput
   }
 
   export type AccountUncheckedCreateInput = {
@@ -42595,6 +42819,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
     entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
+    vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
   }
 
   export type AccountUpdateInput = {
@@ -42608,6 +42834,8 @@ export namespace Prisma {
     children?: AccountUpdateManyWithoutParentNestedInput
     company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
     entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    customer?: CustomerUpdateOneWithoutAccountNestedInput
+    vendor?: VendorUpdateOneWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateInput = {
@@ -42622,6 +42850,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
     entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
+    vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
   }
 
   export type AccountCreateManyInput = {
@@ -43948,6 +44178,11 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type AccountNullableScalarRelationFilter = {
+    is?: AccountWhereInput | null
+    isNot?: AccountWhereInput | null
+  }
+
   export type CustomerCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -43955,6 +44190,8 @@ export namespace Prisma {
     address?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    taxNumber?: SortOrder
+    accountId?: SortOrder
     companyId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -43962,6 +44199,7 @@ export namespace Prisma {
 
   export type CustomerAvgOrderByAggregateInput = {
     id?: SortOrder
+    accountId?: SortOrder
     companyId?: SortOrder
   }
 
@@ -43972,6 +44210,8 @@ export namespace Prisma {
     address?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    taxNumber?: SortOrder
+    accountId?: SortOrder
     companyId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -43984,6 +44224,8 @@ export namespace Prisma {
     address?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    taxNumber?: SortOrder
+    accountId?: SortOrder
     companyId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -43991,6 +44233,7 @@ export namespace Prisma {
 
   export type CustomerSumOrderByAggregateInput = {
     id?: SortOrder
+    accountId?: SortOrder
     companyId?: SortOrder
   }
 
@@ -44002,6 +44245,8 @@ export namespace Prisma {
     address?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    taxNumber?: SortOrder
+    accountId?: SortOrder
     companyId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -44009,6 +44254,7 @@ export namespace Prisma {
 
   export type VendorAvgOrderByAggregateInput = {
     id?: SortOrder
+    accountId?: SortOrder
     companyId?: SortOrder
   }
 
@@ -44020,6 +44266,8 @@ export namespace Prisma {
     address?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    taxNumber?: SortOrder
+    accountId?: SortOrder
     companyId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -44033,6 +44281,8 @@ export namespace Prisma {
     address?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    taxNumber?: SortOrder
+    accountId?: SortOrder
     companyId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -44040,6 +44290,7 @@ export namespace Prisma {
 
   export type VendorSumOrderByAggregateInput = {
     id?: SortOrder
+    accountId?: SortOrder
     companyId?: SortOrder
   }
 
@@ -44980,15 +45231,15 @@ export namespace Prisma {
     not?: NestedEnumAccountTypeFilter<$PrismaModel> | $Enums.AccountType
   }
 
-  export type AccountNullableScalarRelationFilter = {
-    is?: AccountWhereInput | null
-    isNot?: AccountWhereInput | null
-  }
-
   export type AccountEntryListRelationFilter = {
     every?: AccountEntryWhereInput
     some?: AccountEntryWhereInput
     none?: AccountEntryWhereInput
+  }
+
+  export type CustomerNullableScalarRelationFilter = {
+    is?: CustomerWhereInput | null
+    isNot?: CustomerWhereInput | null
   }
 
   export type AccountEntryOrderByRelationAggregateInput = {
@@ -45197,11 +45448,6 @@ export namespace Prisma {
     in?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel>
     notIn?: $Enums.PaymentMode[] | ListEnumPaymentModeFieldRefInput<$PrismaModel>
     not?: NestedEnumPaymentModeFilter<$PrismaModel> | $Enums.PaymentMode
-  }
-
-  export type CustomerNullableScalarRelationFilter = {
-    is?: CustomerWhereInput | null
-    isNot?: CustomerWhereInput | null
   }
 
   export type PaymentCompanyIdReceiptNumberCompoundUniqueInput = {
@@ -46668,6 +46914,12 @@ export namespace Prisma {
     deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
   }
 
+  export type AccountCreateNestedOneWithoutCustomerInput = {
+    create?: XOR<AccountCreateWithoutCustomerInput, AccountUncheckedCreateWithoutCustomerInput>
+    connectOrCreate?: AccountCreateOrConnectWithoutCustomerInput
+    connect?: AccountWhereUniqueInput
+  }
+
   export type CompanyCreateNestedOneWithoutCustomersInput = {
     create?: XOR<CompanyCreateWithoutCustomersInput, CompanyUncheckedCreateWithoutCustomersInput>
     connectOrCreate?: CompanyCreateOrConnectWithoutCustomersInput
@@ -46714,6 +46966,16 @@ export namespace Prisma {
     connectOrCreate?: PaymentCreateOrConnectWithoutCustomerInput | PaymentCreateOrConnectWithoutCustomerInput[]
     createMany?: PaymentCreateManyCustomerInputEnvelope
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+  }
+
+  export type AccountUpdateOneWithoutCustomerNestedInput = {
+    create?: XOR<AccountCreateWithoutCustomerInput, AccountUncheckedCreateWithoutCustomerInput>
+    connectOrCreate?: AccountCreateOrConnectWithoutCustomerInput
+    upsert?: AccountUpsertWithoutCustomerInput
+    disconnect?: AccountWhereInput | boolean
+    delete?: AccountWhereInput | boolean
+    connect?: AccountWhereUniqueInput
+    update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutCustomerInput, AccountUpdateWithoutCustomerInput>, AccountUncheckedUpdateWithoutCustomerInput>
   }
 
   export type CompanyUpdateOneRequiredWithoutCustomersNestedInput = {
@@ -46808,6 +47070,12 @@ export namespace Prisma {
     deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
   }
 
+  export type AccountCreateNestedOneWithoutVendorInput = {
+    create?: XOR<AccountCreateWithoutVendorInput, AccountUncheckedCreateWithoutVendorInput>
+    connectOrCreate?: AccountCreateOrConnectWithoutVendorInput
+    connect?: AccountWhereUniqueInput
+  }
+
   export type CompanyCreateNestedOneWithoutVendorsInput = {
     create?: XOR<CompanyCreateWithoutVendorsInput, CompanyUncheckedCreateWithoutVendorsInput>
     connectOrCreate?: CompanyCreateOrConnectWithoutVendorsInput
@@ -46854,6 +47122,16 @@ export namespace Prisma {
     connectOrCreate?: PurchaseInvoiceCreateOrConnectWithoutVendorInput | PurchaseInvoiceCreateOrConnectWithoutVendorInput[]
     createMany?: PurchaseInvoiceCreateManyVendorInputEnvelope
     connect?: PurchaseInvoiceWhereUniqueInput | PurchaseInvoiceWhereUniqueInput[]
+  }
+
+  export type AccountUpdateOneWithoutVendorNestedInput = {
+    create?: XOR<AccountCreateWithoutVendorInput, AccountUncheckedCreateWithoutVendorInput>
+    connectOrCreate?: AccountCreateOrConnectWithoutVendorInput
+    upsert?: AccountUpsertWithoutVendorInput
+    disconnect?: AccountWhereInput | boolean
+    delete?: AccountWhereInput | boolean
+    connect?: AccountWhereUniqueInput
+    update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutVendorInput, AccountUpdateWithoutVendorInput>, AccountUncheckedUpdateWithoutVendorInput>
   }
 
   export type CompanyUpdateOneRequiredWithoutVendorsNestedInput = {
@@ -47744,6 +48022,18 @@ export namespace Prisma {
     connect?: AccountEntryWhereUniqueInput | AccountEntryWhereUniqueInput[]
   }
 
+  export type CustomerCreateNestedOneWithoutAccountInput = {
+    create?: XOR<CustomerCreateWithoutAccountInput, CustomerUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: CustomerCreateOrConnectWithoutAccountInput
+    connect?: CustomerWhereUniqueInput
+  }
+
+  export type VendorCreateNestedOneWithoutAccountInput = {
+    create?: XOR<VendorCreateWithoutAccountInput, VendorUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: VendorCreateOrConnectWithoutAccountInput
+    connect?: VendorWhereUniqueInput
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutParentInput = {
     create?: XOR<AccountCreateWithoutParentInput, AccountUncheckedCreateWithoutParentInput> | AccountCreateWithoutParentInput[] | AccountUncheckedCreateWithoutParentInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutParentInput | AccountCreateOrConnectWithoutParentInput[]
@@ -47756,6 +48046,18 @@ export namespace Prisma {
     connectOrCreate?: AccountEntryCreateOrConnectWithoutAccountInput | AccountEntryCreateOrConnectWithoutAccountInput[]
     createMany?: AccountEntryCreateManyAccountInputEnvelope
     connect?: AccountEntryWhereUniqueInput | AccountEntryWhereUniqueInput[]
+  }
+
+  export type CustomerUncheckedCreateNestedOneWithoutAccountInput = {
+    create?: XOR<CustomerCreateWithoutAccountInput, CustomerUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: CustomerCreateOrConnectWithoutAccountInput
+    connect?: CustomerWhereUniqueInput
+  }
+
+  export type VendorUncheckedCreateNestedOneWithoutAccountInput = {
+    create?: XOR<VendorCreateWithoutAccountInput, VendorUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: VendorCreateOrConnectWithoutAccountInput
+    connect?: VendorWhereUniqueInput
   }
 
   export type EnumAccountTypeFieldUpdateOperationsInput = {
@@ -47808,6 +48110,26 @@ export namespace Prisma {
     deleteMany?: AccountEntryScalarWhereInput | AccountEntryScalarWhereInput[]
   }
 
+  export type CustomerUpdateOneWithoutAccountNestedInput = {
+    create?: XOR<CustomerCreateWithoutAccountInput, CustomerUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: CustomerCreateOrConnectWithoutAccountInput
+    upsert?: CustomerUpsertWithoutAccountInput
+    disconnect?: CustomerWhereInput | boolean
+    delete?: CustomerWhereInput | boolean
+    connect?: CustomerWhereUniqueInput
+    update?: XOR<XOR<CustomerUpdateToOneWithWhereWithoutAccountInput, CustomerUpdateWithoutAccountInput>, CustomerUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type VendorUpdateOneWithoutAccountNestedInput = {
+    create?: XOR<VendorCreateWithoutAccountInput, VendorUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: VendorCreateOrConnectWithoutAccountInput
+    upsert?: VendorUpsertWithoutAccountInput
+    disconnect?: VendorWhereInput | boolean
+    delete?: VendorWhereInput | boolean
+    connect?: VendorWhereUniqueInput
+    update?: XOR<XOR<VendorUpdateToOneWithWhereWithoutAccountInput, VendorUpdateWithoutAccountInput>, VendorUncheckedUpdateWithoutAccountInput>
+  }
+
   export type AccountUncheckedUpdateManyWithoutParentNestedInput = {
     create?: XOR<AccountCreateWithoutParentInput, AccountUncheckedCreateWithoutParentInput> | AccountCreateWithoutParentInput[] | AccountUncheckedCreateWithoutParentInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutParentInput | AccountCreateOrConnectWithoutParentInput[]
@@ -47834,6 +48156,26 @@ export namespace Prisma {
     update?: AccountEntryUpdateWithWhereUniqueWithoutAccountInput | AccountEntryUpdateWithWhereUniqueWithoutAccountInput[]
     updateMany?: AccountEntryUpdateManyWithWhereWithoutAccountInput | AccountEntryUpdateManyWithWhereWithoutAccountInput[]
     deleteMany?: AccountEntryScalarWhereInput | AccountEntryScalarWhereInput[]
+  }
+
+  export type CustomerUncheckedUpdateOneWithoutAccountNestedInput = {
+    create?: XOR<CustomerCreateWithoutAccountInput, CustomerUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: CustomerCreateOrConnectWithoutAccountInput
+    upsert?: CustomerUpsertWithoutAccountInput
+    disconnect?: CustomerWhereInput | boolean
+    delete?: CustomerWhereInput | boolean
+    connect?: CustomerWhereUniqueInput
+    update?: XOR<XOR<CustomerUpdateToOneWithWhereWithoutAccountInput, CustomerUpdateWithoutAccountInput>, CustomerUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type VendorUncheckedUpdateOneWithoutAccountNestedInput = {
+    create?: XOR<VendorCreateWithoutAccountInput, VendorUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: VendorCreateOrConnectWithoutAccountInput
+    upsert?: VendorUpsertWithoutAccountInput
+    disconnect?: VendorWhereInput | boolean
+    delete?: VendorWhereInput | boolean
+    connect?: VendorWhereUniqueInput
+    update?: XOR<XOR<VendorUpdateToOneWithWhereWithoutAccountInput, VendorUpdateWithoutAccountInput>, VendorUncheckedUpdateWithoutAccountInput>
   }
 
   export type AccountEntryCreateNestedManyWithoutTransactionInput = {
@@ -48731,8 +49073,10 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    account?: AccountCreateNestedOneWithoutCustomerInput
     jobs?: JobCreateNestedManyWithoutCustomerInput
     invoices?: InvoiceCreateNestedManyWithoutCustomerInput
     payments?: PaymentCreateNestedManyWithoutCustomerInput
@@ -48745,6 +49089,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     jobs?: JobUncheckedCreateNestedManyWithoutCustomerInput
@@ -48769,8 +49115,10 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    account?: AccountCreateNestedOneWithoutVendorInput
     expenses?: ExpenseCreateNestedManyWithoutVendorInput
     payments?: PaymentCreateNestedManyWithoutVendorInput
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutVendorInput
@@ -48784,6 +49132,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     expenses?: ExpenseUncheckedCreateNestedManyWithoutVendorInput
@@ -48988,6 +49338,8 @@ export namespace Prisma {
     parent?: AccountCreateNestedOneWithoutChildrenInput
     children?: AccountCreateNestedManyWithoutParentInput
     entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    customer?: CustomerCreateNestedOneWithoutAccountInput
+    vendor?: VendorCreateNestedOneWithoutAccountInput
   }
 
   export type AccountUncheckedCreateWithoutCompanyInput = {
@@ -49001,6 +49353,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
     entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
+    vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
   }
 
   export type AccountCreateOrConnectWithoutCompanyInput = {
@@ -49550,6 +49904,8 @@ export namespace Prisma {
     address?: StringNullableFilter<"Customer"> | string | null
     phone?: StringNullableFilter<"Customer"> | string | null
     email?: StringNullableFilter<"Customer"> | string | null
+    taxNumber?: StringNullableFilter<"Customer"> | string | null
+    accountId?: IntNullableFilter<"Customer"> | number | null
     companyId?: IntFilter<"Customer"> | number
     createdAt?: DateTimeFilter<"Customer"> | Date | string
     updatedAt?: DateTimeFilter<"Customer"> | Date | string
@@ -49582,6 +49938,8 @@ export namespace Prisma {
     address?: StringNullableFilter<"Vendor"> | string | null
     phone?: StringNullableFilter<"Vendor"> | string | null
     email?: StringNullableFilter<"Vendor"> | string | null
+    taxNumber?: StringNullableFilter<"Vendor"> | string | null
+    accountId?: IntNullableFilter<"Vendor"> | number | null
     companyId?: IntFilter<"Vendor"> | number
     createdAt?: DateTimeFilter<"Vendor"> | Date | string
     updatedAt?: DateTimeFilter<"Vendor"> | Date | string
@@ -51176,6 +51534,40 @@ export namespace Prisma {
     data: XOR<AuditLogUpdateManyMutationInput, AuditLogUncheckedUpdateManyWithoutUserInput>
   }
 
+  export type AccountCreateWithoutCustomerInput = {
+    code: string
+    name: string
+    type: $Enums.AccountType
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: AccountCreateNestedOneWithoutChildrenInput
+    children?: AccountCreateNestedManyWithoutParentInput
+    company: CompanyCreateNestedOneWithoutAccountsInput
+    entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    vendor?: VendorCreateNestedOneWithoutAccountInput
+  }
+
+  export type AccountUncheckedCreateWithoutCustomerInput = {
+    id?: number
+    code: string
+    name: string
+    type: $Enums.AccountType
+    description?: string | null
+    parentId?: number | null
+    companyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: AccountUncheckedCreateNestedManyWithoutParentInput
+    entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
+  }
+
+  export type AccountCreateOrConnectWithoutCustomerInput = {
+    where: AccountWhereUniqueInput
+    create: XOR<AccountCreateWithoutCustomerInput, AccountUncheckedCreateWithoutCustomerInput>
+  }
+
   export type CompanyCreateWithoutCustomersInput = {
     name: string
     uniqueId: string
@@ -51429,6 +51821,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AccountUpsertWithoutCustomerInput = {
+    update: XOR<AccountUpdateWithoutCustomerInput, AccountUncheckedUpdateWithoutCustomerInput>
+    create: XOR<AccountCreateWithoutCustomerInput, AccountUncheckedCreateWithoutCustomerInput>
+    where?: AccountWhereInput
+  }
+
+  export type AccountUpdateToOneWithWhereWithoutCustomerInput = {
+    where?: AccountWhereInput
+    data: XOR<AccountUpdateWithoutCustomerInput, AccountUncheckedUpdateWithoutCustomerInput>
+  }
+
+  export type AccountUpdateWithoutCustomerInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: AccountUpdateOneWithoutChildrenNestedInput
+    children?: AccountUpdateManyWithoutParentNestedInput
+    company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
+    entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    vendor?: VendorUpdateOneWithoutAccountNestedInput
+  }
+
+  export type AccountUncheckedUpdateWithoutCustomerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: AccountUncheckedUpdateManyWithoutParentNestedInput
+    entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
+  }
+
   export type CompanyUpsertWithoutCustomersInput = {
     update: XOR<CompanyUpdateWithoutCustomersInput, CompanyUncheckedUpdateWithoutCustomersInput>
     create: XOR<CompanyCreateWithoutCustomersInput, CompanyUncheckedCreateWithoutCustomersInput>
@@ -51555,6 +51987,40 @@ export namespace Prisma {
   export type PaymentUpdateManyWithWhereWithoutCustomerInput = {
     where: PaymentScalarWhereInput
     data: XOR<PaymentUpdateManyMutationInput, PaymentUncheckedUpdateManyWithoutCustomerInput>
+  }
+
+  export type AccountCreateWithoutVendorInput = {
+    code: string
+    name: string
+    type: $Enums.AccountType
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: AccountCreateNestedOneWithoutChildrenInput
+    children?: AccountCreateNestedManyWithoutParentInput
+    company: CompanyCreateNestedOneWithoutAccountsInput
+    entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    customer?: CustomerCreateNestedOneWithoutAccountInput
+  }
+
+  export type AccountUncheckedCreateWithoutVendorInput = {
+    id?: number
+    code: string
+    name: string
+    type: $Enums.AccountType
+    description?: string | null
+    parentId?: number | null
+    companyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: AccountUncheckedCreateNestedManyWithoutParentInput
+    entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
+  }
+
+  export type AccountCreateOrConnectWithoutVendorInput = {
+    where: AccountWhereUniqueInput
+    create: XOR<AccountCreateWithoutVendorInput, AccountUncheckedCreateWithoutVendorInput>
   }
 
   export type CompanyCreateWithoutVendorsInput = {
@@ -51754,6 +52220,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AccountUpsertWithoutVendorInput = {
+    update: XOR<AccountUpdateWithoutVendorInput, AccountUncheckedUpdateWithoutVendorInput>
+    create: XOR<AccountCreateWithoutVendorInput, AccountUncheckedCreateWithoutVendorInput>
+    where?: AccountWhereInput
+  }
+
+  export type AccountUpdateToOneWithWhereWithoutVendorInput = {
+    where?: AccountWhereInput
+    data: XOR<AccountUpdateWithoutVendorInput, AccountUncheckedUpdateWithoutVendorInput>
+  }
+
+  export type AccountUpdateWithoutVendorInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: AccountUpdateOneWithoutChildrenNestedInput
+    children?: AccountUpdateManyWithoutParentNestedInput
+    company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
+    entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    customer?: CustomerUpdateOneWithoutAccountNestedInput
+  }
+
+  export type AccountUncheckedUpdateWithoutVendorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: AccountUncheckedUpdateManyWithoutParentNestedInput
+    entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
+  }
+
   export type CompanyUpsertWithoutVendorsInput = {
     update: XOR<CompanyUpdateWithoutVendorsInput, CompanyUncheckedUpdateWithoutVendorsInput>
     create: XOR<CompanyCreateWithoutVendorsInput, CompanyUncheckedCreateWithoutVendorsInput>
@@ -51888,8 +52394,10 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    account?: AccountCreateNestedOneWithoutCustomerInput
     company: CompanyCreateNestedOneWithoutCustomersInput
     invoices?: InvoiceCreateNestedManyWithoutCustomerInput
     payments?: PaymentCreateNestedManyWithoutCustomerInput
@@ -51902,6 +52410,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     companyId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -52148,8 +52658,10 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: AccountUpdateOneWithoutCustomerNestedInput
     company?: CompanyUpdateOneRequiredWithoutCustomersNestedInput
     invoices?: InvoiceUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUpdateManyWithoutCustomerNestedInput
@@ -52162,6 +52674,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52620,8 +53134,10 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    account?: AccountCreateNestedOneWithoutVendorInput
     company: CompanyCreateNestedOneWithoutVendorsInput
     payments?: PaymentCreateNestedManyWithoutVendorInput
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutVendorInput
@@ -52635,6 +53151,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     companyId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -52813,8 +53331,10 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: AccountUpdateOneWithoutVendorNestedInput
     company?: CompanyUpdateOneRequiredWithoutVendorsNestedInput
     payments?: PaymentUpdateManyWithoutVendorNestedInput
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutVendorNestedInput
@@ -52828,6 +53348,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52989,8 +53511,10 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    account?: AccountCreateNestedOneWithoutCustomerInput
     company: CompanyCreateNestedOneWithoutCustomersInput
     jobs?: JobCreateNestedManyWithoutCustomerInput
     payments?: PaymentCreateNestedManyWithoutCustomerInput
@@ -53003,6 +53527,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     companyId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53247,8 +53773,10 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: AccountUpdateOneWithoutCustomerNestedInput
     company?: CompanyUpdateOneRequiredWithoutCustomersNestedInput
     jobs?: JobUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUpdateManyWithoutCustomerNestedInput
@@ -53261,6 +53789,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54704,8 +55234,10 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    account?: AccountCreateNestedOneWithoutVendorInput
     company: CompanyCreateNestedOneWithoutVendorsInput
     expenses?: ExpenseCreateNestedManyWithoutVendorInput
     payments?: PaymentCreateNestedManyWithoutVendorInput
@@ -54719,6 +55251,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     companyId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -54890,8 +55424,10 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: AccountUpdateOneWithoutVendorNestedInput
     company?: CompanyUpdateOneRequiredWithoutVendorsNestedInput
     expenses?: ExpenseUpdateManyWithoutVendorNestedInput
     payments?: PaymentUpdateManyWithoutVendorNestedInput
@@ -54905,6 +55441,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55238,6 +55776,8 @@ export namespace Prisma {
     parent?: AccountCreateNestedOneWithoutChildrenInput
     company: CompanyCreateNestedOneWithoutAccountsInput
     entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    customer?: CustomerCreateNestedOneWithoutAccountInput
+    vendor?: VendorCreateNestedOneWithoutAccountInput
   }
 
   export type AccountUncheckedCreateWithoutChildrenInput = {
@@ -55251,6 +55791,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
+    vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
   }
 
   export type AccountCreateOrConnectWithoutChildrenInput = {
@@ -55268,6 +55810,8 @@ export namespace Prisma {
     children?: AccountCreateNestedManyWithoutParentInput
     company: CompanyCreateNestedOneWithoutAccountsInput
     entries?: AccountEntryCreateNestedManyWithoutAccountInput
+    customer?: CustomerCreateNestedOneWithoutAccountInput
+    vendor?: VendorCreateNestedOneWithoutAccountInput
   }
 
   export type AccountUncheckedCreateWithoutParentInput = {
@@ -55281,6 +55825,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
     entries?: AccountEntryUncheckedCreateNestedManyWithoutAccountInput
+    customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
+    vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
   }
 
   export type AccountCreateOrConnectWithoutParentInput = {
@@ -55394,6 +55940,80 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CustomerCreateWithoutAccountInput = {
+    name: string
+    code: string
+    address?: string | null
+    phone?: string | null
+    email?: string | null
+    taxNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutCustomersInput
+    jobs?: JobCreateNestedManyWithoutCustomerInput
+    invoices?: InvoiceCreateNestedManyWithoutCustomerInput
+    payments?: PaymentCreateNestedManyWithoutCustomerInput
+  }
+
+  export type CustomerUncheckedCreateWithoutAccountInput = {
+    id?: number
+    name: string
+    code: string
+    address?: string | null
+    phone?: string | null
+    email?: string | null
+    taxNumber?: string | null
+    companyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    jobs?: JobUncheckedCreateNestedManyWithoutCustomerInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutCustomerInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutCustomerInput
+  }
+
+  export type CustomerCreateOrConnectWithoutAccountInput = {
+    where: CustomerWhereUniqueInput
+    create: XOR<CustomerCreateWithoutAccountInput, CustomerUncheckedCreateWithoutAccountInput>
+  }
+
+  export type VendorCreateWithoutAccountInput = {
+    name: string
+    code: string
+    type?: string | null
+    address?: string | null
+    phone?: string | null
+    email?: string | null
+    taxNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutVendorsInput
+    expenses?: ExpenseCreateNestedManyWithoutVendorInput
+    payments?: PaymentCreateNestedManyWithoutVendorInput
+    purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutVendorInput
+  }
+
+  export type VendorUncheckedCreateWithoutAccountInput = {
+    id?: number
+    name: string
+    code: string
+    type?: string | null
+    address?: string | null
+    phone?: string | null
+    email?: string | null
+    taxNumber?: string | null
+    companyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    expenses?: ExpenseUncheckedCreateNestedManyWithoutVendorInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutVendorInput
+    purchaseInvoices?: PurchaseInvoiceUncheckedCreateNestedManyWithoutVendorInput
+  }
+
+  export type VendorCreateOrConnectWithoutAccountInput = {
+    where: VendorWhereUniqueInput
+    create: XOR<VendorCreateWithoutAccountInput, VendorUncheckedCreateWithoutAccountInput>
+  }
+
   export type AccountUpsertWithoutChildrenInput = {
     update: XOR<AccountUpdateWithoutChildrenInput, AccountUncheckedUpdateWithoutChildrenInput>
     create: XOR<AccountCreateWithoutChildrenInput, AccountUncheckedCreateWithoutChildrenInput>
@@ -55415,6 +56035,8 @@ export namespace Prisma {
     parent?: AccountUpdateOneWithoutChildrenNestedInput
     company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
     entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    customer?: CustomerUpdateOneWithoutAccountNestedInput
+    vendor?: VendorUpdateOneWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutChildrenInput = {
@@ -55428,6 +56050,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
+    vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
   }
 
   export type AccountUpsertWithWhereUniqueWithoutParentInput = {
@@ -55553,6 +56177,92 @@ export namespace Prisma {
     debit?: FloatFilter<"AccountEntry"> | number
     credit?: FloatFilter<"AccountEntry"> | number
     createdAt?: DateTimeFilter<"AccountEntry"> | Date | string
+  }
+
+  export type CustomerUpsertWithoutAccountInput = {
+    update: XOR<CustomerUpdateWithoutAccountInput, CustomerUncheckedUpdateWithoutAccountInput>
+    create: XOR<CustomerCreateWithoutAccountInput, CustomerUncheckedCreateWithoutAccountInput>
+    where?: CustomerWhereInput
+  }
+
+  export type CustomerUpdateToOneWithWhereWithoutAccountInput = {
+    where?: CustomerWhereInput
+    data: XOR<CustomerUpdateWithoutAccountInput, CustomerUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type CustomerUpdateWithoutAccountInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutCustomersNestedInput
+    jobs?: JobUpdateManyWithoutCustomerNestedInput
+    invoices?: InvoiceUpdateManyWithoutCustomerNestedInput
+    payments?: PaymentUpdateManyWithoutCustomerNestedInput
+  }
+
+  export type CustomerUncheckedUpdateWithoutAccountInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jobs?: JobUncheckedUpdateManyWithoutCustomerNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutCustomerNestedInput
+  }
+
+  export type VendorUpsertWithoutAccountInput = {
+    update: XOR<VendorUpdateWithoutAccountInput, VendorUncheckedUpdateWithoutAccountInput>
+    create: XOR<VendorCreateWithoutAccountInput, VendorUncheckedCreateWithoutAccountInput>
+    where?: VendorWhereInput
+  }
+
+  export type VendorUpdateToOneWithWhereWithoutAccountInput = {
+    where?: VendorWhereInput
+    data: XOR<VendorUpdateWithoutAccountInput, VendorUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type VendorUpdateWithoutAccountInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutVendorsNestedInput
+    expenses?: ExpenseUpdateManyWithoutVendorNestedInput
+    payments?: PaymentUpdateManyWithoutVendorNestedInput
+    purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutVendorNestedInput
+  }
+
+  export type VendorUncheckedUpdateWithoutAccountInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expenses?: ExpenseUncheckedUpdateManyWithoutVendorNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutVendorNestedInput
+    purchaseInvoices?: PurchaseInvoiceUncheckedUpdateManyWithoutVendorNestedInput
   }
 
   export type AccountEntryCreateWithoutTransactionInput = {
@@ -56098,6 +56808,8 @@ export namespace Prisma {
     parent?: AccountCreateNestedOneWithoutChildrenInput
     children?: AccountCreateNestedManyWithoutParentInput
     company: CompanyCreateNestedOneWithoutAccountsInput
+    customer?: CustomerCreateNestedOneWithoutAccountInput
+    vendor?: VendorCreateNestedOneWithoutAccountInput
   }
 
   export type AccountUncheckedCreateWithoutEntriesInput = {
@@ -56111,6 +56823,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     children?: AccountUncheckedCreateNestedManyWithoutParentInput
+    customer?: CustomerUncheckedCreateNestedOneWithoutAccountInput
+    vendor?: VendorUncheckedCreateNestedOneWithoutAccountInput
   }
 
   export type AccountCreateOrConnectWithoutEntriesInput = {
@@ -56179,6 +56893,8 @@ export namespace Prisma {
     parent?: AccountUpdateOneWithoutChildrenNestedInput
     children?: AccountUpdateManyWithoutParentNestedInput
     company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
+    customer?: CustomerUpdateOneWithoutAccountNestedInput
+    vendor?: VendorUpdateOneWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutEntriesInput = {
@@ -56192,6 +56908,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
+    customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
+    vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
   }
 
   export type CustomerCreateWithoutPaymentsInput = {
@@ -56200,8 +56918,10 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    account?: AccountCreateNestedOneWithoutCustomerInput
     company: CompanyCreateNestedOneWithoutCustomersInput
     jobs?: JobCreateNestedManyWithoutCustomerInput
     invoices?: InvoiceCreateNestedManyWithoutCustomerInput
@@ -56214,6 +56934,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     companyId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -56233,8 +56955,10 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    account?: AccountCreateNestedOneWithoutVendorInput
     company: CompanyCreateNestedOneWithoutVendorsInput
     expenses?: ExpenseCreateNestedManyWithoutVendorInput
     purchaseInvoices?: PurchaseInvoiceCreateNestedManyWithoutVendorInput
@@ -56248,6 +56972,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     companyId: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -56385,8 +57111,10 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: AccountUpdateOneWithoutCustomerNestedInput
     company?: CompanyUpdateOneRequiredWithoutCustomersNestedInput
     jobs?: JobUpdateManyWithoutCustomerNestedInput
     invoices?: InvoiceUpdateManyWithoutCustomerNestedInput
@@ -56399,6 +57127,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56424,8 +57154,10 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: AccountUpdateOneWithoutVendorNestedInput
     company?: CompanyUpdateOneRequiredWithoutVendorsNestedInput
     expenses?: ExpenseUpdateManyWithoutVendorNestedInput
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutVendorNestedInput
@@ -56439,6 +57171,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     companyId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57256,6 +57990,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -57268,6 +58004,8 @@ export namespace Prisma {
     address?: string | null
     phone?: string | null
     email?: string | null
+    taxNumber?: string | null
+    accountId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -57632,8 +58370,10 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: AccountUpdateOneWithoutCustomerNestedInput
     jobs?: JobUpdateManyWithoutCustomerNestedInput
     invoices?: InvoiceUpdateManyWithoutCustomerNestedInput
     payments?: PaymentUpdateManyWithoutCustomerNestedInput
@@ -57646,6 +58386,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     jobs?: JobUncheckedUpdateManyWithoutCustomerNestedInput
@@ -57660,6 +58402,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -57671,8 +58415,10 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: AccountUpdateOneWithoutVendorNestedInput
     expenses?: ExpenseUpdateManyWithoutVendorNestedInput
     payments?: PaymentUpdateManyWithoutVendorNestedInput
     purchaseInvoices?: PurchaseInvoiceUpdateManyWithoutVendorNestedInput
@@ -57686,6 +58432,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expenses?: ExpenseUncheckedUpdateManyWithoutVendorNestedInput
@@ -57701,6 +58449,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    accountId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -57934,6 +58684,8 @@ export namespace Prisma {
     parent?: AccountUpdateOneWithoutChildrenNestedInput
     children?: AccountUpdateManyWithoutParentNestedInput
     entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    customer?: CustomerUpdateOneWithoutAccountNestedInput
+    vendor?: VendorUpdateOneWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutCompanyInput = {
@@ -57947,6 +58699,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
     entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
+    vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateManyWithoutCompanyInput = {
@@ -59453,6 +60207,8 @@ export namespace Prisma {
     children?: AccountUpdateManyWithoutParentNestedInput
     company?: CompanyUpdateOneRequiredWithoutAccountsNestedInput
     entries?: AccountEntryUpdateManyWithoutAccountNestedInput
+    customer?: CustomerUpdateOneWithoutAccountNestedInput
+    vendor?: VendorUpdateOneWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutParentInput = {
@@ -59466,6 +60222,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     children?: AccountUncheckedUpdateManyWithoutParentNestedInput
     entries?: AccountEntryUncheckedUpdateManyWithoutAccountNestedInput
+    customer?: CustomerUncheckedUpdateOneWithoutAccountNestedInput
+    vendor?: VendorUncheckedUpdateOneWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateManyWithoutParentInput = {

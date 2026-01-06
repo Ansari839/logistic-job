@@ -203,6 +203,8 @@ exports.Prisma.CustomerScalarFieldEnum = {
   address: 'address',
   phone: 'phone',
   email: 'email',
+  taxNumber: 'taxNumber',
+  accountId: 'accountId',
   companyId: 'companyId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -216,6 +218,8 @@ exports.Prisma.VendorScalarFieldEnum = {
   address: 'address',
   phone: 'phone',
   email: 'email',
+  taxNumber: 'taxNumber',
+  accountId: 'accountId',
   companyId: 'companyId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

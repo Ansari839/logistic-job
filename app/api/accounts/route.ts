@@ -19,6 +19,13 @@ const accountSchema = z.object({
         if (val === '' || val === null || val === undefined) return null;
         return Number(val);
     }, z.number().nullable().optional()),
+    partnerDetails: z.object({
+        address: z.string().optional(),
+        phone: z.string().optional(),
+        email: z.string().optional(),
+        taxNumber: z.string().optional(),
+        type: z.enum(['CUSTOMER', 'VENDOR'])
+    }).optional()
 });
 
 async function getAuthUser() {
@@ -97,11 +104,47 @@ export async function POST(req: Request) {
         const body = await req.json();
         const validatedData = accountSchema.parse(body);
 
-        const account = await prisma.account.create({
-            data: {
-                ...validatedData,
-                companyId: user.companyId,
-            },
+        const { partnerDetails, ...accountData } = validatedData;
+
+        const account = await prisma.$transaction(async (tx) => {
+            const newAccount = await tx.account.create({
+                data: {
+                    ...accountData,
+                    companyId: user.companyId,
+                },
+            });
+
+            if (partnerDetails) {
+                if (partnerDetails.type === 'CUSTOMER') {
+                    await tx.customer.create({
+                        data: {
+                            name: accountData.name,
+                            code: accountData.code,
+                            address: partnerDetails.address,
+                            phone: partnerDetails.phone,
+                            email: partnerDetails.email,
+                            taxNumber: partnerDetails.taxNumber,
+                            accountId: newAccount.id,
+                            companyId: user.companyId
+                        }
+                    });
+                } else if (partnerDetails.type === 'VENDOR') {
+                    await tx.vendor.create({
+                        data: {
+                            name: accountData.name,
+                            code: accountData.code,
+                            address: partnerDetails.address,
+                            phone: partnerDetails.phone,
+                            email: partnerDetails.email,
+                            taxNumber: partnerDetails.taxNumber,
+                            accountId: newAccount.id,
+                            companyId: user.companyId
+                        }
+                    });
+                }
+            }
+
+            return newAccount;
         });
 
         return NextResponse.json({ account, message: 'Account created successfully' });

@@ -6,7 +6,7 @@ import {
     BookOpen, Plus, Search, ChevronDown,
     ChevronRight, Folder, FileText,
     MoreVertical, Edit3, Trash2,
-    PieChart, Layers, Info
+    PieChart, Layers, Info, Users, Building2
 } from 'lucide-react';
 
 interface Account {
@@ -33,7 +33,14 @@ export default function ChartOfAccountsPage() {
         name: '',
         type: 'EXPENSE' as any,
         description: '',
-        parentId: ''
+        parentId: '',
+        partnerDetails: {
+            address: '',
+            phone: '',
+            email: '',
+            taxNumber: '',
+            type: '' as 'CUSTOMER' | 'VENDOR' | ''
+        }
     });
 
     useEffect(() => {
@@ -170,7 +177,14 @@ export default function ChartOfAccountsPage() {
                                     name: node.name,
                                     type: node.type,
                                     description: node.description || '',
-                                    parentId: node.parentId?.toString() || ''
+                                    parentId: node.parentId?.toString() || '',
+                                    partnerDetails: {
+                                        address: '',
+                                        phone: '',
+                                        email: '',
+                                        taxNumber: '',
+                                        type: '' as '' | 'CUSTOMER' | 'VENDOR'
+                                    }
                                 });
                                 setShowModal(true);
                             }}
@@ -187,7 +201,14 @@ export default function ChartOfAccountsPage() {
                                     name: '',
                                     type: node.type,
                                     description: '',
-                                    parentId: node.id.toString()
+                                    parentId: node.id.toString(),
+                                    partnerDetails: {
+                                        address: '',
+                                        phone: '',
+                                        email: '',
+                                        taxNumber: '',
+                                        type: '' as '' | 'CUSTOMER' | 'VENDOR'
+                                    }
                                 });
                                 setShowModal(true);
                             }}
@@ -229,7 +250,16 @@ export default function ChartOfAccountsPage() {
                         <button
                             onClick={() => {
                                 setEditingAccount(null);
-                                setFormData({ id: '', code: '', name: '', type: 'ASSET', description: '', parentId: '' });
+                                setFormData({
+                                    id: '', code: '', name: '', type: 'ASSET', description: '', parentId: '',
+                                    partnerDetails: {
+                                        address: '',
+                                        phone: '',
+                                        email: '',
+                                        taxNumber: '',
+                                        type: '' as '' | 'CUSTOMER' | 'VENDOR'
+                                    }
+                                });
                                 setShowModal(true);
                             }}
                             className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-[2rem] font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-blue-600/20"
@@ -368,6 +398,66 @@ export default function ChartOfAccountsPage() {
                                         onChange={e => setFormData({ ...formData, description: e.target.value })}
                                     />
                                 </div>
+
+                                {/* Dynamic Partner Form Logic */}
+                                {(() => {
+                                    const parent = accounts.find(a => a.id.toString() === formData.parentId);
+                                    const isCustomer = parent?.code === '1230'; // Accounts Receivable
+                                    const isVendor = parent?.code === '2210';   // Accounts Payable
+
+                                    if (isCustomer || isVendor) {
+                                        return (
+                                            <div className="p-6 bg-primary/5 rounded-3xl border border-primary/10 space-y-4 animate-in slide-in-from-top-4">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+                                                        {isCustomer ? <Users size={20} /> : <Building2 size={20} />}
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-black text-slate-900 dark:text-white text-sm uppercase tracking-tight">{isCustomer ? 'Customer' : 'Vendor'} Details</h4>
+                                                        <p className="text-[10px] text-subtext font-bold uppercase tracking-widest">Additional info for Partner Registry</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div className="space-y-2">
+                                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Tax Number (NTN)</label>
+                                                        <input
+                                                            className="glass-input w-full rounded-2xl px-4 py-3 text-slate-900 dark:text-white text-xs font-bold"
+                                                            placeholder="NTN-..."
+                                                            onChange={e => setFormData({ ...formData, partnerDetails: { ...formData.partnerDetails, taxNumber: e.target.value, type: isCustomer ? 'CUSTOMER' : 'VENDOR' } } as any)}
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Phone</label>
+                                                        <input
+                                                            className="glass-input w-full rounded-2xl px-4 py-3 text-slate-900 dark:text-white text-xs font-bold"
+                                                            placeholder="+92..."
+                                                            onChange={e => setFormData({ ...formData, partnerDetails: { ...formData.partnerDetails, phone: e.target.value, type: isCustomer ? 'CUSTOMER' : 'VENDOR' } } as any)}
+                                                        />
+                                                    </div>
+                                                    <div className="col-span-2 space-y-2">
+                                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Email</label>
+                                                        <input
+                                                            className="glass-input w-full rounded-2xl px-4 py-3 text-slate-900 dark:text-white text-xs font-bold"
+                                                            placeholder="Email Address"
+                                                            onChange={e => setFormData({ ...formData, partnerDetails: { ...formData.partnerDetails, email: e.target.value, type: isCustomer ? 'CUSTOMER' : 'VENDOR' } } as any)}
+                                                        />
+                                                    </div>
+                                                    <div className="col-span-2 space-y-2">
+                                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Address</label>
+                                                        <textarea
+                                                            rows={2}
+                                                            className="glass-input w-full rounded-2xl px-4 py-3 text-slate-900 dark:text-white text-xs font-medium resize-none"
+                                                            placeholder="Full Business Address"
+                                                            onChange={e => setFormData({ ...formData, partnerDetails: { ...formData.partnerDetails, address: e.target.value, type: isCustomer ? 'CUSTOMER' : 'VENDOR' } } as any)}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    }
+                                    return null;
+                                })()}
                                 <div className="flex gap-4 pt-4">
                                     <button
                                         type="button"

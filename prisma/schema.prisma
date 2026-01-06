@@ -176,6 +176,11 @@ model Customer {
   address   String?
   phone     String?
   email     String?
+  taxNumber String?   // NTN
+  
+  accountId Int?      @unique // Linked ledger account (Accounts Receivable)
+  account   Account?  @relation(fields: [accountId], references: [id])
+  
   companyId Int
   company   Company   @relation(fields: [companyId], references: [id])
   jobs      Job[]
@@ -193,6 +198,11 @@ model Vendor {
   address   String?
   phone     String?
   email     String?
+  taxNumber String?   // NTN
+  
+  accountId Int?      @unique // Linked ledger account (Accounts Payable)
+  account   Account?  @relation(fields: [accountId], references: [id])
+  
   companyId Int
   company   Company   @relation(fields: [companyId], references: [id])
   expenses  Expense[]
@@ -486,6 +496,9 @@ model Account {
   company     Company       @relation(fields: [companyId], references: [id])
   
   entries     AccountEntry[]
+  
+  customer    Customer?
+  vendor      Vendor?
   
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
