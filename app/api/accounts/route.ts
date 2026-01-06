@@ -78,10 +78,13 @@ export async function GET(request: Request) {
             return NextResponse.json({ nextCode });
         }
 
+        const typeFilter = searchParams.get('type');
+
         const accounts = await prisma.account.findMany({
             where: {
                 companyId: user.companyId,
-                division: user.division
+                division: user.division,
+                ...(typeFilter ? { type: typeFilter as any } : {})
             },
             include: {
                 parent: { select: { name: true, code: true } },

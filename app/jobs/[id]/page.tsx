@@ -1,8 +1,10 @@
 'use client';
 
-import React, { useEffect, useState, use } from 'react';
+import React, { useEffect, useState, use, useRef } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import { useRouter } from 'next/navigation';
+import { useReactToPrint } from 'react-to-print';
+import JobPrintTemplate from '@/components/JobPrintTemplate';
 import {
     Ship, User, FileText, Package,
     ChevronLeft, Plus, DollarSign, Calculator,
@@ -73,6 +75,14 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
     const [showExpenseModal, setShowExpenseModal] = useState(false);
     const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
     const [vendors, setVendors] = useState<{ id: number; name: string }[]>([]);
+
+    // Print functionality
+    const printRef = useRef<HTMLDivElement>(null);
+    const handlePrint = useReactToPrint({
+        contentRef: printRef,
+        documentTitle: `Job-${job?.jobNumber || 'Sheet'}`,
+    });
+
     const [expenseForm, setExpenseForm] = useState({
         description: '',
         vendorId: '',
@@ -220,7 +230,11 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                         >
                             <Trash2 size={18} />
                         </button>
-                        <button className="p-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all">
+                        <button
+                            onClick={handlePrint}
+                            className="p-3 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all"
+                            title="Print Job Sheet"
+                        >
                             <Printer size={18} />
                         </button>
                         <div className="flex gap-4">
@@ -615,6 +629,13 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                         </div>
                     </div>
                 )}
+
+                {/* Hidden Print Template */}
+                <div className="hidden">
+                    <div ref={printRef}>
+                        {job && <JobPrintTemplate job={job} />}
+                    </div>
+                </div>
 
             </div>
         </DashboardLayout >

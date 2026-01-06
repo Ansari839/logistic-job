@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useEffect, useState, use } from 'react';
+import React, { useEffect, useState, use, useRef } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import { useRouter } from 'next/navigation';
+import { useReactToPrint } from 'react-to-print';
+import JobPrintTemplate from '@/components/JobPrintTemplate';
 import {
     ChevronLeft, Save, Loader2,
     Copy, Edit3, Trash2, RotateCcw, LogOut,
-    Plus, Book
+    Plus, Book, Printer
 } from 'lucide-react';
 
 interface Customer {
@@ -15,7 +17,7 @@ interface Customer {
     code: string;
 }
 
-interface ExpenseMaster {
+interface ExpenseAccount {
     id: number;
     code: string;
     name: string;
@@ -34,7 +36,7 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
     const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(true);
     const [customers, setCustomers] = useState<Customer[]>([]);
-    const [expenseMasters, setExpenseMasters] = useState<ExpenseMaster[]>([]);
+    const [expenseAccounts, setExpenseAccounts] = useState<ExpenseAccount[]>([]);
     const [ports, setPorts] = useState<Port[]>([]);
 
     const [expenses, setExpenses] = useState<any[]>([]);
@@ -64,13 +66,22 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
 
     const [containers, setContainers] = useState<string[]>(['']);
 
+    // Print functionality
+    const printRef = useRef<HTMLDivElement>(null);
+    const [jobForPrint, setJobForPrint] = useState<any>(null);
+
+    const handlePrint = useReactToPrint({
+        contentRef: printRef,
+        documentTitle: `Job-${formData.jobNumber || 'Sheet'}`,
+    });
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 // 1. Fetch Metadata
-                const [custRes, expMasterRes, portRes] = await Promise.all([
+                const [custRes, expAccRes, portRes] = await Promise.all([
                     fetch('/api/customers'),
-                    fetch('/api/settings/expenses-master'),
+                    fetch('/api/accounts?type=EXPENSE'),
                     fetch('/api/settings/ports')
                 ]);
 
@@ -78,9 +89,9 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                     const custData = await custRes.json();
                     setCustomers(custData.customers);
                 }
-                if (expMasterRes.ok) {
-                    const expMData = await expMasterRes.json();
-                    setExpenseMasters(expMData.expensesMaster || []);
+                if (expAccRes.ok) {
+                    const expData = await expAccRes.json();
+                    setExpenseAccounts(expData.accounts || []);
                 }
                 if (portRes.ok) {
                     const portData = await portRes.json();
@@ -139,6 +150,9 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                         paddedExpenses.push({ code: '', name: '', description: '', cost: '', selling: '' });
                     }
                     setExpenses(paddedExpenses);
+
+                    // Set job data for printing
+                    setJobForPrint(job);
                 } else {
                     alert('Failed to load job details');
                     router.push('/jobs');
@@ -161,16 +175,16 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
         const newExpenses = [...expenses];
         newExpenses[index] = { ...newExpenses[index], [field]: value };
 
-        // If selecting from master, auto-fill
+        // If selecting from expense accounts, auto-fill
         if (field === 'code') {
-            const master = expenseMasters.find(m => m.code === value);
-            if (master) {
-                newExpenses[index].name = master.name;
+            const account = expenseAccounts.find(a => a.code === value);
+            if (account) {
+                newExpenses[index].name = account.name;
             }
         } else if (field === 'name') {
-            const master = expenseMasters.find(m => m.name === value);
-            if (master) {
-                newExpenses[index].code = master.code;
+            const account = expenseAccounts.find(a => a.name === value);
+            if (account) {
+                newExpenses[index].code = account.code;
             }
         }
 
@@ -253,6 +267,15 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                     <div className="flex flex-wrap items-center gap-2">
                         <button type="button" className="flex flex-col items-center gap-1 px-4 py-2 hover:bg-slate-800 rounded-xl transition-all text-slate-400 hover:text-white">
                             <Copy size={16} /> <span className="text-[8px] font-black uppercase tracking-widest">Copy</span>
+                        </button>
+                        <div className="w-px h-8 bg-slate-800 mx-2 hidden lg:block"></div>
+                        <button
+                            type="button"
+                            onClick={handlePrint}
+                            className="flex flex-col items-center gap-1 px-4 py-2 hover:bg-slate-800 rounded-xl transition-all text-slate-400 hover:text-white"
+                            title="Print Job Sheet"
+                        >
+                            <Printer size={16} /> <span className="text-[8px] font-black uppercase tracking-widest">Print</span>
                         </button>
                         <div className="w-px h-8 bg-slate-800 mx-2 hidden lg:block"></div>
                         <button
@@ -632,11 +655,18 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                     </div>
 
                     <datalist id="expense-names">
-                        {expenseMasters.map((em) => (
-                            <option key={em.id} value={em.name} />
+                        {expenseAccounts.map((acc) => (
+                            <option key={acc.id} value={acc.name} />
                         ))}
                     </datalist>
                 </form>
+
+                {/* Hidden Print Template */}
+                <div className="hidden">
+                    <div ref={printRef}>
+                        {jobForPrint && <JobPrintTemplate job={jobForPrint} />}
+                    </div>
+                </div>
             </div >
         </DashboardLayout >
     );

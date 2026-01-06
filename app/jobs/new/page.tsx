@@ -15,7 +15,7 @@ interface Customer {
     code: string;
 }
 
-interface ExpenseMaster {
+interface ExpenseAccount {
     id: number;
     code: string;
     name: string;
@@ -30,7 +30,7 @@ export default function NewJobPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [customers, setCustomers] = useState<Customer[]>([]);
-    const [expenseMasters, setExpenseMasters] = useState<ExpenseMaster[]>([]);
+    const [expenseAccounts, setExpenseAccounts] = useState<ExpenseAccount[]>([]);
     const [ports, setPorts] = useState<Port[]>([]);
 
     const [expenses, setExpenses] = useState([
@@ -65,9 +65,9 @@ export default function NewJobPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [custRes, expRes, portRes] = await Promise.all([
+                const [custRes, expAccRes, portRes] = await Promise.all([
                     fetch('/api/customers'),
-                    fetch('/api/settings/expenses-master'),
+                    fetch('/api/accounts?type=EXPENSE'),
                     fetch('/api/settings/ports')
                 ]);
 
@@ -76,10 +76,10 @@ export default function NewJobPage() {
                     setCustomers(custData.customers);
                 }
 
-                // If expenses master exists, populate it for the dropdown
-                if (expRes.ok) {
-                    const expData = await expRes.json();
-                    setExpenseMasters(expData.expensesMaster || []);
+                // Fetch expense accounts from Chart of Accounts
+                if (expAccRes.ok) {
+                    const expData = await expAccRes.json();
+                    setExpenseAccounts(expData.accounts || []);
                 }
 
                 if (portRes.ok) {
@@ -104,16 +104,16 @@ export default function NewJobPage() {
         const newExpenses = [...expenses];
         newExpenses[index] = { ...newExpenses[index], [field]: value };
 
-        // If selecting from master, auto-fill
+        // If selecting from expense accounts, auto-fill
         if (field === 'code') {
-            const master = expenseMasters.find(m => m.code === value);
-            if (master) {
-                newExpenses[index].name = master.name;
+            const account = expenseAccounts.find(a => a.code === value);
+            if (account) {
+                newExpenses[index].name = account.name;
             }
         } else if (field === 'name') {
-            const master = expenseMasters.find(m => m.name === value);
-            if (master) {
-                newExpenses[index].code = master.code;
+            const account = expenseAccounts.find(a => a.name === value);
+            if (account) {
+                newExpenses[index].code = account.code;
             }
         }
 
@@ -573,8 +573,8 @@ export default function NewJobPage() {
                     </div>
 
                     <datalist id="expense-names">
-                        {expenseMasters.map((em) => (
-                            <option key={em.id} value={em.name} />
+                        {expenseAccounts.map((acc) => (
+                            <option key={acc.id} value={acc.name} />
                         ))}
                     </datalist>
                 </form>

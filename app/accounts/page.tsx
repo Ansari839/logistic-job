@@ -96,10 +96,17 @@ export default function ChartOfAccountsPage() {
         e.preventDefault();
         try {
             const method = editingAccount ? 'PATCH' : 'POST';
+
+            // Clean up formData: only send partnerDetails if type is set
+            const submissionData = { ...formData };
+            if (!formData.partnerDetails.type) {
+                delete (submissionData as any).partnerDetails;
+            }
+
             const res = await fetch('/api/accounts', {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(submissionData),
             });
 
             if (res.ok) {
@@ -376,10 +383,20 @@ export default function ChartOfAccountsPage() {
                                         onChange={e => {
                                             const pid = e.target.value;
                                             const parent = accounts.find(a => a.id === parseInt(pid));
+
+                                            // Auto-set partner type
+                                            let partnerType: 'CUSTOMER' | 'VENDOR' | '' = '';
+                                            if (parent?.code === '1230') partnerType = 'CUSTOMER';
+                                            else if (parent?.code === '2210') partnerType = 'VENDOR';
+
                                             setFormData({
                                                 ...formData,
                                                 parentId: pid,
-                                                type: parent ? parent.type : formData.type
+                                                type: parent ? parent.type : formData.type,
+                                                partnerDetails: {
+                                                    ...formData.partnerDetails,
+                                                    type: partnerType
+                                                }
                                             });
                                         }}
                                     >
