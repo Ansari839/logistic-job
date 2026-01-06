@@ -197,7 +197,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                        <div className={`hidden sm:block px-3 py-1 rounded-full bg-${accentColorClass}-500/10 border border-${accentColorClass}-500/20 text-${accentColorClass}-400 text-[10px] font-bold uppercase tracking-wider`}>
+                        <div className={`hidden sm:block px-3 py-1 rounded-full 
+                            ${isAnimalFeed ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20' : 'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400 border-blue-200 dark:border-blue-500/20'}
+                            border text-[10px] font-bold uppercase tracking-wider`}>
                             {user.branch || 'Head Office'}
                         </div>
                     </div>

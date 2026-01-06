@@ -57,7 +57,7 @@ async function main() {
     // 4. Users
     await prisma.user.upsert({
         where: { email: 'admin@logistics.com' },
-        update: { companyId: logos.id, division: 'logistics' },
+        update: { companyId: logos.id, division: 'logistics', password: pass },
         create: {
             name: "Logistics Admin",
             email: "admin@logistics.com",
@@ -70,7 +70,7 @@ async function main() {
 
     await prisma.user.upsert({
         where: { email: 'admin@feed.com' },
-        update: { companyId: feed.id, division: 'animal-feed' },
+        update: { companyId: feed.id, division: 'animal-feed', password: pass },
         create: {
             name: "Animal Feed Admin",
             email: "admin@feed.com",
@@ -84,7 +84,7 @@ async function main() {
     // Default admin
     await prisma.user.upsert({
         where: { email: 'admin@example.com' },
-        update: { companyId: logos.id, division: 'logistics' },
+        update: { companyId: logos.id, division: 'logistics', password: pass },
         create: {
             name: "Main Admin",
             email: "admin@example.com",

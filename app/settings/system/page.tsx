@@ -108,46 +108,46 @@ export default function SystemConfigPage() {
         }
     };
 
-    if (loading) return <div className="text-white">Loading configurations...</div>;
+    if (loading) return <div className="text-foreground text-center pt-20">Loading configurations...</div>;
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-8 pb-10">
             <div>
-                <h2 className="text-2xl font-bold text-white">System Configuration</h2>
-                <p className="text-slate-400 mt-1">Manage company profile and system settings</p>
+                <h2 className="text-3xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter">System Configuration</h2>
+                <p className="text-subtext mt-2">Manage company profile and system settings</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-8 glass-panel p-8">
                 {message && (
-                    <div className={`p-4 ${message.includes('success') ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-rose-500/10 border-rose-500/20 text-rose-400'} border rounded-xl text-sm font-medium`}>
+                    <div className={`p-4 ${message.includes('success') ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400'} border rounded-xl text-sm font-bold`}>
                         {message}
                     </div>
                 )}
 
                 {/* Company Profile Section */}
                 <div className="space-y-6">
-                    <h3 className="text-lg font-semibold text-white border-b border-slate-800 pb-2 flex items-center gap-2">
+                    <h3 className="text-lg font-black text-slate-900 dark:text-white border-b border-border pb-2 flex items-center gap-2">
                         <Building2 size={20} className="text-blue-500" />
                         Company Profile
                     </h3>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2 md:col-span-2">
-                            <label className="text-sm font-medium text-slate-300">Company Name *</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Company Name *</label>
                             <input
                                 required
                                 type="text"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={companyData.name}
                                 onChange={e => setCompanyData({ ...companyData, name: e.target.value })}
                             />
                         </div>
 
                         <div className="space-y-2 md:col-span-2">
-                            <label className="text-sm font-medium text-slate-300">Tagline / Slogan</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Tagline / Slogan</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 placeholder="e.g., Freight Forwarding & Logistics Solutions"
                                 value={companyData.tagline}
                                 onChange={e => setCompanyData({ ...companyData, tagline: e.target.value })}
@@ -155,10 +155,10 @@ export default function SystemConfigPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Industry</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Industry</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 placeholder="e.g., Logistics, Trading"
                                 value={companyData.industry}
                                 onChange={e => setCompanyData({ ...companyData, industry: e.target.value })}
@@ -166,50 +166,50 @@ export default function SystemConfigPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Tax Number (NTN)</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Tax Number (NTN)</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={companyData.taxNumber}
                                 onChange={e => setCompanyData({ ...companyData, taxNumber: e.target.value })}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Registration No.</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Registration No.</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={companyData.registrationNo}
                                 onChange={e => setCompanyData({ ...companyData, registrationNo: e.target.value })}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Phone</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Phone</label>
                             <input
                                 type="tel"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={companyData.phone}
                                 onChange={e => setCompanyData({ ...companyData, phone: e.target.value })}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Email</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Email</label>
                             <input
                                 type="email"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={companyData.email}
                                 onChange={e => setCompanyData({ ...companyData, email: e.target.value })}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Website</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Website</label>
                             <input
                                 type="url"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 placeholder="https://www.company.com"
                                 value={companyData.website}
                                 onChange={e => setCompanyData({ ...companyData, website: e.target.value })}
@@ -217,70 +217,70 @@ export default function SystemConfigPage() {
                         </div>
 
                         <div className="space-y-2 md:col-span-2">
-                            <label className="text-sm font-medium text-slate-300">Address</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Address</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={companyData.address}
                                 onChange={e => setCompanyData({ ...companyData, address: e.target.value })}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">City</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">City</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={companyData.city}
                                 onChange={e => setCompanyData({ ...companyData, city: e.target.value })}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">State</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">State</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={companyData.state}
                                 onChange={e => setCompanyData({ ...companyData, state: e.target.value })}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Postal Code</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Postal Code</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={companyData.postalCode}
                                 onChange={e => setCompanyData({ ...companyData, postalCode: e.target.value })}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Country</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Country</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={companyData.country}
                                 onChange={e => setCompanyData({ ...companyData, country: e.target.value })}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Fiscal Year Start</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Fiscal Year Start</label>
                             <input
                                 type="date"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={companyData.fiscalYearStart}
                                 onChange={e => setCompanyData({ ...companyData, fiscalYearStart: e.target.value })}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Fiscal Year End</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Fiscal Year End</label>
                             <input
                                 type="date"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={companyData.fiscalYearEnd}
                                 onChange={e => setCompanyData({ ...companyData, fiscalYearEnd: e.target.value })}
                             />
@@ -290,15 +290,15 @@ export default function SystemConfigPage() {
 
                 {/* System Settings Section */}
                 <div className="space-y-6">
-                    <h3 className="text-lg font-semibold text-white border-b border-slate-800 pb-2 flex items-center gap-2">
+                    <h3 className="text-lg font-black text-slate-900 dark:text-white border-b border-border pb-2 flex items-center gap-2">
                         <Globe size={20} className="text-blue-500" />
                         System Preferences
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Default Timezone</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Default Timezone</label>
                             <select
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={getSetting('timezone')}
                                 onChange={e => updateSetting('timezone', e.target.value)}
                             >
@@ -310,9 +310,9 @@ export default function SystemConfigPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-300">Date Format</label>
+                            <label className="text-sm font-bold text-slate-500 dark:text-slate-400">Date Format</label>
                             <select
-                                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="glass-input w-full"
                                 value={getSetting('dateFormat')}
                                 onChange={e => updateSetting('dateFormat', e.target.value)}
                             >
@@ -324,11 +324,11 @@ export default function SystemConfigPage() {
                     </div>
                 </div>
 
-                <div className="pt-6 border-t border-slate-800">
+                <div className="pt-6 border-t border-border">
                     <button
                         type="submit"
                         disabled={saving}
-                        className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2"
+                        className="glass-button w-full sm:w-auto"
                     >
                         {saving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
                         {saving ? 'Saving...' : 'Save All Settings'}
