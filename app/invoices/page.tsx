@@ -5,7 +5,7 @@ import DashboardLayout from '@/components/DashboardLayout';
 import {
     FileText, Search, Filter, Download,
     Printer, MoreVertical, ChevronRight,
-    Clock, CheckCircle2, AlertCircle, ArrowUpRight, Plus
+    Clock, CheckCircle2, AlertCircle, ArrowUpRight, Plus, Trash2, RotateCcw
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -47,6 +47,63 @@ export default function InvoicesPage() {
         }
     };
 
+    const handleDelete = async (id: number) => {
+        if (!confirm('Are you sure you want to delete this invoice?')) return;
+        try {
+            const res = await fetch('/api/invoices', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, action: 'DELETE' })
+            });
+            if (res.ok) {
+                fetchInvoices();
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Delete failed');
+            }
+        } catch (err) {
+            alert('Delete error');
+        }
+    };
+
+    const handleApprove = async (id: number) => {
+        if (!confirm('Approve this invoice? This will post entries to Ledger.')) return;
+        try {
+            const res = await fetch('/api/invoices', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, action: 'APPROVE' })
+            });
+            if (res.ok) {
+                fetchInvoices();
+            } else {
+                const error = await res.json();
+                alert(error.error || 'Failed to approve invoice');
+            }
+        } catch (err) {
+            alert('Approval error');
+        }
+    };
+
+    const handleRevert = async (id: number) => {
+        if (!confirm('Revert to Draft? This will REVERSE all ledger entries associated with this invoice.')) return;
+        try {
+            const res = await fetch('/api/invoices', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, action: 'REVERT_TO_DRAFT' })
+            });
+            if (res.ok) {
+                fetchInvoices();
+            } else {
+                const error = await res.json();
+                alert(error.error || 'Failed to revert invoice');
+            }
+        } catch (err) {
+            alert('Revert error');
+        }
+    };
+
     const filteredInvoices = invoices.filter(inv =>
         inv.invoiceNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
         inv.customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -68,18 +125,18 @@ export default function InvoicesPage() {
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
-                        <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic">Billing & Invoices</h1>
+                        <h1 className="text-4xl text-heading">Billing & Invoices</h1>
                         <p className="text-subtext mt-1">Management Console</p>
                     </div>
                     <div className="flex gap-3">
                         <button
                             onClick={() => router.push('/invoices/new')}
-                            className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-2xl font-black transition-all shadow-xl shadow-blue-600/20 active:scale-95 flex items-center gap-2 text-xs uppercase tracking-widest"
+                            className="glass-button"
                         >
                             <Plus size={18} />
                             Create Invoice
                         </button>
-                        <button className="flex items-center gap-2 bg-background/80 backdrop-blur-md border border-border text-slate-500 hover:text-slate-900 dark:hover:text-white px-6 py-3 rounded-2xl font-black transition-all hover:bg-slate-100 dark:hover:bg-slate-800 text-xs uppercase tracking-widest">
+                        <button className="glass-button-secondary">
                             <Download size={16} />
                             Export CSV
                         </button>
@@ -114,10 +171,10 @@ export default function InvoicesPage() {
                             <p className="text-slate-500 font-black uppercase tracking-widest text-xs">Authenticating Data Access...</p>
                         </div>
                     ) : filteredInvoices.length === 0 ? (
-                        <div className="glass-card p-20 text-center">
-                            <FileText className="w-16 h-16 text-slate-300 dark:text-slate-800 mx-auto mb-4" />
-                            <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">No Invoices Found</h3>
-                            <p className="text-slate-500 dark:text-slate-400 font-bold max-w-sm mx-auto">We couldn't find any invoice records matching your criteria. Try adjusting your filters.</p>
+                        <div className="glass-panel p-20 text-center">
+                            <FileText className="w-16 h-16 text-primary/20 mx-auto mb-4" />
+                            <h3 className="text-2xl text-heading mb-2">No Invoices Found</h3>
+                            <p className="text-slate-500 font-bold max-w-sm mx-auto">We couldn't find any invoice records matching your criteria. Try adjusting your filters.</p>
                         </div>
                     ) : (
                         filteredInvoices.map((inv) => (
@@ -147,7 +204,7 @@ export default function InvoicesPage() {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center justify-between lg:justify-end gap-12 lg:pl-12 lg:border-l lg:border-border/50 flex-1">
+                                    <div className="flex items-center justify-between lg:justify-end gap-6 lg:pl-12 lg:border-l lg:border-border/50 flex-1">
                                         <div className="text-right">
                                             <p className="text-subtext mb-1">Total Amount</p>
                                             <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">
@@ -155,18 +212,69 @@ export default function InvoicesPage() {
                                             </p>
                                         </div>
                                         <div className="flex gap-2">
+                                            {/* Action Buttons */}
+                                            {inv.status === 'DRAFT' && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleApprove(inv.id);
+                                                    }}
+                                                    title="Approve & Post"
+                                                    className="p-4 rounded-2xl bg-emerald-600/10 border border-emerald-500/20 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-all font-bold"
+                                                >
+                                                    <CheckCircle2 size={18} />
+                                                </button>
+                                            )}
+
+                                            {inv.status === 'SENT' && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleRevert(inv.id);
+                                                    }}
+                                                    title="Revert to Draft (Un-approve)"
+                                                    className="p-4 rounded-2xl bg-amber-600/10 border border-amber-500/20 text-amber-600 hover:bg-amber-600 hover:text-white transition-all font-bold"
+                                                >
+                                                    <RotateCcw size={18} />
+                                                </button>
+                                            )}
+
+                                            {inv.status === 'DRAFT' && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        router.push(`/invoices/${inv.id}/edit`);
+                                                    }}
+                                                    title="Edit Invoice"
+                                                    className="p-4 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all font-bold"
+                                                >
+                                                    <MoreVertical size={18} />
+                                                </button>
+                                            )}
+
                                             <button
-                                                onClick={() => router.push(`/invoices/${inv.id}`)}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    router.push(`/invoices/${inv.id}`);
+                                                }}
+                                                title="View/Print"
                                                 className="p-4 rounded-2xl bg-background border border-border text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all font-bold"
                                             >
                                                 <Printer size={18} />
                                             </button>
-                                            <button
-                                                onClick={() => router.push(`/invoices/${inv.id}`)}
-                                                className="bg-primary/5 dark:bg-white/5 hover:bg-primary/10 dark:hover:bg-white/10 text-primary dark:text-white p-4 rounded-2xl transition-all"
-                                            >
-                                                <ArrowUpRight size={18} />
-                                            </button>
+
+                                            {inv.status === 'DRAFT' && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleDelete(inv.id);
+                                                    }}
+                                                    title="Delete"
+                                                    className="p-4 rounded-2xl bg-red-600/10 border border-red-500/20 text-red-600 hover:bg-red-600 hover:text-white transition-all font-bold"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
