@@ -292,7 +292,7 @@ exports.Prisma.ExpenseScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.InvoiceScalarFieldEnum = {
+exports.Prisma.ServiceInvoiceScalarFieldEnum = {
   id: 'id',
   invoiceNumber: 'invoiceNumber',
   date: 'date',
@@ -323,7 +323,7 @@ exports.Prisma.InvoiceScalarFieldEnum = {
   division: 'division'
 };
 
-exports.Prisma.InvoiceItemScalarFieldEnum = {
+exports.Prisma.ServiceInvoiceItemScalarFieldEnum = {
   id: 'id',
   invoiceId: 'invoiceId',
   description: 'description',
@@ -334,6 +334,44 @@ exports.Prisma.InvoiceItemScalarFieldEnum = {
   taxAmount: 'taxAmount',
   total: 'total',
   productId: 'productId'
+};
+
+exports.Prisma.FreightInvoiceScalarFieldEnum = {
+  id: 'id',
+  invoiceNumber: 'invoiceNumber',
+  date: 'date',
+  jobId: 'jobId',
+  customerId: 'customerId',
+  type: 'type',
+  status: 'status',
+  usdRate: 'usdRate',
+  exchangeRate: 'exchangeRate',
+  totalAmount: 'totalAmount',
+  taxAmount: 'taxAmount',
+  grandTotal: 'grandTotal',
+  currencyCode: 'currencyCode',
+  isApproved: 'isApproved',
+  approvedById: 'approvedById',
+  isLocked: 'isLocked',
+  lockedAt: 'lockedAt',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  transactionId: 'transactionId',
+  division: 'division'
+};
+
+exports.Prisma.FreightInvoiceItemScalarFieldEnum = {
+  id: 'id',
+  invoiceId: 'invoiceId',
+  description: 'description',
+  quantity: 'quantity',
+  rate: 'rate',
+  amount: 'amount',
+  taxPercentage: 'taxPercentage',
+  taxAmount: 'taxAmount',
+  total: 'total',
+  vendorId: 'vendorId'
 };
 
 exports.Prisma.ProductCategoryScalarFieldEnum = {
@@ -631,8 +669,10 @@ exports.Prisma.ModelName = {
   Job: 'Job',
   ExpenseMaster: 'ExpenseMaster',
   Expense: 'Expense',
-  Invoice: 'Invoice',
-  InvoiceItem: 'InvoiceItem',
+  ServiceInvoice: 'ServiceInvoice',
+  ServiceInvoiceItem: 'ServiceInvoiceItem',
+  FreightInvoice: 'FreightInvoice',
+  FreightInvoiceItem: 'FreightInvoiceItem',
   ProductCategory: 'ProductCategory',
   Product: 'Product',
   Warehouse: 'Warehouse',

@@ -1,0 +1,231 @@
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import { getAuthUser } from '@/lib/auth';
+import { logAction } from '@/lib/security';
+
+export async function POST(request: Request) {
+    const user = await getAuthUser();
+    if (!user || !user.companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    try {
+        const body = await request.json();
+        const {
+            invoiceNumber, jobId, customerId,
+            totalAmount, taxAmount, grandTotal, currencyCode, items,
+            usdRate, exchangeRate
+        } = body;
+
+        if (!invoiceNumber || !customerId) {
+            return NextResponse.json({ error: 'Invoice Number and Customer are required' }, { status: 400 });
+        }
+
+        const result = await prisma.$transaction(async (tx) => {
+            const inv = await tx.freightInvoice.create({
+                data: {
+                    invoiceNumber,
+                    jobId: jobId ? parseInt(jobId) : null,
+                    customerId: parseInt(customerId),
+                    usdRate: parseFloat(usdRate) || 0,
+                    exchangeRate: parseFloat(exchangeRate) || 1.0,
+                    totalAmount: parseFloat(totalAmount) || 0,
+                    taxAmount: parseFloat(taxAmount) || 0,
+                    grandTotal: parseFloat(grandTotal) || 0,
+                    currencyCode: currencyCode || 'PKR',
+                    companyId: user.companyId as number,
+                    division: user.division,
+                    items: {
+                        create: items?.map((item: any) => ({
+                            description: item.description,
+                            quantity: parseFloat(item.quantity) || 1.0,
+                            rate: parseFloat(item.rate) || 0.0,
+                            amount: parseFloat(item.amount),
+                            taxPercentage: parseFloat(item.taxPercentage) || 0,
+                            taxAmount: parseFloat(item.taxAmount) || 0,
+                            total: parseFloat(item.total),
+                            vendorId: item.vendorId ? parseInt(item.vendorId) : null,
+                        })) || []
+                    }
+                },
+                include: {
+                    items: true,
+                    customer: true,
+                }
+            });
+
+            return inv;
+        });
+
+        await logAction({
+            user,
+            action: 'CREATE',
+            module: 'FREIGHT_INVOICE',
+            entityId: result.id,
+            payload: { invoiceNumber: result.invoiceNumber, total: result.grandTotal }
+        });
+
+        return NextResponse.json({ invoice: result });
+    } catch (error: any) {
+        console.error('Create freight invoice error:', error);
+        if (error.code === 'P2002') {
+            return NextResponse.json({ error: 'An invoice already exists with this number.' }, { status: 400 });
+        }
+        return NextResponse.json({ error: 'Failed to create freight invoice' }, { status: 500 });
+    }
+}
+
+export async function PATCH(request: Request) {
+    const user = await getAuthUser();
+    if (!user || user.role !== 'ADMIN') return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    try {
+        const { id, action, ...updateData } = await request.json();
+
+        const invoice = await prisma.freightInvoice.findUnique({
+            where: { id: parseInt(id) },
+            include: { items: true }
+        });
+        if (!invoice) return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
+
+        if (action === 'UPDATE') {
+            if (invoice.isApproved) return NextResponse.json({ error: 'Cannot update approved invoice' }, { status: 400 });
+
+            const updated = await prisma.$transaction(async (tx) => {
+                await tx.freightInvoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
+
+                return await tx.freightInvoice.update({
+                    where: { id: invoice.id },
+                    data: {
+                        invoiceNumber: updateData.invoiceNumber,
+                        customerId: parseInt(updateData.customerId),
+                        usdRate: parseFloat(updateData.usdRate) || 0,
+                        exchangeRate: parseFloat(updateData.exchangeRate) || 1.0,
+                        totalAmount: parseFloat(updateData.totalAmount) || 0,
+                        taxAmount: parseFloat(updateData.taxAmount) || 0,
+                        grandTotal: parseFloat(updateData.grandTotal) || 0,
+                        currencyCode: updateData.currencyCode,
+                        items: {
+                            create: updateData.items?.map((item: any) => ({
+                                description: item.description,
+                                quantity: parseFloat(item.quantity) || 1,
+                                rate: parseFloat(item.rate) || 0,
+                                amount: parseFloat(item.amount),
+                                taxPercentage: parseFloat(item.taxPercentage) || 0,
+                                taxAmount: parseFloat(item.taxAmount) || 0,
+                                total: parseFloat(item.total),
+                                vendorId: item.vendorId ? parseInt(item.vendorId) : null,
+                            })) || []
+                        }
+                    },
+                    include: { items: true }
+                });
+            });
+            return NextResponse.json({ invoice: updated });
+        }
+
+        if (action === 'APPROVE') {
+            if (invoice.isApproved) return NextResponse.json({ error: 'Invoice already approved' }, { status: 400 });
+
+            const updated = await prisma.$transaction(async (tx) => {
+                const inv = await tx.freightInvoice.update({
+                    where: { id: invoice.id },
+                    data: { isApproved: true, approvedById: user.id, status: 'SENT' },
+                    include: { items: true, customer: true }
+                });
+
+                // Posting for Freight Invoice
+                const revenueAccount = await tx.account.findUnique({
+                    where: { companyId_code: { companyId: user.companyId as number, code: '4100' } }
+                });
+                const costAccount = await tx.account.findUnique({
+                    where: { companyId_code: { companyId: user.companyId as number, code: '5100' } }
+                });
+                const defaultCustomerAccount = await tx.account.findUnique({
+                    where: { companyId_code: { companyId: user.companyId as number, code: '1230' } }
+                });
+                const defaultVendorAccount = await tx.account.findUnique({
+                    where: { companyId_code: { companyId: user.companyId as number, code: '2210' } }
+                });
+
+                if (inv.grandTotal > 0 && revenueAccount && (inv.customer.accountId || defaultCustomerAccount)) {
+                    // 1. Post Customer Receivable
+                    const transaction = await tx.transaction.create({
+                        data: {
+                            reference: inv.invoiceNumber,
+                            description: `Freight Invoice: ${inv.invoiceNumber} for ${inv.customer.name}`,
+                            type: 'INVOICE',
+                            companyId: user.companyId as number,
+                            date: inv.date,
+                            entries: {
+                                create: [
+                                    {
+                                        accountId: inv.customer.accountId || defaultCustomerAccount!.id,
+                                        debit: inv.grandTotal,
+                                        description: `Freight Receivable: ${inv.invoiceNumber}`
+                                    },
+                                    ...inv.items.map(item => ({
+                                        accountId: revenueAccount.id,
+                                        credit: item.total,
+                                        description: `Freight Revenue: ${item.description}`
+                                    }))
+                                ]
+                            }
+                        }
+                    });
+                    await tx.freightInvoice.update({
+                        where: { id: inv.id },
+                        data: { transactionId: transaction.id }
+                    });
+                }
+
+                // 2. Handle Item-based Cost Posting (Vendors)
+                for (const item of inv.items) {
+                    if (item.vendorId && costAccount) {
+                        const vendor = await tx.vendor.findUnique({ where: { id: item.vendorId } });
+                        if (vendor) {
+                            await tx.transaction.create({
+                                data: {
+                                    reference: `${inv.invoiceNumber}-COST`,
+                                    description: `Freight Cost Allocation: ${item.description}`,
+                                    type: 'JOURNAL',
+                                    companyId: user.companyId as number,
+                                    date: inv.date,
+                                    entries: {
+                                        create: [
+                                            {
+                                                accountId: costAccount.id,
+                                                debit: item.amount, // Using base amount for cost
+                                                description: `Freight Cost: ${item.description}`
+                                            },
+                                            {
+                                                accountId: vendor.accountId || defaultVendorAccount!.id,
+                                                credit: item.amount,
+                                                description: `Payable to ${vendor.name} for ${item.description}`
+                                            }
+                                        ]
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+
+                return inv;
+            });
+
+            await logAction({ user, action: 'APPROVE', module: 'FREIGHT_INVOICE', entityId: invoice.id });
+            return NextResponse.json({ invoice: updated });
+        }
+
+        if (action === 'DELETE') {
+            if (invoice.isApproved) return NextResponse.json({ error: 'Approved invoice cannot be deleted' }, { status: 400 });
+            await prisma.freightInvoice.delete({ where: { id: invoice.id } });
+            await logAction({ user, action: 'DELETE', module: 'FREIGHT_INVOICE', entityId: invoice.id });
+            return NextResponse.json({ success: true });
+        }
+
+        return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    } catch (error: any) {
+        console.error('Freight invoice action error:', error);
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
+}

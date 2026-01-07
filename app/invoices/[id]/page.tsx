@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useEffect, useState, use } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
 import {
     FileText, Printer, ChevronLeft, Download,
     Ship, User, MapPin, Calendar, Hash,
     Package, Info, CreditCard, Building2,
-    CheckCircle2, Clock, AlertCircle
+    CheckCircle2, Clock, AlertCircle, DollarSign, ArrowRightLeft
 } from 'lucide-react';
 
 interface InvoiceItem {
@@ -27,10 +27,13 @@ interface Invoice {
     date: string;
     status: string;
     type: string;
+    category: 'SERVICE' | 'FREIGHT';
     totalAmount: number;
     taxAmount: number;
     grandTotal: number;
     currencyCode: string;
+    usdRate?: number;
+    exchangeRate?: number;
     isApproved: boolean;
     customer: {
         name: string;
@@ -47,7 +50,7 @@ interface Invoice {
         gdNo: string | null;
         containerNo: string | null;
         hawbBl: string | null;
-    };
+    } | null;
     items: InvoiceItem[];
     company: {
         name: string;
@@ -62,6 +65,8 @@ interface Invoice {
 export default function InvoiceViewPage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = use(params);
     const id = resolvedParams.id;
+    const searchParams = useSearchParams();
+    const category = searchParams.get('category');
     const router = useRouter();
     const [invoice, setInvoice] = useState<Invoice | null>(null);
     const [loading, setLoading] = useState(true);
@@ -69,7 +74,8 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
     useEffect(() => {
         const fetchInvoice = async () => {
             try {
-                const res = await fetch(`/api/invoices/${id}`);
+                const url = `/api/invoices/${id}${category ? `?category=${category}` : ''}`;
+                const res = await fetch(url);
                 if (res.ok) {
                     const data = await res.json();
                     setInvoice(data.invoice);
@@ -83,7 +89,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
             }
         };
         fetchInvoice();
-    }, [id]);
+    }, [id, category]);
 
     const handlePrint = () => {
         window.print();
@@ -156,7 +162,12 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                             </div>
                         </div>
                         <div className="text-right">
-                            <h1 className="text-6xl font-black text-slate-200 tracking-tighter leading-none mb-4 uppercase italic">Invoice</h1>
+                            <div className="flex flex-col items-end gap-2 mb-2">
+                                <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${invoice.category === 'SERVICE' ? 'bg-blue-600/10 text-blue-600 border-blue-600/20' : 'bg-purple-600/10 text-purple-600 border-purple-600/20'}`}>
+                                    {invoice.category} INVOICE
+                                </span>
+                                <h1 className="text-6xl font-black text-slate-200 tracking-tighter leading-none uppercase italic">Invoice</h1>
+                            </div>
                             <div className="space-y-2">
                                 <div>
                                     <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Invoice Number</p>
@@ -167,10 +178,12 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                                         <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Issue Date</p>
                                         <p className="font-black text-slate-700">{new Date(invoice.date).toLocaleDateString()}</p>
                                     </div>
-                                    <div className="text-right">
-                                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Job Number</p>
-                                        <p className="font-black text-slate-900"># {invoice.job.jobNumber}</p>
-                                    </div>
+                                    {invoice.job && (
+                                        <div className="text-right">
+                                            <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Job Number</p>
+                                            <p className="font-black text-slate-900"># {invoice.job.jobNumber}</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -188,25 +201,47 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                             </div>
                         </div>
                         <div className="bg-slate-50 rounded-3xl p-6 border border-slate-100 flex flex-col justify-center">
-                            <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mb-4 border-b pb-2 border-slate-200">Job Metadata</p>
-                            <div className="grid grid-cols-2 gap-y-4 gap-x-6">
-                                <div>
-                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">Vessel/Voyage</p>
-                                    <p className="text-xs font-black text-slate-700">{invoice.job.vessel || 'N/A'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">GD Number</p>
-                                    <p className="text-xs font-black text-slate-700">{invoice.job.gdNo || 'N/A'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">B/L / HAWB</p>
-                                    <p className="text-xs font-black text-slate-700">{invoice.job.hawbBl || 'N/A'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">Container #</p>
-                                    <p className="text-xs font-black text-slate-700 font-mono tracking-tighter">{invoice.job.containerNo || 'N/A'}</p>
-                                </div>
-                            </div>
+                            {invoice.category === 'SERVICE' && invoice.job ? (
+                                <>
+                                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mb-4 border-b pb-2 border-slate-200">Job Metadata</p>
+                                    <div className="grid grid-cols-2 gap-y-4 gap-x-6">
+                                        <div>
+                                            <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">Vessel/Voyage</p>
+                                            <p className="text-xs font-black text-slate-700">{invoice.job.vessel || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">GD Number</p>
+                                            <p className="text-xs font-black text-slate-700">{invoice.job.gdNo || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">B/L / HAWB</p>
+                                            <p className="text-xs font-black text-slate-700">{invoice.job.hawbBl || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-0.5">Container #</p>
+                                            <p className="text-xs font-black text-slate-700 font-mono tracking-tighter">{invoice.job.containerNo || 'N/A'}</p>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <p className="text-[10px] text-purple-600 font-black uppercase tracking-[0.2em] mb-4 border-b pb-2 border-purple-50/50">Freight Rates</p>
+                                    <div className="space-y-4">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-[9px] text-slate-400 font-black uppercase">Freight Rate</span>
+                                            <span className="text-sm font-black text-slate-900">$ {invoice.usdRate?.toLocaleString()}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-[9px] text-slate-400 font-black uppercase">Exchange Rate</span>
+                                            <span className="text-sm font-black text-slate-900">Rs. {invoice.exchangeRate?.toLocaleString()}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center border-t border-slate-200 pt-2">
+                                            <span className="text-[9px] text-slate-400 font-black uppercase">Total (PKR)</span>
+                                            <span className="text-sm font-black text-purple-600">Rs. {((invoice.usdRate || 0) * (invoice.exchangeRate || 1)).toLocaleString()}</span>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -267,9 +302,9 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                                 <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">WHT / Other Taxes</span>
                                 <span className="text-lg font-bold text-slate-600">{invoice.taxAmount.toLocaleString()}</span>
                             </div>
-                            <div className="flex justify-between items-center bg-blue-600 p-6 rounded-[2.5rem] shadow-xl shadow-blue-600/20">
+                            <div className={`flex justify-between items-center p-6 rounded-[2.5rem] shadow-xl ${invoice.category === 'SERVICE' ? 'bg-blue-600 shadow-blue-600/20 text-white' : 'bg-purple-600 shadow-purple-600/20 text-white'}`}>
                                 <span className="text-[10px] text-blue-100 font-black uppercase tracking-[0.2em]">Grand Total ({invoice.currencyCode})</span>
-                                <span className="text-3xl font-black text-white italic tracking-tighter leading-none">{invoice.grandTotal.toLocaleString()}</span>
+                                <span className="text-3xl font-black italic tracking-tighter leading-none">{invoice.grandTotal.toLocaleString()}</span>
                             </div>
                         </div>
                     </div>

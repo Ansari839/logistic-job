@@ -106,7 +106,11 @@ export async function GET(request: Request) {
                     const customers = await prisma.customer.findMany({
                         where: { companyId: user.companyId },
                         include: {
-                            invoices: {
+                            serviceInvoices: {
+                                where: { status: { not: 'CANCELLED' } },
+                                select: { grandTotal: true, id: true }
+                            },
+                            freightInvoices: {
                                 where: { status: { not: 'CANCELLED' } },
                                 select: { grandTotal: true, id: true }
                             },
@@ -117,7 +121,9 @@ export async function GET(request: Request) {
                     });
 
                     const report = customers.map(c => {
-                        const totalInvoiced = c.invoices.reduce((sum, i) => sum + i.grandTotal, 0);
+                        const serviceInvoiced = c.serviceInvoices.reduce((sum, i) => sum + i.grandTotal, 0);
+                        const freightInvoiced = c.freightInvoices.reduce((sum, i) => sum + i.grandTotal, 0);
+                        const totalInvoiced = serviceInvoiced + freightInvoiced;
                         const totalPaid = c.payments.reduce((sum, p) => sum + p.amount, 0);
                         return {
                             id: c.id,

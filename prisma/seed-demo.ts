@@ -17,8 +17,10 @@ async function main() {
     const headOffice = await prisma.branch.findFirst({ where: { companyId: mainCompany.id } });
     if (!headOffice) throw new Error("Head Office not found. Run seed-core first.");
     // Clean up
-    await prisma.invoiceItem.deleteMany({ where: { invoice: { job: { jobNumber: 'JOB-2025-001' } } } });
-    await prisma.invoice.deleteMany({ where: { job: { jobNumber: 'JOB-2025-001' } } });
+    await prisma.serviceInvoiceItem.deleteMany({ where: { invoice: { job: { jobNumber: 'JOB-2025-001' } } } });
+    await prisma.freightInvoiceItem.deleteMany({ where: { invoice: { job: { jobNumber: 'JOB-2025-001' } } } });
+    await prisma.serviceInvoice.deleteMany({ where: { job: { jobNumber: 'JOB-2025-001' } } });
+    await prisma.freightInvoice.deleteMany({ where: { job: { jobNumber: 'JOB-2025-001' } } });
     await prisma.expense.deleteMany({ where: { job: { jobNumber: 'JOB-2025-001' } } });
     await prisma.job.deleteMany({ where: { jobNumber: 'JOB-2025-001' } });
     await prisma.customer.deleteMany({ where: { code: 'CUST-001' } });

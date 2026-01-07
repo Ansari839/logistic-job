@@ -5,14 +5,14 @@ import DashboardLayout from '@/components/DashboardLayout';
 import { useRouter } from 'next/navigation';
 import {
     FileText, Search, Loader2, Save, X, Plus, Trash2, Printer,
-    ChevronLeft, CreditCard, User, Briefcase, Hash
+    ChevronLeft, CreditCard, User, Briefcase, Hash, DollarSign, ArrowRightLeft
 } from 'lucide-react';
 
 interface Job {
     id: number;
     jobNumber: string;
     customerId: number;
-    customer: { name: string; code: string };
+    customer: { name: string; code: string; taxNumber?: string; address?: string };
     containerNo: string | null;
     expenses: Array<{
         id: number;
@@ -20,6 +20,19 @@ interface Job {
         sellingPrice: number;
         currencyCode: string;
     }>;
+}
+
+interface Customer {
+    id: number;
+    name: string;
+    code: string;
+    taxNumber: string | null;
+    address: string | null;
+}
+
+interface Vendor {
+    id: number;
+    name: string;
 }
 
 interface InvoiceItem {
@@ -30,22 +43,55 @@ interface InvoiceItem {
     taxPercentage: number;
     taxAmount: number;
     total: number;
-    productId: string | null;
+    productId?: string | null;
+    vendorId?: string | null;
 }
 
 export default function NewInvoicePage() {
     const router = useRouter();
+    const [category, setCategory] = useState<'SERVICE' | 'FREIGHT'>('SERVICE');
     const [loading, setLoading] = useState(false);
     const [searching, setSearching] = useState(false);
     const [jobNumber, setJobNumber] = useState('');
     const [job, setJob] = useState<Job | null>(null);
+    const [customers, setCustomers] = useState<Customer[]>([]);
+    const [vendors, setVendors] = useState<Vendor[]>([]);
+    const [selectedCustomerId, setSelectedCustomerId] = useState<string>('');
     const [invoiceItems, setInvoiceItems] = useState<InvoiceItem[]>([]);
     const [invoiceData, setInvoiceData] = useState({
         invoiceNumber: '',
         type: 'MASTER',
         currencyCode: 'PKR',
-        taxAmount: 0,
+        usdRate: 0,
+        exchangeRate: 1,
     });
+
+    useEffect(() => {
+        if (category === 'FREIGHT') {
+            fetchCustomers();
+            fetchVendors();
+        }
+    }, [category]);
+
+    const fetchCustomers = async () => {
+        try {
+            const res = await fetch('/api/customers');
+            if (res.ok) {
+                const data = await res.json();
+                setCustomers(data.customers || []);
+            }
+        } catch (err) { console.error('Fetch customers error'); }
+    };
+
+    const fetchVendors = async () => {
+        try {
+            const res = await fetch('/api/vendors');
+            if (res.ok) {
+                const data = await res.json();
+                setVendors(data.vendors || []);
+            }
+        } catch (err) { console.error('Fetch vendors error'); }
+    };
 
     const handleSearchJob = async () => {
         if (!jobNumber) return;
@@ -58,28 +104,40 @@ export default function NewInvoicePage() {
                 const foundJob = data.job;
                 setJob(foundJob);
 
-                // Pre-populate invoice items from job expenses (selling prices)
-                const initialItems = (foundJob.expenses || []).map((exp: any) => ({
-                    description: exp.description,
-                    quantity: 1,
-                    rate: exp.sellingPrice,
-                    amount: exp.sellingPrice,
-                    taxPercentage: 0,
-                    taxAmount: 0,
-                    total: exp.sellingPrice,
-                    productId: null
-                }));
+                // Service Invoice Logic:
+                // 1. Service Charges (Container Count * 2000)
+                const containerCount = foundJob.containerNo ? foundJob.containerNo.split(',').filter((x: string) => x.trim()).length : 0;
+                const serviceChargeRate = 2000;
+                const serviceChargeAmount = containerCount * serviceChargeRate;
+
+                const initialItems: InvoiceItem[] = [
+                    {
+                        description: `Service Charges (${containerCount} Containers)`,
+                        quantity: containerCount,
+                        rate: serviceChargeRate,
+                        amount: serviceChargeAmount,
+                        taxPercentage: 13, // Default Sales Tax as requested
+                        taxAmount: (serviceChargeAmount * 13) / 100,
+                        total: serviceChargeAmount + (serviceChargeAmount * 13) / 100,
+                        productId: null
+                    },
+                    ...(foundJob.expenses || []).map((exp: any) => ({
+                        description: exp.description,
+                        quantity: 1,
+                        rate: exp.sellingPrice,
+                        amount: exp.sellingPrice,
+                        taxPercentage: 0, // No tax on expenses by default
+                        taxAmount: 0,
+                        total: exp.sellingPrice,
+                        productId: null
+                    }))
+                ];
                 setInvoiceItems(initialItems);
 
-                if (initialItems.length === 0) {
-                    addInvoiceItem();
-                }
-
-                // Generate a draft invoice number if possible or leave blank
                 setInvoiceData(prev => ({
                     ...prev,
-                    invoiceNumber: `INV-${foundJob.jobNumber}`,
-                    currencyCode: foundJob.expenses?.[0]?.currencyCode || 'PKR'
+                    invoiceNumber: `SIN-${new Date().getFullYear()}-WAIT`, // Will be generated on server or refined
+                    currencyCode: 'PKR'
                 }));
             } else {
                 const error = await res.json();
@@ -101,7 +159,8 @@ export default function NewInvoicePage() {
             taxPercentage: 0,
             taxAmount: 0,
             total: 0,
-            productId: null
+            productId: null,
+            vendorId: null
         }]);
     };
 
@@ -133,27 +192,34 @@ export default function NewInvoicePage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!job) return;
+        const finalCustomerId = category === 'SERVICE' ? job?.customerId : selectedCustomerId;
+        if (!finalCustomerId) { alert('Please select a customer'); return; }
+
         setLoading(true);
+        const endpoint = category === 'SERVICE' ? '/api/invoices' : '/api/invoices/freight';
 
         try {
-            const response = await fetch('/api/invoices', {
+            // Generate Invoice Number if strictly needed on client side, but better on server
+            // For now we send the draft number or let server overwrite it
+            const payload = {
+                ...invoiceData,
+                jobId: job?.id || null,
+                customerId: parseInt(finalCustomerId.toString()),
+                totalAmount: subtotal,
+                taxAmount: totalTax,
+                grandTotal: grandTotal,
+                items: invoiceItems
+            };
+
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...invoiceData,
-                    jobId: job.id,
-                    customerId: job.customerId,
-                    totalAmount: subtotal,
-                    taxAmount: totalTax,
-                    grandTotal: grandTotal,
-                    items: invoiceItems
-                }),
+                body: JSON.stringify(payload),
             });
 
             if (response.ok) {
                 const data = await response.json();
-                router.push(`/invoices/${data.invoice.id}`);
+                router.push(`/invoices/${data.invoice.id}?category=${category}`);
             } else {
                 const error = await response.json();
                 alert(error.error || 'Failed to create invoice');
@@ -164,6 +230,8 @@ export default function NewInvoicePage() {
             setLoading(false);
         }
     };
+
+    const selectedCustomer = customers.find(c => c.id.toString() === selectedCustomerId);
 
     return (
         <DashboardLayout>
@@ -176,70 +244,140 @@ export default function NewInvoicePage() {
                     Back
                 </button>
 
+                {/* Category Toggle */}
+                <div className="flex glass-card p-1.5 rounded-3xl border border-border/50 w-fit mb-8">
+                    <button
+                        onClick={() => { setCategory('SERVICE'); setJob(null); setInvoiceItems([]); }}
+                        className={`px-8 py-3 rounded-2xl text-sm font-black transition-all ${category === 'SERVICE' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-subtext hover:text-white'}`}
+                    >
+                        Service Invoice
+                    </button>
+                    <button
+                        onClick={() => { setCategory('FREIGHT'); setJob(null); setInvoiceItems([]); }}
+                        className={`px-8 py-3 rounded-2xl text-sm font-black transition-all ${category === 'FREIGHT' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-subtext hover:text-white'}`}
+                    >
+                        Freight Invoice
+                    </button>
+                </div>
+
                 <div className="flex flex-col gap-8">
-                    {/* Step 1: Search Job */}
+                    {/* Step 1: Link/Select Customer */}
                     <div className="glass-panel p-8">
                         <div className="flex items-center gap-4 mb-6">
                             <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-                                <Search size={24} />
+                                {category === 'SERVICE' ? <Briefcase size={24} /> : <User size={24} />}
                             </div>
                             <div>
-                                <h1 className="text-2xl text-heading">Create New Invoice</h1>
-                                <p className="text-subtext">Step 1: Link to a Job</p>
+                                <h1 className="text-2xl text-heading">
+                                    {category === 'SERVICE' ? 'Create Service Invoice' : 'Create Freight Invoice'}
+                                </h1>
+                                <p className="text-subtext">
+                                    {category === 'SERVICE' ? 'Step 1: Link to a Job' : 'Step 1: Select Customer & Rates'}
+                                </p>
                             </div>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <div className="flex-1 relative group">
-                                <Hash className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors" size={18} />
-                                <input
-                                    type="text"
-                                    placeholder="Enter Job Number (e.g., JOB-1001)..."
-                                    className="glass-input w-full pl-12 uppercase tracking-widest"
-                                    value={jobNumber}
-                                    onChange={(e) => setJobNumber(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && handleSearchJob()}
-                                />
+                        {category === 'SERVICE' ? (
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <div className="flex-1 relative group">
+                                    <Hash className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors" size={18} />
+                                    <input
+                                        type="text"
+                                        placeholder="Enter Job Number (e.g., JOB-1001)..."
+                                        className="glass-input w-full pl-12 uppercase tracking-widest"
+                                        value={jobNumber}
+                                        onChange={(e) => setJobNumber(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && handleSearchJob()}
+                                    />
+                                </div>
+                                <button
+                                    onClick={handleSearchJob}
+                                    disabled={searching || !jobNumber}
+                                    className="glass-button min-w-[160px]"
+                                >
+                                    {searching ? <Loader2 className="animate-spin" size={18} /> : <Search size={18} />}
+                                    {searching ? 'Searching...' : 'Fetch Job'}
+                                </button>
                             </div>
-                            <button
-                                onClick={handleSearchJob}
-                                disabled={searching || !jobNumber}
-                                className="glass-button min-w-[160px]"
-                            >
-                                {searching ? <Loader2 className="animate-spin" size={18} /> : <Search size={18} />}
-                                {searching ? 'Searching...' : 'Fetch Job'}
-                            </button>
-                        </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="space-y-1">
+                                    <label className="text-subtext ml-1">Customer *</label>
+                                    <select
+                                        className="glass-input w-full appearance-none"
+                                        value={selectedCustomerId}
+                                        onChange={(e) => setSelectedCustomerId(e.target.value)}
+                                    >
+                                        <option value="">Select Customer...</option>
+                                        {customers.map(c => (
+                                            <option key={c.id} value={c.id}>{c.name} ({c.code})</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-subtext ml-1">Freight Rate (USD)</label>
+                                    <div className="relative">
+                                        <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
+                                        <input
+                                            type="number"
+                                            className="glass-input w-full pl-10"
+                                            placeholder="0.00"
+                                            value={invoiceData.usdRate}
+                                            onChange={(e) => setInvoiceData({ ...invoiceData, usdRate: parseFloat(e.target.value) || 0 })}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-subtext ml-1">Exchange Rate (PKR)</label>
+                                    <div className="relative">
+                                        <ArrowRightLeft className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
+                                        <input
+                                            type="number"
+                                            className="glass-input w-full pl-10"
+                                            placeholder="e.g. 280"
+                                            value={invoiceData.exchangeRate}
+                                            onChange={(e) => setInvoiceData({ ...invoiceData, exchangeRate: parseFloat(e.target.value) || 1 })}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Step 2: Invoice Details */}
-                    {job && (
+                    {(job || category === 'FREIGHT') && (
                         <form onSubmit={handleSubmit} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            {/* Job Info Summary Card */}
+                            {/* Info Card */}
                             <div className="bg-primary/5 border border-primary/20 p-6 rounded-[2rem] flex flex-wrap gap-12 items-center">
                                 <div className="flex items-center gap-3">
                                     <User className="text-primary" size={18} />
                                     <div>
                                         <p className="text-subtext">Customer</p>
-                                        <p className="text-sm font-black text-foreground">{job.customer.name} ({job.customer.code})</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <Briefcase className="text-primary" size={18} />
-                                    <div>
-                                        <p className="text-subtext">Linked Job</p>
-                                        <p className="text-sm font-black text-foreground">{job.jobNumber}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <Hash className="text-primary" size={18} />
-                                    <div>
-                                        <p className="text-subtext">Containers</p>
                                         <p className="text-sm font-black text-foreground">
-                                            {job.containerNo ? job.containerNo.split(',').filter(x => x.trim()).length : 0} Total
+                                            {category === 'SERVICE' ? job?.customer.name : (selectedCustomer?.name || '---')}
                                         </p>
                                     </div>
                                 </div>
+                                {category === 'SERVICE' && (
+                                    <div className="flex items-center gap-3">
+                                        <Briefcase className="text-primary" size={18} />
+                                        <div>
+                                            <p className="text-subtext">Linked Job</p>
+                                            <p className="text-sm font-black text-foreground">{job?.jobNumber}</p>
+                                        </div>
+                                    </div>
+                                )}
+                                {category === 'FREIGHT' && (
+                                    <div className="flex items-center gap-3">
+                                        <DollarSign className="text-primary" size={18} />
+                                        <div>
+                                            <p className="text-subtext">PKR Output</p>
+                                            <p className="text-sm font-black text-foreground">
+                                                Rs. {(invoiceData.usdRate * invoiceData.exchangeRate).toLocaleString()}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
                                 <div className="ml-auto flex items-center gap-4">
                                     <div className="text-right">
                                         <p className="text-subtext">Invoice Date</p>
@@ -248,14 +386,13 @@ export default function NewInvoicePage() {
                                 </div>
                             </div>
 
-                            {/* Main Form Area */}
                             <div className="glass-panel p-8">
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                                     <div className="space-y-1">
-                                        <label className="text-subtext ml-1">Invoice Number *</label>
+                                        <label className="text-subtext ml-1">Invoice Number</label>
                                         <input
-                                            required
                                             className="glass-input w-full uppercase tracking-wider"
+                                            placeholder="Auto-generated if blank"
                                             value={invoiceData.invoiceNumber}
                                             onChange={(e) => setInvoiceData({ ...invoiceData, invoiceNumber: e.target.value })}
                                         />
@@ -280,7 +417,6 @@ export default function NewInvoicePage() {
                                         >
                                             <option value="PKR">PKR - Pakistani Rupee</option>
                                             <option value="USD">USD - US Dollar</option>
-                                            <option value="EUR">EUR - Euro</option>
                                         </select>
                                     </div>
                                 </div>
@@ -295,9 +431,9 @@ export default function NewInvoicePage() {
                                         <button
                                             type="button"
                                             onClick={addInvoiceItem}
-                                            className="text-subtext text-primary hover:text-primary/80 flex items-center gap-1 transition-colors"
+                                            className="text-subtext text-primary hover:text-primary/80 flex items-center gap-1 transition-colors font-bold"
                                         >
-                                            <Plus size={14} /> Add Item
+                                            <Plus size={14} /> Add Line Item
                                         </button>
                                     </div>
 
@@ -306,6 +442,7 @@ export default function NewInvoicePage() {
                                             <thead>
                                                 <tr className="border-b border-border/50">
                                                     <th className="py-3 px-4 text-subtext">Description</th>
+                                                    {category === 'FREIGHT' && <th className="py-3 px-4 text-subtext w-48">Vendor (Expense Mapping)</th>}
                                                     <th className="py-3 px-4 text-subtext w-24">Qty</th>
                                                     <th className="py-3 px-4 text-subtext w-32">Rate</th>
                                                     <th className="py-3 px-4 text-subtext w-24 text-center">Tax %</th>
@@ -324,10 +461,24 @@ export default function NewInvoicePage() {
                                                                 placeholder="Item description..."
                                                             />
                                                         </td>
+                                                        {category === 'FREIGHT' && (
+                                                            <td className="py-2 px-1">
+                                                                <select
+                                                                    className="w-full bg-transparent px-3 py-2 text-xs font-bold text-subtext focus:outline-none focus:bg-primary/5 rounded-lg transition-all"
+                                                                    value={item.vendorId || ''}
+                                                                    onChange={(e) => updateItem(idx, 'vendorId', e.target.value)}
+                                                                >
+                                                                    <option value="">No Vendor (Direct)</option>
+                                                                    {vendors.map(v => (
+                                                                        <option key={v.id} value={v.id}>{v.name}</option>
+                                                                    ))}
+                                                                </select>
+                                                            </td>
+                                                        )}
                                                         <td className="py-2 px-1">
                                                             <input
                                                                 type="number"
-                                                                className="w-full bg-transparent px-3 py-2 text-sm font-bold text-foreground focus:outline-none focus:bg-primary/5 rounded-lg transition-all text-center"
+                                                                className="w-full bg-transparent px-3 py-2 text-sm font-black text-foreground focus:outline-none focus:bg-primary/5 rounded-lg transition-all text-center"
                                                                 value={item.quantity}
                                                                 onChange={(e) => updateItem(idx, 'quantity', e.target.value)}
                                                             />
@@ -335,7 +486,7 @@ export default function NewInvoicePage() {
                                                         <td className="py-2 px-1">
                                                             <input
                                                                 type="number"
-                                                                className="w-full bg-transparent px-3 py-2 text-sm font-bold text-foreground focus:outline-none focus:bg-primary/5 rounded-lg transition-all text-right"
+                                                                className="w-full bg-transparent px-3 py-2 text-sm font-black text-foreground focus:outline-none focus:bg-primary/5 rounded-lg transition-all text-right"
                                                                 value={item.rate}
                                                                 onChange={(e) => updateItem(idx, 'rate', e.target.value)}
                                                             />
@@ -343,7 +494,7 @@ export default function NewInvoicePage() {
                                                         <td className="py-2 px-1 text-center">
                                                             <input
                                                                 type="number"
-                                                                className="w-20 bg-transparent px-3 py-2 text-sm font-bold text-muted-foreground focus:outline-none focus:bg-primary/5 rounded-lg transition-all text-center"
+                                                                className="w-20 bg-transparent px-3 py-2 text-sm font-black text-primary focus:outline-none focus:bg-primary/5 rounded-lg transition-all text-center"
                                                                 value={item.taxPercentage}
                                                                 onChange={(e) => updateItem(idx, 'taxPercentage', e.target.value)}
                                                             />
@@ -355,7 +506,7 @@ export default function NewInvoicePage() {
                                                             <button
                                                                 type="button"
                                                                 onClick={() => removeItem(idx)}
-                                                                className="p-2 text-slate-600 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                                                                className="p-2 text-slate-600 hover:text-red-500 transition-colors"
                                                             >
                                                                 <Trash2 size={14} />
                                                             </button>
@@ -372,18 +523,18 @@ export default function NewInvoicePage() {
                                     <div className="space-y-2">
                                         <div className="flex items-center gap-4">
                                             <span className="text-subtext w-24">Subtotal :</span>
-                                            <span className="text-sm font-bold text-foreground">{subtotal.toLocaleString()} {invoiceData.currencyCode}</span>
+                                            <span className="text-sm font-black text-foreground">{subtotal.toLocaleString()} {invoiceData.currencyCode}</span>
                                         </div>
                                         <div className="flex items-center gap-4">
                                             <span className="text-subtext w-24">Tax Total :</span>
-                                            <span className="text-sm font-bold text-foreground">{totalTax.toLocaleString()} {invoiceData.currencyCode}</span>
+                                            <span className="text-sm font-black text-foreground">{totalTax.toLocaleString()} {invoiceData.currencyCode}</span>
                                         </div>
                                     </div>
 
                                     <div className="flex flex-col items-end gap-6 w-full md:w-auto">
                                         <div className="text-right">
                                             <p className="text-subtext mb-1">Grand Total</p>
-                                            <p className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                                            <p className="text-5xl font-black text-white tracking-tighter leading-none">
                                                 <span className="text-xs text-primary mr-2 uppercase tracking-widest font-black">{invoiceData.currencyCode}</span>
                                                 {grandTotal.toLocaleString()}
                                             </p>
@@ -402,7 +553,7 @@ export default function NewInvoicePage() {
                                                 className="glass-button flex-1"
                                             >
                                                 {loading ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
-                                                {loading ? 'Creating...' : 'Finalize Invoice'}
+                                                {loading ? 'Finalizing...' : 'Finalize Invoice'}
                                             </button>
                                         </div>
                                     </div>

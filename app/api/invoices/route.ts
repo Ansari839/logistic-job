@@ -11,23 +11,44 @@ export async function GET(request: Request) {
     const jobId = searchParams.get('jobId');
 
     try {
-        const invoices = await prisma.invoice.findMany({
-            where: {
-                companyId: user.companyId as number,
-                division: user.division,
-                ...(jobId && { jobId: parseInt(jobId) }),
-            },
-            include: {
-                customer: { select: { name: true, code: true } },
-                job: { select: { jobNumber: true, containerNo: true, customer: { select: { name: true, code: true } } } },
-                items: { include: { product: { select: { name: true, unit: true } } } },
-            },
-            orderBy: { createdAt: 'desc' },
-        });
+        const [serviceInvoices, freightInvoices] = await Promise.all([
+            prisma.serviceInvoice.findMany({
+                where: {
+                    companyId: user.companyId as number,
+                    division: user.division,
+                    ...(jobId && { jobId: parseInt(jobId) }),
+                },
+                include: {
+                    customer: { select: { name: true, code: true } },
+                    job: { select: { jobNumber: true, containerNo: true, customer: { select: { name: true, code: true } } } },
+                    items: { include: { product: { select: { name: true, unit: true } } } },
+                },
+                orderBy: { createdAt: 'desc' },
+            }),
+            prisma.freightInvoice.findMany({
+                where: {
+                    companyId: user.companyId as number,
+                    division: user.division,
+                    ...(jobId && { jobId: parseInt(jobId) }),
+                },
+                include: {
+                    customer: { select: { name: true, code: true, taxNumber: true, address: true } },
+                    job: { select: { jobNumber: true, customer: { select: { name: true, code: true } } } },
+                    items: { include: { vendor: { select: { name: true } } } },
+                },
+                orderBy: { createdAt: 'desc' },
+            })
+        ]);
 
-        return NextResponse.json({ invoices });
+        // Add a category field to distinguish them in the UI
+        const combined = [
+            ...serviceInvoices.map(inv => ({ ...inv, category: 'SERVICE' })),
+            ...freightInvoices.map(inv => ({ ...inv, category: 'FREIGHT' }))
+        ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+        return NextResponse.json({ invoices: combined });
     } catch (error) {
-        console.error('Fetch invoices error:', error);
+        console.error('Fetch Combined Invoices error:', error);
         return NextResponse.json({ error: 'Failed to fetch invoices' }, { status: 500 });
     }
 }
@@ -48,7 +69,7 @@ export async function POST(request: Request) {
         }
 
         const result = await prisma.$transaction(async (tx) => {
-            const inv = await tx.invoice.create({
+            const inv = await tx.serviceInvoice.create({
                 data: {
                     invoiceNumber,
                     jobId: parseInt(jobId),
@@ -124,7 +145,7 @@ export async function PATCH(request: Request) {
     try {
         const { id, action, ...updateData } = await request.json();
 
-        const invoice = await prisma.invoice.findUnique({
+        const invoice = await prisma.serviceInvoice.findUnique({
             where: { id: parseInt(id) },
             include: { items: true }
         });
@@ -134,9 +155,9 @@ export async function PATCH(request: Request) {
             if (invoice.isApproved) return NextResponse.json({ error: 'Cannot update approved invoice' }, { status: 400 });
 
             const updated = await prisma.$transaction(async (tx) => {
-                await tx.invoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
+                await tx.serviceInvoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
 
-                return await tx.invoice.update({
+                return await tx.serviceInvoice.update({
                     where: { id: invoice.id },
                     data: {
                         invoiceNumber: updateData.invoiceNumber,
@@ -182,7 +203,7 @@ export async function PATCH(request: Request) {
                     }
                 });
 
-                const inv = await tx.invoice.update({
+                const inv = await tx.serviceInvoice.update({
                     where: { id: invoice.id },
                     data: { isApproved: false, approvedById: null, transactionId: null, status: 'DRAFT' }
                 });
@@ -203,7 +224,7 @@ export async function PATCH(request: Request) {
             if (invoice.isApproved) return NextResponse.json({ error: 'Invoice is already approved' }, { status: 400 });
 
             const updated = await prisma.$transaction(async (tx) => {
-                const inv = await tx.invoice.update({
+                const inv = await tx.serviceInvoice.update({
                     where: { id: parseInt(id) },
                     data: { isApproved: true, approvedById: user.id, status: 'SENT' },
                     include: {
@@ -219,10 +240,6 @@ export async function PATCH(request: Request) {
                         where: { companyId_code: { companyId: user.companyId as number, code: '4100' } }
                     });
 
-                    // Search for specific account: 
-                    // a) linked via accountId 
-                    // b) sub-account with same name
-                    // c) fallback to 1230 (A/R)
                     let customerAccount = null;
                     if (inv.customer.accountId) {
                         customerAccount = await tx.account.findUnique({ where: { id: inv.customer.accountId } });
@@ -245,7 +262,6 @@ export async function PATCH(request: Request) {
                     }
 
                     if (customerAccount && revenueAccount) {
-                        // Create Master Invoice Transaction
                         const containerInfo = inv.job.containerNo ? ` | Cont: ${inv.job.containerNo}` : '';
                         const transaction = await tx.transaction.create({
                             data: {
@@ -270,7 +286,7 @@ export async function PATCH(request: Request) {
                                 }
                             }
                         });
-                        await tx.invoice.update({
+                        await tx.serviceInvoice.update({
                             where: { id: inv.id },
                             data: { transactionId: transaction.id }
                         });
@@ -284,12 +300,11 @@ export async function PATCH(request: Request) {
                 });
 
                 const costAccount = await tx.account.findUnique({
-                    where: { companyId_code: { companyId: user.companyId as number, code: '5100' } } // Direct Cost of Service
+                    where: { companyId_code: { companyId: user.companyId as number, code: '5100' } }
                 });
 
                 for (const exp of jobExpenses) {
                     if (exp.costPrice > 0) {
-                        // Find Vendor Specific Account or fallback to 2210 (A/P)
                         let vendorAccount = null;
                         if (exp.vendor?.accountId) {
                             vendorAccount = await tx.account.findUnique({ where: { id: exp.vendor.accountId } });
@@ -353,7 +368,7 @@ export async function PATCH(request: Request) {
         }
 
         if (action === 'LOCK') {
-            const updated = await prisma.invoice.update({
+            const updated = await prisma.serviceInvoice.update({
                 where: { id: invoice.id },
                 data: { isLocked: true, lockedAt: new Date() }
             });
@@ -365,7 +380,7 @@ export async function PATCH(request: Request) {
             if (invoice.isApproved) return NextResponse.json({ error: 'Approved invoice cannot be deleted' }, { status: 400 });
             if (invoice.isLocked) return NextResponse.json({ error: 'Locked document cannot be deleted' }, { status: 400 });
 
-            await prisma.invoice.delete({ where: { id: invoice.id } });
+            await prisma.serviceInvoice.delete({ where: { id: invoice.id } });
             await logAction({ user, action: 'DELETE', module: 'INVOICE', entityId: invoice.id });
             return NextResponse.json({ success: true });
         }
@@ -387,7 +402,7 @@ export async function DELETE(request: Request) {
 
     try {
         const { id } = await request.json();
-        const invoice = await prisma.invoice.findUnique({ where: { id: parseInt(id) } });
+        const invoice = await prisma.serviceInvoice.findUnique({ where: { id: parseInt(id) } });
 
         if (!invoice || invoice.companyId !== user.companyId) {
             return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
@@ -396,7 +411,7 @@ export async function DELETE(request: Request) {
         if (invoice.isApproved) return NextResponse.json({ error: 'Approved invoice cannot be deleted' }, { status: 400 });
         if (invoice.isLocked) return NextResponse.json({ error: 'Locked document cannot be deleted' }, { status: 400 });
 
-        await prisma.invoice.delete({ where: { id: invoice.id } });
+        await prisma.serviceInvoice.delete({ where: { id: invoice.id } });
         await logAction({ user, action: 'DELETE', module: 'INVOICE', entityId: invoice.id });
         return NextResponse.json({ success: true });
     } catch (error) {

@@ -30,7 +30,10 @@ export async function GET(request: Request) {
                 _count: {
                     select: { expenses: true }
                 },
-                invoice: {
+                serviceInvoice: {
+                    select: { id: true }
+                },
+                freightInvoice: {
                     select: { id: true }
                 }
             },

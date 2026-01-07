@@ -18,6 +18,7 @@ interface Invoice {
     taxAmount: number;
     status: string;
     type: string;
+    category: 'SERVICE' | 'FREIGHT';
     currencyCode: string;
     customer: { name: string; code: string };
     job: { jobNumber: string };
@@ -47,10 +48,11 @@ export default function InvoicesPage() {
         }
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: number, cat: string) => {
         if (!confirm('Are you sure you want to delete this invoice?')) return;
+        const endpoint = cat === 'SERVICE' ? '/api/invoices' : '/api/invoices/freight';
         try {
-            const res = await fetch('/api/invoices', {
+            const res = await fetch(endpoint, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id, action: 'DELETE' })
@@ -66,10 +68,11 @@ export default function InvoicesPage() {
         }
     };
 
-    const handleApprove = async (id: number) => {
+    const handleApprove = async (id: number, cat: string) => {
         if (!confirm('Approve this invoice? This will post entries to Ledger.')) return;
+        const endpoint = cat === 'SERVICE' ? '/api/invoices' : '/api/invoices/freight';
         try {
-            const res = await fetch('/api/invoices', {
+            const res = await fetch(endpoint, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id, action: 'APPROVE' })
@@ -85,10 +88,11 @@ export default function InvoicesPage() {
         }
     };
 
-    const handleRevert = async (id: number) => {
+    const handleRevert = async (id: number, cat: string) => {
         if (!confirm('Revert to Draft? This will REVERSE all ledger entries associated with this invoice.')) return;
+        const endpoint = cat === 'SERVICE' ? '/api/invoices' : '/api/invoices/freight';
         try {
-            const res = await fetch('/api/invoices', {
+            const res = await fetch(endpoint, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id, action: 'REVERT_TO_DRAFT' })
@@ -107,12 +111,12 @@ export default function InvoicesPage() {
     const filteredInvoices = invoices.filter(inv =>
         inv.invoiceNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
         inv.customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        inv.job.jobNumber.toLowerCase().includes(searchTerm.toLowerCase())
+        (inv.job?.jobNumber || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const getStatusStyle = (status: string) => {
         switch (status) {
-            case 'PAID': return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
+            case 'SENT': return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
             case 'DRAFT': return 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20';
             case 'CANCELLED': return 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20';
             default: return 'bg-slate-500/10 text-slate-500 dark:text-slate-400 border-slate-500/20';
@@ -126,7 +130,7 @@ export default function InvoicesPage() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
                         <h1 className="text-4xl text-heading">Billing & Invoices</h1>
-                        <p className="text-subtext mt-1">Management Console</p>
+                        <p className="text-subtext mt-1">Unified Service & Freight Billing Console</p>
                     </div>
                     <div className="flex gap-3">
                         <button
@@ -135,10 +139,6 @@ export default function InvoicesPage() {
                         >
                             <Plus size={18} />
                             Create Invoice
-                        </button>
-                        <button className="glass-button-secondary">
-                            <Download size={16} />
-                            Export CSV
                         </button>
                     </div>
                 </div>
@@ -155,50 +155,47 @@ export default function InvoicesPage() {
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                    <div className="flex gap-4 w-full lg:w-auto">
-                        <button className="flex-1 lg:flex-none flex items-center justify-center gap-2 bg-background/50 dark:bg-slate-900/40 border border-border text-slate-500 dark:text-slate-400 px-8 py-4 rounded-3xl font-black hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs uppercase tracking-widest">
-                            <Filter size={18} />
-                            Filter
-                        </button>
-                    </div>
                 </div>
 
                 {/* Invoices List */}
                 <div className="grid gap-6">
                     {loading ? (
-                        <div className="bg-slate-900/40 border border-slate-800/60 rounded-[2.5rem] p-20 flex flex-col items-center">
+                        <div className="glass-panel p-20 flex flex-col items-center">
                             <div className="animate-spin w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full mb-4" />
-                            <p className="text-slate-500 font-black uppercase tracking-widest text-xs">Authenticating Data Access...</p>
+                            <p className="text-slate-500 font-black uppercase tracking-widest text-xs">Fetching Records...</p>
                         </div>
                     ) : filteredInvoices.length === 0 ? (
                         <div className="glass-panel p-20 text-center">
                             <FileText className="w-16 h-16 text-primary/20 mx-auto mb-4" />
                             <h3 className="text-2xl text-heading mb-2">No Invoices Found</h3>
-                            <p className="text-slate-500 font-bold max-w-sm mx-auto">We couldn't find any invoice records matching your criteria. Try adjusting your filters.</p>
+                            <p className="text-slate-500 font-bold max-w-sm mx-auto">We couldn't find any invoice records matching your criteria.</p>
                         </div>
                     ) : (
                         filteredInvoices.map((inv) => (
                             <div
-                                key={inv.id}
+                                key={`${inv.category}-${inv.id}`}
                                 className="group relative glass-card p-6 lg:p-8 hover:translate-x-1"
                             >
                                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
                                     <div className="flex items-center gap-6">
-                                        <div className="w-16 h-16 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                                        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border ${inv.category === 'SERVICE' ? 'bg-blue-600/10 text-blue-600 border-blue-500/20' : 'bg-purple-600/10 text-purple-600 border-purple-500/20'}`}>
                                             <FileText size={28} />
                                         </div>
                                         <div>
                                             <div className="flex items-center gap-3 mb-1">
-                                                <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{inv.invoiceNumber}</h3>
+                                                <h3 className="text-xl font-black text-white tracking-tight">{inv.invoiceNumber}</h3>
+                                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${inv.category === 'SERVICE' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-purple-500/10 text-purple-400 border-purple-500/20'}`}>
+                                                    {inv.category}
+                                                </span>
                                                 <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${getStatusStyle(inv.status)}`}>
                                                     {inv.status}
                                                 </span>
                                             </div>
                                             <div className="flex items-center gap-4 text-slate-500 text-[10px] font-black uppercase tracking-widest">
-                                                <span className="text-slate-700 dark:text-slate-300">{inv.customer.name}</span>
-                                                <span className="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-800" />
-                                                <span className="text-blue-600 dark:text-blue-400">Job: {inv.job.jobNumber}</span>
-                                                <span className="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-800" />
+                                                <span className="text-slate-300">{inv.customer.name}</span>
+                                                <span className="w-1 h-1 rounded-full bg-slate-800" />
+                                                <span className="text-primary">{inv.job ? `Job: ${inv.job.jobNumber}` : 'Standalone'}</span>
+                                                <span className="w-1 h-1 rounded-full bg-slate-800" />
                                                 <span>{new Date(inv.date).toLocaleDateString()}</span>
                                             </div>
                                         </div>
@@ -206,20 +203,15 @@ export default function InvoicesPage() {
 
                                     <div className="flex items-center justify-between lg:justify-end gap-6 lg:pl-12 lg:border-l lg:border-border/50 flex-1">
                                         <div className="text-right">
-                                            <p className="text-subtext mb-1">Total Amount</p>
-                                            <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">
+                                            <p className="text-subtext mb-1">Grand Total</p>
+                                            <p className="text-2xl font-black text-white tracking-tighter">
                                                 {inv.grandTotal.toLocaleString()} <span className="text-xs">{inv.currencyCode}</span>
                                             </p>
                                         </div>
                                         <div className="flex gap-2">
-                                            {/* Action Buttons */}
                                             {inv.status === 'DRAFT' && (
                                                 <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleApprove(inv.id);
-                                                    }}
-                                                    title="Approve & Post"
+                                                    onClick={() => handleApprove(inv.id, inv.category)}
                                                     className="p-4 rounded-2xl bg-emerald-600/10 border border-emerald-500/20 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-all font-bold"
                                                 >
                                                     <CheckCircle2 size={18} />
@@ -228,11 +220,7 @@ export default function InvoicesPage() {
 
                                             {inv.status === 'SENT' && (
                                                 <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleRevert(inv.id);
-                                                    }}
-                                                    title="Revert to Draft (Un-approve)"
+                                                    onClick={() => handleRevert(inv.id, inv.category)}
                                                     className="p-4 rounded-2xl bg-amber-600/10 border border-amber-500/20 text-amber-600 hover:bg-amber-600 hover:text-white transition-all font-bold"
                                                 >
                                                     <RotateCcw size={18} />
@@ -241,11 +229,7 @@ export default function InvoicesPage() {
 
                                             {inv.status === 'DRAFT' && (
                                                 <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        router.push(`/invoices/${inv.id}/edit`);
-                                                    }}
-                                                    title="Edit Invoice"
+                                                    onClick={() => router.push(`/invoices/${inv.id}/edit?category=${inv.category}`)}
                                                     className="p-4 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all font-bold"
                                                 >
                                                     <MoreVertical size={18} />
@@ -253,23 +237,15 @@ export default function InvoicesPage() {
                                             )}
 
                                             <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    router.push(`/invoices/${inv.id}`);
-                                                }}
-                                                title="View/Print"
-                                                className="p-4 rounded-2xl bg-background border border-border text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all font-bold"
+                                                onClick={() => router.push(`/invoices/${inv.id}?category=${inv.category}`)}
+                                                className="p-4 rounded-2xl bg-slate-900 border border-border text-slate-400 hover:text-white transition-all font-bold"
                                             >
                                                 <Printer size={18} />
                                             </button>
 
                                             {inv.status === 'DRAFT' && (
                                                 <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleDelete(inv.id);
-                                                    }}
-                                                    title="Delete"
+                                                    onClick={() => handleDelete(inv.id, inv.category)}
                                                     className="p-4 rounded-2xl bg-red-600/10 border border-red-500/20 text-red-600 hover:bg-red-600 hover:text-white transition-all font-bold"
                                                 >
                                                     <Trash2 size={18} />

@@ -10,34 +10,37 @@ export async function GET(
     if (!user || !user.companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { id } = await params;
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get('category');
 
     try {
-        const invoice = await prisma.invoice.findUnique({
-            where: {
-                id: parseInt(id),
-                companyId: user.companyId as number,
-            },
-            include: {
-                customer: true,
-                job: {
-                    include: {
-                        branch: true
-                    }
-                },
-                items: {
-                    include: {
-                        product: {
-                            select: {
-                                name: true,
-                                unit: true,
-                                sku: true
-                            }
-                        }
-                    }
-                },
-                company: true
-            }
-        });
+        let invoice: any = null;
+
+        if (category === 'SERVICE' || !category) {
+            invoice = await prisma.serviceInvoice.findUnique({
+                where: { id: parseInt(id), companyId: user.companyId as number },
+                include: {
+                    customer: true,
+                    job: true,
+                    items: { include: { product: true } },
+                    company: true
+                }
+            });
+            if (invoice) invoice.category = 'SERVICE';
+        }
+
+        if (!invoice && (category === 'FREIGHT' || !category)) {
+            invoice = await prisma.freightInvoice.findUnique({
+                where: { id: parseInt(id), companyId: user.companyId as number },
+                include: {
+                    customer: true,
+                    job: true,
+                    items: { include: { vendor: true } },
+                    company: true
+                }
+            });
+            if (invoice) invoice.category = 'FREIGHT';
+        }
 
         if (!invoice) {
             return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });

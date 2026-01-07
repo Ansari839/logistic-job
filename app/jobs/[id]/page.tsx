@@ -47,7 +47,8 @@ interface Job {
     hawbBl: string | null;
     branches: { name: string } | null;
     expenses: Expense[];
-    invoice: Invoice | null;
+    serviceInvoice: Invoice | null;
+    freightInvoice: Invoice | null;
     place?: string;
     shipperRef?: string;
     formE?: string;
@@ -119,9 +120,16 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
     };
 
 
+    // useEffect(() => {
+    //     router.replace(`/jobs/${id}/edit`);
+    // }, [id, router]);
+
     useEffect(() => {
-        router.replace(`/jobs/${id}/edit`);
-    }, [id, router]);
+        if (id) {
+            fetchJob();
+            fetchVendors();
+        }
+    }, [id]);
 
     const handleAddExpense = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -506,14 +514,14 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
 
                     {activeTab === 'invoices' && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {!job.invoice ? (
+                            {(!job.serviceInvoice && !job.freightInvoice) ? (
                                 <div className="col-span-full glass-card p-20 text-center">
                                     <FileText className="w-12 h-12 text-slate-700 dark:text-slate-600 mx-auto mb-4" />
                                     <h3 className="text-lg font-bold text-slate-900 dark:text-slate-300">No invoice generated</h3>
                                     <p className="text-subtext text-sm mt-1">Visit the Invoices page to create an invoice for this job.</p>
                                 </div>
                             ) : (
-                                [job.invoice].map((inv) => (
+                                [job.serviceInvoice, job.freightInvoice].filter(Boolean).map((inv: any) => (
                                     <div key={inv.id} className="glass-card p-6 group hover:border-primary/50">
                                         <div className="flex justify-between items-start mb-6">
                                             <div>
@@ -536,13 +544,12 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                                         </div>
                                         <div className="pt-4 border-t border-border/50 flex gap-2">
                                             <button
-                                                onClick={() => router.push(`/invoices/${inv.id}`)}
+                                                onClick={() => router.push(`/invoices/${inv.id}?category=${inv.invoiceNumber.startsWith('SIN') ? 'SERVICE' : 'FREIGHT'}`)}
                                                 className="flex-1 bg-background/50 dark:bg-white/5 hover:bg-white/10 text-slate-900 dark:text-white font-black py-3 rounded-xl text-xs uppercase tracking-widest transition-all text-center border border-border"
                                             >
                                                 View Details
                                             </button>
                                             <button
-                                                onClick={() => router.push(`/invoices/${inv.id}`)}
                                                 className="p-3 rounded-xl bg-background border border-border text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all"
                                             >
                                                 <Printer size={16} />

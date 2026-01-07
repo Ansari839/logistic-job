@@ -45,17 +45,26 @@ export async function GET(request: Request) {
                     select: { grandTotal: true, createdAt: true }
                 });
 
-                const sales = await prisma.invoice.findMany({
-                    where: { companyId: user.companyId, status: { not: 'CANCELLED' }, ...dateFilter },
-                    select: { grandTotal: true, createdAt: true }
-                });
+                const [serviceInvoices, freightInvoices] = await Promise.all([
+                    prisma.serviceInvoice.findMany({
+                        where: { companyId: user.companyId, status: { not: 'CANCELLED' }, ...dateFilter },
+                        select: { grandTotal: true }
+                    }),
+                    prisma.freightInvoice.findMany({
+                        where: { companyId: user.companyId, status: { not: 'CANCELLED' }, ...dateFilter },
+                        select: { grandTotal: true }
+                    })
+                ]);
+
+                const totalSales = serviceInvoices.reduce((sum, s) => sum + s.grandTotal, 0) +
+                    freightInvoices.reduce((sum, f) => sum + f.grandTotal, 0);
 
                 return NextResponse.json({
                     report: {
                         totalPurchases: purchases.reduce((sum, p) => sum + p.grandTotal, 0),
-                        totalSales: sales.reduce((sum, s) => sum + s.grandTotal, 0),
+                        totalSales: totalSales,
                         purchaseCount: purchases.length,
-                        salesCount: sales.length
+                        salesCount: serviceInvoices.length + freightInvoices.length
                     }
                 });
             }

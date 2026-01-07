@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, use } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
     FileText, Search, Loader2, Save, X, Plus, Trash2, Printer,
-    ChevronLeft, CreditCard, User, Briefcase, Hash
+    ChevronLeft, CreditCard, User, Briefcase, Hash, DollarSign, ArrowRightLeft
 } from 'lucide-react';
 
 interface Job {
@@ -26,50 +26,81 @@ interface InvoiceItem {
     taxAmount: number;
     total: number;
     productId: string | null;
+    vendorId?: string | null;
+}
+
+interface Vendor {
+    id: number;
+    name: string;
 }
 
 export default function EditInvoicePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
+    const searchParams = useSearchParams();
+    const category = searchParams.get('category') as 'SERVICE' | 'FREIGHT' || 'SERVICE';
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [job, setJob] = useState<Job | null>(null);
+    const [vendors, setVendors] = useState<Vendor[]>([]);
     const [invoiceItems, setInvoiceItems] = useState<InvoiceItem[]>([]);
     const [invoiceData, setInvoiceData] = useState({
         invoiceNumber: '',
         type: 'MASTER',
         currencyCode: 'PKR',
         taxAmount: 0,
-        status: 'DRAFT'
+        status: 'DRAFT',
+        usdRate: '0',
+        exchangeRate: '1.0',
+        customerId: ''
     });
 
     useEffect(() => {
         fetchInvoice();
-    }, [id]);
+        if (category === 'FREIGHT') {
+            fetchVendors();
+        }
+    }, [id, category]);
+
+    const fetchVendors = async () => {
+        try {
+            const res = await fetch('/api/vendors');
+            if (res.ok) {
+                const data = await res.json();
+                setVendors(data.vendors || []);
+            }
+        } catch (err) {
+            console.error('Fetch vendors failed');
+        }
+    };
 
     const fetchInvoice = async () => {
         try {
-            const res = await fetch(`/api/invoices`);
+            const res = await fetch(`/api/invoices/${id}?category=${category}`);
             if (res.ok) {
                 const data = await res.json();
-                const inv = data.invoices.find((i: any) => i.id.toString() === id);
+                const inv = data.invoice;
                 if (inv) {
-                    if (inv.isApproved) {
-                        alert('Cannot edit an approved invoice');
+                    if (inv.status === 'SENT') {
+                        alert('Cannot edit an approved invoice. Revert to draft first.');
                         router.push('/invoices');
                         return;
                     }
                     setInvoiceData({
                         invoiceNumber: inv.invoiceNumber,
-                        type: inv.type,
+                        type: inv.type || 'MASTER',
                         currencyCode: inv.currencyCode,
                         taxAmount: inv.taxAmount,
-                        status: inv.status
+                        status: inv.status,
+                        usdRate: inv.usdRate?.toString() || '0',
+                        exchangeRate: inv.exchangeRate?.toString() || '1.0',
+                        customerId: inv.customerId?.toString() || ''
                     });
                     setJob(inv.job);
                     setInvoiceItems(inv.items.map((item: any) => ({
                         ...item,
-                        productId: item.productId?.toString() || null
+                        productId: item.productId?.toString() || null,
+                        vendorId: item.vendorId?.toString() || null
                     })));
                 } else {
                     alert('Invoice not found');
@@ -77,7 +108,7 @@ export default function EditInvoicePage({ params }: { params: Promise<{ id: stri
                 }
             }
         } catch (err) {
-            console.error('Fetch invoice failed');
+            console.error('Fetch invoice failed', err);
         } finally {
             setLoading(false);
         }
@@ -92,7 +123,8 @@ export default function EditInvoicePage({ params }: { params: Promise<{ id: stri
             taxPercentage: 0,
             taxAmount: 0,
             total: 0,
-            productId: null
+            productId: null,
+            vendorId: null
         }]);
     };
 
@@ -126,8 +158,10 @@ export default function EditInvoicePage({ params }: { params: Promise<{ id: stri
         e.preventDefault();
         setSaving(true);
 
+        const endpoint = category === 'SERVICE' ? '/api/invoices' : '/api/invoices/freight';
+
         try {
-            const response = await fetch('/api/invoices', {
+            const response = await fetch(endpoint, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -142,7 +176,7 @@ export default function EditInvoicePage({ params }: { params: Promise<{ id: stri
             });
 
             if (response.ok) {
-                router.push(`/invoices/${id}`);
+                router.push(`/invoices/${id}?category=${category}`);
             } else {
                 const error = await response.json();
                 alert(error.error || 'Failed to update invoice');
@@ -178,30 +212,34 @@ export default function EditInvoicePage({ params }: { params: Promise<{ id: stri
                 <div className="flex flex-col gap-8">
                     <form onSubmit={handleSubmit} className="space-y-8">
                         {/* Job Info Summary Card */}
-                        <div className="bg-primary/5 border border-primary/20 p-6 rounded-[2rem] flex flex-wrap gap-12 items-center">
+                        <div className={`border p-6 rounded-[2rem] flex flex-wrap gap-12 items-center ${category === 'SERVICE' ? 'bg-blue-600/5 border-blue-600/20' : 'bg-purple-600/5 border-purple-600/20'}`}>
                             <div className="flex items-center gap-3">
-                                <User className="text-primary" size={18} />
+                                <User className={category === 'SERVICE' ? 'text-blue-600' : 'text-purple-600'} size={18} />
                                 <div>
                                     <p className="text-subtext">Customer</p>
                                     <p className="text-sm font-black text-foreground">{job?.customer?.name || '---'}</p>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-3">
-                                <Briefcase className="text-primary" size={18} />
-                                <div>
-                                    <p className="text-subtext">Linked Job</p>
-                                    <p className="text-sm font-black text-foreground">{job?.jobNumber || '---'}</p>
+                            {category === 'SERVICE' && (
+                                <div className="flex items-center gap-3">
+                                    <Briefcase className="text-blue-600" size={18} />
+                                    <div>
+                                        <p className="text-subtext">Linked Job</p>
+                                        <p className="text-sm font-black text-foreground">{job?.jobNumber || '---'}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <Hash className="text-primary" size={18} />
-                                <div>
-                                    <p className="text-subtext">Containers</p>
-                                    <p className="text-sm font-black text-foreground">
-                                        {job?.containerNo ? job.containerNo.split(',').filter(x => x.trim()).length : 0} Total
-                                    </p>
+                            )}
+                            {category === 'SERVICE' && (
+                                <div className="flex items-center gap-3">
+                                    <Hash className="text-blue-600" size={18} />
+                                    <div>
+                                        <p className="text-subtext">Containers</p>
+                                        <p className="text-sm font-black text-foreground">
+                                            {job?.containerNo ? job.containerNo.split(',').filter(x => x.trim()).length : 0} Total
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                             <div className="ml-auto flex items-center gap-4">
                                 <div className="text-right">
                                     <p className="text-subtext">Status</p>
@@ -247,13 +285,44 @@ export default function EditInvoicePage({ params }: { params: Promise<{ id: stri
                                         <option value="EUR">EUR - Euro</option>
                                     </select>
                                 </div>
+
+                                {category === 'FREIGHT' && (
+                                    <>
+                                        <div className="space-y-1">
+                                            <label className="text-subtext ml-1">Freight Rate (USD)</label>
+                                            <div className="relative">
+                                                <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
+                                                <input
+                                                    type="number"
+                                                    step="0.01"
+                                                    className="glass-input w-full pl-10"
+                                                    value={invoiceData.usdRate}
+                                                    onChange={(e) => setInvoiceData({ ...invoiceData, usdRate: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-subtext ml-1">Exchange Rate (PKR)</label>
+                                            <div className="relative">
+                                                <ArrowRightLeft className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
+                                                <input
+                                                    type="number"
+                                                    step="0.01"
+                                                    className="glass-input w-full pl-10"
+                                                    value={invoiceData.exchangeRate}
+                                                    onChange={(e) => setInvoiceData({ ...invoiceData, exchangeRate: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
 
                             {/* Items Table */}
                             <div className="space-y-4 mb-10">
                                 <div className="flex items-center justify-between mb-4">
                                     <h3 className="text-sm text-heading flex items-center gap-2">
-                                        <CreditCard size={16} className="text-primary" />
+                                        <CreditCard size={16} className={category === 'SERVICE' ? 'text-blue-600' : 'text-purple-600'} />
                                         Invoice Items
                                     </h3>
                                     <button
@@ -270,6 +339,7 @@ export default function EditInvoicePage({ params }: { params: Promise<{ id: stri
                                         <thead>
                                             <tr className="border-b border-border/50">
                                                 <th className="py-3 px-4 text-subtext">Description</th>
+                                                {category === 'FREIGHT' && <th className="py-3 px-4 text-subtext w-48">Vendor / Expense</th>}
                                                 <th className="py-3 px-4 text-subtext w-24">Qty</th>
                                                 <th className="py-3 px-4 text-subtext w-32">Rate</th>
                                                 <th className="py-3 px-4 text-subtext w-24">Tax %</th>
@@ -288,6 +358,20 @@ export default function EditInvoicePage({ params }: { params: Promise<{ id: stri
                                                             placeholder="Item description..."
                                                         />
                                                     </td>
+                                                    {category === 'FREIGHT' && (
+                                                        <td className="py-2 px-1">
+                                                            <select
+                                                                className="w-full bg-transparent px-3 py-2 text-sm font-bold text-foreground focus:outline-none focus:bg-primary/5 rounded-lg transition-all"
+                                                                value={item.vendorId || ''}
+                                                                onChange={(e) => updateItem(idx, 'vendorId', e.target.value)}
+                                                            >
+                                                                <option value="">No Vendor (Direct)</option>
+                                                                {vendors.map(v => (
+                                                                    <option key={v.id} value={v.id}>{v.name}</option>
+                                                                ))}
+                                                            </select>
+                                                        </td>
+                                                    )}
                                                     <td className="py-2 px-1">
                                                         <input
                                                             type="number"
@@ -347,7 +431,7 @@ export default function EditInvoicePage({ params }: { params: Promise<{ id: stri
                                 <div className="flex flex-col items-end gap-6 w-full md:w-auto">
                                     <div className="text-right">
                                         <p className="text-subtext mb-1">Grand Total</p>
-                                        <p className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                                        <p className={`text-5xl font-black tracking-tighter leading-none ${category === 'SERVICE' ? 'text-blue-600' : 'text-purple-600'}`}>
                                             <span className="text-xs text-primary mr-2 uppercase tracking-widest font-black">{invoiceData.currencyCode}</span>
                                             {grandTotal.toLocaleString()}
                                         </p>

@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
 }
 
 datasource db {
@@ -37,7 +36,8 @@ model Company {
   expenses          Expense[]
   expensesMaster    ExpenseMaster[]
   financialPeriods  FinancialPeriod[]
-  invoices          Invoice[]
+  serviceInvoices   ServiceInvoice[]
+  freightInvoices   FreightInvoice[]
   jobs              Job[]
   payments          Payment[]
   ports             Port[]
@@ -146,9 +146,10 @@ model Customer {
   updatedAt DateTime  @updatedAt
   division  String?   @default("logistics")
   account   Account?  @relation(fields: [accountId], references: [id])
-  company   Company   @relation(fields: [companyId], references: [id])
-  invoices  Invoice[]
-  jobs      Job[]
+  company         Company          @relation(fields: [companyId], references: [id])
+  serviceInvoices ServiceInvoice[]
+  freightInvoices FreightInvoice[]
+  jobs            Job[]
   payments  Payment[]
 }
 
@@ -169,8 +170,9 @@ model Vendor {
   expenses         Expense[]
   payments         Payment[]
   purchaseInvoices PurchaseInvoice[]
-  account          Account?          @relation(fields: [accountId], references: [id])
-  company          Company           @relation(fields: [companyId], references: [id])
+  account          Account?             @relation(fields: [accountId], references: [id])
+  company          Company              @relation(fields: [companyId], references: [id])
+  freightItems     FreightInvoiceItem[]
 }
 
 model Job {
@@ -202,10 +204,11 @@ model Job {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
-  division    String?   @default("logistics")
-  expenses    Expense[]
-  invoice     Invoice?
-  branch      Branch?   @relation(fields: [branchId], references: [id])
+  division       String?         @default("logistics")
+  expenses       Expense[]
+  serviceInvoice ServiceInvoice?
+  freightInvoice FreightInvoice?
+  branch         Branch?         @relation(fields: [branchId], references: [id])
   company     Company   @relation(fields: [companyId], references: [id])
   customer    Customer  @relation(fields: [customerId], references: [id])
   pod         Port?     @relation(fields: [podId], references: [id])
@@ -240,14 +243,14 @@ model Expense {
   vendor       Vendor?  @relation(fields: [vendorId], references: [id])
 }
 
-model Invoice {
-  id            Int           @id @default(autoincrement())
+model ServiceInvoice {
+  id            Int                  @id @default(autoincrement())
   invoiceNumber String
-  date          DateTime      @default(now())
-  jobId         Int           @unique
+  date          DateTime             @default(now())
+  jobId         Int                  @unique
   customerId    Int
-  type          InvoiceType   @default(MASTER)
-  status        InvoiceStatus @default(DRAFT)
+  type          InvoiceType          @default(MASTER)
+  status        InvoiceStatus        @default(DRAFT)
   masterNumber  String?
   agentCode     String?
   shippingLine  String?
@@ -255,42 +258,92 @@ model Invoice {
   destination   String?
   creditDays    Int?
   vendorType    String?
-  totalAmount   Float         @default(0.0)
-  taxAmount     Float         @default(0.0)
-  grandTotal    Float         @default(0.0)
-  currencyCode  String        @default("PKR")
-  exchangeRate  Float         @default(1.0)
-  isApproved    Boolean       @default(false)
+  totalAmount   Float                @default(0.0)
+  taxAmount     Float                @default(0.0)
+  grandTotal    Float                @default(0.0)
+  currencyCode  String               @default("PKR")
+  exchangeRate  Float                @default(1.0)
+  isApproved    Boolean              @default(false)
   approvedById  Int?
-  isLocked      Boolean       @default(false)
+  isLocked      Boolean              @default(false)
   lockedAt      DateTime?
   companyId     Int
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  transactionId Int?          @unique
-  division      String?       @default("logistics")
-  company       Company       @relation(fields: [companyId], references: [id])
-  customer      Customer      @relation(fields: [customerId], references: [id])
-  job           Job           @relation(fields: [jobId], references: [id])
-  transaction   Transaction?  @relation(fields: [transactionId], references: [id])
-  items         InvoiceItem[]
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  transactionId Int?                 @unique
+  division      String?              @default("logistics")
+  company       Company              @relation(fields: [companyId], references: [id])
+  customer      Customer             @relation(fields: [customerId], references: [id])
+  job           Job                  @relation(fields: [jobId], references: [id])
+  transaction   Transaction?         @relation(fields: [transactionId], references: [id])
+  items         ServiceInvoiceItem[]
+
+  @@unique([companyId, invoiceNumber])
+  @@map("Invoice")
+}
+
+model ServiceInvoiceItem {
+  id            Int            @id @default(autoincrement())
+  invoiceId     Int
+  description   String
+  quantity      Float          @default(1.0)
+  rate          Float          @default(0.0)
+  amount        Float
+  taxPercentage Float          @default(0.0)
+  taxAmount     Float          @default(0.0)
+  total         Float
+  productId     Int?
+  invoice       ServiceInvoice @relation(fields: [invoiceId], references: [id])
+  product       Product?       @relation(fields: [productId], references: [id])
+
+  @@map("InvoiceItem")
+}
+
+model FreightInvoice {
+  id            Int                  @id @default(autoincrement())
+  invoiceNumber String
+  date          DateTime             @default(now())
+  jobId         Int?                 @unique
+  customerId    Int
+  type          InvoiceType          @default(MASTER)
+  status        InvoiceStatus        @default(DRAFT)
+  usdRate       Float                @default(0.0)
+  exchangeRate  Float                @default(1.0)
+  totalAmount   Float                @default(0.0)
+  taxAmount     Float                @default(0.0)
+  grandTotal    Float                @default(0.0)
+  currencyCode  String               @default("PKR")
+  isApproved    Boolean              @default(false)
+  approvedById  Int?
+  isLocked      Boolean              @default(false)
+  lockedAt      DateTime?
+  companyId     Int
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  transactionId Int?                 @unique
+  division      String?              @default("logistics")
+  company       Company              @relation(fields: [companyId], references: [id])
+  customer      Customer             @relation(fields: [customerId], references: [id])
+  transaction   Transaction?         @relation(fields: [transactionId], references: [id])
+  job           Job?                 @relation(fields: [jobId], references: [id])
+  items         FreightInvoiceItem[]
 
   @@unique([companyId, invoiceNumber])
 }
 
-model InvoiceItem {
-  id            Int      @id @default(autoincrement())
+model FreightInvoiceItem {
+  id            Int            @id @default(autoincrement())
   invoiceId     Int
   description   String
-  quantity      Float    @default(1.0)
-  rate          Float    @default(0.0)
+  quantity      Float          @default(1.0)
+  rate          Float          @default(0.0)
   amount        Float
-  taxPercentage Float    @default(0.0)
-  taxAmount     Float    @default(0.0)
+  taxPercentage Float          @default(0.0)
+  taxAmount     Float          @default(0.0)
   total         Float
-  productId     Int?
-  invoice       Invoice  @relation(fields: [invoiceId], references: [id])
-  product       Product? @relation(fields: [productId], references: [id])
+  vendorId      Int?
+  invoice       FreightInvoice @relation(fields: [invoiceId], references: [id])
+  vendor        Vendor?        @relation(fields: [vendorId], references: [id])
 }
 
 model ProductCategory {
@@ -319,7 +372,7 @@ model Product {
   createdAt     DateTime              @default(now())
   updatedAt     DateTime              @updatedAt
   deletedAt     DateTime?
-  invoiceItems  InvoiceItem[]
+  serviceItems  ServiceInvoiceItem[]
   category      ProductCategory       @relation(fields: [categoryId], references: [id])
   company       Company               @relation(fields: [companyId], references: [id])
   purchaseItems PurchaseInvoiceItem[]
@@ -426,10 +479,11 @@ model Transaction {
   companyId   Int
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
-  isLocked    Boolean          @default(false)
-  entries     AccountEntry[]
-  invoice     Invoice?
-  payment     Payment?
+  isLocked Boolean         @default(false)
+  entries  AccountEntry[]
+  service  ServiceInvoice?
+  freight  FreightInvoice?
+  payment  Payment?
   purchase    PurchaseInvoice?
   company     Company          @relation(fields: [companyId], references: [id])
 
