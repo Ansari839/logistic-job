@@ -204,13 +204,13 @@ export default function ReportViewer({ report }: ReportViewerProps) {
                     <div className="space-y-6">
                         {ledgerSummary && (
                             <div className="grid grid-cols-2 gap-4 mb-6">
-                                <div className="p-6 bg-slate-950/60 rounded-3xl border border-white/5 flex flex-col items-center justify-center gap-2">
+                                <div className="p-6 glass-panel rounded-3xl border border-white/5 flex flex-col items-center justify-center gap-2">
                                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Opening Balance</span>
                                     <span className={`text-xl font-black ${ledgerSummary.openingBalance >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
                                         {Math.abs(ledgerSummary.openingBalance).toLocaleString()} <span className="text-[8px] opacity-50 uppercase">{ledgerSummary.openingBalance >= 0 ? 'DR' : 'CR'} PKR</span>
                                     </span>
                                 </div>
-                                <div className="p-6 bg-slate-950/60 rounded-3xl border border-white/5 flex flex-col items-center justify-center gap-2">
+                                <div className="p-6 glass-panel rounded-3xl border border-white/5 flex flex-col items-center justify-center gap-2">
                                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Closing Balance</span>
                                     <span className={`text-xl font-black ${ledgerSummary.closingBalance >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
                                         {Math.abs(ledgerSummary.closingBalance).toLocaleString()} <span className="text-[8px] opacity-50 uppercase">{ledgerSummary.closingBalance >= 0 ? 'DR' : 'CR'} PKR</span>
@@ -220,7 +220,7 @@ export default function ReportViewer({ report }: ReportViewerProps) {
                         )}
 
                         {data.length > 0 ? (
-                            <div className="overflow-x-auto rounded-3xl border border-white/5 bg-slate-950/40">
+                            <div className="overflow-x-auto rounded-3xl border border-white/5 bg-slate-950">
                                 <table className="w-full text-left border-collapse">
                                     <thead>
                                         <tr className="bg-white/[0.02]">
@@ -272,7 +272,7 @@ export default function ReportViewer({ report }: ReportViewerProps) {
                             </div>
                         ) : (
                             <div className="flex flex-col items-center justify-center p-20 text-center space-y-4">
-                                <div className="p-6 bg-slate-950 rounded-full border border-white/5 mb-4">
+                                <div className="p-6 glass-panel rounded-full border border-white/5 mb-4">
                                     <Search size={32} className="text-slate-800" />
                                 </div>
                                 <h4 className="text-white font-black uppercase tracking-widest">No Data Discovered</h4>
