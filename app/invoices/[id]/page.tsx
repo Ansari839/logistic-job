@@ -54,6 +54,7 @@ interface Invoice {
         address: string | null;
         phone: string | null;
         email: string | null;
+        taxNumber: string | null;
         logo: string | null;
     };
 }
@@ -147,8 +148,11 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                                 </div>
                             )}
                             <div className="space-y-1 text-slate-500 text-sm">
-                                <p className="font-bold flex items-center gap-2"><MapPin size={14} /> {invoice.company.address || 'Address Placeholder'}</p>
+                                <p className="font-bold flex items-center gap-2"><MapPin size={14} /> {invoice.company.address || 'Address Not Set'}</p>
                                 <p className="font-bold flex items-center gap-2"><Building2 size={14} /> {invoice.company.email} | {invoice.company.phone}</p>
+                                {invoice.company.taxNumber && (
+                                    <p className="font-black text-[10px] text-blue-600 uppercase tracking-widest mt-2">NTN: {invoice.company.taxNumber}</p>
+                                )}
                             </div>
                         </div>
                         <div className="text-right">

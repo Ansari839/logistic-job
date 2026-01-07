@@ -6,7 +6,7 @@ import { z } from 'zod';
 const loginSchema = z.object({
     email: z.string().email(),
     password: z.string().min(6),
-    division: z.string(),
+    division: z.string().optional().default('logistics'),
 });
 
 export async function POST(request: Request) {
@@ -25,10 +25,11 @@ export async function POST(request: Request) {
             );
         }
 
-        // Division Check
-        if (user.division && user.division !== division) {
+        // Simplified Division Check: User must match 'logistics' if they have a division
+        if (user.division && user.division !== 'logistics') {
+            // For now, we block others since we removed feed
             return NextResponse.json(
-                { error: `This account is registered for ${user.division.toUpperCase()} Hub only.` },
+                { error: `This account is registered for ${user.division.toUpperCase()} Hub, which is currently inactive.` },
                 { status: 403 }
             );
         }

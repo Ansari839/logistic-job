@@ -10,21 +10,21 @@ export async function GET() {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user with company info
-    const dbUser = await prisma.user.findUnique({
-        where: { id: user.id },
-        include: {
-            company: {
-                include: { branches: true }
-            }
-        },
+    // Get company directly
+    if (!user.companyId) {
+        return NextResponse.json({ error: 'User has no company assigned' }, { status: 400 });
+    }
+
+    const company = await prisma.company.findUnique({
+        where: { id: user.companyId },
+        include: { branches: true }
     });
 
-    if (!dbUser?.company) {
+    if (!company) {
         return NextResponse.json({ error: 'Company not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ company: dbUser.company });
+    return NextResponse.json({ company });
 }
 
 export async function PATCH(request: Request) {

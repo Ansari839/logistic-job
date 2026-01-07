@@ -125,23 +125,23 @@ exports.Prisma.CompanyScalarFieldEnum = {
   name: 'name',
   uniqueId: 'uniqueId',
   address: 'address',
-  city: 'city',
-  state: 'state',
-  postalCode: 'postalCode',
-  country: 'country',
   phone: 'phone',
   email: 'email',
-  website: 'website',
-  taxNumber: 'taxNumber',
-  registrationNo: 'registrationNo',
   industry: 'industry',
   logo: 'logo',
-  tagline: 'tagline',
   themeConfig: 'themeConfig',
-  fiscalYearStart: 'fiscalYearStart',
-  fiscalYearEnd: 'fiscalYearEnd',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  city: 'city',
+  country: 'country',
+  fiscalYearEnd: 'fiscalYearEnd',
+  fiscalYearStart: 'fiscalYearStart',
+  postalCode: 'postalCode',
+  registrationNo: 'registrationNo',
+  state: 'state',
+  tagline: 'tagline',
+  taxNumber: 'taxNumber',
+  website: 'website'
 };
 
 exports.Prisma.BranchScalarFieldEnum = {
@@ -216,9 +216,9 @@ exports.Prisma.CustomerScalarFieldEnum = {
   taxNumber: 'taxNumber',
   accountId: 'accountId',
   companyId: 'companyId',
-  division: 'division',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  division: 'division'
 };
 
 exports.Prisma.VendorScalarFieldEnum = {
@@ -232,9 +232,9 @@ exports.Prisma.VendorScalarFieldEnum = {
   taxNumber: 'taxNumber',
   accountId: 'accountId',
   companyId: 'companyId',
-  division: 'division',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  division: 'division'
 };
 
 exports.Prisma.JobScalarFieldEnum = {
@@ -262,11 +262,11 @@ exports.Prisma.JobScalarFieldEnum = {
   handledBy: 'handledBy',
   salesPerson: 'salesPerson',
   companyId: 'companyId',
-  division: 'division',
   branchId: 'branchId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  deletedAt: 'deletedAt',
+  division: 'division'
 };
 
 exports.Prisma.ExpenseMasterScalarFieldEnum = {
@@ -317,10 +317,10 @@ exports.Prisma.InvoiceScalarFieldEnum = {
   isLocked: 'isLocked',
   lockedAt: 'lockedAt',
   companyId: 'companyId',
-  division: 'division',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  transactionId: 'transactionId'
+  transactionId: 'transactionId',
+  division: 'division'
 };
 
 exports.Prisma.InvoiceItemScalarFieldEnum = {
@@ -422,9 +422,9 @@ exports.Prisma.AccountScalarFieldEnum = {
   description: 'description',
   parentId: 'parentId',
   companyId: 'companyId',
-  division: 'division',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  division: 'division'
 };
 
 exports.Prisma.TransactionScalarFieldEnum = {
@@ -460,9 +460,9 @@ exports.Prisma.PaymentScalarFieldEnum = {
   vendorId: 'vendorId',
   transactionId: 'transactionId',
   companyId: 'companyId',
-  division: 'division',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  division: 'division'
 };
 
 exports.Prisma.AuditLogScalarFieldEnum = {
@@ -499,8 +499,14 @@ exports.Prisma.VoucherScalarFieldEnum = {
   id: 'id',
   voucherNumber: 'voucherNumber',
   voucherType: 'voucherType',
+  status: 'status',
   date: 'date',
-  description: 'description',
+  postingDate: 'postingDate',
+  paymentMode: 'paymentMode',
+  instrumentNo: 'instrumentNo',
+  instrumentDate: 'instrumentDate',
+  bankName: 'bankName',
+  narration: 'narration',
   companyId: 'companyId',
   division: 'division',
   isPosted: 'isPosted',
@@ -602,7 +608,14 @@ exports.PaymentMode = exports.$Enums.PaymentMode = {
 exports.VoucherType = exports.$Enums.VoucherType = {
   PAYMENT: 'PAYMENT',
   RECEIPT: 'RECEIPT',
-  JOURNAL: 'JOURNAL'
+  JOURNAL: 'JOURNAL',
+  CONTRA: 'CONTRA'
+};
+
+exports.VoucherStatus = exports.$Enums.VoucherStatus = {
+  DRAFT: 'DRAFT',
+  POSTED: 'POSTED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.Prisma.ModelName = {

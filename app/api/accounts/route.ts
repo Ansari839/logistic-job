@@ -1,14 +1,8 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/app/generated/prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth';
 import { z } from 'zod';
-
-const adapter = new PrismaPg({
-    connectionString: process.env.DATABASE_URL!,
-});
-const prisma = new PrismaClient({ adapter });
+import prisma from '@/lib/prisma';
 
 const accountSchema = z.object({
     code: z.string().min(1),
@@ -83,7 +77,12 @@ export async function GET(request: Request) {
         const accounts = await prisma.account.findMany({
             where: {
                 companyId: user.companyId,
-                division: user.division,
+                ...(user.division ? {
+                    OR: [
+                        { division: user.division },
+                        { division: null }
+                    ]
+                } : {}),
                 ...(typeFilter ? { type: typeFilter as any } : {})
             },
             include: {

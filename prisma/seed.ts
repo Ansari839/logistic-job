@@ -39,22 +39,9 @@ async function main() {
         },
     });
 
-    // 3. Animal Feed Company
-    const feed = await prisma.company.upsert({
-        where: { uniqueId: 'FEED-001' },
-        update: {},
-        create: {
-            name: "Animal Feed Co.",
-            uniqueId: "FEED-001",
-            email: "info@feedco.com",
-            industry: "Agriculture",
-            themeConfig: { primaryColor: '#10b981', darkMode: true },
-        },
-    });
-
     const pass = await bcrypt.hash('password123', 10);
 
-    // 4. Users
+    // 3. User
     await prisma.user.upsert({
         where: { email: 'admin@logistics.com' },
         update: { companyId: logos.id, division: 'logistics', password: pass },
@@ -65,19 +52,6 @@ async function main() {
             role: 'ADMIN',
             division: 'logistics',
             companyId: logos.id,
-        },
-    });
-
-    await prisma.user.upsert({
-        where: { email: 'admin@feed.com' },
-        update: { companyId: feed.id, division: 'animal-feed', password: pass },
-        create: {
-            name: "Animal Feed Admin",
-            email: "admin@feed.com",
-            password: pass,
-            role: 'ADMIN',
-            division: 'animal-feed',
-            companyId: feed.id,
         },
     });
 

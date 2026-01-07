@@ -7,10 +7,7 @@ import { usePathname } from 'next/navigation';
 import { Building2, Globe, Percent, Settings as SettingsIcon, MapPin } from 'lucide-react';
 
 const settingsNav = [
-    { name: 'Company Profile', href: '/settings/profile', icon: Building2 },
-    { name: 'Currencies', href: '/settings/currencies', icon: Globe },
-    { name: 'Tax Rules', href: '/settings/taxes', icon: Percent },
-    { name: 'System Config', href: '/settings/system', icon: SettingsIcon },
+    { name: 'System Dashboard', href: '/settings/system', icon: SettingsIcon },
     { name: 'Ports (POD)', href: '/settings/pods', icon: MapPin },
 ];
 

@@ -60,10 +60,17 @@ export default function UsersPage() {
             const url = editingUser ? `/api/users/${editingUser.id}` : '/api/users';
             const method = editingUser ? 'PATCH' : 'POST';
 
+            // Clean payload
+            const payload: any = { ...formData };
+            if (editingUser) {
+                delete payload.email; // Email usually not editable
+                if (!payload.password) delete payload.password;
+            }
+
             const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(payload),
             });
 
             if (res.ok) {
@@ -148,10 +155,10 @@ export default function UsersPage() {
                                 <Users size={28} className="text-blue-600 dark:text-blue-400" />
                             </div>
                             <div>
-                                <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">
+                                <h1 className="text-2xl font-black text-heading tracking-tight uppercase">
                                     User Management
                                 </h1>
-                                <p className="text-sm text-slate-500 font-medium">Manage system users and permissions</p>
+                                <p className="text-sm text-muted-foreground font-medium">Manage system users and permissions</p>
                             </div>
                         </div>
                         <button
@@ -173,7 +180,7 @@ export default function UsersPage() {
                             placeholder="Search users by name or email..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="w-full pl-12 pr-4 py-3 bg-slate-900/50 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+                            className="w-full pl-12 pr-4 py-3 glass-input placeholder-muted-foreground focus:outline-none focus:border-primary transition-colors"
                         />
                     </div>
                 </div>
@@ -193,19 +200,19 @@ export default function UsersPage() {
                     ) : (
                         <div className="overflow-x-auto">
                             <table className="w-full">
-                                <thead className="bg-slate-900/50 border-b border-slate-800">
+                                <thead className="bg-secondary/50 border-b border-border">
                                     <tr>
-                                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-slate-400">Name</th>
-                                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-slate-400">Email</th>
-                                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-slate-400">Role</th>
-                                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-slate-400">Division</th>
-                                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-slate-400">Branch</th>
-                                        <th className="px-6 py-4 text-right text-xs font-black uppercase tracking-widest text-slate-400">Actions</th>
+                                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">Name</th>
+                                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">Email</th>
+                                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">Role</th>
+                                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">Division</th>
+                                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">Branch</th>
+                                        <th className="px-6 py-4 text-right text-xs font-black uppercase tracking-widest text-muted-foreground">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-800">
                                     {users.map((user) => (
-                                        <tr key={user.id} className="hover:bg-slate-900/30 transition-colors">
+                                        <tr key={user.id} className="hover:bg-muted/50 transition-colors">
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center border border-blue-500/30">
@@ -213,17 +220,17 @@ export default function UsersPage() {
                                                             {user.name?.charAt(0).toUpperCase() || user.email.charAt(0).toUpperCase()}
                                                         </span>
                                                     </div>
-                                                    <span className="font-semibold text-white">{user.name || 'N/A'}</span>
+                                                    <span className="font-semibold text-foreground">{user.name || 'N/A'}</span>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4 text-slate-300">{user.email}</td>
+                                            <td className="px-6 py-4 text-muted-foreground">{user.email}</td>
                                             <td className="px-6 py-4">
                                                 <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getRoleBadgeColor(user.role)}`}>
                                                     {user.role}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-slate-300 capitalize">{user.division || '-'}</td>
-                                            <td className="px-6 py-4 text-slate-300">{user.branch || '-'}</td>
+                                            <td className="px-6 py-4 text-muted-foreground capitalize">{user.division || '-'}</td>
+                                            <td className="px-6 py-4 text-muted-foreground">{user.branch || '-'}</td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center justify-end gap-2">
                                                     <button
@@ -252,38 +259,38 @@ export default function UsersPage() {
 
                 {/* User Modal */}
                 {showModal && (
-                    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                         <div className="glass-card max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                            <div className="p-6 border-b border-slate-800">
-                                <h2 className="text-2xl font-black text-white uppercase tracking-tight">
+                            <div className="p-6 border-b border-border">
+                                <h2 className="text-2xl font-black text-heading uppercase tracking-tight">
                                     {editingUser ? 'Edit User' : 'Add New User'}
                                 </h2>
                             </div>
                             <form onSubmit={handleSubmit} className="p-6 space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-400 mb-2">Name *</label>
+                                        <label className="block text-sm font-bold text-muted-foreground mb-2">Name *</label>
                                         <input
                                             type="text"
                                             required
                                             value={formData.name}
                                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                            className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                                            className="w-full glass-input"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-400 mb-2">Email *</label>
+                                        <label className="block text-sm font-bold text-muted-foreground mb-2">Email *</label>
                                         <input
                                             type="email"
                                             required
                                             disabled={!!editingUser}
                                             value={formData.email}
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500 disabled:opacity-50"
+                                            className="w-full glass-input disabled:opacity-50"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-400 mb-2">
+                                        <label className="block text-sm font-bold text-muted-foreground mb-2">
                                             Password {editingUser ? '(leave blank to keep current)' : '*'}
                                         </label>
                                         <input
@@ -291,59 +298,59 @@ export default function UsersPage() {
                                             required={!editingUser}
                                             value={formData.password}
                                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                            className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                                            className="w-full glass-input"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-400 mb-2">Role *</label>
+                                        <label className="block text-sm font-bold text-muted-foreground mb-2">Role *</label>
                                         <select
                                             required
                                             value={formData.role}
                                             onChange={(e) => setFormData({ ...formData, role: e.target.value as any })}
-                                            className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                                            className="w-full glass-input"
                                         >
-                                            <option value="OPERATOR">Operator</option>
-                                            <option value="SALES">Sales</option>
-                                            <option value="ACCOUNTS">Accounts</option>
-                                            <option value="ADMIN">Admin</option>
+                                            <option className="bg-card text-foreground" value="OPERATOR">Operator</option>
+                                            <option className="bg-card text-foreground" value="SALES">Sales</option>
+                                            <option className="bg-card text-foreground" value="ACCOUNTS">Accounts</option>
+                                            <option className="bg-card text-foreground" value="ADMIN">Admin</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-400 mb-2">Division</label>
+                                        <label className="block text-sm font-bold text-muted-foreground mb-2">Division</label>
                                         <select
                                             value={formData.division}
                                             onChange={(e) => setFormData({ ...formData, division: e.target.value })}
-                                            className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                                            className="w-full glass-input"
                                         >
-                                            <option value="logistics">Logistics</option>
-                                            <option value="animal-feed">Animal Feed</option>
+                                            <option className="bg-card text-foreground" value="logistics">Logistics</option>
+                                            <option className="bg-card text-foreground" value="animal-feed">Animal Feed</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-400 mb-2">Branch</label>
+                                        <label className="block text-sm font-bold text-muted-foreground mb-2">Branch</label>
                                         <input
                                             type="text"
                                             value={formData.branch}
                                             onChange={(e) => setFormData({ ...formData, branch: e.target.value })}
-                                            className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                                            className="w-full glass-input"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-400 mb-2">Department</label>
+                                        <label className="block text-sm font-bold text-muted-foreground mb-2">Department</label>
                                         <input
                                             type="text"
                                             value={formData.department}
                                             onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                                            className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                                            className="w-full glass-input"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-400 mb-2">Region</label>
+                                        <label className="block text-sm font-bold text-muted-foreground mb-2">Region</label>
                                         <input
                                             type="text"
                                             value={formData.region}
                                             onChange={(e) => setFormData({ ...formData, region: e.target.value })}
-                                            className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                                            className="w-full glass-input"
                                         />
                                     </div>
                                 </div>
@@ -351,14 +358,14 @@ export default function UsersPage() {
                                     <button
                                         type="button"
                                         onClick={() => { setShowModal(false); resetForm(); }}
-                                        className="flex-1 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-colors font-bold"
+                                        className="glass-button-secondary flex-1"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl transition-colors font-bold disabled:opacity-50 flex items-center justify-center gap-2"
+                                        className="glass-button flex-1"
                                     >
                                         {loading ? <Loader2 className="animate-spin" size={20} /> : null}
                                         {editingUser ? 'Update User' : 'Create User'}

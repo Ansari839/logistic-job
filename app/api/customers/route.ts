@@ -47,28 +47,19 @@ export async function POST(request: Request) {
 
     try {
         const body = await request.json();
-        console.log("POST /api/customers - Body:", body);
         const { name, code, address, phone, email, taxNumber } = body;
 
-        console.log("User Company ID:", user.companyId);
-
         if (!name || !code) {
-            console.log("Validation failed: Name or Code missing");
             return NextResponse.json({ error: 'Name and Code are required' }, { status: 400 });
         }
 
-        console.log("Starting sequential operations (no transaction)...");
-
         // 1. Find parent account
-        console.log("Finding parent account...");
         const parentAccount = await prisma.account.findUnique({
             where: { companyId_code: { companyId: user.companyId, code: '1230' } }
         });
-        console.log("Parent account found:", parentAccount?.id);
 
         // 2. Create sub-account
         const accountCode = `${parentAccount?.code || '1230'}-${code}`;
-        console.log("Creating sub-account:", accountCode);
 
         let customerAccount;
         try {
@@ -81,7 +72,6 @@ export async function POST(request: Request) {
                     parentId: parentAccount?.id
                 }
             });
-            console.log("Sub-account created:", customerAccount.id);
         } catch (accError: any) {
             console.error("Account creation failed:", accError);
             if (accError.code === 'P2002') {
@@ -91,7 +81,6 @@ export async function POST(request: Request) {
         }
 
         // 3. Create Customer
-        console.log("Creating Customer record...");
         const customer = await prisma.customer.create({
             data: {
                 name,
@@ -105,7 +94,6 @@ export async function POST(request: Request) {
                 accountId: customerAccount.id
             }
         });
-        console.log("Transaction successful. Customer ID:", customer.id);
 
         return NextResponse.json({ customer });
     } catch (error: any) {

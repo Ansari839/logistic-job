@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { verifyToken } from '@/lib/auth';
+import { verifyToken, getAuthToken } from '@/lib/auth';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 
@@ -18,7 +18,8 @@ const userSchema = z.object({
 // GET /api/users - List all users (filtered by company)
 export async function GET(req: NextRequest) {
     try {
-        const user = await verifyToken(req);
+        const token = await getAuthToken();
+        const user = token ? verifyToken(token) : null;
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
@@ -64,7 +65,8 @@ export async function GET(req: NextRequest) {
 // POST /api/users - Create new user
 export async function POST(req: NextRequest) {
     try {
-        const user = await verifyToken(req);
+        const token = await getAuthToken();
+        const user = token ? verifyToken(token) : null;
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
@@ -118,7 +120,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(newUser, { status: 201 });
     } catch (error) {
         if (error instanceof z.ZodError) {
-            return NextResponse.json({ error: 'Invalid input', details: error.errors }, { status: 400 });
+            return NextResponse.json({ error: 'Invalid input', details: error.issues }, { status: 400 });
         }
         console.error('Error creating user:', error);
         return NextResponse.json({ error: 'Failed to create user' }, { status: 500 });

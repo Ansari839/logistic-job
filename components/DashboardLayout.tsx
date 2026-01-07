@@ -19,7 +19,6 @@ interface NavItem {
     href: string;
     icon: React.ElementType;
     roles?: string[];
-    division?: 'logistics' | 'animal-feed' | 'both';
     attributes?: {
         branch?: string[];
         department?: string[];
@@ -27,18 +26,14 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-    { name: 'Overview', href: '/dashboard', icon: LayoutDashboard, division: 'both' },
-    { name: 'Users', href: '/users', icon: Users, roles: ['ADMIN'], division: 'both' },
-    { name: 'Jobs', href: '/jobs', icon: Package, roles: ['ADMIN', 'OPERATOR', 'SALES'], division: 'logistics' },
-    { name: 'Invoices', href: '/invoices', icon: FileText, roles: ['ADMIN', 'ACCOUNTS', 'SALES'], division: 'logistics' },
-    { name: 'Inventory', href: '/inventory', icon: Box, roles: ['ADMIN', 'OPERATOR', 'SALES'], division: 'animal-feed' },
-    { name: 'Purchases', href: '/purchases', icon: ShoppingBag, roles: ['ADMIN', 'ACCOUNTS'], division: 'animal-feed' },
-    { name: 'Chart of Accounts', href: '/accounts', icon: BookOpen, roles: ['ADMIN', 'ACCOUNTS'], division: 'both' },
-    { name: 'Journal Vouchers', href: '/vouchers', icon: ArrowRightLeft, roles: ['ADMIN', 'ACCOUNTS'], division: 'both' },
-    { name: 'Payments', href: '/payments', icon: CreditCard, roles: ['ADMIN', 'ACCOUNTS'], division: 'both' },
-    { name: 'Business Reports', href: '/reports', icon: BarChart2, roles: ['ADMIN', 'ACCOUNTS', 'OPERATOR', 'SALES'], division: 'both' },
-    { name: 'Audit Logs', href: '/settings/audit-logs', icon: HistoryIcon, roles: ['ADMIN'], division: 'both' },
-    { name: 'System Settings', href: '/settings/system', icon: Settings, roles: ['ADMIN'], division: 'both' },
+    { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Users', href: '/users', icon: Users, roles: ['ADMIN'] },
+    { name: 'Jobs', href: '/jobs', icon: Package, roles: ['ADMIN', 'OPERATOR', 'SALES'] },
+    { name: 'Invoices', href: '/invoices', icon: FileText, roles: ['ADMIN', 'ACCOUNTS', 'SALES'] },
+    { name: 'Chart of Accounts', href: '/accounts', icon: BookOpen, roles: ['ADMIN', 'ACCOUNTS'] },
+    { name: 'Journal Vouchers', href: '/vouchers', icon: ArrowRightLeft, roles: ['ADMIN', 'ACCOUNTS'] },
+    { name: 'Business Reports', href: '/reports', icon: BarChart2, roles: ['ADMIN', 'ACCOUNTS', 'OPERATOR', 'SALES'] },
+    { name: 'System Settings', href: '/settings/system', icon: Settings, roles: ['ADMIN'] },
 ];
 
 
@@ -48,34 +43,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const pathname = usePathname();
 
-    const [activeDivision, setActiveDivision] = useState<string | null>(null);
     const [companyName, setCompanyName] = useState('LogisticOS');
 
     React.useEffect(() => {
-        const getCookie = (name: string) => {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop()?.split(';').shift();
-        };
-
-        const cookieDiv = getCookie('app_division');
-        const stored = cookieDiv || localStorage.getItem('app_division') || 'logistics';
-
-        // Sync localStorage if needed
-        if (cookieDiv && cookieDiv !== localStorage.getItem('app_division')) {
-            localStorage.setItem('app_division', cookieDiv);
-        }
-
-        const initialDivision = user?.division || stored;
-        setActiveDivision(initialDivision);
-        setCompanyName(initialDivision === 'animal-feed' ? 'FeedOS' : 'LogisticOS');
-
         const fetchCompany = async () => {
             try {
                 const res = await fetch('/api/company');
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.name) setCompanyName(data.name);
+                    if (data.company?.name) setCompanyName(data.company.name);
                 }
             } catch (error) {
                 console.error('Failed to fetch company info');
@@ -92,7 +68,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
     const filteredNavItems = navItems.filter(item => {
         if (item.roles && !item.roles.includes(user.role)) return false;
-        if (activeDivision && item.division && item.division !== 'both' && item.division !== activeDivision) return false;
         if (item.attributes) {
             if (item.attributes.branch && user.branch && !item.attributes.branch.includes(user.branch)) return false;
             if (item.attributes.department && user.department && !item.attributes.department.includes(user.department)) return false;
@@ -100,9 +75,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         return true;
     });
 
-    const isAnimalFeed = activeDivision === 'animal-feed';
-    const accentColorClass = isAnimalFeed ? 'emerald' : 'blue';
-    const accentGradient = isAnimalFeed ? 'from-emerald-500 to-teal-500' : 'from-blue-500 to-indigo-500';
+    const accentGradient = 'from-blue-500 to-indigo-500';
 
     return (
         <div className="min-h-screen font-sans bg-background text-foreground">
@@ -120,13 +93,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         bg-card/80 border-border
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-                <div className="p-6 flex justify-between items-center">
-                    <h2 className={`text-xl font-bold bg-gradient-to-r ${accentGradient} bg-clip-text text-transparent truncate`} title={companyName}>
+                <div className="p-6 flex flex-col justify-center border-b border-border/10 bg-primary/5">
+                    <h2 className={`text-xl font-black italic tracking-tighter bg-gradient-to-r ${accentGradient} bg-clip-text text-transparent truncate`} title={companyName}>
                         {companyName}
                     </h2>
-                    <button className="lg:hidden p-2 rounded-lg hover:bg-accent/10 text-foreground" onClick={() => setIsSidebarOpen(false)}>
-                        <X size={20} />
-                    </button>
+                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-subtext mt-1 opacity-50">
+                        Logistics Intelligence
+                    </p>
                 </div>
 
                 <nav className="flex-1 px-4 space-y-1">
@@ -197,9 +170,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                        <div className={`hidden sm:block px-3 py-1 rounded-full 
-                            ${isAnimalFeed ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20' : 'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400 border-blue-200 dark:border-blue-500/20'}
-                            border text-[10px] font-bold uppercase tracking-wider`}>
+                        <div className="hidden sm:block px-3 py-1 rounded-full 
+                            bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400 border-blue-200 dark:border-blue-500/20
+                            border text-[10px] font-bold uppercase tracking-wider">
                             {user.branch || 'Head Office'}
                         </div>
                     </div>

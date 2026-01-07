@@ -29,7 +29,7 @@ export default function LandingPage() {
         </div>
 
         {/* Division Selection Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+        <div className="max-w-2xl w-full">
           {/* Logistics Hub */}
           <Link href="/login?division=logistics" className="group">
             <div className="h-[450px] relative overflow-hidden rounded-[3rem] border border-white/10 bg-slate-900/40 backdrop-blur-2xl p-10 flex flex-col justify-between transition-all duration-500 hover:border-blue-500/50 hover:bg-slate-900/60 hover:translate-y-[-10px] hover:shadow-2xl hover:shadow-blue-500/20">
@@ -51,33 +51,6 @@ export default function LandingPage() {
               <div className="flex items-center justify-between mt-8">
                 <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em]">LogisticOS Portal</span>
                 <div className="p-4 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/30 transition-all group-hover:rotate-[-45deg] group-hover:scale-110">
-                  <ArrowRight size={20} />
-                </div>
-              </div>
-            </div>
-          </Link>
-
-          {/* Animal Feed Hub */}
-          <Link href="/login?division=animal-feed" className="group">
-            <div className="h-[450px] relative overflow-hidden rounded-[3rem] border border-white/10 bg-slate-900/40 backdrop-blur-2xl p-10 flex flex-col justify-between transition-all duration-500 hover:border-emerald-500/50 hover:bg-slate-900/60 hover:translate-y-[-10px] hover:shadow-2xl hover:shadow-emerald-500/20">
-              {/* Card Background Pattern */}
-              <div className="absolute top-0 right-0 p-12 opacity-5 transition-opacity group-hover:opacity-10">
-                <Wheat size={300} />
-              </div>
-
-              <div>
-                <div className="w-16 h-16 rounded-2xl bg-emerald-600/10 border border-emerald-500/20 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                  <Wheat size={32} className="text-emerald-500" />
-                </div>
-                <h2 className="text-4xl font-black text-white mb-4 tracking-tighter uppercase italic">ANIMAL FEED</h2>
-                <p className="text-slate-400 leading-relaxed text-sm tracking-wide">
-                  End-to-end inventory control, procurement management, and warehouse optimization for agriculture supply chains.
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between mt-8">
-                <span className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.3em]">FeedOS Portal</span>
-                <div className="p-4 rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-600/30 transition-all group-hover:rotate-[-45deg] group-hover:scale-110">
                   <ArrowRight size={20} />
                 </div>
               </div>

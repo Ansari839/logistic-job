@@ -40,6 +40,7 @@ export default function ReportViewer({ report }: ReportViewerProps) {
         accountId: '',
     });
     const [accounts, setAccounts] = useState<any[]>([]);
+    const [company, setCompany] = useState<any>(null);
     const [ledgerSummary, setLedgerSummary] = useState<any>(null);
 
     useEffect(() => {
@@ -50,7 +51,15 @@ export default function ReportViewer({ report }: ReportViewerProps) {
                 setAccounts(result.accounts || []);
             }
         };
+        const fetchCompany = async () => {
+            const res = await fetch('/api/company');
+            if (res.ok) {
+                const result = await res.json();
+                setCompany(result.company);
+            }
+        };
         fetchAccounts();
+        fetchCompany();
     }, []);
 
     const fetchReport = async () => {
@@ -163,6 +172,29 @@ export default function ReportViewer({ report }: ReportViewerProps) {
 
             {/* Content Area */}
             <div className="p-8 min-h-[400px]">
+                {/* Print Branded Header */}
+                <div className="hidden print:block mb-8 border-b-2 border-black pb-6 text-black">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <h1 className="text-3xl font-black uppercase tracking-tighter italic">{report.name}</h1>
+                            <p className="text-xl font-bold mt-1">{company?.name || 'Logistics solutions'}</p>
+                            <div className="text-[10px] font-bold mt-1 uppercase tracking-widest text-slate-700">
+                                <p>{company?.address}</p>
+                                <p>{company?.phone} | {company?.email}</p>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <p className="text-[10px] font-black uppercase tracking-widest">Report Date</p>
+                            <p className="font-bold">{new Date().toLocaleDateString()}</p>
+                            {filters.startDate && (
+                                <p className="text-[10px] mt-2 font-black uppercase text-slate-500">
+                                    Period: {filters.startDate} to {filters.endDate}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
                 {loading ? (
                     <div className="flex flex-col items-center justify-center p-20 gap-4">
                         <Loader2 className="animate-spin text-blue-500" size={32} />
