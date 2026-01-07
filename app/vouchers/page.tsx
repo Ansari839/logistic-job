@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import {
     FileText, Plus, Search, Trash2,
     ArrowRightLeft, AlertCircle, CheckCircle2,
-    Calculator, Calendar, Hash, Loader2, Info
+    Calculator, Calendar, Hash, Loader2, Info,
+    ChevronDown, ChevronUp, Edit2, X, Printer,
+    Briefcase, ArrowUpRight, ArrowDownLeft
 } from 'lucide-react';
 
 interface Account {
@@ -19,15 +21,15 @@ interface Entry {
     debit: number;
     credit: number;
     description: string | null;
-    account: { name: string; code: string };
+    account: { id: number; name: string; code: string };
 }
 
 interface Voucher {
     id: number;
     voucherNumber: string;
     date: string;
-    description: string | null;
-    voucherType: 'JOURNAL' | 'PAYMENT' | 'RECEIPT';
+    narration: string | null;
+    voucherType: 'JOURNAL' | 'PAYMENT' | 'RECEIPT' | 'CONTRA';
     entries: Entry[];
     postedBy?: { name: string | null };
 }
@@ -39,43 +41,116 @@ interface Pagination {
     pages: number;
 }
 
+// Searchable Select Component
+const AccountSearch = ({ accounts, value, onChange, placeholder = "Select Account..." }: any) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [search, setSearch] = useState("");
+
+    const selectedAccount = accounts.find((a: any) => a.id.toString() === value.toString());
+    const filteredAccounts = useMemo(() =>
+        accounts.filter((a: any) =>
+            a.name.toLowerCase().includes(search.toLowerCase()) ||
+            a.code.toLowerCase().includes(search.toLowerCase())
+        ), [accounts, search]
+    );
+
+    return (
+        <div className="relative">
+            <div
+                onClick={() => setIsOpen(!isOpen)}
+                className="glass-input w-full py-2.5 px-4 text-xs flex justify-between items-center cursor-pointer hover:border-indigo-500/50 transition-all font-bold"
+            >
+                <span className={selectedAccount ? "text-foreground" : "text-subtext italic"}>
+                    {selectedAccount ? `${selectedAccount.code} - ${selectedAccount.name}` : placeholder}
+                </span>
+                <ChevronDown size={14} className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+            </div>
+
+            {isOpen && (
+                <div className="absolute z-[100] mt-2 w-full glass-panel bg-white dark:bg-slate-900 shadow-2xl border border-border animate-in fade-in zoom-in-95 duration-200">
+                    <div className="p-3 border-b border-border sticky top-0 bg-inherit">
+                        <div className="relative">
+                            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-subtext" />
+                            <input
+                                autoFocus
+                                className="w-full bg-slate-100 dark:bg-slate-800 rounded-lg py-2 pl-9 pr-4 text-xs font-bold border-none focus:ring-2 focus:ring-indigo-500"
+                                placeholder="Search code or name..."
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className="max-h-[250px] overflow-y-auto p-1">
+                        {filteredAccounts.length > 0 ? (
+                            filteredAccounts.map((a: any) => (
+                                <div
+                                    key={a.id}
+                                    onClick={() => {
+                                        onChange(a.id);
+                                        setIsOpen(false);
+                                        setSearch("");
+                                    }}
+                                    className={`
+                                        p-3 rounded-lg cursor-pointer transition-all flex justify-between items-center group
+                                        ${value.toString() === a.id.toString() ? 'bg-indigo-600 text-white' : 'hover:bg-indigo-500/10 text-foreground'}
+                                    `}
+                                >
+                                    <div className="flex flex-col">
+                                        <span className="text-[11px] font-black">{a.name}</span>
+                                        <span className={`text-[9px] font-bold opacity-70 ${value.toString() === a.id.toString() ? 'text-white' : 'text-indigo-500'}`}>{a.code}</span>
+                                    </div>
+                                    {value.toString() === a.id.toString() && <CheckCircle2 size={12} />}
+                                </div>
+                            ))
+                        ) : (
+                            <div className="p-4 text-center text-[10px] font-black uppercase text-subtext italic">No accounts found</div>
+                        )}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
 export default function JournalVouchersPage() {
     const [vouchers, setVouchers] = useState<Voucher[]>([]);
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [company, setCompany] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [editingVoucherId, setEditingVoucherId] = useState<number | null>(null);
+    const [expandedVoucherId, setExpandedVoucherId] = useState<number | null>(null);
 
     // Filters & Pagination
-    const [typeFilter, setTypeFilter] = useState<'ALL' | 'JOURNAL' | 'PAYMENT' | 'RECEIPT'>('ALL');
+    const [typeFilter, setTypeFilter] = useState<'ALL' | 'JOURNAL' | 'PAYMENT' | 'RECEIPT' | 'CONTRA'>('ALL');
     const [page, setPage] = useState(1);
     const [pagination, setPagination] = useState<Pagination | null>(null);
+    const [searchQuery, setSearchQuery] = useState("");
 
     // Voucher Form State
-    const [form, setForm] = useState({
+    const initialForm = {
         date: new Date().toISOString().split('T')[0],
         description: '',
-        voucherType: 'JOURNAL' as 'JOURNAL' | 'PAYMENT' | 'RECEIPT',
-        paymentMode: 'CASH' as 'CASH' | 'BANK' | 'CHEQUE' | 'ONLINE',
+        voucherType: 'JOURNAL' as any,
+        paymentMode: 'CASH' as any,
         instrumentNo: '',
         instrumentDate: '',
         bankName: '',
-        // For Payment/Receipt modes
-        sourceAccount: '', // From (CR for Payment, DR for Receipt)
-        targetAccount: '', // To (DR for Payment, CR for Receipt)
+        sourceAccount: '',
+        targetAccount: '',
         amount: 0,
-        // For Journal/Multi
         entries: [
             { accountId: '', debit: 0, credit: 0, description: '' },
             { accountId: '', debit: 0, credit: 0, description: '' },
         ]
-    });
+    };
 
+    const [form, setForm] = useState(initialForm);
     const [selectedVoucherForPrint, setSelectedVoucherForPrint] = useState<Voucher | null>(null);
 
     useEffect(() => {
         fetchVouchers();
-    }, [page, typeFilter]);
+    }, [page, typeFilter, searchQuery]);
 
     useEffect(() => {
         fetchAccounts();
@@ -100,7 +175,8 @@ export default function JournalVouchersPage() {
             const query = new URLSearchParams({
                 page: page.toString(),
                 limit: '20',
-                ...(typeFilter !== 'ALL' && { type: typeFilter })
+                ...(typeFilter !== 'ALL' && { type: typeFilter }),
+                ...(searchQuery && { search: searchQuery })
             });
             const res = await fetch(`/api/vouchers?${query}`);
             if (res.ok) {
@@ -127,6 +203,47 @@ export default function JournalVouchersPage() {
         }
     };
 
+    const handleEdit = (v: Voucher) => {
+        setEditingVoucherId(v.id);
+        const sourceEntry = v.entries.find(e => v.voucherType === 'PAYMENT' ? e.credit > 0 : e.debit > 0);
+        const targetEntry = v.entries.find(e => v.voucherType === 'PAYMENT' ? e.debit > 0 : e.credit > 0);
+
+        setForm({
+            date: new Date(v.date).toISOString().split('T')[0],
+            description: v.narration || '',
+            voucherType: v.voucherType,
+            paymentMode: (v as any).paymentMode || 'CASH',
+            instrumentNo: (v as any).instrumentNo || '',
+            instrumentDate: (v as any).instrumentDate ? new Date((v as any).instrumentDate).toISOString().split('T')[0] : '',
+            bankName: (v as any).bankName || '',
+            sourceAccount: sourceEntry ? sourceEntry.account.id.toString() : '',
+            targetAccount: targetEntry ? targetEntry.account.id.toString() : '',
+            amount: sourceEntry ? (v.voucherType === 'PAYMENT' ? sourceEntry.credit : sourceEntry.debit) : 0,
+            entries: v.entries.map(e => ({
+                accountId: e.account.id.toString(),
+                debit: e.debit,
+                credit: e.credit,
+                description: e.description || ''
+            }))
+        } as any);
+        setShowModal(true);
+    };
+
+    const handleDelete = async (id: number) => {
+        if (!confirm('Are you sure you want to delete this voucher? This will also reverse the ledger effects.')) return;
+        try {
+            const res = await fetch(`/api/vouchers?id=${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                fetchVouchers();
+            } else {
+                const err = await res.json();
+                alert(err.error);
+            }
+        } catch (err) {
+            alert('Failed to delete');
+        }
+    };
+
     const addEntry = () => {
         setForm({
             ...form,
@@ -147,14 +264,14 @@ export default function JournalVouchersPage() {
         setForm({ ...form, entries: next });
     };
 
-    const totalDebit = form.voucherType === 'JOURNAL'
+    const totalDebit = form.voucherType === 'JOURNAL' || form.voucherType === 'CONTRA'
         ? form.entries.reduce((sum, e) => sum + Number(e.debit), 0)
         : form.amount;
-    const totalCredit = form.voucherType === 'JOURNAL'
+    const totalCredit = form.voucherType === 'JOURNAL' || form.voucherType === 'CONTRA'
         ? form.entries.reduce((sum, e) => sum + Number(e.credit), 0)
         : form.amount;
 
-    const isBalanced = form.voucherType === 'JOURNAL'
+    const isBalanced = (form.voucherType === 'JOURNAL' || form.voucherType === 'CONTRA')
         ? (Math.abs(totalDebit - totalCredit) < 0.01 && totalDebit > 0)
         : (form.amount > 0 && form.sourceAccount && form.targetAccount);
 
@@ -163,7 +280,7 @@ export default function JournalVouchersPage() {
         if (!isBalanced) return;
 
         let entries: any[] = [];
-        if (form.voucherType === 'JOURNAL') {
+        if (form.voucherType === 'JOURNAL' || form.voucherType === 'CONTRA') {
             entries = form.entries.map(e => ({
                 accountId: Number(e.accountId),
                 description: e.description,
@@ -171,13 +288,11 @@ export default function JournalVouchersPage() {
                 credit: Number(e.credit)
             }));
         } else if (form.voucherType === 'PAYMENT') {
-            // Payment: CR Cash/Bank (Source), DR Payee (Target)
             entries = [
                 { accountId: Number(form.targetAccount), debit: Number(form.amount), credit: 0, description: form.description },
                 { accountId: Number(form.sourceAccount), debit: 0, credit: Number(form.amount), description: form.description }
             ];
         } else if (form.voucherType === 'RECEIPT') {
-            // Receipt: DR Cash/Bank (Source), CR Payer (Target)
             entries = [
                 { accountId: Number(form.sourceAccount), debit: Number(form.amount), credit: 0, description: form.description },
                 { accountId: Number(form.targetAccount), debit: 0, credit: Number(form.amount), description: form.description }
@@ -185,10 +300,14 @@ export default function JournalVouchersPage() {
         }
 
         try {
-            const res = await fetch('/api/vouchers', {
-                method: 'POST',
+            const url = editingVoucherId ? '/api/vouchers' : '/api/vouchers';
+            const method = editingVoucherId ? 'PATCH' : 'POST';
+
+            const res = await fetch(url, {
+                method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    ...(editingVoucherId && { id: editingVoucherId }),
                     date: form.date,
                     description: form.description,
                     voucherType: form.voucherType,
@@ -199,25 +318,12 @@ export default function JournalVouchersPage() {
                     entries: entries
                 }),
             });
+
             if (res.ok) {
                 setShowModal(false);
+                setEditingVoucherId(null);
                 fetchVouchers();
-                setForm({
-                    date: new Date().toISOString().split('T')[0],
-                    description: '',
-                    voucherType: 'JOURNAL',
-                    paymentMode: 'CASH',
-                    instrumentNo: '',
-                    instrumentDate: '',
-                    bankName: '',
-                    sourceAccount: '',
-                    targetAccount: '',
-                    amount: 0,
-                    entries: [
-                        { accountId: '', debit: 0, credit: 0, description: '' },
-                        { accountId: '', debit: 0, credit: 0, description: '' },
-                    ]
-                });
+                setForm(initialForm);
             } else {
                 const error = await res.json();
                 alert(error.error || 'Failed to post voucher');
@@ -229,392 +335,578 @@ export default function JournalVouchersPage() {
 
     return (
         <DashboardLayout>
-            <div className="max-w-7xl mx-auto space-y-8">
-                {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="max-w-7xl mx-auto space-y-8 pb-20">
+                {/* Header Section */}
+                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
                     <div className="print:hidden">
-                        <h1 className="text-4xl font-black text-heading tracking-tighter uppercase italic">Voucher System</h1>
-                        <p className="text-subtext text-sm font-bold uppercase tracking-[0.2em] mt-1">Unified Journal & Cash Entries</p>
+                        <div className="flex items-center gap-4 mb-2">
+                            <div className="p-3 bg-indigo-600 rounded-2xl shadow-xl shadow-indigo-600/20">
+                                <FileText className="text-white" size={28} />
+                            </div>
+                            <div>
+                                <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic">Voucher System</h1>
+                                <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.5em] mt-0.5">Financial Operations Control</p>
+                            </div>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-4 print:hidden">
+
+                    <div className="flex flex-wrap items-center gap-4 print:hidden">
+                        <div className="relative group min-w-[240px]">
+                            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                            <input
+                                className="glass-input pl-12 pr-4 py-4 w-full font-black text-xs uppercase"
+                                placeholder="Search Voucher # or Rem..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+
                         <select
                             value={typeFilter}
                             onChange={(e) => setTypeFilter(e.target.value as any)}
-                            className="glass-input py-3 rounded-2xl font-bold text-xs uppercase"
+                            className="glass-input py-4 rounded-2xl font-black text-xs uppercase tracking-widest px-6 appearance-none bg-no-repeat bg-[right_1.5rem_center]"
+                            style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'currentColor\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'/%3E%3C/svg%3E")', backgroundSize: '1.25rem' }}
                         >
-                            <option value="ALL">All Types</option>
-                            <option value="JOURNAL">Journal Vouchers</option>
-                            <option value="PAYMENT">Payments</option>
-                            <option value="RECEIPT">Receipts</option>
+                            <option value="ALL">All Entries</option>
+                            <option value="JOURNAL">Journal (JV)</option>
+                            <option value="PAYMENT">Payment (PV)</option>
+                            <option value="RECEIPT">Receipt (RV)</option>
+                            <option value="CONTRA">Contra (CV)</option>
                         </select>
+
                         <button
-                            onClick={() => setShowModal(true)}
-                            className="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-[2.5rem] font-black transition-all flex items-center gap-2 text-sm uppercase tracking-widest shadow-xl shadow-indigo-600/20"
+                            onClick={() => { setEditingVoucherId(null); setForm(initialForm); setShowModal(true); }}
+                            className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-10 py-4 rounded-[1.5rem] font-black transition-all flex items-center gap-3 text-sm uppercase tracking-tighter shadow-2xl hover:scale-105 active:scale-95"
                         >
-                            <Plus size={20} />
-                            New Voucher
+                            <Plus size={22} strokeWidth={3} />
+                            Deploy Voucher
                         </button>
                     </div>
                 </div>
 
-                {/* History */}
-                <div className="grid gap-6 print:hidden">
+                {/* Voucher History Matrix */}
+                <div className="space-y-4 print:hidden">
                     {loading ? (
-                        <div className="glass-panel p-20 flex flex-col items-center">
-                            <Loader2 className="animate-spin text-indigo-500 mb-4" size={32} />
-                            <p className="text-subtext font-bold uppercase tracking-widest text-xs">Retrieving Ledger Evidence...</p>
+                        <div className="glass-panel p-32 flex flex-col items-center justify-center space-y-6">
+                            <Loader2 className="animate-spin text-indigo-500" size={56} />
+                            <p className="text-slate-500 font-black uppercase tracking-[0.4em] text-[10px] animate-pulse">Syncing Ledger Evidence...</p>
                         </div>
                     ) : vouchers.length === 0 ? (
-                        <div className="glass-panel p-20 text-center">
-                            <ArrowRightLeft className="w-16 h-16 text-subtext opacity-20 mx-auto mb-4" />
-                            <h3 className="text-xl font-black text-slate-900 dark:text-white">No Vouchers Found</h3>
-                            <p className="text-subtext text-sm mt-1">Create your first voucher to start adjustments.</p>
+                        <div className="glass-panel p-24 text-center border-dashed border-2">
+                            <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6 opacity-40">
+                                <ArrowRightLeft className="w-12 h-12 text-slate-400" />
+                            </div>
+                            <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter">System Void</h3>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] mt-2">No transactional evidence found in current filter.</p>
                         </div>
                     ) : (
-                        vouchers.map((tx) => (
-                            <div key={tx.id} className="glass-card shadow-sm overflow-hidden group">
-                                <div className="p-6 border-b border-border flex items-center justify-between bg-primary/5">
-                                    <div className="flex items-center gap-6">
-                                        <div>
-                                            <p className="text-[10px] text-subtext font-black uppercase tracking-widest mb-1">Voucher #</p>
-                                            <h4 className="text-lg font-black text-foreground">{tx.voucherNumber}</h4>
+                        <div className="grid gap-3">
+                            {vouchers.map((tx) => (
+                                <div key={tx.id} className={`glass-card overflow-hidden transition-all duration-500 border border-slate-200 dark:border-slate-800/50 hover:shadow-2xl shadow-slate-900/10 ${expandedVoucherId === tx.id ? 'ring-2 ring-indigo-500' : 'hover:-translate-y-1'}`}>
+                                    {/* Summary View */}
+                                    <div
+                                        onClick={() => setExpandedVoucherId(expandedVoucherId === tx.id ? null : tx.id)}
+                                        className="p-6 cursor-pointer flex flex-wrap lg:flex-nowrap items-center gap-8 group"
+                                    >
+                                        <div className="flex items-center gap-6 min-w-[200px]">
+                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-lg transition-transform group-hover:scale-110 ${tx.voucherType === 'PAYMENT' ? 'bg-rose-500/10 text-rose-500' :
+                                                tx.voucherType === 'RECEIPT' ? 'bg-emerald-500/10 text-emerald-500' :
+                                                    'bg-indigo-500/10 text-indigo-500'
+                                                }`}>
+                                                {tx.voucherType.substring(0, 1)}
+                                            </div>
+                                            <div>
+                                                <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest mb-1">Voucher Number</p>
+                                                <h4 className="text-base font-black text-slate-900 dark:text-white tracking-tighter">{tx.voucherNumber}</h4>
+                                            </div>
                                         </div>
-                                        <div className="w-px h-8 bg-border" />
-                                        <div>
-                                            <p className="text-[10px] text-subtext font-black uppercase tracking-widest mb-1">Entry Date</p>
-                                            <p className="text-sm font-bold text-muted-foreground">{new Date(tx.date).toLocaleDateString()}</p>
+
+                                        <div className="hidden md:block w-px h-10 bg-slate-200 dark:bg-slate-800" />
+
+                                        <div className="flex-1 min-w-[200px]">
+                                            <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest mb-1">Narration / Memo</p>
+                                            <p className="text-sm font-bold text-slate-700 dark:text-slate-300 truncate max-w-[400px]">
+                                                {tx.narration || <span className="text-slate-400 italic font-medium opacity-50">No Remarks Captured</span>}
+                                            </p>
+                                        </div>
+
+                                        <div className="hidden lg:block w-px h-10 bg-slate-200 dark:bg-slate-800" />
+
+                                        <div className="min-w-[120px]">
+                                            <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest mb-1">Entry Date</p>
+                                            <p className="text-[13px] font-black text-slate-900 dark:text-white">{new Date(tx.date).toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()}</p>
+                                        </div>
+
+                                        <div className="min-w-[150px] text-right">
+                                            <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest mb-1">Voucher Total</p>
+                                            <p className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">
+                                                <span className="text-xs mr-1 opacity-40">PKR</span>
+                                                {tx.entries.reduce((s, e) => s + e.debit, 0).toLocaleString()}
+                                            </p>
+                                        </div>
+
+                                        <div className="flex items-center gap-2 pl-4">
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); setSelectedVoucherForPrint(tx); }}
+                                                className="p-3 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-slate-900 rounded-xl transition-all"
+                                            >
+                                                <Printer size={18} />
+                                            </button>
+                                            {expandedVoucherId === tx.id ? <ChevronUp size={20} className="text-indigo-500" /> : <ChevronDown size={20} className="text-slate-400 group-hover:text-indigo-500" />}
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-4">
-                                        <button
-                                            onClick={() => setSelectedVoucherForPrint(tx)}
-                                            className="p-2 hover:bg-indigo-500/10 text-indigo-600 rounded-lg transition-colors"
-                                            title="Print Voucher"
-                                        >
-                                            <FileText size={20} />
-                                        </button>
-                                        <div className="text-right">
-                                            <p className="text-[10px] text-indigo-400 font-black uppercase tracking-widest mb-1">Type</p>
-                                            <span className="text-xs font-black text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full">{tx.voucherType}</span>
+
+                                    {/* Expanded Detail View */}
+                                    {expandedVoucherId === tx.id && (
+                                        <div className="border-t border-slate-100 dark:border-slate-800 bg-slate-900/[0.02] dark:bg-white/[0.02] animate-in slide-in-from-top-4 duration-500">
+                                            <div className="p-8">
+                                                <div className="flex justify-between items-start mb-8">
+                                                    <div>
+                                                        <h5 className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.3em] mb-4">Transaction Lineage</h5>
+                                                    </div>
+                                                    <div className="flex gap-3">
+                                                        <button
+                                                            onClick={() => handleEdit(tx)}
+                                                            className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-indigo-600/20"
+                                                        >
+                                                            <Edit2 size={14} /> Redefine
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDelete(tx.id)}
+                                                            className="flex items-center gap-2 px-5 py-2.5 bg-rose-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-rose-600/20"
+                                                        >
+                                                            <Trash2 size={14} /> Purge
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <table className="w-full border-collapse">
+                                                    <thead>
+                                                        <tr className="border-b border-slate-200 dark:border-slate-800">
+                                                            <th className="pb-4 text-[9px] font-black text-slate-500 uppercase tracking-widest text-left">Account Identifier</th>
+                                                            <th className="pb-4 text-[9px] font-black text-slate-500 uppercase tracking-widest text-left">Internal Description</th>
+                                                            <th className="pb-4 text-[9px] font-black text-slate-500 uppercase tracking-widest text-right">Debit Effect</th>
+                                                            <th className="pb-4 text-[9px] font-black text-slate-500 uppercase tracking-widest text-right">Credit Effect</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                        {tx.entries.map((entry) => (
+                                                            <tr key={entry.id} className="group">
+                                                                <td className="py-5">
+                                                                    <div className="flex items-center gap-3">
+                                                                        <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-black text-[9px] text-slate-500">{entry.account.code}</div>
+                                                                        <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tighter">{entry.account.name}</span>
+                                                                    </div>
+                                                                </td>
+                                                                <td className="py-5 text-[11px] font-bold text-slate-500 italic">{entry.description || '-'}</td>
+                                                                <td className="py-5 text-right font-black text-sm text-emerald-600 dark:text-emerald-400">
+                                                                    {entry.debit > 0 ? Number(entry.debit).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}
+                                                                </td>
+                                                                <td className="py-5 text-right font-black text-sm text-rose-600 dark:text-rose-400">
+                                                                    {entry.credit > 0 ? Number(entry.credit).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
-                                <div className="p-4 overflow-x-auto">
-                                    <table className="w-full text-left border-collapse">
-                                        <thead>
-                                            <tr className="bg-primary/5">
-                                                <th className="px-4 py-2 text-[10px] font-black text-subtext uppercase tracking-widest">Account</th>
-                                                <th className="px-4 py-2 text-[10px] font-black text-subtext uppercase tracking-widest text-right">Debit</th>
-                                                <th className="px-4 py-2 text-[10px] font-black text-subtext uppercase tracking-widest text-right">Credit</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-border">
-                                            {tx.entries.map((entry) => (
-                                                <tr key={entry.id}>
-                                                    <td className="px-4 py-2">
-                                                        <div className="flex flex-col">
-                                                            <span className="text-sm font-bold text-foreground">{entry.account.name}</span>
-                                                            <span className="text-[10px] font-bold text-subtext font-mono">{entry.account.code}</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="px-4 py-2 text-right font-black text-sm text-foreground">{entry.debit > 0 ? Number(entry.debit).toLocaleString() : '-'}</td>
-                                                    <td className="px-4 py-2 text-right font-black text-sm text-foreground">{entry.credit > 0 ? Number(entry.credit).toLocaleString() : '-'}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        ))
+                            ))}
+                        </div>
                     )}
                 </div>
 
-                {/* Pagination */}
+                {/* Pagination Matrix */}
                 {pagination && pagination.pages > 1 && (
-                    <div className="flex justify-center gap-4 items-center py-4 print:hidden">
+                    <div className="flex justify-center gap-6 items-center py-10 print:hidden">
                         <button
                             disabled={page === 1}
                             onClick={() => setPage(p => p - 1)}
-                            className="glass-button-secondary py-2 px-6 disabled:opacity-50"
+                            className="glass-panel p-4 rounded-2xl disabled:opacity-20 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all font-black uppercase text-[10px] tracking-widest"
                         >
-                            Previous
+                            Shift Left
                         </button>
-                        <span className="text-subtext font-black">Page {page} of {pagination.pages}</span>
+                        <div className="px-6 py-3 bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em]">
+                            BLOCK {page} / {pagination.pages}
+                        </div>
                         <button
                             disabled={page === pagination.pages}
                             onClick={() => setPage(p => p + 1)}
-                            className="glass-button-secondary py-2 px-6 disabled:opacity-50"
+                            className="glass-panel p-4 rounded-2xl disabled:opacity-20 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all font-black uppercase text-[10px] tracking-widest"
                         >
-                            Next
+                            Shift Right
                         </button>
                     </div>
                 )}
 
-                {/* Voucher Modal */}
+                {/* Deploy Modal */}
                 {showModal && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                        <div className="absolute inset-0 bg-background/90 backdrop-blur-md" onClick={() => setShowModal(false)} />
-                        <div className="relative glass-panel w-full max-w-5xl rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
-                            <div className="p-8 border-b border-border bg-indigo-600 text-white flex justify-between items-center">
-                                <div>
-                                    <h3 className="text-3xl font-black italic tracking-tighter uppercase">{form.voucherType} Voucher</h3>
-                                    <p className="text-indigo-100 text-xs font-bold uppercase tracking-widest">Entry Protocol V3</p>
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-3xl animate-in fade-in duration-500">
+                        <div className="relative glass-panel w-full max-w-6xl rounded-[3rem] shadow-[0_50px_150px_-30px_rgba(79,70,229,0.3)] border-indigo-500/20 overflow-hidden animate-in zoom-in-95 duration-300">
+                            <div className="p-10 border-b border-indigo-500/10 bg-indigo-600 text-white flex justify-between items-center">
+                                <div className="flex items-center gap-8">
+                                    <div className="p-4 bg-white/10 rounded-3xl border border-white/20 backdrop-blur-xl">
+                                        <Briefcase size={32} />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-4xl font-black italic tracking-tighter uppercase">{editingVoucherId ? 'Refine' : 'Deploy'} {form.voucherType} ENTRY</h3>
+                                        <p className="text-indigo-100 text-[10px] font-black uppercase tracking-[0.5em] mt-1">Transaction Protocol V4.2.0</p>
+                                    </div>
                                 </div>
                                 <div className="text-right">
-                                    <div className={`text-2xl font-black tracking-tighter ${isBalanced ? 'text-white' : 'text-indigo-900'}`}>
-                                        {totalDebit.toLocaleString()} <span className="text-xs italic uppercase">Total</span>
+                                    <div className={`text-4xl font-black tracking-tighter transition-all ${isBalanced ? 'text-white' : 'text-indigo-900/50'}`}>
+                                        <span className="text-xs mr-2 uppercase opacity-40">Total</span>
+                                        {totalDebit.toLocaleString()}
                                     </div>
-                                    {!isBalanced && <span className="text-[10px] bg-indigo-900 text-indigo-400 px-2 py-0.5 rounded font-black uppercase">Pending Balance</span>}
-                                    {isBalanced && <span className="text-[10px] bg-emerald-500 text-white px-2 py-0.5 rounded font-black uppercase">Balanced</span>}
+                                    <div className="flex items-center gap-2 justify-end mt-2">
+                                        {!isBalanced && <div className="w-2 h-2 rounded-full bg-indigo-900/30 animate-ping" />}
+                                        <span className={`text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${isBalanced ? 'bg-emerald-500 text-white' : 'bg-indigo-900/20 text-indigo-200'}`}>
+                                            {isBalanced ? 'Configuration Balanced' : 'Awaiting Balance Matrix'}
+                                        </span>
+                                    </div>
                                 </div>
+                                <button onClick={() => setShowModal(false)} className="absolute top-10 right-10 p-3 hover:bg-white/10 rounded-full transition-all text-white/50 hover:text-white">
+                                    <X size={32} />
+                                </button>
                             </div>
 
                             <form onSubmit={handleSubmit} className="flex flex-col h-[75vh]">
-                                <div className="p-8 grid grid-cols-2 md:grid-cols-4 gap-6 border-b border-border bg-secondary/5">
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Voucher Mode</label>
-                                        <div className="flex p-1 bg-background/40 rounded-xl border border-border">
-                                            {['JOURNAL', 'PAYMENT', 'RECEIPT'].map(t => (
+                                <div className="p-10 grid grid-cols-2 md:grid-cols-4 gap-8 bg-slate-50 dark:bg-slate-900/50 border-b border-border">
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Voucher Category</label>
+                                        <div className="flex p-1.5 bg-background dark:bg-slate-800 rounded-2xl border border-border shadow-inner">
+                                            {['JOURNAL', 'PAYMENT', 'RECEIPT', 'CONTRA'].map(t => (
                                                 <button
                                                     key={t}
                                                     type="button"
                                                     onClick={() => setForm({ ...form, voucherType: t as any })}
-                                                    className={`flex-1 py-2 text-[10px] font-black rounded-lg transition-all ${form.voucherType === t ? 'bg-indigo-600 text-white shadow-lg' : 'text-subtext hover:text-foreground'}`}
+                                                    className={`flex-1 py-3 text-[10px] font-black rounded-xl transition-all duration-300 ${form.voucherType === t ? 'bg-indigo-600 text-white shadow-lg scale-[1.05]' : 'text-slate-500 hover:text-slate-900'}`}
                                                 >
-                                                    {t}
+                                                    {t.substring(0, 1)}
                                                 </button>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Entry Date</label>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Posting Chronology</label>
                                         <input
                                             type="date"
                                             required
-                                            className="glass-input w-full py-2.5 text-xs"
+                                            className="glass-input w-full py-4 font-black uppercase tracking-widest text-xs"
                                             value={form.date}
                                             onChange={e => setForm({ ...form, date: e.target.value })}
                                         />
                                     </div>
-                                    <div className="space-y-2 col-span-2">
-                                        <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Narration / Remarks</label>
+                                    <div className="space-y-3 col-span-2">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Narration Narrative</label>
                                         <input
-                                            className="glass-input w-full py-2.5 text-xs"
-                                            placeholder="Enter transaction details..."
+                                            className="glass-input w-full py-4 text-xs font-bold"
+                                            placeholder="Capture the essence of this transaction..."
                                             value={form.description}
                                             onChange={e => setForm({ ...form, description: e.target.value })}
                                         />
                                     </div>
                                 </div>
 
-                                <div className="flex-1 overflow-y-auto p-8">
+                                <div className="flex-1 overflow-y-auto p-12 bg-white dark:bg-slate-950">
                                     {(form.voucherType === 'PAYMENT' || form.voucherType === 'RECEIPT') ? (
-                                        <div className="space-y-8 max-w-2xl mx-auto">
-                                            <div className="grid grid-cols-2 gap-8">
-                                                <div className="space-y-3">
-                                                    <label className="text-xs font-black uppercase tracking-widest text-indigo-500">
-                                                        {form.voucherType === 'PAYMENT' ? 'Paid From (Credit)' : 'Deposit To (Debit)'}
+                                        <div className="space-y-12 max-w-4xl mx-auto py-10 animate-in fade-in zoom-in-95 duration-500">
+                                            <div className="grid grid-cols-2 gap-12 relative">
+                                                <div className="space-y-4">
+                                                    <label className="text-[11px] font-black uppercase tracking-[0.4em] text-indigo-500">
+                                                        {form.voucherType === 'PAYMENT' ? 'Liquidity Source (Credit)' : 'Liquidity Target (Debit)'}
                                                     </label>
-                                                    <select
-                                                        required
-                                                        className="glass-input w-full border-indigo-500/30"
+                                                    <AccountSearch
+                                                        accounts={accounts.filter(a => a.name.toLowerCase().includes('cash') || a.name.toLowerCase().includes('bank'))}
                                                         value={form.sourceAccount}
-                                                        onChange={e => setForm({ ...form, sourceAccount: e.target.value })}
-                                                    >
-                                                        <option value="">Select Cash/Bank...</option>
-                                                        {accounts.filter(a => a.name.toLowerCase().includes('cash') || a.name.toLowerCase().includes('bank')).map(a => (
-                                                            <option key={a.id} value={a.id}>{a.code} - {a.name}</option>
-                                                        ))}
-                                                    </select>
+                                                        onChange={(val: any) => setForm({ ...form, sourceAccount: val })}
+                                                        placeholder="Deploy Cash/Bank..."
+                                                    />
                                                 </div>
-                                                <div className="space-y-3">
-                                                    <label className="text-xs font-black uppercase tracking-widest text-emerald-500">
-                                                        {form.voucherType === 'PAYMENT' ? 'Paid To (Debit)' : 'Received From (Credit)'}
+                                                <div className="absolute left-1/2 top-10 -translate-x-1/2 p-3 bg-white dark:bg-slate-900 border border-border rounded-full shadow-2xl z-10 rotate-90 lg:rotate-0">
+                                                    {form.voucherType === 'PAYMENT' ? <ArrowUpRight className="text-rose-500" /> : <ArrowDownLeft className="text-emerald-500" />}
+                                                </div>
+                                                <div className="space-y-4">
+                                                    <label className="text-[11px] font-black uppercase tracking-[0.4em] text-emerald-500">
+                                                        {form.voucherType === 'PAYMENT' ? 'Recipient Module (Debit)' : 'Originating Module (Credit)'}
                                                     </label>
-                                                    <select
-                                                        required
-                                                        className="glass-input w-full border-emerald-500/30"
+                                                    <AccountSearch
+                                                        accounts={accounts}
                                                         value={form.targetAccount}
-                                                        onChange={e => setForm({ ...form, targetAccount: e.target.value })}
-                                                    >
-                                                        <option value="">Select Account...</option>
-                                                        {accounts.map(a => <option key={a.id} value={a.id}>{a.code} - {a.name}</option>)}
-                                                    </select>
+                                                        onChange={(val: any) => setForm({ ...form, targetAccount: val })}
+                                                        placeholder="Target Account..."
+                                                    />
                                                 </div>
                                             </div>
 
-                                            <div className="grid grid-cols-2 gap-8 items-end">
-                                                <div className="space-y-3">
-                                                    <label className="text-xs font-black uppercase tracking-widest text-subtext">Amount</label>
-                                                    <div className="relative">
+                                            <div className="grid grid-cols-2 gap-12 items-end">
+                                                <div className="space-y-4">
+                                                    <label className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-500">Magnitude / Amount</label>
+                                                    <div className="relative group">
+                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-2xl text-slate-300 group-hover:text-indigo-500 transition-colors">Rs</div>
                                                         <input
                                                             type="number"
                                                             placeholder="0.00"
-                                                            className="glass-input w-full text-2xl font-black pl-10 h-16"
+                                                            className="glass-input w-full text-5xl font-black pl-20 h-24 focus:ring-[20px] focus:ring-indigo-500/5 transition-all tracking-tighter"
                                                             value={form.amount || ''}
                                                             onChange={e => setForm({ ...form, amount: Number(e.target.value) })}
                                                         />
-                                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-subtext opacity-50">Rs</span>
                                                     </div>
                                                 </div>
-                                                <div className="space-y-3">
-                                                    <label className="text-xs font-black uppercase tracking-widest text-subtext">Method</label>
+                                                <div className="space-y-4">
+                                                    <label className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-500">Exchange Protocol</label>
                                                     <select
-                                                        className="glass-input w-full h-16"
+                                                        className="glass-input w-full h-24 font-black text-xl uppercase tracking-widest px-8 appearance-none"
                                                         value={form.paymentMode}
                                                         onChange={e => setForm({ ...form, paymentMode: e.target.value as any })}
                                                     >
-                                                        <option value="CASH">Cash</option>
-                                                        <option value="BANK">Bank Transfer</option>
-                                                        <option value="CHEQUE">Cheque</option>
-                                                        <option value="ONLINE">Online/Credit</option>
+                                                        <option value="CASH">Physical Cash</option>
+                                                        <option value="BANK">Wire Transfer</option>
+                                                        <option value="CHEQUE">Bank Instrument</option>
+                                                        <option value="ONLINE">Digital Ledger</option>
                                                     </select>
                                                 </div>
                                             </div>
 
                                             {(form.paymentMode === 'CHEQUE' || form.paymentMode === 'BANK') && (
-                                                <div className="grid grid-cols-3 gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                                                    <div>
-                                                        <label className="text-[10px] font-black text-subtext uppercase mb-1">Instrument #</label>
-                                                        <input className="glass-input w-full py-2 text-xs" value={form.instrumentNo} onChange={e => setForm({ ...form, instrumentNo: e.target.value })} placeholder="CHQ-001" />
+                                                <div className="grid grid-cols-3 gap-6 p-8 bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] border border-border animate-in slide-in-from-top-4 duration-500 shadow-inner">
+                                                    <div className="space-y-2">
+                                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Instrument ID</label>
+                                                        <input className="glass-input w-full py-4 font-mono font-black border-transparent bg-white dark:bg-slate-800" value={form.instrumentNo} onChange={e => setForm({ ...form, instrumentNo: e.target.value })} placeholder="CHQ-X901" />
                                                     </div>
-                                                    <div>
-                                                        <label className="text-[10px] font-black text-subtext uppercase mb-1">Inst. Date</label>
-                                                        <input type="date" className="glass-input w-full py-2 text-xs" value={form.instrumentDate} onChange={e => setForm({ ...form, instrumentDate: e.target.value })} />
+                                                    <div className="space-y-2">
+                                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Release Chronology</label>
+                                                        <input type="date" className="glass-input w-full py-4 font-black border-transparent bg-white dark:bg-slate-800" value={form.instrumentDate} onChange={e => setForm({ ...form, instrumentDate: e.target.value })} />
                                                     </div>
-                                                    <div>
-                                                        <label className="text-[10px] font-black text-subtext uppercase mb-1">Bank Name</label>
-                                                        <input className="glass-input w-full py-2 text-xs" value={form.bankName} onChange={e => setForm({ ...form, bankName: e.target.value })} placeholder="HBL / Alfalah" />
+                                                    <div className="space-y-2">
+                                                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Financial Institution</label>
+                                                        <input className="glass-input w-full py-4 font-black uppercase border-transparent bg-white dark:bg-slate-800" value={form.bankName} onChange={e => setForm({ ...form, bankName: e.target.value })} placeholder="Global Central Bank" />
                                                     </div>
                                                 </div>
                                             )}
                                         </div>
                                     ) : (
-                                        <div className="space-y-4">
-                                            {form.entries.map((entry, index) => (
-                                                <div key={index} className="grid grid-cols-12 gap-4 items-center">
-                                                    <div className="col-span-4">
-                                                        <select
-                                                            className="glass-input w-full py-2 text-xs"
-                                                            value={entry.accountId}
-                                                            onChange={e => updateEntry(index, 'accountId', e.target.value)}
-                                                        >
-                                                            <option value="">Select Account...</option>
-                                                            {accounts.map(a => <option key={a.id} value={a.id}>{a.code} - {a.name}</option>)}
-                                                        </select>
+                                        <div className="space-y-4 pb-20">
+                                            <div className="grid grid-cols-12 gap-8 mb-6 px-4">
+                                                <div className="col-span-4 text-[9px] font-black uppercase tracking-[0.3em] text-slate-400">Account Configuration</div>
+                                                <div className="col-span-3 text-[9px] font-black uppercase tracking-[0.3em] text-slate-400">Ledger Remark</div>
+                                                <div className="col-span-2 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 text-right">Debit Matrix</div>
+                                                <div className="col-span-2 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 text-right">Credit Matrix</div>
+                                                <div className="col-span-1"></div>
+                                            </div>
+                                            <div className="space-y-3">
+                                                {form.entries.map((entry, index) => (
+                                                    <div key={index} className="grid grid-cols-12 gap-4 items-center group animate-in slide-in-from-left duration-300" style={{ animationDelay: `${index * 50}ms` }}>
+                                                        <div className="col-span-4">
+                                                            <AccountSearch
+                                                                accounts={accounts}
+                                                                value={entry.accountId}
+                                                                onChange={(val: any) => updateEntry(index, 'accountId', val)}
+                                                            />
+                                                        </div>
+                                                        <div className="col-span-3">
+                                                            <input className="glass-input w-full py-2.5 text-xs font-bold" placeholder="Line Item Remark" value={entry.description} onChange={e => updateEntry(index, 'description', e.target.value)} />
+                                                        </div>
+                                                        <div className="col-span-2">
+                                                            <input type="number" className="glass-input w-full py-2.5 font-black text-xs text-right focus:ring-emerald-500/20" placeholder="0.00" value={entry.debit || ''} onChange={e => updateEntry(index, 'debit', e.target.value)} />
+                                                        </div>
+                                                        <div className="col-span-2">
+                                                            <input type="number" className="glass-input w-full py-2.5 font-black text-xs text-right focus:ring-rose-500/20" placeholder="0.00" value={entry.credit || ''} onChange={e => updateEntry(index, 'credit', e.target.value)} />
+                                                        </div>
+                                                        <div className="col-span-1 flex justify-center">
+                                                            <button type="button" onClick={() => removeEntry(index)} className="p-2.5 rounded-xl hover:bg-rose-500/10 text-slate-300 hover:text-rose-500 transition-all opacity-0 group-hover:opacity-100">
+                                                                <Trash2 size={18} />
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                    <div className="col-span-3">
-                                                        <input className="glass-input w-full py-2 text-xs" placeholder="Description" value={entry.description} onChange={e => updateEntry(index, 'description', e.target.value)} />
-                                                    </div>
-                                                    <div className="col-span-2">
-                                                        <input type="number" className="glass-input w-full py-2 text-xs text-right" placeholder="Debit" value={entry.debit || ''} onChange={e => updateEntry(index, 'debit', e.target.value)} />
-                                                    </div>
-                                                    <div className="col-span-2">
-                                                        <input type="number" className="glass-input w-full py-2 text-xs text-right" placeholder="Credit" value={entry.credit || ''} onChange={e => updateEntry(index, 'credit', e.target.value)} />
-                                                    </div>
-                                                    <button type="button" onClick={() => removeEntry(index)} className="col-span-1 p-2 text-subtext hover:text-rose-500"><Trash2 size={16} /></button>
-                                                </div>
-                                            ))}
-                                            <button type="button" onClick={addEntry} className="flex items-center gap-2 text-indigo-500 font-black text-[10px] uppercase tracking-widest p-2 hover:bg-indigo-500/10 rounded-lg border border-border">
-                                                <Plus size={14} /> Add Line
+                                                ))}
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={addEntry}
+                                                className="mt-8 flex items-center justify-center gap-3 w-full py-5 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 hover:border-indigo-500 hover:text-indigo-500 transition-all group"
+                                            >
+                                                <Plus size={18} className="group-hover:rotate-180 transition-transform duration-500" />
+                                                Provision New Ledger Line
                                             </button>
                                         </div>
                                     )}
                                 </div>
 
-                                <div className="p-8 border-t border-border flex gap-4 bg-secondary/5">
-                                    <button type="button" onClick={() => setShowModal(false)} className="flex-1 glass-button-secondary py-5">Discard Entry</button>
-                                    <button type="submit" disabled={!isBalanced} className={`flex-1 glass-button py-5 ${!isBalanced && 'opacity-30 grayscale'}`}>Post {form.voucherType} Voucher</button>
+                                <div className="p-10 border-t border-border flex gap-6 bg-slate-50 dark:bg-slate-900/50">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowModal(false)}
+                                        className="px-12 py-5 rounded-[1.5rem] font-black text-[11px] uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-all"
+                                    >
+                                        Abort Deployment
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={!isBalanced || loading}
+                                        className={`flex-1 bg-indigo-600 dark:bg-white text-white dark:text-slate-900 py-5 rounded-[1.5rem] font-black text-base uppercase italic tracking-tighter shadow-2xl flex items-center justify-center gap-4 transition-all ${(!isBalanced || loading) ? 'opacity-20 grayscale cursor-not-allowed' : 'hover:scale-[1.02] active:scale-95'}`}
+                                    >
+                                        {loading ? <Loader2 className="animate-spin" /> : <CheckCircle2 size={24} />}
+                                        {editingVoucherId ? 'Validate and Sync Voucher' : `Authorize ${form.voucherType} Protocol`}
+                                    </button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 )}
 
-                {/* Print Overlay */}
+                {/* Refined Print Layout */}
                 {selectedVoucherForPrint && (
-                    <div className="fixed inset-0 z-[60] bg-white flex flex-col p-12 overflow-y-auto">
-                        <div className="absolute top-8 right-8 print:hidden flex gap-4">
-                            <button onClick={() => window.print()} className="glass-button bg-black text-white px-6">Direct Print</button>
-                            <button onClick={() => setSelectedVoucherForPrint(null)} className="glass-button bg-slate-200 text-slate-800 px-6">Close Preview</button>
+                    <div className="fixed inset-0 z-[200] bg-slate-50/50 backdrop-blur-3xl flex flex-col p-8 overflow-y-auto animate-in fade-in duration-500">
+                        <div className="max-w-4xl mx-auto w-full mb-12 flex justify-between items-center print:hidden bg-white dark:bg-slate-900 p-6 rounded-[2rem] shadow-2xl border border-border">
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-slate-900 dark:bg-white rounded-2xl">
+                                    <Printer className="text-white dark:text-slate-900" size={24} />
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-black uppercase italic tracking-tighter leading-none">Print Protocol</h2>
+                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1">Voucher Identification: {selectedVoucherForPrint.voucherNumber}</p>
+                                </div>
+                            </div>
+                            <div className="flex gap-3">
+                                <button onClick={() => window.print()} className="bg-slate-900 dark:bg-blue-600 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl">Apply Print</button>
+                                <button onClick={() => setSelectedVoucherForPrint(null)} className="bg-white dark:bg-slate-800 text-slate-800 dark:text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest border border-border hover:bg-slate-100 transition-all">Close Pipeline</button>
+                            </div>
                         </div>
 
-                        <div className="w-full max-w-4xl mx-auto border-[3px] border-black p-10 font-serif">
-                            <div className="flex justify-between items-start border-b-2 border-black pb-8 mb-8">
-                                <div>
-                                    <h1 className="text-4xl font-black uppercase tracking-tighter">Voucher Copy</h1>
-                                    <p className="text-xl font-black mt-2 text-indigo-700">{company?.name || 'Logistics Solutions ERP'}</p>
-                                    <div className="text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-wider">
-                                        <p>{company?.address}</p>
-                                        <p>{company?.phone} | {company?.email}</p>
+                        {/* Official Print Matrix */}
+                        <div className="w-full max-w-4xl mx-auto bg-white p-16 shadow-[0_100px_200px_-50px_rgba(0,0,0,0.2)] print:shadow-none border-[1px] border-slate-200 print:border-none relative overflow-hidden">
+                            {/* Watermark */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12 opacity-[0.02] pointer-events-none select-none">
+                                <h1 className="text-[12rem] font-black uppercase tracking-tighter">{selectedVoucherForPrint.voucherType}</h1>
+                            </div>
+
+                            {/* Header Branding */}
+                            <div className="flex justify-between items-start mb-16 relative">
+                                <div className="space-y-6">
+                                    <div className="flex flex-col">
+                                        <h1 className="text-6xl font-black text-slate-900 tracking-tighter uppercase italic leading-[0.8]">
+                                            {company?.name || 'LOGISTICS SOLUTIONS'}
+                                        </h1>
+                                        <div className="h-2 w-48 bg-indigo-600 mt-4" />
                                     </div>
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">{company?.tagline || 'Leading Global Logistic Operations'}</p>
+                                        <div className="flex items-center gap-4 text-[9px] font-bold text-slate-400 uppercase tracking-widest pt-2">
+                                            <span>{company?.taxNumber && `NTN: ${company.taxNumber}`}</span>
+                                            <span>{company?.registrationNo && `REG: ${company.registrationNo}`}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="text-right flex flex-col items-end">
+                                    <div className="bg-slate-900 text-white px-8 py-4 mb-6">
+                                        <h2 className="text-4xl font-black uppercase italic tracking-tighter">Voucher</h2>
+                                    </div>
+                                    <div className="space-y-2 text-right">
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Document Registry</p>
+                                            <p className="text-xl font-black text-slate-900 tracking-tighter">{selectedVoucherForPrint.voucherNumber}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Effective Date</p>
+                                            <p className="text-sm font-black text-slate-900 uppercase">{new Date(selectedVoucherForPrint.date).toLocaleDateString(undefined, { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Separation Line */}
+                            <div className="flex gap-4 mb-16">
+                                <div className="flex-1 space-y-2">
+                                    <p className="text-[10px] font-black text-slate-800 uppercase tracking-[0.2em] border-b border-slate-100 pb-2">Business Narrative / Remittance Advice</p>
+                                    <p className="text-base font-medium leading-relaxed text-slate-700">{selectedVoucherForPrint.narration || 'No Additional Remarks'}</p>
+                                </div>
+                                <div className="w-[300px] bg-slate-50 p-6 flex flex-col justify-between">
+                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4 italic">Protocol ID</p>
+                                    <div className="text-right">
+                                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Type Identifier</p>
+                                        <p className="text-lg font-black text-indigo-600 uppercase italic tracking-tighter">{selectedVoucherForPrint.voucherType} PROTOCOL</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Main Transaction Table */}
+                            <div className="mb-20">
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="border-b-4 border-slate-900">
+                                            <th className="py-4 text-left text-[11px] font-black text-slate-900 uppercase tracking-widest px-4">Account Specification</th>
+                                            <th className="py-4 text-left text-[11px] font-black text-slate-900 uppercase tracking-widest px-4">Internal Remark</th>
+                                            <th className="py-4 text-right text-[11px] font-black text-slate-900 uppercase tracking-widest px-4">Debit</th>
+                                            <th className="py-4 text-right text-[11px] font-black text-slate-900 uppercase tracking-widest px-4">Credit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-100">
+                                        {selectedVoucherForPrint.entries.map((entry, idx) => (
+                                            <tr key={idx} className="group">
+                                                <td className="py-6 px-4">
+                                                    <div className="flex items-center gap-4">
+                                                        <span className="text-xs font-black text-slate-400 font-mono tracking-tighter">{entry.account.code}</span>
+                                                        <span className="text-sm font-black text-slate-900 uppercase tracking-tighter">{entry.account.name}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="py-6 px-4 text-[11px] font-bold text-slate-500 italic uppercase tracking-tight">{entry.description || '-'}</td>
+                                                <td className="py-6 px-4 text-right font-black text-sm text-slate-900">
+                                                    {entry.debit > 0 ? Number(entry.debit).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}
+                                                </td>
+                                                <td className="py-6 px-4 text-right font-black text-sm text-slate-900">
+                                                    {entry.credit > 0 ? Number(entry.credit).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '-'}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr className="border-t-4 border-slate-900 bg-slate-900 text-white">
+                                            <td colSpan={2} className="py-5 px-6 text-right text-[11px] font-black uppercase tracking-[0.5em]">Consolidated Valuation</td>
+                                            <td className="py-5 px-6 text-right font-black text-xl tracking-tighter">
+                                                {selectedVoucherForPrint.entries.reduce((s, e) => s + Number(e.debit), 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                            </td>
+                                            <td className="py-5 px-6 text-right font-black text-xl tracking-tighter">
+                                                {selectedVoucherForPrint.entries.reduce((s, e) => s + Number(e.credit), 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            {/* Address & Contact Footer */}
+                            <div className="mb-20 grid grid-cols-2 gap-10 border-t border-slate-100 pt-10">
+                                <div>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Corporate Headquarters</p>
+                                    <p className="text-[11px] font-bold text-slate-700 leading-relaxed uppercase">{company?.address || 'Operational Zone - Karachi, Pakistan'}</p>
                                 </div>
                                 <div className="text-right">
-                                    <p className="font-bold text-sm">Voucher #: {selectedVoucherForPrint.voucherNumber}</p>
-                                    <p className="font-bold text-sm">Type: {selectedVoucherForPrint.voucherType}</p>
-                                    <p className="font-bold text-sm">Date: {new Date(selectedVoucherForPrint.date).toLocaleDateString()}</p>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Comm Channels</p>
+                                    <p className="text-[11px] font-black text-slate-900">{company?.phone || '+92 000 0000000'}</p>
+                                    <p className="text-[11px] font-black text-slate-900 lowercase">{company?.email || 'ops@logistics.com'}</p>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-12 mb-10">
-                                <div>
-                                    <p className="text-xs uppercase font-black text-slate-500 mb-1">Description / Narration</p>
-                                    <p className="text-lg font-medium">{selectedVoucherForPrint.description || 'N/A'}</p>
+                            {/* Signature Matrix */}
+                            <div className="grid grid-cols-3 gap-12 pt-12">
+                                <div className="border-t-2 border-slate-900 pt-6 text-center">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-900 italic">Prepared By</p>
+                                    <p className="text-[11px] font-black text-slate-500 mt-4 uppercase italic">{selectedVoucherForPrint.postedBy?.name || 'Authorized System User'}</p>
                                 </div>
-                                {(selectedVoucherForPrint.voucherType !== 'JOURNAL') && (
-                                    <div className="bg-slate-50 p-4 border border-slate-200">
-                                        <p className="text-[10px] uppercase font-black text-slate-500 mb-1">Instrument Details</p>
-                                        <p className="text-sm">Method: <strong>Cash</strong></p>
-                                        {/* In a real app, these would come from the voucher metadata */}
-                                    </div>
-                                )}
+                                <div className="border-t-2 border-slate-900 pt-6 text-center">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-900 italic">Accounts Audit</p>
+                                    <div className="h-10" />
+                                </div>
+                                <div className="border-t-2 border-slate-900 pt-6 text-center">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-900 italic">Chief Executive</p>
+                                    <div className="h-10" />
+                                </div>
                             </div>
 
-                            <table className="w-full border-collapse mb-12">
-                                <thead>
-                                    <tr className="border-b-2 border-black bg-slate-100">
-                                        <th className="px-4 py-3 text-left font-black uppercase text-xs">A/C Title & Description</th>
-                                        <th className="px-4 py-3 text-right font-black uppercase text-xs w-32">Debit</th>
-                                        <th className="px-4 py-3 text-right font-black uppercase text-xs w-32">Credit</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {selectedVoucherForPrint.entries.map((entry, idx) => (
-                                        <tr key={idx} className="border-b border-slate-300">
-                                            <td className="px-4 py-4">
-                                                <p className="font-bold text-md">{entry.account.name}</p>
-                                                <p className="text-[10px] font-mono opacity-60">Code: {entry.account.code}</p>
-                                                {entry.description && <p className="text-xs italic mt-1">{entry.description}</p>}
-                                            </td>
-                                            <td className="px-4 py-4 text-right font-bold">{entry.debit > 0 ? Number(entry.debit).toLocaleString() : '-'}</td>
-                                            <td className="px-4 py-4 text-right font-bold">{entry.credit > 0 ? Number(entry.credit).toLocaleString() : '-'}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                                <tfoot>
-                                    <tr className="border-t-2 border-black bg-slate-50">
-                                        <td className="px-4 py-4 text-right font-black uppercase text-xs">Grand Total</td>
-                                        <td className="px-4 py-4 text-right font-black text-md">
-                                            {selectedVoucherForPrint.entries.reduce((s, e) => s + Number(e.debit), 0).toLocaleString()}
-                                        </td>
-                                        <td className="px-4 py-4 text-right font-black text-md">
-                                            {selectedVoucherForPrint.entries.reduce((s, e) => s + Number(e.credit), 0).toLocaleString()}
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-
-                            <div className="grid grid-cols-3 gap-8 mt-20">
-                                <div className="border-t border-black pt-4 text-center">
-                                    <p className="text-[10px] font-black uppercase">Prepared By</p>
-                                    <p className="text-sm font-bold mt-2">{selectedVoucherForPrint.postedBy?.name || 'Admin User'}</p>
-                                </div>
-                                <div className="border-t border-black pt-4 text-center">
-                                    <p className="text-[10px] font-black uppercase tracking-widest">Accounts Approval</p>
-                                </div>
-                                <div className="border-t border-black pt-4 text-center">
-                                    <p className="text-[10px] font-black uppercase tracking-widest">Receiver Signature</p>
-                                </div>
+                            <div className="mt-20 text-center opacity-20">
+                                <p className="text-[8px] font-black uppercase tracking-[1em]">Logistics ERP System - Secure Ledger Protocol</p>
                             </div>
                         </div>
                     </div>
@@ -624,8 +916,9 @@ export default function JournalVouchersPage() {
             <style jsx global>{`
                 @media print {
                     .print\\:hidden { display: none !important; }
-                    body { background: white !important; padding: 0 !important; }
-                    .max-w-7xl { max-width: 100% !important; margin: 0 !important; }
+                    body { background: white !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; }
+                    .max-w-4xl { max-width: 100% !important; border: none !important; box-shadow: none !important; padding: 0 !important; }
+                    @page { margin: 1cm; }
                 }
             `}</style>
         </DashboardLayout>
