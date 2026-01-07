@@ -112,7 +112,7 @@ export default function ReportViewer({ report }: ReportViewerProps) {
     };
 
     return (
-        <div className="bg-slate-900/50 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="glass-panel border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Filter Bar */}
             <div className="p-8 border-b border-white/5 flex flex-wrap items-center gap-4 bg-white/[0.02]">
                 <div className="flex items-center gap-3 bg-slate-950 border border-slate-800 rounded-2xl px-4 py-2">
