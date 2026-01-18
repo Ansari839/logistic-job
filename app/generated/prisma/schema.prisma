@@ -294,7 +294,7 @@ model ServiceInvoiceItem {
   taxAmount     Float          @default(0.0)
   total         Float
   productId     Int?
-  invoice       ServiceInvoice @relation(fields: [invoiceId], references: [id])
+  invoice       ServiceInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   product       Product?       @relation(fields: [productId], references: [id])
 
   @@map("InvoiceItem")
@@ -343,7 +343,7 @@ model FreightInvoiceItem {
   taxAmount     Float          @default(0.0)
   total         Float
   vendorId      Int?
-  invoice       FreightInvoice @relation(fields: [invoiceId], references: [id])
+  invoice       FreightInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   vendor        Vendor?        @relation(fields: [vendorId], references: [id])
 }
 
@@ -657,6 +657,7 @@ enum TransactionType {
   JOURNAL
   RECEIPT
   PAYMENT
+  CONTRA
   INVOICE
   PURCHASE
 }

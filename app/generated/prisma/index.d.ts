@@ -243,6 +243,7 @@ export const TransactionType: {
   JOURNAL: 'JOURNAL',
   RECEIPT: 'RECEIPT',
   PAYMENT: 'PAYMENT',
+  CONTRA: 'CONTRA',
   INVOICE: 'INVOICE',
   PURCHASE: 'PURCHASE'
 };

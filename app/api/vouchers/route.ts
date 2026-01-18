@@ -104,7 +104,10 @@ export async function POST(req: NextRequest) {
 
         const voucher = await prisma.$transaction(async (tx) => {
             const date = validatedData.date ? new Date(validatedData.date) : new Date();
-            const voucherNumber = await generateVoucherNumber(user.companyId!, validatedData.voucherType as any, date);
+            if (isNaN(date.getTime())) throw new Error('Invalid voucher date');
+
+            const voucherNumber = await generateVoucherNumber(user.companyId!, validatedData.voucherType as any, date, tx);
+            console.log(`Generating voucher: ${voucherNumber} for type ${validatedData.voucherType}`);
 
             const newVoucher = await tx.voucher.create({
                 data: {

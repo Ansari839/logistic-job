@@ -183,8 +183,28 @@ export async function DELETE(
             return NextResponse.json({ error: 'Job not found' }, { status: 404 });
         }
 
-        await prisma.job.delete({
-            where: { id: parseInt(id) }
+        await prisma.$transaction(async (tx) => {
+            // 1. Delete associated expenses
+            await tx.expense.deleteMany({ where: { jobId: parseInt(id) } });
+
+            // 2. Delete associated service invoices and their items
+            const serviceInvoices = await tx.serviceInvoice.findMany({ where: { jobId: parseInt(id) } });
+            for (const inv of serviceInvoices) {
+                await tx.serviceInvoiceItem.deleteMany({ where: { invoiceId: inv.id } });
+            }
+            await tx.serviceInvoice.deleteMany({ where: { jobId: parseInt(id) } });
+
+            // 3. Delete associated freight invoices and their items
+            const freightInvoices = await tx.freightInvoice.findMany({ where: { jobId: parseInt(id) } });
+            for (const inv of freightInvoices) {
+                await tx.freightInvoiceItem.deleteMany({ where: { invoiceId: inv.id } });
+            }
+            await tx.freightInvoice.deleteMany({ where: { jobId: parseInt(id) } });
+
+            // 4. Finally delete the job
+            await tx.job.delete({
+                where: { id: parseInt(id) }
+            });
         });
 
         return NextResponse.json({ message: 'Job deleted successfully' });

@@ -70,7 +70,7 @@ const AccountSearch = ({ accounts, value, onChange, placeholder = "Select Accoun
                 <div className="absolute z-[100] mt-2 w-full glass-panel bg-white dark:bg-slate-900 shadow-2xl border border-border animate-in fade-in zoom-in-95 duration-200">
                     <div className="p-3 border-b border-border sticky top-0 bg-inherit">
                         <div className="relative">
-                            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-subtext" />
+                            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-subtext pointer-events-none" />
                             <input
                                 autoFocus
                                 className="w-full bg-slate-100 dark:bg-slate-800 rounded-lg py-2 pl-9 pr-4 text-xs font-bold border-none focus:ring-2 focus:ring-indigo-500"
@@ -138,10 +138,10 @@ export default function JournalVouchersPage() {
         bankName: '',
         sourceAccount: '',
         targetAccount: '',
-        amount: 0,
+        amount: '' as any,
         entries: [
-            { accountId: '', debit: 0, credit: 0, description: '' },
-            { accountId: '', debit: 0, credit: 0, description: '' },
+            { accountId: '', debit: '' as any, credit: '' as any, description: '' },
+            { accountId: '', debit: '' as any, credit: '' as any, description: '' },
         ]
     };
 
@@ -265,15 +265,15 @@ export default function JournalVouchersPage() {
     };
 
     const totalDebit = form.voucherType === 'JOURNAL' || form.voucherType === 'CONTRA'
-        ? form.entries.reduce((sum, e) => sum + Number(e.debit), 0)
-        : form.amount;
+        ? form.entries.reduce((sum, e) => sum + Number(e.debit || 0), 0)
+        : Number(form.amount || 0);
     const totalCredit = form.voucherType === 'JOURNAL' || form.voucherType === 'CONTRA'
-        ? form.entries.reduce((sum, e) => sum + Number(e.credit), 0)
-        : form.amount;
+        ? form.entries.reduce((sum, e) => sum + Number(e.credit || 0), 0)
+        : Number(form.amount || 0);
 
     const isBalanced = (form.voucherType === 'JOURNAL' || form.voucherType === 'CONTRA')
         ? (Math.abs(totalDebit - totalCredit) < 0.01 && totalDebit > 0)
-        : (form.amount > 0 && form.sourceAccount && form.targetAccount);
+        : (Number(form.amount || 0) > 0 && form.sourceAccount && form.targetAccount);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -352,8 +352,9 @@ export default function JournalVouchersPage() {
 
                     <div className="flex flex-wrap items-center gap-4 print:hidden">
                         <div className="relative group min-w-[240px]">
-                            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-indigo-500 transition-colors pointer-events-none" />
                             <input
+                                type="text"
                                 className="glass-input pl-12 pr-4 py-4 w-full font-black text-xs uppercase"
                                 placeholder="Search Voucher # or Rem..."
                                 value={searchQuery}
@@ -645,13 +646,14 @@ export default function JournalVouchersPage() {
                                                 <div className="space-y-4">
                                                     <label className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-500">Magnitude / Amount</label>
                                                     <div className="relative group">
-                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-2xl text-slate-300 group-hover:text-indigo-500 transition-colors">Rs</div>
+                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-2xl text-slate-300 group-hover:text-indigo-500 transition-colors pointer-events-none">Rs</div>
                                                         <input
                                                             type="number"
+                                                            step="0.01"
                                                             placeholder="0.00"
                                                             className="glass-input w-full text-5xl font-black pl-20 h-24 focus:ring-[20px] focus:ring-indigo-500/5 transition-all tracking-tighter"
-                                                            value={form.amount || ''}
-                                                            onChange={e => setForm({ ...form, amount: Number(e.target.value) })}
+                                                            value={form.amount}
+                                                            onChange={e => setForm({ ...form, amount: e.target.value as any })}
                                                         />
                                                     </div>
                                                 </div>
@@ -710,10 +712,10 @@ export default function JournalVouchersPage() {
                                                             <input className="glass-input w-full py-2.5 text-xs font-bold" placeholder="Line Item Remark" value={entry.description} onChange={e => updateEntry(index, 'description', e.target.value)} />
                                                         </div>
                                                         <div className="col-span-2">
-                                                            <input type="number" className="glass-input w-full py-2.5 font-black text-xs text-right focus:ring-emerald-500/20" placeholder="0.00" value={entry.debit || ''} onChange={e => updateEntry(index, 'debit', e.target.value)} />
+                                                            <input type="number" step="0.01" className="glass-input w-full py-2.5 font-black text-xs text-right focus:ring-emerald-500/20" placeholder="0.00" value={entry.debit} onChange={e => updateEntry(index, 'debit', e.target.value)} />
                                                         </div>
                                                         <div className="col-span-2">
-                                                            <input type="number" className="glass-input w-full py-2.5 font-black text-xs text-right focus:ring-rose-500/20" placeholder="0.00" value={entry.credit || ''} onChange={e => updateEntry(index, 'credit', e.target.value)} />
+                                                            <input type="number" step="0.01" className="glass-input w-full py-2.5 font-black text-xs text-right focus:ring-rose-500/20" placeholder="0.00" value={entry.credit} onChange={e => updateEntry(index, 'credit', e.target.value)} />
                                                         </div>
                                                         <div className="col-span-1 flex justify-center">
                                                             <button type="button" onClick={() => removeEntry(index)} className="p-2.5 rounded-xl hover:bg-rose-500/10 text-slate-300 hover:text-rose-500 transition-all opacity-0 group-hover:opacity-100">

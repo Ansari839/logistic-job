@@ -1,7 +1,8 @@
 import prisma from '@/lib/prisma';
 import { VoucherType } from '@/app/generated/prisma';
 
-export async function generateVoucherNumber(companyId: number, type: VoucherType, date: Date = new Date()): Promise<string> {
+export async function generateVoucherNumber(companyId: number, type: VoucherType, date: Date = new Date(), tx?: any): Promise<string> {
+    const client = tx || prisma;
     const year = date.getFullYear();
     const prefixMap: Record<VoucherType, string> = {
         JOURNAL: 'JV',
@@ -12,8 +13,9 @@ export async function generateVoucherNumber(companyId: number, type: VoucherType
 
     const prefix = prefixMap[type] || 'VO';
     const searchPrefix = `${prefix}-${year}-`;
+    console.log(`Searching for last voucher with prefix: ${searchPrefix}`);
 
-    const lastVoucher = await prisma.voucher.findFirst({
+    const lastVoucher = await client.voucher.findFirst({
         where: {
             companyId,
             voucherNumber: { startsWith: searchPrefix }

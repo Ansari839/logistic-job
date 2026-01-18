@@ -140,7 +140,7 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
     const user = await getAuthUser();
-    if (!user || user.role !== 'ADMIN') return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!user || !user.companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     try {
         const { id, action, ...updateData } = await request.json();
@@ -380,7 +380,16 @@ export async function PATCH(request: Request) {
             if (invoice.isApproved) return NextResponse.json({ error: 'Approved invoice cannot be deleted' }, { status: 400 });
             if (invoice.isLocked) return NextResponse.json({ error: 'Locked document cannot be deleted' }, { status: 400 });
 
-            await prisma.serviceInvoice.delete({ where: { id: invoice.id } });
+            // Ensure only admins can delete approved/locked or if they are not the owner (though draft check is primary)
+            if (user.role !== 'ADMIN' && invoice.status !== 'DRAFT') {
+                return NextResponse.json({ error: 'Only admins can delete non-draft invoices' }, { status: 403 });
+            }
+
+            await prisma.$transaction(async (tx) => {
+                await tx.stockMovement.deleteMany({ where: { reference: invoice.invoiceNumber, companyId: user.companyId as number } });
+                await tx.serviceInvoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
+                await tx.serviceInvoice.delete({ where: { id: invoice.id } });
+            });
             await logAction({ user, action: 'DELETE', module: 'INVOICE', entityId: invoice.id });
             return NextResponse.json({ success: true });
         }
@@ -398,7 +407,7 @@ export async function PATCH(request: Request) {
 
 export async function DELETE(request: Request) {
     const user = await getAuthUser();
-    if (!user || user.role !== 'ADMIN') return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!user || !user.companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     try {
         const { id } = await request.json();
@@ -411,7 +420,15 @@ export async function DELETE(request: Request) {
         if (invoice.isApproved) return NextResponse.json({ error: 'Approved invoice cannot be deleted' }, { status: 400 });
         if (invoice.isLocked) return NextResponse.json({ error: 'Locked document cannot be deleted' }, { status: 400 });
 
-        await prisma.serviceInvoice.delete({ where: { id: invoice.id } });
+        if (user.role !== 'ADMIN' && invoice.status !== 'DRAFT') {
+            return NextResponse.json({ error: 'Only admins can delete non-draft invoices' }, { status: 403 });
+        }
+
+        await prisma.$transaction(async (tx) => {
+            await tx.stockMovement.deleteMany({ where: { reference: invoice.invoiceNumber, companyId: user.companyId as number } });
+            await tx.serviceInvoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
+            await tx.serviceInvoice.delete({ where: { id: invoice.id } });
+        });
         await logAction({ user, action: 'DELETE', module: 'INVOICE', entityId: invoice.id });
         return NextResponse.json({ success: true });
     } catch (error) {

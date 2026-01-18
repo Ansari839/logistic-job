@@ -65,13 +65,29 @@ export default function NewInvoicePage() {
         usdRate: 0,
         exchangeRate: 1,
     });
+    const [pendingJobs, setPendingJobs] = useState<Job[]>([]);
+    const [fetchingJobs, setFetchingJobs] = useState(false);
 
     useEffect(() => {
         if (category === 'FREIGHT') {
             fetchCustomers();
             fetchVendors();
+        } else {
+            fetchPendingJobs();
         }
     }, [category]);
+
+    const fetchPendingJobs = async () => {
+        setFetchingJobs(true);
+        try {
+            const res = await fetch('/api/jobs?noInvoice=true');
+            if (res.ok) {
+                const data = await res.json();
+                setPendingJobs(data.jobs || []);
+            }
+        } catch (err) { console.error('Fetch pending jobs error'); }
+        finally { setFetchingJobs(false); }
+    };
 
     const fetchCustomers = async () => {
         try {
@@ -278,26 +294,58 @@ export default function NewInvoicePage() {
                         </div>
 
                         {category === 'SERVICE' ? (
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <div className="flex-1 relative group">
-                                    <Hash className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors" size={18} />
-                                    <input
-                                        type="text"
-                                        placeholder="Enter Job Number (e.g., JOB-1001)..."
-                                        className="glass-input w-full pl-12 uppercase tracking-widest"
-                                        value={jobNumber}
-                                        onChange={(e) => setJobNumber(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && handleSearchJob()}
-                                    />
+                            <div className="space-y-6">
+                                <div className="flex flex-col sm:flex-row gap-4">
+                                    <div className="flex-1 relative group">
+                                        <Hash className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors" size={18} />
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Job Number (e.g., JOB-1001)..."
+                                            className="glass-input w-full pl-12 uppercase tracking-widest"
+                                            value={jobNumber}
+                                            onChange={(e) => setJobNumber(e.target.value)}
+                                            onKeyDown={(e) => e.key === 'Enter' && handleSearchJob()}
+                                        />
+                                    </div>
+                                    <button
+                                        onClick={handleSearchJob}
+                                        type="button"
+                                        disabled={searching || !jobNumber}
+                                        className="glass-button min-w-[160px]"
+                                    >
+                                        {searching ? <Loader2 className="animate-spin" size={18} /> : <Search size={18} />}
+                                        {searching ? 'Searching...' : 'Fetch Job'}
+                                    </button>
                                 </div>
-                                <button
-                                    onClick={handleSearchJob}
-                                    disabled={searching || !jobNumber}
-                                    className="glass-button min-w-[160px]"
-                                >
-                                    {searching ? <Loader2 className="animate-spin" size={18} /> : <Search size={18} />}
-                                    {searching ? 'Searching...' : 'Fetch Job'}
-                                </button>
+
+                                {/* Pending Jobs List */}
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-subtext">Recent Pending Jobs (No Invoice)</label>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                        {fetchingJobs ? (
+                                            <div className="col-span-full py-4 text-center">
+                                                <Loader2 className="animate-spin text-primary inline-block mr-2" size={16} />
+                                                <span className="text-xs font-bold text-subtext uppercase tracking-widest">Scanning Jobs...</span>
+                                            </div>
+                                        ) : pendingJobs.length === 0 ? (
+                                            <div className="col-span-full py-4 text-center border-2 border-dashed border-border rounded-2xl">
+                                                <p className="text-xs font-bold text-subtext uppercase tracking-widest">No uninvoiced jobs found</p>
+                                            </div>
+                                        ) : (
+                                            pendingJobs.map(pj => (
+                                                <button
+                                                    key={pj.id}
+                                                    type="button"
+                                                    onClick={() => { setJobNumber(pj.jobNumber); setTimeout(() => handleSearchJob(), 100); }}
+                                                    className="flex flex-col items-start p-3 glass-card hover:bg-primary/10 border-border hover:border-primary/50 transition-all text-left group"
+                                                >
+                                                    <span className="text-sm font-black text-foreground group-hover:text-primary transition-colors">{pj.jobNumber}</span>
+                                                    <span className="text-[10px] font-bold text-subtext uppercase truncate w-full">{pj.customer.name}</span>
+                                                </button>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

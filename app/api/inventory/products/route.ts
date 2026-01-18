@@ -21,7 +21,7 @@ export async function GET() {
 
     try {
         const products = await prisma.product.findMany({
-            where: { companyId: user.companyId },
+            where: { companyId: user.companyId, deletedAt: null },
             include: {
                 category: { select: { name: true } },
                 _count: { select: { movements: true } }
@@ -104,5 +104,21 @@ export async function POST(request: Request) {
         }
         console.error('Create product error:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
+}
+export async function DELETE(request: Request) {
+    const user = await getAuthUser();
+    if (!user || user.role !== 'ADMIN') return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    try {
+        const { id } = await request.json();
+        await prisma.product.update({
+            where: { id: parseInt(id), companyId: user.companyId as number },
+            data: { deletedAt: new Date() }
+        });
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error('Delete product error:', error);
+        return NextResponse.json({ error: 'Failed to delete product' }, { status: 500 });
     }
 }

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import {
     Plus, Search, Filter, MoreHorizontal,
     ArrowUpRight, Package, Calendar, User,
-    FileText, Tag, Ship, Hash
+    FileText, Tag, Ship, Hash, Copy, Check
 } from 'lucide-react';
 
 interface Job {
@@ -27,6 +27,15 @@ export default function JobsPage() {
     const [jobs, setJobs] = useState<Job[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
+    const [copiedId, setCopiedId] = useState<number | null>(null);
+
+    const handleCopy = (e: React.MouseEvent, text: string, id: number) => {
+        e.preventDefault();
+        e.stopPropagation();
+        navigator.clipboard.writeText(text);
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 2000);
+    };
 
     useEffect(() => {
         fetchJobs();
@@ -120,6 +129,13 @@ export default function JobsPage() {
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-3 mb-1">
                                             <span className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{job.jobNumber}</span>
+                                            <button
+                                                onClick={(e) => handleCopy(e, job.jobNumber, job.id)}
+                                                className={`p-1.5 rounded-lg transition-all ${copiedId === job.id ? 'bg-emerald-500/20 text-emerald-500' : 'bg-slate-500/10 text-slate-500 hover:text-white hover:bg-slate-500/20'}`}
+                                                title="Copy Job Number"
+                                            >
+                                                {copiedId === job.id ? <Check size={14} /> : <Copy size={14} />}
+                                            </button>
                                             <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest ${job.jobType === 'EXPORT' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20'
                                                 }`}>
                                                 {job.jobType}

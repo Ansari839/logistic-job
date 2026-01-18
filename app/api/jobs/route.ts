@@ -10,6 +10,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const jobType = searchParams.get('jobType');
     const customerId = searchParams.get('customerId');
+    const noInvoice = searchParams.get('noInvoice') === 'true';
 
     try {
         const jobs = await prisma.job.findMany({
@@ -19,6 +20,10 @@ export async function GET(request: Request) {
                 deletedAt: null,
                 ...(jobType && { jobType: jobType as any }),
                 ...(customerId && { customerId: parseInt(customerId) }),
+                ...(noInvoice && {
+                    serviceInvoice: { is: null },
+                    freightInvoice: { is: null }
+                })
             },
             include: {
                 customer: {

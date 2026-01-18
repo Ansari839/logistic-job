@@ -121,6 +121,25 @@ export default function InventoryPage() {
         }
     };
 
+    const handleDelete = async (id: number) => {
+        if (!confirm('Are you sure you want to delete this product?')) return;
+        try {
+            const res = await fetch('/api/inventory/products', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id }),
+            });
+            if (res.ok) {
+                fetchData();
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Delete failed');
+            }
+        } catch (err) {
+            alert('Delete error');
+        }
+    };
+
     return (
         <DashboardLayout>
             <div className="max-w-7xl mx-auto space-y-8">
@@ -244,9 +263,17 @@ export default function InventoryPage() {
                                                 </div>
                                             </td>
                                             <td className="px-8 py-5 text-right">
-                                                <button className="p-2 text-subtext hover:text-primary transition-colors">
-                                                    <MoreVertical size={18} />
-                                                </button>
+                                                <div className="flex justify-end gap-2">
+                                                    <button className="p-2 text-subtext hover:text-primary transition-colors">
+                                                        <MoreVertical size={18} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(p.id)}
+                                                        className="p-2 text-subtext hover:text-red-500 transition-colors"
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))
