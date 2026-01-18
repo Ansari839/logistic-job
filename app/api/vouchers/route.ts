@@ -187,6 +187,8 @@ export async function DELETE(req: NextRequest) {
 
         const voucherId = parseInt(id);
 
+
+
         await prisma.$transaction(async (tx) => {
             const voucher = await tx.voucher.findUnique({
                 where: { id: voucherId, companyId: user.companyId! }
@@ -194,15 +196,53 @@ export async function DELETE(req: NextRequest) {
 
             if (!voucher) throw new Error('Voucher not found');
 
-            // Delete linked transaction
-            await tx.transaction.deleteMany({
-                where: { reference: voucher.voucherNumber, companyId: user.companyId! }
-            });
+            if (voucher.status === 'POSTED') {
+                // Soft Delete (Void)
+                // 1. Delete Financial Impact (Transaction)
+                await tx.transaction.deleteMany({
+                    where: { reference: voucher.voucherNumber, companyId: user.companyId! }
+                });
 
-            // Delete voucher (Cascade will handle VoucherEntry if configured, but we do it anyway for safety if not)
-            await tx.voucher.delete({
-                where: { id: voucherId }
-            });
+                // 2. Mark Voucher as CANCELLED
+                await tx.voucher.update({
+                    where: { id: voucherId },
+                    data: { status: 'CANCELLED' }
+                });
+            } else {
+                // Hard Delete (Draft or Already Cancelled - Wait, if Cancelled, maybe just delete? Or strict?)
+                // Assuming DRAFT or CANCELLED can be hard deleted if user really wants to remove it?
+                // Plan said: DRAFT -> Hard Delete. POSTED -> Soft Delete.
+                // If it's already CANCELLED, reusing delete again might mean "Cleanup".
+                // For now, let's treat anything NOT POSTED as deletable, or strictly DRAFT.
+                // But usually if it's Cancelled, it stays. The user button usually handles "Delete" vs "Cancel".
+                // If user hits Delete on a Cancelled item, maybe allowed?
+                // Let's stick to: If POSTED, Void it. If DRAFT (or others), Delete it.
+                // Wait, if it is CANCELLED, and they click DELETE, should we hard delete?
+                // User said: "It stays in the database... UI shows... as VOID".
+                // So DELETE on a Cancelled item should probably be blocked or do nothing?
+                // Or maybe the UI won't show a delete button for Cancelled?
+                // Let's implement: If POSTED -> Cancel. If DRAFT -> Delete. If CANCELLED -> Error "Already Voided" or Allow Delete? 
+                // "Reuse the number" logic implies Hard Delete frees it.
+                // Let's assume standard behavior:
+                // If status is POSTED: Void it.
+                // If status is DRAFT: Delete it.
+                // If status is CANCELLED: Delete it (Hard Delete) ? No, user said "Stays in DB".
+                // So if status is CANCELLED, we should probably throw "Cannot delete voided voucher" or just return success (noop).
+                // Let's allow Hard Delete only for DRAFT.
+
+                if (voucher.status === 'DRAFT') {
+                    // Delete linked transaction coverage (just in case)
+                    await tx.transaction.deleteMany({
+                        where: { reference: voucher.voucherNumber, companyId: user.companyId! }
+                    });
+
+                    await tx.voucher.delete({
+                        where: { id: voucherId }
+                    });
+                } else if (voucher.status === 'CANCELLED') {
+                    throw new Error('This voucher is already voided and cannot be deleted.');
+                }
+            }
         });
 
         return NextResponse.json({ message: 'Voucher deleted successfully' });

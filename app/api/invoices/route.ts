@@ -385,13 +385,28 @@ export async function PATCH(request: Request) {
                 return NextResponse.json({ error: 'Only admins can delete non-draft invoices' }, { status: 403 });
             }
 
-            await prisma.$transaction(async (tx) => {
-                await tx.stockMovement.deleteMany({ where: { reference: invoice.invoiceNumber, companyId: user.companyId as number } });
-                await tx.serviceInvoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
-                await tx.serviceInvoice.delete({ where: { id: invoice.id } });
-            });
-            await logAction({ user, action: 'DELETE', module: 'INVOICE', entityId: invoice.id });
-            return NextResponse.json({ success: true });
+            if (invoice.isApproved || invoice.status === 'SENT' || invoice.status === 'PAID') {
+                await prisma.$transaction(async (tx) => {
+                    await tx.stockMovement.deleteMany({ where: { reference: invoice.invoiceNumber, companyId: user.companyId as number } });
+                    await tx.serviceInvoice.update({
+                        where: { id: invoice.id },
+                        data: { status: 'CANCELLED', isApproved: false, isLocked: true }
+                    });
+                });
+                await logAction({ user, action: 'UPDATE', module: 'INVOICE', entityId: invoice.id });
+                return NextResponse.json({ message: 'Invoice voided successfully' });
+            } else if (invoice.status === 'DRAFT') {
+                await prisma.$transaction(async (tx) => {
+                    await tx.stockMovement.deleteMany({ where: { reference: invoice.invoiceNumber, companyId: user.companyId as number } });
+                    await tx.serviceInvoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
+                    await tx.serviceInvoice.delete({ where: { id: invoice.id } });
+                });
+                await logAction({ user, action: 'DELETE', module: 'INVOICE', entityId: invoice.id });
+                return NextResponse.json({ success: true });
+            } else if (invoice.status === 'CANCELLED') {
+                return NextResponse.json({ error: 'Invoice is already cancelled' }, { status: 400 });
+            }
+            return NextResponse.json({ error: 'Cannot delete invoice in current status' }, { status: 400 });
         }
 
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });

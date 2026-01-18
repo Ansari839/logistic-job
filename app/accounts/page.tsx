@@ -240,6 +240,22 @@ export default function ChartOfAccountsPage() {
         );
     };
 
+    const handleExpandAll = () => {
+        if (expandedIds.size === accounts.length) {
+            setExpandedIds(new Set());
+        } else {
+            setExpandedIds(new Set(accounts.map(a => a.id)));
+        }
+    };
+
+    const displayedNodes = React.useMemo(() => {
+        if (!searchTerm) return buildTree(accounts);
+        return accounts.filter(a =>
+            a.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            a.code.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [accounts, searchTerm, expandedIds]); // expandedIds dependency not strictly needed for list build but ok
+
     return (
         <DashboardLayout>
             <div className="max-w-6xl mx-auto space-y-8">
@@ -250,9 +266,12 @@ export default function ChartOfAccountsPage() {
                         <p className="text-subtext text-sm font-bold uppercase tracking-[0.2em] mt-1">Financial Structure & Hierarchy</p>
                     </div>
                     <div className="flex gap-3">
-                        <button className="flex items-center gap-2 glass-panel text-subtext px-6 py-4 rounded-[2rem] font-black transition-all hover:bg-primary/5 hover:text-slate-900 dark:hover:text-white text-xs uppercase tracking-widest shadow-xl">
+                        <button
+                            onClick={handleExpandAll}
+                            className="flex items-center gap-2 glass-panel text-subtext px-6 py-4 rounded-[2rem] font-black transition-all hover:bg-primary/5 hover:text-slate-900 dark:hover:text-white text-xs uppercase tracking-widest shadow-xl"
+                        >
                             <Layers size={18} />
-                            Full Expand
+                            {expandedIds.size > 0 ? 'Collapse All' : 'Full Expand'}
                         </button>
                         <button
                             onClick={() => {
@@ -281,7 +300,7 @@ export default function ChartOfAccountsPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <div className="lg:col-span-3">
                         <div className="relative group">
-                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-subtext group-focus-within:text-blue-600 dark:group-focus-within:text-blue-500 transition-colors" size={20} />
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-subtext group-focus-within:text-blue-600 dark:group-focus-within:text-blue-500 transition-colors pointer-events-none" size={20} />
                             <input
                                 type="text"
                                 placeholder="Search by name, code or type..."
@@ -307,13 +326,13 @@ export default function ChartOfAccountsPage() {
                             <div className="animate-spin w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full mb-4" />
                             <p className="text-subtext font-black uppercase tracking-widest text-[10px]">Loading Hierarchy...</p>
                         </div>
-                    ) : tree.length === 0 ? (
+                    ) : displayedNodes.length === 0 ? (
                         <div className="py-20 text-center">
                             <BookOpen size={48} className="text-slate-300 dark:text-slate-800 mx-auto mb-4" />
-                            <p className="text-subtext font-bold uppercase tracking-widest text-sm">No accounts configured</p>
+                            <p className="text-subtext font-bold uppercase tracking-widest text-sm">No accounts found</p>
                         </div>
                     ) : (
-                        tree.map(node => renderNode(node))
+                        displayedNodes.map(node => renderNode(node))
                     )}
                 </div>
 

@@ -176,7 +176,7 @@ export async function DELETE(
         // Check ownership
         const existingJob = await prisma.job.findUnique({
             where: { id: parseInt(id) },
-            select: { companyId: true }
+            select: { companyId: true, status: true }
         });
 
         if (!existingJob || existingJob.companyId !== user.companyId) {
@@ -184,27 +184,33 @@ export async function DELETE(
         }
 
         await prisma.$transaction(async (tx) => {
-            // 1. Delete associated expenses
-            await tx.expense.deleteMany({ where: { jobId: parseInt(id) } });
+            if (existingJob.status === 'DRAFT') {
+                // Hard Delete
+                await tx.expense.deleteMany({ where: { jobId: parseInt(id) } });
 
-            // 2. Delete associated service invoices and their items
-            const serviceInvoices = await tx.serviceInvoice.findMany({ where: { jobId: parseInt(id) } });
-            for (const inv of serviceInvoices) {
-                await tx.serviceInvoiceItem.deleteMany({ where: { invoiceId: inv.id } });
+                const serviceInvoices = await tx.serviceInvoice.findMany({ where: { jobId: parseInt(id) } });
+                for (const inv of serviceInvoices) {
+                    await tx.serviceInvoiceItem.deleteMany({ where: { invoiceId: inv.id } });
+                    await tx.stockMovement.deleteMany({ where: { reference: inv.invoiceNumber, companyId: user.companyId } });
+                }
+                await tx.serviceInvoice.deleteMany({ where: { jobId: parseInt(id) } });
+
+                const freightInvoices = await tx.freightInvoice.findMany({ where: { jobId: parseInt(id) } });
+                for (const inv of freightInvoices) {
+                    await tx.freightInvoiceItem.deleteMany({ where: { invoiceId: inv.id } });
+                }
+                await tx.freightInvoice.deleteMany({ where: { jobId: parseInt(id) } });
+
+                await tx.job.delete({ where: { id: parseInt(id) } });
+            } else if (existingJob.status === 'IN_PROGRESS' || existingJob.status === 'CLOSED') {
+                // Soft Delete (Void)
+                await tx.job.update({
+                    where: { id: parseInt(id) },
+                    data: { status: 'CANCELLED' }
+                });
+            } else if (existingJob.status === 'CANCELLED') {
+                throw new Error('Job is already cancelled');
             }
-            await tx.serviceInvoice.deleteMany({ where: { jobId: parseInt(id) } });
-
-            // 3. Delete associated freight invoices and their items
-            const freightInvoices = await tx.freightInvoice.findMany({ where: { jobId: parseInt(id) } });
-            for (const inv of freightInvoices) {
-                await tx.freightInvoiceItem.deleteMany({ where: { invoiceId: inv.id } });
-            }
-            await tx.freightInvoice.deleteMany({ where: { jobId: parseInt(id) } });
-
-            // 4. Finally delete the job
-            await tx.job.delete({
-                where: { id: parseInt(id) }
-            });
         });
 
         return NextResponse.json({ message: 'Job deleted successfully' });
