@@ -20408,7 +20408,7 @@ export namespace Prisma {
     id: number
     invoiceNumber: string
     date: Date
-    jobId: number
+    jobId: number | null
     customerId: number
     type: $Enums.InvoiceType
     status: $Enums.InvoiceStatus
@@ -20485,7 +20485,7 @@ export namespace Prisma {
     division?: boolean
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
-    job?: boolean | JobDefaultArgs<ExtArgs>
+    job?: boolean | ServiceInvoice$jobArgs<ExtArgs>
     transaction?: boolean | ServiceInvoice$transactionArgs<ExtArgs>
     items?: boolean | ServiceInvoice$itemsArgs<ExtArgs>
     _count?: boolean | ServiceInvoiceCountOutputTypeDefaultArgs<ExtArgs>
@@ -20522,7 +20522,7 @@ export namespace Prisma {
     division?: boolean
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
-    job?: boolean | JobDefaultArgs<ExtArgs>
+    job?: boolean | ServiceInvoice$jobArgs<ExtArgs>
     transaction?: boolean | ServiceInvoice$transactionArgs<ExtArgs>
   }, ExtArgs["result"]["serviceInvoice"]>
 
@@ -20557,7 +20557,7 @@ export namespace Prisma {
     division?: boolean
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
-    job?: boolean | JobDefaultArgs<ExtArgs>
+    job?: boolean | ServiceInvoice$jobArgs<ExtArgs>
     transaction?: boolean | ServiceInvoice$transactionArgs<ExtArgs>
   }, ExtArgs["result"]["serviceInvoice"]>
 
@@ -20596,7 +20596,7 @@ export namespace Prisma {
   export type ServiceInvoiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
-    job?: boolean | JobDefaultArgs<ExtArgs>
+    job?: boolean | ServiceInvoice$jobArgs<ExtArgs>
     transaction?: boolean | ServiceInvoice$transactionArgs<ExtArgs>
     items?: boolean | ServiceInvoice$itemsArgs<ExtArgs>
     _count?: boolean | ServiceInvoiceCountOutputTypeDefaultArgs<ExtArgs>
@@ -20604,13 +20604,13 @@ export namespace Prisma {
   export type ServiceInvoiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
-    job?: boolean | JobDefaultArgs<ExtArgs>
+    job?: boolean | ServiceInvoice$jobArgs<ExtArgs>
     transaction?: boolean | ServiceInvoice$transactionArgs<ExtArgs>
   }
   export type ServiceInvoiceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     customer?: boolean | CustomerDefaultArgs<ExtArgs>
-    job?: boolean | JobDefaultArgs<ExtArgs>
+    job?: boolean | ServiceInvoice$jobArgs<ExtArgs>
     transaction?: boolean | ServiceInvoice$transactionArgs<ExtArgs>
   }
 
@@ -20619,7 +20619,7 @@ export namespace Prisma {
     objects: {
       company: Prisma.$CompanyPayload<ExtArgs>
       customer: Prisma.$CustomerPayload<ExtArgs>
-      job: Prisma.$JobPayload<ExtArgs>
+      job: Prisma.$JobPayload<ExtArgs> | null
       transaction: Prisma.$TransactionPayload<ExtArgs> | null
       items: Prisma.$ServiceInvoiceItemPayload<ExtArgs>[]
     }
@@ -20627,7 +20627,7 @@ export namespace Prisma {
       id: number
       invoiceNumber: string
       date: Date
-      jobId: number
+      jobId: number | null
       customerId: number
       type: $Enums.InvoiceType
       status: $Enums.InvoiceStatus
@@ -21048,7 +21048,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     customer<T extends CustomerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CustomerDefaultArgs<ExtArgs>>): Prisma__CustomerClient<$Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    job<T extends JobDefaultArgs<ExtArgs> = {}>(args?: Subset<T, JobDefaultArgs<ExtArgs>>): Prisma__JobClient<$Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    job<T extends ServiceInvoice$jobArgs<ExtArgs> = {}>(args?: Subset<T, ServiceInvoice$jobArgs<ExtArgs>>): Prisma__JobClient<$Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     transaction<T extends ServiceInvoice$transactionArgs<ExtArgs> = {}>(args?: Subset<T, ServiceInvoice$transactionArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     items<T extends ServiceInvoice$itemsArgs<ExtArgs> = {}>(args?: Subset<T, ServiceInvoice$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceInvoiceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -21501,6 +21501,25 @@ export namespace Prisma {
      * Limit how many ServiceInvoices to delete.
      */
     limit?: number
+  }
+
+  /**
+   * ServiceInvoice.job
+   */
+  export type ServiceInvoice$jobArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Job
+     */
+    select?: JobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Job
+     */
+    omit?: JobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: JobInclude<ExtArgs> | null
+    where?: JobWhereInput
   }
 
   /**
@@ -45694,7 +45713,7 @@ export namespace Prisma {
     id?: IntFilter<"ServiceInvoice"> | number
     invoiceNumber?: StringFilter<"ServiceInvoice"> | string
     date?: DateTimeFilter<"ServiceInvoice"> | Date | string
-    jobId?: IntFilter<"ServiceInvoice"> | number
+    jobId?: IntNullableFilter<"ServiceInvoice"> | number | null
     customerId?: IntFilter<"ServiceInvoice"> | number
     type?: EnumInvoiceTypeFilter<"ServiceInvoice"> | $Enums.InvoiceType
     status?: EnumInvoiceStatusFilter<"ServiceInvoice"> | $Enums.InvoiceStatus
@@ -45721,7 +45740,7 @@ export namespace Prisma {
     division?: StringNullableFilter<"ServiceInvoice"> | string | null
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     customer?: XOR<CustomerScalarRelationFilter, CustomerWhereInput>
-    job?: XOR<JobScalarRelationFilter, JobWhereInput>
+    job?: XOR<JobNullableScalarRelationFilter, JobWhereInput> | null
     transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
     items?: ServiceInvoiceItemListRelationFilter
   }
@@ -45730,7 +45749,7 @@ export namespace Prisma {
     id?: SortOrder
     invoiceNumber?: SortOrder
     date?: SortOrder
-    jobId?: SortOrder
+    jobId?: SortOrderInput | SortOrder
     customerId?: SortOrder
     type?: SortOrder
     status?: SortOrder
@@ -45797,7 +45816,7 @@ export namespace Prisma {
     division?: StringNullableFilter<"ServiceInvoice"> | string | null
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     customer?: XOR<CustomerScalarRelationFilter, CustomerWhereInput>
-    job?: XOR<JobScalarRelationFilter, JobWhereInput>
+    job?: XOR<JobNullableScalarRelationFilter, JobWhereInput> | null
     transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
     items?: ServiceInvoiceItemListRelationFilter
   }, "id" | "jobId" | "transactionId" | "companyId_invoiceNumber">
@@ -45806,7 +45825,7 @@ export namespace Prisma {
     id?: SortOrder
     invoiceNumber?: SortOrder
     date?: SortOrder
-    jobId?: SortOrder
+    jobId?: SortOrderInput | SortOrder
     customerId?: SortOrder
     type?: SortOrder
     status?: SortOrder
@@ -45845,7 +45864,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"ServiceInvoice"> | number
     invoiceNumber?: StringWithAggregatesFilter<"ServiceInvoice"> | string
     date?: DateTimeWithAggregatesFilter<"ServiceInvoice"> | Date | string
-    jobId?: IntWithAggregatesFilter<"ServiceInvoice"> | number
+    jobId?: IntNullableWithAggregatesFilter<"ServiceInvoice"> | number | null
     customerId?: IntWithAggregatesFilter<"ServiceInvoice"> | number
     type?: EnumInvoiceTypeWithAggregatesFilter<"ServiceInvoice"> | $Enums.InvoiceType
     status?: EnumInvoiceStatusWithAggregatesFilter<"ServiceInvoice"> | $Enums.InvoiceStatus
@@ -48847,7 +48866,7 @@ export namespace Prisma {
     division?: string | null
     company: CompanyCreateNestedOneWithoutServiceInvoicesInput
     customer: CustomerCreateNestedOneWithoutServiceInvoicesInput
-    job: JobCreateNestedOneWithoutServiceInvoiceInput
+    job?: JobCreateNestedOneWithoutServiceInvoiceInput
     transaction?: TransactionCreateNestedOneWithoutServiceInput
     items?: ServiceInvoiceItemCreateNestedManyWithoutInvoiceInput
   }
@@ -48856,7 +48875,7 @@ export namespace Prisma {
     id?: number
     invoiceNumber: string
     date?: Date | string
-    jobId: number
+    jobId?: number | null
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
@@ -48910,7 +48929,7 @@ export namespace Prisma {
     division?: NullableStringFieldUpdateOperationsInput | string | null
     company?: CompanyUpdateOneRequiredWithoutServiceInvoicesNestedInput
     customer?: CustomerUpdateOneRequiredWithoutServiceInvoicesNestedInput
-    job?: JobUpdateOneRequiredWithoutServiceInvoiceNestedInput
+    job?: JobUpdateOneWithoutServiceInvoiceNestedInput
     transaction?: TransactionUpdateOneWithoutServiceNestedInput
     items?: ServiceInvoiceItemUpdateManyWithoutInvoiceNestedInput
   }
@@ -48919,7 +48938,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     invoiceNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    jobId?: IntFieldUpdateOperationsInput | number
+    jobId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -48951,7 +48970,7 @@ export namespace Prisma {
     id?: number
     invoiceNumber: string
     date?: Date | string
-    jobId: number
+    jobId?: number | null
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
@@ -49008,7 +49027,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     invoiceNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    jobId?: IntFieldUpdateOperationsInput | number
+    jobId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -52052,6 +52071,11 @@ export namespace Prisma {
     not?: NestedEnumInvoiceStatusFilter<$PrismaModel> | $Enums.InvoiceStatus
   }
 
+  export type JobNullableScalarRelationFilter = {
+    is?: JobWhereInput | null
+    isNot?: JobWhereInput | null
+  }
+
   export type TransactionNullableScalarRelationFilter = {
     is?: TransactionWhereInput | null
     isNot?: TransactionWhereInput | null
@@ -52284,11 +52308,6 @@ export namespace Prisma {
     taxAmount?: SortOrder
     total?: SortOrder
     productId?: SortOrder
-  }
-
-  export type JobNullableScalarRelationFilter = {
-    is?: JobWhereInput | null
-    isNot?: JobWhereInput | null
   }
 
   export type FreightInvoiceCompanyIdInvoiceNumberCompoundUniqueInput = {
@@ -55569,10 +55588,12 @@ export namespace Prisma {
     update?: XOR<XOR<CustomerUpdateToOneWithWhereWithoutServiceInvoicesInput, CustomerUpdateWithoutServiceInvoicesInput>, CustomerUncheckedUpdateWithoutServiceInvoicesInput>
   }
 
-  export type JobUpdateOneRequiredWithoutServiceInvoiceNestedInput = {
+  export type JobUpdateOneWithoutServiceInvoiceNestedInput = {
     create?: XOR<JobCreateWithoutServiceInvoiceInput, JobUncheckedCreateWithoutServiceInvoiceInput>
     connectOrCreate?: JobCreateOrConnectWithoutServiceInvoiceInput
     upsert?: JobUpsertWithoutServiceInvoiceInput
+    disconnect?: JobWhereInput | boolean
+    delete?: JobWhereInput | boolean
     connect?: JobWhereUniqueInput
     update?: XOR<XOR<JobUpdateToOneWithWhereWithoutServiceInvoiceInput, JobUpdateWithoutServiceInvoiceInput>, JobUncheckedUpdateWithoutServiceInvoiceInput>
   }
@@ -57641,7 +57662,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     division?: string | null
     customer: CustomerCreateNestedOneWithoutServiceInvoicesInput
-    job: JobCreateNestedOneWithoutServiceInvoiceInput
+    job?: JobCreateNestedOneWithoutServiceInvoiceInput
     transaction?: TransactionCreateNestedOneWithoutServiceInput
     items?: ServiceInvoiceItemCreateNestedManyWithoutInvoiceInput
   }
@@ -57650,7 +57671,7 @@ export namespace Prisma {
     id?: number
     invoiceNumber: string
     date?: Date | string
-    jobId: number
+    jobId?: number | null
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
@@ -58569,7 +58590,7 @@ export namespace Prisma {
     id?: IntFilter<"ServiceInvoice"> | number
     invoiceNumber?: StringFilter<"ServiceInvoice"> | string
     date?: DateTimeFilter<"ServiceInvoice"> | Date | string
-    jobId?: IntFilter<"ServiceInvoice"> | number
+    jobId?: IntNullableFilter<"ServiceInvoice"> | number | null
     customerId?: IntFilter<"ServiceInvoice"> | number
     type?: EnumInvoiceTypeFilter<"ServiceInvoice"> | $Enums.InvoiceType
     status?: EnumInvoiceStatusFilter<"ServiceInvoice"> | $Enums.InvoiceStatus
@@ -60672,7 +60693,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     division?: string | null
     company: CompanyCreateNestedOneWithoutServiceInvoicesInput
-    job: JobCreateNestedOneWithoutServiceInvoiceInput
+    job?: JobCreateNestedOneWithoutServiceInvoiceInput
     transaction?: TransactionCreateNestedOneWithoutServiceInput
     items?: ServiceInvoiceItemCreateNestedManyWithoutInvoiceInput
   }
@@ -60681,7 +60702,7 @@ export namespace Prisma {
     id?: number
     invoiceNumber: string
     date?: Date | string
-    jobId: number
+    jobId?: number | null
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
     masterNumber?: string | null
@@ -63569,7 +63590,7 @@ export namespace Prisma {
     division?: string | null
     company: CompanyCreateNestedOneWithoutServiceInvoicesInput
     customer: CustomerCreateNestedOneWithoutServiceInvoicesInput
-    job: JobCreateNestedOneWithoutServiceInvoiceInput
+    job?: JobCreateNestedOneWithoutServiceInvoiceInput
     transaction?: TransactionCreateNestedOneWithoutServiceInput
   }
 
@@ -63577,7 +63598,7 @@ export namespace Prisma {
     id?: number
     invoiceNumber: string
     date?: Date | string
-    jobId: number
+    jobId?: number | null
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
@@ -63684,7 +63705,7 @@ export namespace Prisma {
     division?: NullableStringFieldUpdateOperationsInput | string | null
     company?: CompanyUpdateOneRequiredWithoutServiceInvoicesNestedInput
     customer?: CustomerUpdateOneRequiredWithoutServiceInvoicesNestedInput
-    job?: JobUpdateOneRequiredWithoutServiceInvoiceNestedInput
+    job?: JobUpdateOneWithoutServiceInvoiceNestedInput
     transaction?: TransactionUpdateOneWithoutServiceNestedInput
   }
 
@@ -63692,7 +63713,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     invoiceNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    jobId?: IntFieldUpdateOperationsInput | number
+    jobId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -67071,7 +67092,7 @@ export namespace Prisma {
     division?: string | null
     company: CompanyCreateNestedOneWithoutServiceInvoicesInput
     customer: CustomerCreateNestedOneWithoutServiceInvoicesInput
-    job: JobCreateNestedOneWithoutServiceInvoiceInput
+    job?: JobCreateNestedOneWithoutServiceInvoiceInput
     items?: ServiceInvoiceItemCreateNestedManyWithoutInvoiceInput
   }
 
@@ -67079,7 +67100,7 @@ export namespace Prisma {
     id?: number
     invoiceNumber: string
     date?: Date | string
-    jobId: number
+    jobId?: number | null
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
@@ -67396,7 +67417,7 @@ export namespace Prisma {
     division?: NullableStringFieldUpdateOperationsInput | string | null
     company?: CompanyUpdateOneRequiredWithoutServiceInvoicesNestedInput
     customer?: CustomerUpdateOneRequiredWithoutServiceInvoicesNestedInput
-    job?: JobUpdateOneRequiredWithoutServiceInvoiceNestedInput
+    job?: JobUpdateOneWithoutServiceInvoiceNestedInput
     items?: ServiceInvoiceItemUpdateManyWithoutInvoiceNestedInput
   }
 
@@ -67404,7 +67425,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     invoiceNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    jobId?: IntFieldUpdateOperationsInput | number
+    jobId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -69687,7 +69708,7 @@ export namespace Prisma {
     id?: number
     invoiceNumber: string
     date?: Date | string
-    jobId: number
+    jobId?: number | null
     customerId: number
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
@@ -70216,7 +70237,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     division?: NullableStringFieldUpdateOperationsInput | string | null
     customer?: CustomerUpdateOneRequiredWithoutServiceInvoicesNestedInput
-    job?: JobUpdateOneRequiredWithoutServiceInvoiceNestedInput
+    job?: JobUpdateOneWithoutServiceInvoiceNestedInput
     transaction?: TransactionUpdateOneWithoutServiceNestedInput
     items?: ServiceInvoiceItemUpdateManyWithoutInvoiceNestedInput
   }
@@ -70225,7 +70246,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     invoiceNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    jobId?: IntFieldUpdateOperationsInput | number
+    jobId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -70256,7 +70277,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     invoiceNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    jobId?: IntFieldUpdateOperationsInput | number
+    jobId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: IntFieldUpdateOperationsInput | number
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -71290,7 +71311,7 @@ export namespace Prisma {
     id?: number
     invoiceNumber: string
     date?: Date | string
-    jobId: number
+    jobId?: number | null
     type?: $Enums.InvoiceType
     status?: $Enums.InvoiceStatus
     masterNumber?: string | null
@@ -71411,7 +71432,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     division?: NullableStringFieldUpdateOperationsInput | string | null
     company?: CompanyUpdateOneRequiredWithoutServiceInvoicesNestedInput
-    job?: JobUpdateOneRequiredWithoutServiceInvoiceNestedInput
+    job?: JobUpdateOneWithoutServiceInvoiceNestedInput
     transaction?: TransactionUpdateOneWithoutServiceNestedInput
     items?: ServiceInvoiceItemUpdateManyWithoutInvoiceNestedInput
   }
@@ -71420,7 +71441,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     invoiceNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    jobId?: IntFieldUpdateOperationsInput | number
+    jobId?: NullableIntFieldUpdateOperationsInput | number | null
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71451,7 +71472,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     invoiceNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    jobId?: IntFieldUpdateOperationsInput | number
+    jobId?: NullableIntFieldUpdateOperationsInput | number | null
     type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     masterNumber?: NullableStringFieldUpdateOperationsInput | string | null

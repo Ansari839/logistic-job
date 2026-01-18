@@ -248,7 +248,7 @@ model ServiceInvoice {
   id            Int                  @id @default(autoincrement())
   invoiceNumber String
   date          DateTime             @default(now())
-  jobId         Int                  @unique
+  jobId         Int?                 @unique
   customerId    Int
   type          InvoiceType          @default(MASTER)
   status        InvoiceStatus        @default(DRAFT)
@@ -275,7 +275,7 @@ model ServiceInvoice {
   division      String?              @default("logistics")
   company       Company              @relation(fields: [companyId], references: [id])
   customer      Customer             @relation(fields: [customerId], references: [id])
-  job           Job                  @relation(fields: [jobId], references: [id])
+  job           Job?                 @relation(fields: [jobId], references: [id])
   transaction   Transaction?         @relation(fields: [transactionId], references: [id])
   items         ServiceInvoiceItem[]
 

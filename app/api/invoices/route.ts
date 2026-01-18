@@ -132,7 +132,10 @@ export async function POST(request: Request) {
     } catch (error: any) {
         console.error('Create invoice error:', error);
         if (error.code === 'P2002') {
-            return NextResponse.json({ error: 'An invoice already exists for this job or number.' }, { status: 400 });
+            const target = error.meta?.target;
+            return NextResponse.json({
+                error: `Detailed Conflict: ${Array.isArray(target) ? target.join(', ') : target} already exists.`
+            }, { status: 400 });
         }
         return NextResponse.json({ error: 'Failed to create invoice' }, { status: 500 });
     }
@@ -390,7 +393,7 @@ export async function PATCH(request: Request) {
                     await tx.stockMovement.deleteMany({ where: { reference: invoice.invoiceNumber, companyId: user.companyId as number } });
                     await tx.serviceInvoice.update({
                         where: { id: invoice.id },
-                        data: { status: 'CANCELLED', isApproved: false, isLocked: true }
+                        data: { status: 'CANCELLED', isApproved: false, isLocked: true, jobId: null }
                     });
                 });
                 await logAction({ user, action: 'UPDATE', module: 'INVOICE', entityId: invoice.id });
