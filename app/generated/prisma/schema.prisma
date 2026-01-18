@@ -673,4 +673,5 @@ enum JobStatus {
   DRAFT
   IN_PROGRESS
   CLOSED
+  CANCELLED
 }

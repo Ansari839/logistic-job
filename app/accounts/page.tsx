@@ -61,11 +61,18 @@ export default function ChartOfAccountsPage() {
         }
     };
 
+    const [isGeneratingCode, setIsGeneratingCode] = useState(false);
+
     useEffect(() => {
         const fetchSuggestedCode = async () => {
             if (!formData.parentId || editingAccount) return;
+            setIsGeneratingCode(true);
+            setFormData(prev => ({ ...prev, code: '' })); // Clear reset
             try {
-                const res = await fetch(`/api/accounts?suggestCode=true&parentId=${formData.parentId}`);
+                const res = await fetch(`/api/accounts?suggestCode=true&parentId=${formData.parentId}&_t=${Date.now()}`, {
+                    cache: 'no-store',
+                    next: { revalidate: 0 }
+                });
                 if (res.ok) {
                     const data = await res.json();
                     if (data.nextCode) {
@@ -74,10 +81,12 @@ export default function ChartOfAccountsPage() {
                 }
             } catch (err) {
                 console.error('Fetch suggested code failed');
+            } finally {
+                setIsGeneratingCode(false);
             }
         };
         fetchSuggestedCode();
-    }, [formData.parentId, editingAccount]);
+    }, [formData.parentId, editingAccount, showModal]);
 
     const buildTree = (list: Account[], parentId: number | null = null): Account[] => {
         return list
@@ -92,8 +101,11 @@ export default function ChartOfAccountsPage() {
         setExpandedIds(next);
     };
 
+    const [saving, setSaving] = useState(false);
+
     const handleSaveAccount = async (e: React.FormEvent) => {
         e.preventDefault();
+        setSaving(true);
         try {
             const method = editingAccount ? 'PATCH' : 'POST';
 
@@ -111,13 +123,16 @@ export default function ChartOfAccountsPage() {
 
             if (res.ok) {
                 setShowModal(false);
-                fetchAccounts();
+                await fetchAccounts();
             } else {
                 const data = await res.json();
                 alert(data.error || 'Failed to save account');
             }
         } catch (err) {
             console.error('Save account error:', err);
+            alert('An unexpected error occurred.');
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -361,13 +376,21 @@ export default function ChartOfAccountsPage() {
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Account Code</label>
-                                        <input
-                                            required
-                                            className="glass-input w-full rounded-2xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
-                                            value={formData.code}
-                                            onChange={e => setFormData({ ...formData, code: e.target.value })}
-                                            placeholder="e.g. 1000"
-                                        />
+                                        <div className="relative">
+                                            <input
+                                                required
+                                                readOnly={!!formData.parentId}
+                                                className={`glass-input w-full rounded-2xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono ${formData.parentId ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed text-subtext' : ''}`}
+                                                value={isGeneratingCode ? '' : formData.code}
+                                                onChange={e => setFormData({ ...formData, code: e.target.value })}
+                                                placeholder={isGeneratingCode ? "Generating..." : "e.g. 1000"}
+                                            />
+                                            {isGeneratingCode && (
+                                                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                                                    <div className="animate-spin w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full" />
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black text-subtext uppercase tracking-widest ml-1">Type</label>
@@ -503,10 +526,10 @@ export default function ChartOfAccountsPage() {
                                         Cancel
                                     </button>
                                     <button
-                                        type="submit"
-                                        className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl text-xs uppercase tracking-widest shadow-lg shadow-blue-600/20 transition-all active:scale-95"
+                                        disabled={saving}
+                                        className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl text-xs uppercase tracking-widest shadow-lg shadow-blue-600/20 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        {editingAccount ? 'Update Account' : 'Create Account'}
+                                        {saving ? 'Saving...' : editingAccount ? 'Update Account' : 'Create Account'}
                                     </button>
                                 </div>
                             </form>

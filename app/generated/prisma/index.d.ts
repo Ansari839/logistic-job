@@ -264,7 +264,8 @@ export type PaymentMode = (typeof PaymentMode)[keyof typeof PaymentMode]
 export const JobStatus: {
   DRAFT: 'DRAFT',
   IN_PROGRESS: 'IN_PROGRESS',
-  CLOSED: 'CLOSED'
+  CLOSED: 'CLOSED',
+  CANCELLED: 'CANCELLED'
 };
 
 export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]

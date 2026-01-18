@@ -105,63 +105,79 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    let body, validatedData, accountData, partnerDetails;
     try {
-        const body = await req.json();
-        const validatedData = accountSchema.parse(body);
-
-        const { partnerDetails, ...accountData } = validatedData;
-
-        const account = await prisma.$transaction(async (tx) => {
-            const newAccount = await tx.account.create({
-                data: {
-                    ...accountData,
-                    companyId: user.companyId!,
-                    division: user.division,
-                },
-            });
-
-            if (partnerDetails) {
-                if (partnerDetails.type === 'CUSTOMER') {
-                    await tx.customer.create({
-                        data: {
-                            name: accountData.name,
-                            code: accountData.code,
-                            address: partnerDetails.address,
-                            phone: partnerDetails.phone,
-                            email: partnerDetails.email,
-                            taxNumber: partnerDetails.taxNumber,
-                            accountId: newAccount.id,
-                            companyId: user.companyId!,
-                            division: user.division
-                        }
-                    });
-                } else if (partnerDetails.type === 'VENDOR') {
-                    await tx.vendor.create({
-                        data: {
-                            name: accountData.name,
-                            code: accountData.code,
-                            address: partnerDetails.address,
-                            phone: partnerDetails.phone,
-                            email: partnerDetails.email,
-                            taxNumber: partnerDetails.taxNumber,
-                            accountId: newAccount.id,
-                            companyId: user.companyId!,
-                            division: user.division
-                        }
-                    });
-                }
-            }
-
-            return newAccount;
-        });
-
-        return NextResponse.json({ account, message: 'Account created successfully' });
+        body = await req.json();
+        validatedData = accountSchema.parse(body);
+        ({ partnerDetails, ...accountData } = validatedData);
     } catch (error) {
-        console.error('Create account error:', error);
         if (error instanceof z.ZodError) {
             return NextResponse.json({ error: 'Invalid data', details: error.issues }, { status: 400 });
         }
-        return NextResponse.json({ error: 'Failed to create account' }, { status: 500 });
+        return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+    }
+
+    let attempts = 0;
+    while (attempts < 3) {
+        try {
+            // Transaction logic
+            const account = await prisma.$transaction(async (tx) => {
+                const newAccount = await tx.account.create({
+                    data: {
+                        ...accountData,
+                        companyId: user.companyId!,
+                        division: user.division,
+                    },
+                });
+
+                if (partnerDetails) {
+                    const partnerData = {
+                        name: accountData.name,
+                        code: accountData.code,
+                        address: partnerDetails.address,
+                        phone: partnerDetails.phone,
+                        email: partnerDetails.email,
+                        taxNumber: partnerDetails.taxNumber,
+                        accountId: newAccount.id,
+                        companyId: user.companyId!,
+                        division: user.division
+                    };
+
+                    if (partnerDetails.type === 'CUSTOMER') {
+                        await tx.customer.create({ data: partnerData });
+                    } else if (partnerDetails.type === 'VENDOR') {
+                        await tx.vendor.create({ data: partnerData });
+                    }
+                }
+
+                return newAccount;
+            }, {
+                maxWait: 5000, // Default: 2000
+                timeout: 5000  // Default: 5000
+            });
+
+            return NextResponse.json({ account, message: 'Account created successfully' });
+
+        } catch (error: any) {
+            attempts++;
+            // Check if error is P2028 or retry-able
+            const isRetryable = error.code === 'P2028' || error.message?.includes('Transaction API error');
+
+            if (!isRetryable || attempts >= 3) {
+                console.error('Create account error:', error);
+                if (error instanceof z.ZodError) {
+                    return NextResponse.json({ error: 'Invalid data', details: error.issues }, { status: 400 });
+                }
+                // Handle Unique Constraint specifically if needed
+                if (error.code === 'P2002') {
+                    return NextResponse.json({ error: 'Account code or name already exists' }, { status: 400 });
+                }
+                return NextResponse.json({ error: 'Failed to create account (System Error)' }, { status: 500 });
+            }
+            // If retryable, loop continues
+            console.warn(`Retrying account creation (Attempt ${attempts})...`);
+            await new Promise(resolve => setTimeout(resolve, 500)); // Small delay
+        }
     }
 }
 export async function PATCH(req: Request) {

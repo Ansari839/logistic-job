@@ -605,7 +605,8 @@ exports.JobType = exports.$Enums.JobType = {
 exports.JobStatus = exports.$Enums.JobStatus = {
   DRAFT: 'DRAFT',
   IN_PROGRESS: 'IN_PROGRESS',
-  CLOSED: 'CLOSED'
+  CLOSED: 'CLOSED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.InvoiceType = exports.$Enums.InvoiceType = {
