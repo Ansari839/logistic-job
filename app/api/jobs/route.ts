@@ -80,7 +80,8 @@ export async function POST(request: Request) {
         const lastJob = await prisma.job.findFirst({
             where: {
                 companyId: user.companyId as number,
-                jobNumber: { startsWith: `JOB-${year}-` }
+                jobNumber: { startsWith: `JOB-${year}-` },
+                deletedAt: null
             },
             orderBy: { jobNumber: 'desc' }
         });
@@ -129,15 +130,18 @@ export async function POST(request: Request) {
                 salesPerson,
                 podId: podId ? parseInt(podId) : null,
                 expenses: {
-                    create: expenses?.filter((e: any) => e.name || e.cost || e.selling).map((e: any) => ({
-                        description: e.name + (e.description ? ` - ${e.description}` : ''),
-                        costPrice: parseFloat(e.cost) || 0,
-                        sellingPrice: parseFloat(e.selling) || 0,
-                        vendorId: e.vendorId ? parseInt(e.vendorId) : null,
-                        invoiceCategory: e.invoiceCategory || 'SERVICE',
-                        currencyCode: 'PKR',
-                        companyId: user.companyId as number
-                    }))
+                    create: expenses?.filter((e: any) => e.name || e.cost || e.selling).map((e: any) => {
+                        const parsedVendor = e.vendorId ? parseInt(e.vendorId) : null;
+                        return {
+                            description: e.name + (e.description ? ` - ${e.description}` : ''),
+                            costPrice: parseFloat(e.cost) || 0,
+                            sellingPrice: parseFloat(e.selling) || 0,
+                            vendorId: isNaN(parsedVendor as number) ? null : parsedVendor,
+                            invoiceCategory: e.invoiceCategory || 'SERVICE',
+                            currencyCode: 'PKR',
+                            companyId: user.companyId as number
+                        };
+                    })
                 }
             },
             include: {
@@ -156,7 +160,8 @@ export async function POST(request: Request) {
 
         return NextResponse.json({ job });
     } catch (error: any) {
-        console.error('Create job error:', error);
-        return NextResponse.json({ error: 'Failed to create job' }, { status: 500 });
+        console.error('Create job error FULL:', JSON.stringify(error, null, 2));
+        console.error('Create job error stack:', error.stack);
+        return NextResponse.json({ error: 'Failed to create job: ' + error.message }, { status: 500 });
     }
 }

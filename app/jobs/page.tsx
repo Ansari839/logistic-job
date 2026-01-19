@@ -18,7 +18,7 @@ interface Job {
     commodity: string | null;
     vessel: string | null;
     containerNo: string | null;
-    serviceInvoice: { id: number } | null;
+    serviceInvoices: { id: number }[];
     freightInvoice: { id: number } | null;
     _count: { expenses: number };
 }
@@ -172,7 +172,7 @@ export default function JobsPage() {
                                         </div>
                                         <div className="text-center px-4">
                                             <p className="text-subtext mb-1">Invoice</p>
-                                            <p className="text-lg font-black text-slate-900 dark:text-white uppercase">{(job.serviceInvoice || job.freightInvoice) ? 1 : 0}</p>
+                                            <p className="text-lg font-black text-slate-900 dark:text-white uppercase">{(job.serviceInvoices?.length || 0) + (job.freightInvoice ? 1 : 0)}</p>
                                         </div>
                                         <div className="ml-4 p-3 rounded-2xl bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-all text-blue-600 dark:text-blue-400">
                                             <ArrowUpRight size={20} />

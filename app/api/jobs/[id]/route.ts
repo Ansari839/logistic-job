@@ -41,7 +41,7 @@ export async function GET(
                     include: { vendor: { select: { name: true, code: true } } },
                     orderBy: { createdAt: 'desc' }
                 },
-                serviceInvoice: {
+                serviceInvoices: {
                     include: { items: true }
                 },
                 freightInvoice: {

@@ -416,8 +416,8 @@ export async function PATCH(request: Request) {
     } catch (error: any) {
         console.error('Invoice action error detail:', JSON.stringify(error, null, 2));
         if (error.code === 'P2002') {
-            const field = error.meta?.target || 'Record';
-            return NextResponse.json({ error: `Conflict: ${field} already exists. (Each Job can have only ONE invoice).` }, { status: 400 });
+            const field = error.meta?.target ? (Array.isArray(error.meta.target) ? error.meta.target.join(', ') : error.meta.target) : 'Record';
+            return NextResponse.json({ error: `Conflict: ${field} already exists.` }, { status: 400 });
         }
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }

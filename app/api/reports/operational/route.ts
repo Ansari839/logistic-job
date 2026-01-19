@@ -34,14 +34,15 @@ export async function GET(request: Request) {
                     include: {
                         customer: { select: { name: true } },
                         expenses: { select: { costPrice: true, sellingPrice: true } },
-                        serviceInvoice: { select: { totalAmount: true, status: true } },
+                        serviceInvoices: { select: { totalAmount: true, status: true } },
                         freightInvoice: { select: { totalAmount: true, status: true } },
                     },
                 });
 
                 const report = jobs.map(job => {
                     const totalCost = job.expenses.reduce((sum, exp) => sum + exp.costPrice, 0);
-                    const serviceRevenue = job.serviceInvoice && job.serviceInvoice.status !== 'CANCELLED' ? job.serviceInvoice.totalAmount : 0;
+                    const serviceRevenue = job.serviceInvoices.reduce((sum, inv) =>
+                        inv.status !== 'CANCELLED' ? sum + inv.totalAmount : sum, 0);
                     const freightRevenue = job.freightInvoice && job.freightInvoice.status !== 'CANCELLED' ? job.freightInvoice.totalAmount : 0;
                     const totalRevenue = serviceRevenue + freightRevenue;
 
@@ -82,7 +83,7 @@ export async function GET(request: Request) {
                         jobs: {
                             where: { ...dateFilter },
                             include: {
-                                serviceInvoice: { select: { totalAmount: true, status: true } },
+                                serviceInvoices: { select: { totalAmount: true, status: true } },
                                 freightInvoice: { select: { totalAmount: true, status: true } }
                             }
                         }
@@ -92,7 +93,8 @@ export async function GET(request: Request) {
                 const report = customers.map(c => {
                     const totalJobs = c.jobs.length;
                     const totalRevenue = c.jobs.reduce((sum, job) => {
-                        const serRev = job.serviceInvoice && job.serviceInvoice.status !== 'CANCELLED' ? job.serviceInvoice.totalAmount : 0;
+                        const serRev = job.serviceInvoices.reduce((sum: number, inv: any) =>
+                            inv.status !== 'CANCELLED' ? sum + inv.totalAmount : sum, 0);
                         const freRev = job.freightInvoice && job.freightInvoice.status !== 'CANCELLED' ? job.freightInvoice.totalAmount : 0;
                         return sum + serRev + freRev;
                     }, 0);

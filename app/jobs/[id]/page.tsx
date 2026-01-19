@@ -47,7 +47,7 @@ interface Job {
     hawbBl: string | null;
     branches: { name: string } | null;
     expenses: Expense[];
-    serviceInvoice: Invoice | null;
+    serviceInvoices: Invoice[];
     freightInvoice: Invoice | null;
     place?: string;
     shipperRef?: string;
@@ -514,14 +514,14 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
 
                     {activeTab === 'invoices' && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {(!job.serviceInvoice && !job.freightInvoice) ? (
+                            {((!job.serviceInvoices || job.serviceInvoices.length === 0) && !job.freightInvoice) ? (
                                 <div className="col-span-full glass-card p-20 text-center">
                                     <FileText className="w-12 h-12 text-slate-700 dark:text-slate-600 mx-auto mb-4" />
                                     <h3 className="text-lg font-bold text-slate-900 dark:text-slate-300">No invoice generated</h3>
                                     <p className="text-subtext text-sm mt-1">Visit the Invoices page to create an invoice for this job.</p>
                                 </div>
                             ) : (
-                                [job.serviceInvoice, job.freightInvoice].filter(Boolean).map((inv: any) => (
+                                [...(job.serviceInvoices || []), job.freightInvoice].filter(Boolean).map((inv: any) => (
                                     <div key={inv.id} className="glass-card p-6 group hover:border-primary/50">
                                         <div className="flex justify-between items-start mb-6">
                                             <div>
