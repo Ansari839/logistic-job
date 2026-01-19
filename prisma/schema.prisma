@@ -207,7 +207,7 @@ model Job {
   deletedAt   DateTime?
   division       String?         @default("logistics")
   expenses       Expense[]
-  serviceInvoice ServiceInvoice?
+  serviceInvoices ServiceInvoice[]
   freightInvoice FreightInvoice?
   branch         Branch?         @relation(fields: [branchId], references: [id])
   company     Company   @relation(fields: [companyId], references: [id])
@@ -234,6 +234,7 @@ model Expense {
   description  String
   costPrice    Float    @default(0.0)
   sellingPrice Float    @default(0.0)
+  invoiceCategory String @default("SERVICE") // SERVICE or FREIGHT
   currencyCode String   @default("PKR")
   exchangeRate Float    @default(1.0)
   companyId    Int
@@ -248,7 +249,7 @@ model ServiceInvoice {
   id            Int                  @id @default(autoincrement())
   invoiceNumber String
   date          DateTime             @default(now())
-  jobId         Int?                 @unique
+  jobId         Int?
   customerId    Int
   type          InvoiceType          @default(MASTER)
   status        InvoiceStatus        @default(DRAFT)

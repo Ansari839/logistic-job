@@ -177,42 +177,42 @@ model Vendor {
 }
 
 model Job {
-  id             Int             @id @default(autoincrement())
-  jobNumber      String          @unique
-  date           DateTime        @default(now())
-  jobDate        DateTime        @default(now())
-  jobType        JobType         @default(EXPORT)
-  status         JobStatus       @default(DRAFT)
-  customerId     Int
-  vessel         String?
-  place          String?
-  shipperRef     String?
-  gdNo           String?
-  gdDate         DateTime?
-  formE          String?
-  formEDate      DateTime?
-  commodity      String?
-  volume         String?
-  containerNo    String?
-  podId          Int?
-  packages       Int?
-  weight         Float?
-  hawbBl         String?
-  handledBy      String?
-  salesPerson    String?
-  companyId      Int
-  branchId       Int?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  deletedAt      DateTime?
-  division       String?         @default("logistics")
-  expenses       Expense[]
-  serviceInvoice ServiceInvoice?
-  freightInvoice FreightInvoice?
-  branch         Branch?         @relation(fields: [branchId], references: [id])
-  company        Company         @relation(fields: [companyId], references: [id])
-  customer       Customer        @relation(fields: [customerId], references: [id])
-  pod            Port?           @relation(fields: [podId], references: [id])
+  id              Int              @id @default(autoincrement())
+  jobNumber       String           @unique
+  date            DateTime         @default(now())
+  jobDate         DateTime         @default(now())
+  jobType         JobType          @default(EXPORT)
+  status          JobStatus        @default(DRAFT)
+  customerId      Int
+  vessel          String?
+  place           String?
+  shipperRef      String?
+  gdNo            String?
+  gdDate          DateTime?
+  formE           String?
+  formEDate       DateTime?
+  commodity       String?
+  volume          String?
+  containerNo     String?
+  podId           Int?
+  packages        Int?
+  weight          Float?
+  hawbBl          String?
+  handledBy       String?
+  salesPerson     String?
+  companyId       Int
+  branchId        Int?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
+  division        String?          @default("logistics")
+  expenses        Expense[]
+  serviceInvoices ServiceInvoice[]
+  freightInvoice  FreightInvoice?
+  branch          Branch?          @relation(fields: [branchId], references: [id])
+  company         Company          @relation(fields: [companyId], references: [id])
+  customer        Customer         @relation(fields: [customerId], references: [id])
+  pod             Port?            @relation(fields: [podId], references: [id])
 }
 
 model ExpenseMaster {
@@ -228,27 +228,28 @@ model ExpenseMaster {
 }
 
 model Expense {
-  id           Int      @id @default(autoincrement())
-  jobId        Int
-  vendorId     Int?
-  description  String
-  costPrice    Float    @default(0.0)
-  sellingPrice Float    @default(0.0)
-  currencyCode String   @default("PKR")
-  exchangeRate Float    @default(1.0)
-  companyId    Int
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  company      Company  @relation(fields: [companyId], references: [id])
-  job          Job      @relation(fields: [jobId], references: [id])
-  vendor       Vendor?  @relation(fields: [vendorId], references: [id])
+  id              Int      @id @default(autoincrement())
+  jobId           Int
+  vendorId        Int?
+  description     String
+  costPrice       Float    @default(0.0)
+  sellingPrice    Float    @default(0.0)
+  invoiceCategory String   @default("SERVICE") // SERVICE or FREIGHT
+  currencyCode    String   @default("PKR")
+  exchangeRate    Float    @default(1.0)
+  companyId       Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  company         Company  @relation(fields: [companyId], references: [id])
+  job             Job      @relation(fields: [jobId], references: [id])
+  vendor          Vendor?  @relation(fields: [vendorId], references: [id])
 }
 
 model ServiceInvoice {
   id            Int                  @id @default(autoincrement())
   invoiceNumber String
   date          DateTime             @default(now())
-  jobId         Int?                 @unique
+  jobId         Int?
   customerId    Int
   type          InvoiceType          @default(MASTER)
   status        InvoiceStatus        @default(DRAFT)

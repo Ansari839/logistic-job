@@ -138,6 +138,7 @@ export async function PATCH(
                             costPrice: parseFloat(e.cost) || 0,
                             sellingPrice: parseFloat(e.selling) || 0,
                             vendorId: e.vendorId ? parseInt(e.vendorId) : null,
+                            invoiceCategory: e.invoiceCategory || 'SERVICE',
                             currencyCode: 'PKR',
                             companyId: user.companyId as number,
                         }))

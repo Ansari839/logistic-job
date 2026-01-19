@@ -10,6 +10,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const jobType = searchParams.get('jobType');
     const customerId = searchParams.get('customerId');
+    const jobNumber = searchParams.get('jobNumber');
     const noInvoice = searchParams.get('noInvoice') === 'true';
 
     try {
@@ -20,9 +21,11 @@ export async function GET(request: Request) {
                 deletedAt: null,
                 ...(jobType && { jobType: jobType as any }),
                 ...(customerId && { customerId: parseInt(customerId) }),
+                ...(jobNumber && { jobNumber: jobNumber }),
                 ...(noInvoice && {
-                    serviceInvoice: { is: null },
-                    freightInvoice: { is: null }
+                    // Allow jobs that don't have ANY service invoice (or maybe partial logic later)
+                    // For now, let's return jobs that are not CLOSED
+                    status: { not: 'CLOSED' }
                 })
             },
             include: {
@@ -35,7 +38,7 @@ export async function GET(request: Request) {
                 _count: {
                     select: { expenses: true }
                 },
-                serviceInvoice: {
+                serviceInvoices: {
                     select: { id: true }
                 },
                 freightInvoice: {
@@ -131,6 +134,7 @@ export async function POST(request: Request) {
                         costPrice: parseFloat(e.cost) || 0,
                         sellingPrice: parseFloat(e.selling) || 0,
                         vendorId: e.vendorId ? parseInt(e.vendorId) : null,
+                        invoiceCategory: e.invoiceCategory || 'SERVICE',
                         currencyCode: 'PKR',
                         companyId: user.companyId as number
                     }))

@@ -285,6 +285,7 @@ exports.Prisma.ExpenseScalarFieldEnum = {
   description: 'description',
   costPrice: 'costPrice',
   sellingPrice: 'sellingPrice',
+  invoiceCategory: 'invoiceCategory',
   currencyCode: 'currencyCode',
   exchangeRate: 'exchangeRate',
   companyId: 'companyId',

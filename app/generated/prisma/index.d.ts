@@ -4201,10 +4201,12 @@ export namespace Prisma {
 
   export type JobCountOutputType = {
     expenses: number
+    serviceInvoices: number
   }
 
   export type JobCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     expenses?: boolean | JobCountOutputTypeCountExpensesArgs
+    serviceInvoices?: boolean | JobCountOutputTypeCountServiceInvoicesArgs
   }
 
   // Custom InputTypes
@@ -4223,6 +4225,13 @@ export namespace Prisma {
    */
   export type JobCountOutputTypeCountExpensesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ExpenseWhereInput
+  }
+
+  /**
+   * JobCountOutputType without action
+   */
+  export type JobCountOutputTypeCountServiceInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceInvoiceWhereInput
   }
 
 
@@ -16572,7 +16581,7 @@ export namespace Prisma {
     deletedAt?: boolean
     division?: boolean
     expenses?: boolean | Job$expensesArgs<ExtArgs>
-    serviceInvoice?: boolean | Job$serviceInvoiceArgs<ExtArgs>
+    serviceInvoices?: boolean | Job$serviceInvoicesArgs<ExtArgs>
     freightInvoice?: boolean | Job$freightInvoiceArgs<ExtArgs>
     branch?: boolean | Job$branchArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -16688,7 +16697,7 @@ export namespace Prisma {
   export type JobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jobNumber" | "date" | "jobDate" | "jobType" | "status" | "customerId" | "vessel" | "place" | "shipperRef" | "gdNo" | "gdDate" | "formE" | "formEDate" | "commodity" | "volume" | "containerNo" | "podId" | "packages" | "weight" | "hawbBl" | "handledBy" | "salesPerson" | "companyId" | "branchId" | "createdAt" | "updatedAt" | "deletedAt" | "division", ExtArgs["result"]["job"]>
   export type JobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     expenses?: boolean | Job$expensesArgs<ExtArgs>
-    serviceInvoice?: boolean | Job$serviceInvoiceArgs<ExtArgs>
+    serviceInvoices?: boolean | Job$serviceInvoicesArgs<ExtArgs>
     freightInvoice?: boolean | Job$freightInvoiceArgs<ExtArgs>
     branch?: boolean | Job$branchArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -16713,7 +16722,7 @@ export namespace Prisma {
     name: "Job"
     objects: {
       expenses: Prisma.$ExpensePayload<ExtArgs>[]
-      serviceInvoice: Prisma.$ServiceInvoicePayload<ExtArgs> | null
+      serviceInvoices: Prisma.$ServiceInvoicePayload<ExtArgs>[]
       freightInvoice: Prisma.$FreightInvoicePayload<ExtArgs> | null
       branch: Prisma.$BranchPayload<ExtArgs> | null
       company: Prisma.$CompanyPayload<ExtArgs>
@@ -17145,7 +17154,7 @@ export namespace Prisma {
   export interface Prisma__JobClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     expenses<T extends Job$expensesArgs<ExtArgs> = {}>(args?: Subset<T, Job$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    serviceInvoice<T extends Job$serviceInvoiceArgs<ExtArgs> = {}>(args?: Subset<T, Job$serviceInvoiceArgs<ExtArgs>>): Prisma__ServiceInvoiceClient<$Result.GetResult<Prisma.$ServiceInvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    serviceInvoices<T extends Job$serviceInvoicesArgs<ExtArgs> = {}>(args?: Subset<T, Job$serviceInvoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceInvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     freightInvoice<T extends Job$freightInvoiceArgs<ExtArgs> = {}>(args?: Subset<T, Job$freightInvoiceArgs<ExtArgs>>): Prisma__FreightInvoiceClient<$Result.GetResult<Prisma.$FreightInvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     branch<T extends Job$branchArgs<ExtArgs> = {}>(args?: Subset<T, Job$branchArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -17629,9 +17638,9 @@ export namespace Prisma {
   }
 
   /**
-   * Job.serviceInvoice
+   * Job.serviceInvoices
    */
-  export type Job$serviceInvoiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Job$serviceInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ServiceInvoice
      */
@@ -17645,6 +17654,11 @@ export namespace Prisma {
      */
     include?: ServiceInvoiceInclude<ExtArgs> | null
     where?: ServiceInvoiceWhereInput
+    orderBy?: ServiceInvoiceOrderByWithRelationInput | ServiceInvoiceOrderByWithRelationInput[]
+    cursor?: ServiceInvoiceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ServiceInvoiceScalarFieldEnum | ServiceInvoiceScalarFieldEnum[]
   }
 
   /**
@@ -18871,6 +18885,7 @@ export namespace Prisma {
     description: string | null
     costPrice: number | null
     sellingPrice: number | null
+    invoiceCategory: string | null
     currencyCode: string | null
     exchangeRate: number | null
     companyId: number | null
@@ -18885,6 +18900,7 @@ export namespace Prisma {
     description: string | null
     costPrice: number | null
     sellingPrice: number | null
+    invoiceCategory: string | null
     currencyCode: string | null
     exchangeRate: number | null
     companyId: number | null
@@ -18899,6 +18915,7 @@ export namespace Prisma {
     description: number
     costPrice: number
     sellingPrice: number
+    invoiceCategory: number
     currencyCode: number
     exchangeRate: number
     companyId: number
@@ -18935,6 +18952,7 @@ export namespace Prisma {
     description?: true
     costPrice?: true
     sellingPrice?: true
+    invoiceCategory?: true
     currencyCode?: true
     exchangeRate?: true
     companyId?: true
@@ -18949,6 +18967,7 @@ export namespace Prisma {
     description?: true
     costPrice?: true
     sellingPrice?: true
+    invoiceCategory?: true
     currencyCode?: true
     exchangeRate?: true
     companyId?: true
@@ -18963,6 +18982,7 @@ export namespace Prisma {
     description?: true
     costPrice?: true
     sellingPrice?: true
+    invoiceCategory?: true
     currencyCode?: true
     exchangeRate?: true
     companyId?: true
@@ -19064,6 +19084,7 @@ export namespace Prisma {
     description: string
     costPrice: number
     sellingPrice: number
+    invoiceCategory: string
     currencyCode: string
     exchangeRate: number
     companyId: number
@@ -19097,6 +19118,7 @@ export namespace Prisma {
     description?: boolean
     costPrice?: boolean
     sellingPrice?: boolean
+    invoiceCategory?: boolean
     currencyCode?: boolean
     exchangeRate?: boolean
     companyId?: boolean
@@ -19114,6 +19136,7 @@ export namespace Prisma {
     description?: boolean
     costPrice?: boolean
     sellingPrice?: boolean
+    invoiceCategory?: boolean
     currencyCode?: boolean
     exchangeRate?: boolean
     companyId?: boolean
@@ -19131,6 +19154,7 @@ export namespace Prisma {
     description?: boolean
     costPrice?: boolean
     sellingPrice?: boolean
+    invoiceCategory?: boolean
     currencyCode?: boolean
     exchangeRate?: boolean
     companyId?: boolean
@@ -19148,6 +19172,7 @@ export namespace Prisma {
     description?: boolean
     costPrice?: boolean
     sellingPrice?: boolean
+    invoiceCategory?: boolean
     currencyCode?: boolean
     exchangeRate?: boolean
     companyId?: boolean
@@ -19155,7 +19180,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ExpenseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jobId" | "vendorId" | "description" | "costPrice" | "sellingPrice" | "currencyCode" | "exchangeRate" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["expense"]>
+  export type ExpenseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "jobId" | "vendorId" | "description" | "costPrice" | "sellingPrice" | "invoiceCategory" | "currencyCode" | "exchangeRate" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["expense"]>
   export type ExpenseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     company?: boolean | CompanyDefaultArgs<ExtArgs>
     job?: boolean | JobDefaultArgs<ExtArgs>
@@ -19186,6 +19211,7 @@ export namespace Prisma {
       description: string
       costPrice: number
       sellingPrice: number
+      invoiceCategory: string
       currencyCode: string
       exchangeRate: number
       companyId: number
@@ -19623,6 +19649,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Expense", 'String'>
     readonly costPrice: FieldRef<"Expense", 'Float'>
     readonly sellingPrice: FieldRef<"Expense", 'Float'>
+    readonly invoiceCategory: FieldRef<"Expense", 'String'>
     readonly currencyCode: FieldRef<"Expense", 'String'>
     readonly exchangeRate: FieldRef<"Expense", 'Float'>
     readonly companyId: FieldRef<"Expense", 'Int'>
@@ -43892,6 +43919,7 @@ export namespace Prisma {
     description: 'description',
     costPrice: 'costPrice',
     sellingPrice: 'sellingPrice',
+    invoiceCategory: 'invoiceCategory',
     currencyCode: 'currencyCode',
     exchangeRate: 'exchangeRate',
     companyId: 'companyId',
@@ -45389,7 +45417,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Job"> | Date | string | null
     division?: StringNullableFilter<"Job"> | string | null
     expenses?: ExpenseListRelationFilter
-    serviceInvoice?: XOR<ServiceInvoiceNullableScalarRelationFilter, ServiceInvoiceWhereInput> | null
+    serviceInvoices?: ServiceInvoiceListRelationFilter
     freightInvoice?: XOR<FreightInvoiceNullableScalarRelationFilter, FreightInvoiceWhereInput> | null
     branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
@@ -45428,7 +45456,7 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     division?: SortOrderInput | SortOrder
     expenses?: ExpenseOrderByRelationAggregateInput
-    serviceInvoice?: ServiceInvoiceOrderByWithRelationInput
+    serviceInvoices?: ServiceInvoiceOrderByRelationAggregateInput
     freightInvoice?: FreightInvoiceOrderByWithRelationInput
     branch?: BranchOrderByWithRelationInput
     company?: CompanyOrderByWithRelationInput
@@ -45470,7 +45498,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Job"> | Date | string | null
     division?: StringNullableFilter<"Job"> | string | null
     expenses?: ExpenseListRelationFilter
-    serviceInvoice?: XOR<ServiceInvoiceNullableScalarRelationFilter, ServiceInvoiceWhereInput> | null
+    serviceInvoices?: ServiceInvoiceListRelationFilter
     freightInvoice?: XOR<FreightInvoiceNullableScalarRelationFilter, FreightInvoiceWhereInput> | null
     branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
@@ -45623,6 +45651,7 @@ export namespace Prisma {
     description?: StringFilter<"Expense"> | string
     costPrice?: FloatFilter<"Expense"> | number
     sellingPrice?: FloatFilter<"Expense"> | number
+    invoiceCategory?: StringFilter<"Expense"> | string
     currencyCode?: StringFilter<"Expense"> | string
     exchangeRate?: FloatFilter<"Expense"> | number
     companyId?: IntFilter<"Expense"> | number
@@ -45640,6 +45669,7 @@ export namespace Prisma {
     description?: SortOrder
     costPrice?: SortOrder
     sellingPrice?: SortOrder
+    invoiceCategory?: SortOrder
     currencyCode?: SortOrder
     exchangeRate?: SortOrder
     companyId?: SortOrder
@@ -45660,6 +45690,7 @@ export namespace Prisma {
     description?: StringFilter<"Expense"> | string
     costPrice?: FloatFilter<"Expense"> | number
     sellingPrice?: FloatFilter<"Expense"> | number
+    invoiceCategory?: StringFilter<"Expense"> | string
     currencyCode?: StringFilter<"Expense"> | string
     exchangeRate?: FloatFilter<"Expense"> | number
     companyId?: IntFilter<"Expense"> | number
@@ -45677,6 +45708,7 @@ export namespace Prisma {
     description?: SortOrder
     costPrice?: SortOrder
     sellingPrice?: SortOrder
+    invoiceCategory?: SortOrder
     currencyCode?: SortOrder
     exchangeRate?: SortOrder
     companyId?: SortOrder
@@ -45699,6 +45731,7 @@ export namespace Prisma {
     description?: StringWithAggregatesFilter<"Expense"> | string
     costPrice?: FloatWithAggregatesFilter<"Expense"> | number
     sellingPrice?: FloatWithAggregatesFilter<"Expense"> | number
+    invoiceCategory?: StringWithAggregatesFilter<"Expense"> | string
     currencyCode?: StringWithAggregatesFilter<"Expense"> | string
     exchangeRate?: FloatWithAggregatesFilter<"Expense"> | number
     companyId?: IntWithAggregatesFilter<"Expense"> | number
@@ -45783,7 +45816,6 @@ export namespace Prisma {
 
   export type ServiceInvoiceWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    jobId?: number
     transactionId?: number
     companyId_invoiceNumber?: ServiceInvoiceCompanyIdInvoiceNumberCompoundUniqueInput
     AND?: ServiceInvoiceWhereInput | ServiceInvoiceWhereInput[]
@@ -45791,6 +45823,7 @@ export namespace Prisma {
     NOT?: ServiceInvoiceWhereInput | ServiceInvoiceWhereInput[]
     invoiceNumber?: StringFilter<"ServiceInvoice"> | string
     date?: DateTimeFilter<"ServiceInvoice"> | Date | string
+    jobId?: IntNullableFilter<"ServiceInvoice"> | number | null
     customerId?: IntFilter<"ServiceInvoice"> | number
     type?: EnumInvoiceTypeFilter<"ServiceInvoice"> | $Enums.InvoiceType
     status?: EnumInvoiceStatusFilter<"ServiceInvoice"> | $Enums.InvoiceStatus
@@ -45819,7 +45852,7 @@ export namespace Prisma {
     job?: XOR<JobNullableScalarRelationFilter, JobWhereInput> | null
     transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
     items?: ServiceInvoiceItemListRelationFilter
-  }, "id" | "jobId" | "transactionId" | "companyId_invoiceNumber">
+  }, "id" | "transactionId" | "companyId_invoiceNumber">
 
   export type ServiceInvoiceOrderByWithAggregationInput = {
     id?: SortOrder
@@ -48486,7 +48519,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     division?: string | null
     expenses?: ExpenseCreateNestedManyWithoutJobInput
-    serviceInvoice?: ServiceInvoiceCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceCreateNestedManyWithoutJobInput
     freightInvoice?: FreightInvoiceCreateNestedOneWithoutJobInput
     branch?: BranchCreateNestedOneWithoutJobsInput
     company: CompanyCreateNestedOneWithoutJobsInput
@@ -48525,7 +48558,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     division?: string | null
     expenses?: ExpenseUncheckedCreateNestedManyWithoutJobInput
-    serviceInvoice?: ServiceInvoiceUncheckedCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceUncheckedCreateNestedManyWithoutJobInput
     freightInvoice?: FreightInvoiceUncheckedCreateNestedOneWithoutJobInput
   }
 
@@ -48555,7 +48588,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
     expenses?: ExpenseUpdateManyWithoutJobNestedInput
-    serviceInvoice?: ServiceInvoiceUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUpdateManyWithoutJobNestedInput
     freightInvoice?: FreightInvoiceUpdateOneWithoutJobNestedInput
     branch?: BranchUpdateOneWithoutJobsNestedInput
     company?: CompanyUpdateOneRequiredWithoutJobsNestedInput
@@ -48594,7 +48627,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
     expenses?: ExpenseUncheckedUpdateManyWithoutJobNestedInput
-    serviceInvoice?: ServiceInvoiceUncheckedUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUncheckedUpdateManyWithoutJobNestedInput
     freightInvoice?: FreightInvoiceUncheckedUpdateOneWithoutJobNestedInput
   }
 
@@ -48752,6 +48785,7 @@ export namespace Prisma {
     description: string
     costPrice?: number
     sellingPrice?: number
+    invoiceCategory?: string
     currencyCode?: string
     exchangeRate?: number
     createdAt?: Date | string
@@ -48768,6 +48802,7 @@ export namespace Prisma {
     description: string
     costPrice?: number
     sellingPrice?: number
+    invoiceCategory?: string
     currencyCode?: string
     exchangeRate?: number
     companyId: number
@@ -48779,6 +48814,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48795,6 +48831,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     companyId?: IntFieldUpdateOperationsInput | number
@@ -48809,6 +48846,7 @@ export namespace Prisma {
     description: string
     costPrice?: number
     sellingPrice?: number
+    invoiceCategory?: string
     currencyCode?: string
     exchangeRate?: number
     companyId: number
@@ -48820,6 +48858,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48833,6 +48872,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     companyId?: IntFieldUpdateOperationsInput | number
@@ -48866,7 +48906,7 @@ export namespace Prisma {
     division?: string | null
     company: CompanyCreateNestedOneWithoutServiceInvoicesInput
     customer: CustomerCreateNestedOneWithoutServiceInvoicesInput
-    job?: JobCreateNestedOneWithoutServiceInvoiceInput
+    job?: JobCreateNestedOneWithoutServiceInvoicesInput
     transaction?: TransactionCreateNestedOneWithoutServiceInput
     items?: ServiceInvoiceItemCreateNestedManyWithoutInvoiceInput
   }
@@ -48929,7 +48969,7 @@ export namespace Prisma {
     division?: NullableStringFieldUpdateOperationsInput | string | null
     company?: CompanyUpdateOneRequiredWithoutServiceInvoicesNestedInput
     customer?: CustomerUpdateOneRequiredWithoutServiceInvoicesNestedInput
-    job?: JobUpdateOneWithoutServiceInvoiceNestedInput
+    job?: JobUpdateOneWithoutServiceInvoicesNestedInput
     transaction?: TransactionUpdateOneWithoutServiceNestedInput
     items?: ServiceInvoiceItemUpdateManyWithoutInvoiceNestedInput
   }
@@ -51771,11 +51811,6 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type ServiceInvoiceNullableScalarRelationFilter = {
-    is?: ServiceInvoiceWhereInput | null
-    isNot?: ServiceInvoiceWhereInput | null
-  }
-
   export type FreightInvoiceNullableScalarRelationFilter = {
     is?: FreightInvoiceWhereInput | null
     isNot?: FreightInvoiceWhereInput | null
@@ -52002,6 +52037,7 @@ export namespace Prisma {
     description?: SortOrder
     costPrice?: SortOrder
     sellingPrice?: SortOrder
+    invoiceCategory?: SortOrder
     currencyCode?: SortOrder
     exchangeRate?: SortOrder
     companyId?: SortOrder
@@ -52026,6 +52062,7 @@ export namespace Prisma {
     description?: SortOrder
     costPrice?: SortOrder
     sellingPrice?: SortOrder
+    invoiceCategory?: SortOrder
     currencyCode?: SortOrder
     exchangeRate?: SortOrder
     companyId?: SortOrder
@@ -52040,6 +52077,7 @@ export namespace Prisma {
     description?: SortOrder
     costPrice?: SortOrder
     sellingPrice?: SortOrder
+    invoiceCategory?: SortOrder
     currencyCode?: SortOrder
     exchangeRate?: SortOrder
     companyId?: SortOrder
@@ -52971,6 +53009,11 @@ export namespace Prisma {
     in?: $Enums.TransactionType[] | ListEnumTransactionTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.TransactionType[] | ListEnumTransactionTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumTransactionTypeFilter<$PrismaModel> | $Enums.TransactionType
+  }
+
+  export type ServiceInvoiceNullableScalarRelationFilter = {
+    is?: ServiceInvoiceWhereInput | null
+    isNot?: ServiceInvoiceWhereInput | null
   }
 
   export type PaymentNullableScalarRelationFilter = {
@@ -55293,10 +55336,11 @@ export namespace Prisma {
     connect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
   }
 
-  export type ServiceInvoiceCreateNestedOneWithoutJobInput = {
-    create?: XOR<ServiceInvoiceCreateWithoutJobInput, ServiceInvoiceUncheckedCreateWithoutJobInput>
-    connectOrCreate?: ServiceInvoiceCreateOrConnectWithoutJobInput
-    connect?: ServiceInvoiceWhereUniqueInput
+  export type ServiceInvoiceCreateNestedManyWithoutJobInput = {
+    create?: XOR<ServiceInvoiceCreateWithoutJobInput, ServiceInvoiceUncheckedCreateWithoutJobInput> | ServiceInvoiceCreateWithoutJobInput[] | ServiceInvoiceUncheckedCreateWithoutJobInput[]
+    connectOrCreate?: ServiceInvoiceCreateOrConnectWithoutJobInput | ServiceInvoiceCreateOrConnectWithoutJobInput[]
+    createMany?: ServiceInvoiceCreateManyJobInputEnvelope
+    connect?: ServiceInvoiceWhereUniqueInput | ServiceInvoiceWhereUniqueInput[]
   }
 
   export type FreightInvoiceCreateNestedOneWithoutJobInput = {
@@ -55336,10 +55380,11 @@ export namespace Prisma {
     connect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
   }
 
-  export type ServiceInvoiceUncheckedCreateNestedOneWithoutJobInput = {
-    create?: XOR<ServiceInvoiceCreateWithoutJobInput, ServiceInvoiceUncheckedCreateWithoutJobInput>
-    connectOrCreate?: ServiceInvoiceCreateOrConnectWithoutJobInput
-    connect?: ServiceInvoiceWhereUniqueInput
+  export type ServiceInvoiceUncheckedCreateNestedManyWithoutJobInput = {
+    create?: XOR<ServiceInvoiceCreateWithoutJobInput, ServiceInvoiceUncheckedCreateWithoutJobInput> | ServiceInvoiceCreateWithoutJobInput[] | ServiceInvoiceUncheckedCreateWithoutJobInput[]
+    connectOrCreate?: ServiceInvoiceCreateOrConnectWithoutJobInput | ServiceInvoiceCreateOrConnectWithoutJobInput[]
+    createMany?: ServiceInvoiceCreateManyJobInputEnvelope
+    connect?: ServiceInvoiceWhereUniqueInput | ServiceInvoiceWhereUniqueInput[]
   }
 
   export type FreightInvoiceUncheckedCreateNestedOneWithoutJobInput = {
@@ -55378,14 +55423,18 @@ export namespace Prisma {
     deleteMany?: ExpenseScalarWhereInput | ExpenseScalarWhereInput[]
   }
 
-  export type ServiceInvoiceUpdateOneWithoutJobNestedInput = {
-    create?: XOR<ServiceInvoiceCreateWithoutJobInput, ServiceInvoiceUncheckedCreateWithoutJobInput>
-    connectOrCreate?: ServiceInvoiceCreateOrConnectWithoutJobInput
-    upsert?: ServiceInvoiceUpsertWithoutJobInput
-    disconnect?: ServiceInvoiceWhereInput | boolean
-    delete?: ServiceInvoiceWhereInput | boolean
-    connect?: ServiceInvoiceWhereUniqueInput
-    update?: XOR<XOR<ServiceInvoiceUpdateToOneWithWhereWithoutJobInput, ServiceInvoiceUpdateWithoutJobInput>, ServiceInvoiceUncheckedUpdateWithoutJobInput>
+  export type ServiceInvoiceUpdateManyWithoutJobNestedInput = {
+    create?: XOR<ServiceInvoiceCreateWithoutJobInput, ServiceInvoiceUncheckedCreateWithoutJobInput> | ServiceInvoiceCreateWithoutJobInput[] | ServiceInvoiceUncheckedCreateWithoutJobInput[]
+    connectOrCreate?: ServiceInvoiceCreateOrConnectWithoutJobInput | ServiceInvoiceCreateOrConnectWithoutJobInput[]
+    upsert?: ServiceInvoiceUpsertWithWhereUniqueWithoutJobInput | ServiceInvoiceUpsertWithWhereUniqueWithoutJobInput[]
+    createMany?: ServiceInvoiceCreateManyJobInputEnvelope
+    set?: ServiceInvoiceWhereUniqueInput | ServiceInvoiceWhereUniqueInput[]
+    disconnect?: ServiceInvoiceWhereUniqueInput | ServiceInvoiceWhereUniqueInput[]
+    delete?: ServiceInvoiceWhereUniqueInput | ServiceInvoiceWhereUniqueInput[]
+    connect?: ServiceInvoiceWhereUniqueInput | ServiceInvoiceWhereUniqueInput[]
+    update?: ServiceInvoiceUpdateWithWhereUniqueWithoutJobInput | ServiceInvoiceUpdateWithWhereUniqueWithoutJobInput[]
+    updateMany?: ServiceInvoiceUpdateManyWithWhereWithoutJobInput | ServiceInvoiceUpdateManyWithWhereWithoutJobInput[]
+    deleteMany?: ServiceInvoiceScalarWhereInput | ServiceInvoiceScalarWhereInput[]
   }
 
   export type FreightInvoiceUpdateOneWithoutJobNestedInput = {
@@ -55448,14 +55497,18 @@ export namespace Prisma {
     deleteMany?: ExpenseScalarWhereInput | ExpenseScalarWhereInput[]
   }
 
-  export type ServiceInvoiceUncheckedUpdateOneWithoutJobNestedInput = {
-    create?: XOR<ServiceInvoiceCreateWithoutJobInput, ServiceInvoiceUncheckedCreateWithoutJobInput>
-    connectOrCreate?: ServiceInvoiceCreateOrConnectWithoutJobInput
-    upsert?: ServiceInvoiceUpsertWithoutJobInput
-    disconnect?: ServiceInvoiceWhereInput | boolean
-    delete?: ServiceInvoiceWhereInput | boolean
-    connect?: ServiceInvoiceWhereUniqueInput
-    update?: XOR<XOR<ServiceInvoiceUpdateToOneWithWhereWithoutJobInput, ServiceInvoiceUpdateWithoutJobInput>, ServiceInvoiceUncheckedUpdateWithoutJobInput>
+  export type ServiceInvoiceUncheckedUpdateManyWithoutJobNestedInput = {
+    create?: XOR<ServiceInvoiceCreateWithoutJobInput, ServiceInvoiceUncheckedCreateWithoutJobInput> | ServiceInvoiceCreateWithoutJobInput[] | ServiceInvoiceUncheckedCreateWithoutJobInput[]
+    connectOrCreate?: ServiceInvoiceCreateOrConnectWithoutJobInput | ServiceInvoiceCreateOrConnectWithoutJobInput[]
+    upsert?: ServiceInvoiceUpsertWithWhereUniqueWithoutJobInput | ServiceInvoiceUpsertWithWhereUniqueWithoutJobInput[]
+    createMany?: ServiceInvoiceCreateManyJobInputEnvelope
+    set?: ServiceInvoiceWhereUniqueInput | ServiceInvoiceWhereUniqueInput[]
+    disconnect?: ServiceInvoiceWhereUniqueInput | ServiceInvoiceWhereUniqueInput[]
+    delete?: ServiceInvoiceWhereUniqueInput | ServiceInvoiceWhereUniqueInput[]
+    connect?: ServiceInvoiceWhereUniqueInput | ServiceInvoiceWhereUniqueInput[]
+    update?: ServiceInvoiceUpdateWithWhereUniqueWithoutJobInput | ServiceInvoiceUpdateWithWhereUniqueWithoutJobInput[]
+    updateMany?: ServiceInvoiceUpdateManyWithWhereWithoutJobInput | ServiceInvoiceUpdateManyWithWhereWithoutJobInput[]
+    deleteMany?: ServiceInvoiceScalarWhereInput | ServiceInvoiceScalarWhereInput[]
   }
 
   export type FreightInvoiceUncheckedUpdateOneWithoutJobNestedInput = {
@@ -55538,9 +55591,9 @@ export namespace Prisma {
     connect?: CustomerWhereUniqueInput
   }
 
-  export type JobCreateNestedOneWithoutServiceInvoiceInput = {
-    create?: XOR<JobCreateWithoutServiceInvoiceInput, JobUncheckedCreateWithoutServiceInvoiceInput>
-    connectOrCreate?: JobCreateOrConnectWithoutServiceInvoiceInput
+  export type JobCreateNestedOneWithoutServiceInvoicesInput = {
+    create?: XOR<JobCreateWithoutServiceInvoicesInput, JobUncheckedCreateWithoutServiceInvoicesInput>
+    connectOrCreate?: JobCreateOrConnectWithoutServiceInvoicesInput
     connect?: JobWhereUniqueInput
   }
 
@@ -55588,14 +55641,14 @@ export namespace Prisma {
     update?: XOR<XOR<CustomerUpdateToOneWithWhereWithoutServiceInvoicesInput, CustomerUpdateWithoutServiceInvoicesInput>, CustomerUncheckedUpdateWithoutServiceInvoicesInput>
   }
 
-  export type JobUpdateOneWithoutServiceInvoiceNestedInput = {
-    create?: XOR<JobCreateWithoutServiceInvoiceInput, JobUncheckedCreateWithoutServiceInvoiceInput>
-    connectOrCreate?: JobCreateOrConnectWithoutServiceInvoiceInput
-    upsert?: JobUpsertWithoutServiceInvoiceInput
+  export type JobUpdateOneWithoutServiceInvoicesNestedInput = {
+    create?: XOR<JobCreateWithoutServiceInvoicesInput, JobUncheckedCreateWithoutServiceInvoicesInput>
+    connectOrCreate?: JobCreateOrConnectWithoutServiceInvoicesInput
+    upsert?: JobUpsertWithoutServiceInvoicesInput
     disconnect?: JobWhereInput | boolean
     delete?: JobWhereInput | boolean
     connect?: JobWhereUniqueInput
-    update?: XOR<XOR<JobUpdateToOneWithWhereWithoutServiceInvoiceInput, JobUpdateWithoutServiceInvoiceInput>, JobUncheckedUpdateWithoutServiceInvoiceInput>
+    update?: XOR<XOR<JobUpdateToOneWithWhereWithoutServiceInvoicesInput, JobUpdateWithoutServiceInvoicesInput>, JobUncheckedUpdateWithoutServiceInvoicesInput>
   }
 
   export type TransactionUpdateOneWithoutServiceNestedInput = {
@@ -57554,6 +57607,7 @@ export namespace Prisma {
     description: string
     costPrice?: number
     sellingPrice?: number
+    invoiceCategory?: string
     currencyCode?: string
     exchangeRate?: number
     createdAt?: Date | string
@@ -57569,6 +57623,7 @@ export namespace Prisma {
     description: string
     costPrice?: number
     sellingPrice?: number
+    invoiceCategory?: string
     currencyCode?: string
     exchangeRate?: number
     createdAt?: Date | string
@@ -57662,7 +57717,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     division?: string | null
     customer: CustomerCreateNestedOneWithoutServiceInvoicesInput
-    job?: JobCreateNestedOneWithoutServiceInvoiceInput
+    job?: JobCreateNestedOneWithoutServiceInvoicesInput
     transaction?: TransactionCreateNestedOneWithoutServiceInput
     items?: ServiceInvoiceItemCreateNestedManyWithoutInvoiceInput
   }
@@ -57793,7 +57848,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     division?: string | null
     expenses?: ExpenseCreateNestedManyWithoutJobInput
-    serviceInvoice?: ServiceInvoiceCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceCreateNestedManyWithoutJobInput
     freightInvoice?: FreightInvoiceCreateNestedOneWithoutJobInput
     branch?: BranchCreateNestedOneWithoutJobsInput
     customer: CustomerCreateNestedOneWithoutJobsInput
@@ -57830,7 +57885,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     division?: string | null
     expenses?: ExpenseUncheckedCreateNestedManyWithoutJobInput
-    serviceInvoice?: ServiceInvoiceUncheckedCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceUncheckedCreateNestedManyWithoutJobInput
     freightInvoice?: FreightInvoiceUncheckedCreateNestedOneWithoutJobInput
   }
 
@@ -58503,6 +58558,7 @@ export namespace Prisma {
     description?: StringFilter<"Expense"> | string
     costPrice?: FloatFilter<"Expense"> | number
     sellingPrice?: FloatFilter<"Expense"> | number
+    invoiceCategory?: StringFilter<"Expense"> | string
     currencyCode?: StringFilter<"Expense"> | string
     exchangeRate?: FloatFilter<"Expense"> | number
     companyId?: IntFilter<"Expense"> | number
@@ -59259,7 +59315,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     division?: string | null
     expenses?: ExpenseCreateNestedManyWithoutJobInput
-    serviceInvoice?: ServiceInvoiceCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceCreateNestedManyWithoutJobInput
     freightInvoice?: FreightInvoiceCreateNestedOneWithoutJobInput
     company: CompanyCreateNestedOneWithoutJobsInput
     customer: CustomerCreateNestedOneWithoutJobsInput
@@ -59296,7 +59352,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     division?: string | null
     expenses?: ExpenseUncheckedCreateNestedManyWithoutJobInput
-    serviceInvoice?: ServiceInvoiceUncheckedCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceUncheckedCreateNestedManyWithoutJobInput
     freightInvoice?: FreightInvoiceUncheckedCreateNestedOneWithoutJobInput
   }
 
@@ -60693,7 +60749,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     division?: string | null
     company: CompanyCreateNestedOneWithoutServiceInvoicesInput
-    job?: JobCreateNestedOneWithoutServiceInvoiceInput
+    job?: JobCreateNestedOneWithoutServiceInvoicesInput
     transaction?: TransactionCreateNestedOneWithoutServiceInput
     items?: ServiceInvoiceItemCreateNestedManyWithoutInvoiceInput
   }
@@ -60824,7 +60880,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     division?: string | null
     expenses?: ExpenseCreateNestedManyWithoutJobInput
-    serviceInvoice?: ServiceInvoiceCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceCreateNestedManyWithoutJobInput
     freightInvoice?: FreightInvoiceCreateNestedOneWithoutJobInput
     branch?: BranchCreateNestedOneWithoutJobsInput
     company: CompanyCreateNestedOneWithoutJobsInput
@@ -60861,7 +60917,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     division?: string | null
     expenses?: ExpenseUncheckedCreateNestedManyWithoutJobInput
-    serviceInvoice?: ServiceInvoiceUncheckedCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceUncheckedCreateNestedManyWithoutJobInput
     freightInvoice?: FreightInvoiceUncheckedCreateNestedOneWithoutJobInput
   }
 
@@ -61130,6 +61186,7 @@ export namespace Prisma {
     description: string
     costPrice?: number
     sellingPrice?: number
+    invoiceCategory?: string
     currencyCode?: string
     exchangeRate?: number
     createdAt?: Date | string
@@ -61144,6 +61201,7 @@ export namespace Prisma {
     description: string
     costPrice?: number
     sellingPrice?: number
+    invoiceCategory?: string
     currencyCode?: string
     exchangeRate?: number
     companyId: number
@@ -61652,6 +61710,7 @@ export namespace Prisma {
     description: string
     costPrice?: number
     sellingPrice?: number
+    invoiceCategory?: string
     currencyCode?: string
     exchangeRate?: number
     createdAt?: Date | string
@@ -61666,6 +61725,7 @@ export namespace Prisma {
     description: string
     costPrice?: number
     sellingPrice?: number
+    invoiceCategory?: string
     currencyCode?: string
     exchangeRate?: number
     companyId: number
@@ -61747,6 +61807,11 @@ export namespace Prisma {
   export type ServiceInvoiceCreateOrConnectWithoutJobInput = {
     where: ServiceInvoiceWhereUniqueInput
     create: XOR<ServiceInvoiceCreateWithoutJobInput, ServiceInvoiceUncheckedCreateWithoutJobInput>
+  }
+
+  export type ServiceInvoiceCreateManyJobInputEnvelope = {
+    data: ServiceInvoiceCreateManyJobInput | ServiceInvoiceCreateManyJobInput[]
+    skipDuplicates?: boolean
   }
 
   export type FreightInvoiceCreateWithoutJobInput = {
@@ -62001,76 +62066,20 @@ export namespace Prisma {
     data: XOR<ExpenseUpdateManyMutationInput, ExpenseUncheckedUpdateManyWithoutJobInput>
   }
 
-  export type ServiceInvoiceUpsertWithoutJobInput = {
+  export type ServiceInvoiceUpsertWithWhereUniqueWithoutJobInput = {
+    where: ServiceInvoiceWhereUniqueInput
     update: XOR<ServiceInvoiceUpdateWithoutJobInput, ServiceInvoiceUncheckedUpdateWithoutJobInput>
     create: XOR<ServiceInvoiceCreateWithoutJobInput, ServiceInvoiceUncheckedCreateWithoutJobInput>
-    where?: ServiceInvoiceWhereInput
   }
 
-  export type ServiceInvoiceUpdateToOneWithWhereWithoutJobInput = {
-    where?: ServiceInvoiceWhereInput
+  export type ServiceInvoiceUpdateWithWhereUniqueWithoutJobInput = {
+    where: ServiceInvoiceWhereUniqueInput
     data: XOR<ServiceInvoiceUpdateWithoutJobInput, ServiceInvoiceUncheckedUpdateWithoutJobInput>
   }
 
-  export type ServiceInvoiceUpdateWithoutJobInput = {
-    invoiceNumber?: StringFieldUpdateOperationsInput | string
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
-    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
-    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
-    origin?: NullableStringFieldUpdateOperationsInput | string | null
-    destination?: NullableStringFieldUpdateOperationsInput | string | null
-    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
-    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    taxAmount?: FloatFieldUpdateOperationsInput | number
-    grandTotal?: FloatFieldUpdateOperationsInput | number
-    currencyCode?: StringFieldUpdateOperationsInput | string
-    exchangeRate?: FloatFieldUpdateOperationsInput | number
-    isApproved?: BoolFieldUpdateOperationsInput | boolean
-    approvedById?: NullableIntFieldUpdateOperationsInput | number | null
-    isLocked?: BoolFieldUpdateOperationsInput | boolean
-    lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    division?: NullableStringFieldUpdateOperationsInput | string | null
-    company?: CompanyUpdateOneRequiredWithoutServiceInvoicesNestedInput
-    customer?: CustomerUpdateOneRequiredWithoutServiceInvoicesNestedInput
-    transaction?: TransactionUpdateOneWithoutServiceNestedInput
-    items?: ServiceInvoiceItemUpdateManyWithoutInvoiceNestedInput
-  }
-
-  export type ServiceInvoiceUncheckedUpdateWithoutJobInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    invoiceNumber?: StringFieldUpdateOperationsInput | string
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    customerId?: IntFieldUpdateOperationsInput | number
-    type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
-    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
-    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
-    origin?: NullableStringFieldUpdateOperationsInput | string | null
-    destination?: NullableStringFieldUpdateOperationsInput | string | null
-    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
-    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
-    taxAmount?: FloatFieldUpdateOperationsInput | number
-    grandTotal?: FloatFieldUpdateOperationsInput | number
-    currencyCode?: StringFieldUpdateOperationsInput | string
-    exchangeRate?: FloatFieldUpdateOperationsInput | number
-    isApproved?: BoolFieldUpdateOperationsInput | boolean
-    approvedById?: NullableIntFieldUpdateOperationsInput | number | null
-    isLocked?: BoolFieldUpdateOperationsInput | boolean
-    lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    companyId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    transactionId?: NullableIntFieldUpdateOperationsInput | number | null
-    division?: NullableStringFieldUpdateOperationsInput | string | null
-    items?: ServiceInvoiceItemUncheckedUpdateManyWithoutInvoiceNestedInput
+  export type ServiceInvoiceUpdateManyWithWhereWithoutJobInput = {
+    where: ServiceInvoiceScalarWhereInput
+    data: XOR<ServiceInvoiceUpdateManyMutationInput, ServiceInvoiceUncheckedUpdateManyWithoutJobInput>
   }
 
   export type FreightInvoiceUpsertWithoutJobInput = {
@@ -62664,7 +62673,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     division?: string | null
-    serviceInvoice?: ServiceInvoiceCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceCreateNestedManyWithoutJobInput
     freightInvoice?: FreightInvoiceCreateNestedOneWithoutJobInput
     branch?: BranchCreateNestedOneWithoutJobsInput
     company: CompanyCreateNestedOneWithoutJobsInput
@@ -62702,7 +62711,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deletedAt?: Date | string | null
     division?: string | null
-    serviceInvoice?: ServiceInvoiceUncheckedCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceUncheckedCreateNestedManyWithoutJobInput
     freightInvoice?: FreightInvoiceUncheckedCreateNestedOneWithoutJobInput
   }
 
@@ -62893,7 +62902,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
-    serviceInvoice?: ServiceInvoiceUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUpdateManyWithoutJobNestedInput
     freightInvoice?: FreightInvoiceUpdateOneWithoutJobNestedInput
     branch?: BranchUpdateOneWithoutJobsNestedInput
     company?: CompanyUpdateOneRequiredWithoutJobsNestedInput
@@ -62931,7 +62940,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
-    serviceInvoice?: ServiceInvoiceUncheckedUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUncheckedUpdateManyWithoutJobNestedInput
     freightInvoice?: FreightInvoiceUncheckedUpdateOneWithoutJobNestedInput
   }
 
@@ -63121,7 +63130,7 @@ export namespace Prisma {
     create: XOR<CustomerCreateWithoutServiceInvoicesInput, CustomerUncheckedCreateWithoutServiceInvoicesInput>
   }
 
-  export type JobCreateWithoutServiceInvoiceInput = {
+  export type JobCreateWithoutServiceInvoicesInput = {
     jobNumber: string
     date?: Date | string
     jobDate?: Date | string
@@ -63154,7 +63163,7 @@ export namespace Prisma {
     pod?: PortCreateNestedOneWithoutJobsInput
   }
 
-  export type JobUncheckedCreateWithoutServiceInvoiceInput = {
+  export type JobUncheckedCreateWithoutServiceInvoicesInput = {
     id?: number
     jobNumber: string
     date?: Date | string
@@ -63188,9 +63197,9 @@ export namespace Prisma {
     freightInvoice?: FreightInvoiceUncheckedCreateNestedOneWithoutJobInput
   }
 
-  export type JobCreateOrConnectWithoutServiceInvoiceInput = {
+  export type JobCreateOrConnectWithoutServiceInvoicesInput = {
     where: JobWhereUniqueInput
-    create: XOR<JobCreateWithoutServiceInvoiceInput, JobUncheckedCreateWithoutServiceInvoiceInput>
+    create: XOR<JobCreateWithoutServiceInvoicesInput, JobUncheckedCreateWithoutServiceInvoicesInput>
   }
 
   export type TransactionCreateWithoutServiceInput = {
@@ -63412,18 +63421,18 @@ export namespace Prisma {
     payments?: PaymentUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
-  export type JobUpsertWithoutServiceInvoiceInput = {
-    update: XOR<JobUpdateWithoutServiceInvoiceInput, JobUncheckedUpdateWithoutServiceInvoiceInput>
-    create: XOR<JobCreateWithoutServiceInvoiceInput, JobUncheckedCreateWithoutServiceInvoiceInput>
+  export type JobUpsertWithoutServiceInvoicesInput = {
+    update: XOR<JobUpdateWithoutServiceInvoicesInput, JobUncheckedUpdateWithoutServiceInvoicesInput>
+    create: XOR<JobCreateWithoutServiceInvoicesInput, JobUncheckedCreateWithoutServiceInvoicesInput>
     where?: JobWhereInput
   }
 
-  export type JobUpdateToOneWithWhereWithoutServiceInvoiceInput = {
+  export type JobUpdateToOneWithWhereWithoutServiceInvoicesInput = {
     where?: JobWhereInput
-    data: XOR<JobUpdateWithoutServiceInvoiceInput, JobUncheckedUpdateWithoutServiceInvoiceInput>
+    data: XOR<JobUpdateWithoutServiceInvoicesInput, JobUncheckedUpdateWithoutServiceInvoicesInput>
   }
 
-  export type JobUpdateWithoutServiceInvoiceInput = {
+  export type JobUpdateWithoutServiceInvoicesInput = {
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     jobDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63456,7 +63465,7 @@ export namespace Prisma {
     pod?: PortUpdateOneWithoutJobsNestedInput
   }
 
-  export type JobUncheckedUpdateWithoutServiceInvoiceInput = {
+  export type JobUncheckedUpdateWithoutServiceInvoicesInput = {
     id?: IntFieldUpdateOperationsInput | number
     jobNumber?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63590,7 +63599,7 @@ export namespace Prisma {
     division?: string | null
     company: CompanyCreateNestedOneWithoutServiceInvoicesInput
     customer: CustomerCreateNestedOneWithoutServiceInvoicesInput
-    job?: JobCreateNestedOneWithoutServiceInvoiceInput
+    job?: JobCreateNestedOneWithoutServiceInvoicesInput
     transaction?: TransactionCreateNestedOneWithoutServiceInput
   }
 
@@ -63705,7 +63714,7 @@ export namespace Prisma {
     division?: NullableStringFieldUpdateOperationsInput | string | null
     company?: CompanyUpdateOneRequiredWithoutServiceInvoicesNestedInput
     customer?: CustomerUpdateOneRequiredWithoutServiceInvoicesNestedInput
-    job?: JobUpdateOneWithoutServiceInvoiceNestedInput
+    job?: JobUpdateOneWithoutServiceInvoicesNestedInput
     transaction?: TransactionUpdateOneWithoutServiceNestedInput
   }
 
@@ -63984,7 +63993,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     division?: string | null
     expenses?: ExpenseCreateNestedManyWithoutJobInput
-    serviceInvoice?: ServiceInvoiceCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceCreateNestedManyWithoutJobInput
     branch?: BranchCreateNestedOneWithoutJobsInput
     company: CompanyCreateNestedOneWithoutJobsInput
     customer: CustomerCreateNestedOneWithoutJobsInput
@@ -64022,7 +64031,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     division?: string | null
     expenses?: ExpenseUncheckedCreateNestedManyWithoutJobInput
-    serviceInvoice?: ServiceInvoiceUncheckedCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceUncheckedCreateNestedManyWithoutJobInput
   }
 
   export type JobCreateOrConnectWithoutFreightInvoiceInput = {
@@ -64292,7 +64301,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
     expenses?: ExpenseUpdateManyWithoutJobNestedInput
-    serviceInvoice?: ServiceInvoiceUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUpdateManyWithoutJobNestedInput
     branch?: BranchUpdateOneWithoutJobsNestedInput
     company?: CompanyUpdateOneRequiredWithoutJobsNestedInput
     customer?: CustomerUpdateOneRequiredWithoutJobsNestedInput
@@ -64330,7 +64339,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
     expenses?: ExpenseUncheckedUpdateManyWithoutJobNestedInput
-    serviceInvoice?: ServiceInvoiceUncheckedUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUncheckedUpdateManyWithoutJobNestedInput
   }
 
   export type FreightInvoiceItemUpsertWithWhereUniqueWithoutInvoiceInput = {
@@ -67092,7 +67101,7 @@ export namespace Prisma {
     division?: string | null
     company: CompanyCreateNestedOneWithoutServiceInvoicesInput
     customer: CustomerCreateNestedOneWithoutServiceInvoicesInput
-    job?: JobCreateNestedOneWithoutServiceInvoiceInput
+    job?: JobCreateNestedOneWithoutServiceInvoicesInput
     items?: ServiceInvoiceItemCreateNestedManyWithoutInvoiceInput
   }
 
@@ -67417,7 +67426,7 @@ export namespace Prisma {
     division?: NullableStringFieldUpdateOperationsInput | string | null
     company?: CompanyUpdateOneRequiredWithoutServiceInvoicesNestedInput
     customer?: CustomerUpdateOneRequiredWithoutServiceInvoicesNestedInput
-    job?: JobUpdateOneWithoutServiceInvoiceNestedInput
+    job?: JobUpdateOneWithoutServiceInvoicesNestedInput
     items?: ServiceInvoiceItemUpdateManyWithoutInvoiceNestedInput
   }
 
@@ -68840,7 +68849,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     division?: string | null
     expenses?: ExpenseCreateNestedManyWithoutJobInput
-    serviceInvoice?: ServiceInvoiceCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceCreateNestedManyWithoutJobInput
     freightInvoice?: FreightInvoiceCreateNestedOneWithoutJobInput
     branch?: BranchCreateNestedOneWithoutJobsInput
     company: CompanyCreateNestedOneWithoutJobsInput
@@ -68877,7 +68886,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     division?: string | null
     expenses?: ExpenseUncheckedCreateNestedManyWithoutJobInput
-    serviceInvoice?: ServiceInvoiceUncheckedCreateNestedOneWithoutJobInput
+    serviceInvoices?: ServiceInvoiceUncheckedCreateNestedManyWithoutJobInput
     freightInvoice?: FreightInvoiceUncheckedCreateNestedOneWithoutJobInput
   }
 
@@ -69681,6 +69690,7 @@ export namespace Prisma {
     description: string
     costPrice?: number
     sellingPrice?: number
+    invoiceCategory?: string
     currencyCode?: string
     exchangeRate?: number
     createdAt?: Date | string
@@ -70129,6 +70139,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -70144,6 +70155,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -70157,6 +70169,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -70237,7 +70250,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     division?: NullableStringFieldUpdateOperationsInput | string | null
     customer?: CustomerUpdateOneRequiredWithoutServiceInvoicesNestedInput
-    job?: JobUpdateOneWithoutServiceInvoiceNestedInput
+    job?: JobUpdateOneWithoutServiceInvoicesNestedInput
     transaction?: TransactionUpdateOneWithoutServiceNestedInput
     items?: ServiceInvoiceItemUpdateManyWithoutInvoiceNestedInput
   }
@@ -70402,7 +70415,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
     expenses?: ExpenseUpdateManyWithoutJobNestedInput
-    serviceInvoice?: ServiceInvoiceUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUpdateManyWithoutJobNestedInput
     freightInvoice?: FreightInvoiceUpdateOneWithoutJobNestedInput
     branch?: BranchUpdateOneWithoutJobsNestedInput
     customer?: CustomerUpdateOneRequiredWithoutJobsNestedInput
@@ -70439,7 +70452,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
     expenses?: ExpenseUncheckedUpdateManyWithoutJobNestedInput
-    serviceInvoice?: ServiceInvoiceUncheckedUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUncheckedUpdateManyWithoutJobNestedInput
     freightInvoice?: FreightInvoiceUncheckedUpdateOneWithoutJobNestedInput
   }
 
@@ -71055,7 +71068,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
     expenses?: ExpenseUpdateManyWithoutJobNestedInput
-    serviceInvoice?: ServiceInvoiceUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUpdateManyWithoutJobNestedInput
     freightInvoice?: FreightInvoiceUpdateOneWithoutJobNestedInput
     company?: CompanyUpdateOneRequiredWithoutJobsNestedInput
     customer?: CustomerUpdateOneRequiredWithoutJobsNestedInput
@@ -71092,7 +71105,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
     expenses?: ExpenseUncheckedUpdateManyWithoutJobNestedInput
-    serviceInvoice?: ServiceInvoiceUncheckedUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUncheckedUpdateManyWithoutJobNestedInput
     freightInvoice?: FreightInvoiceUncheckedUpdateOneWithoutJobNestedInput
   }
 
@@ -71432,7 +71445,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     division?: NullableStringFieldUpdateOperationsInput | string | null
     company?: CompanyUpdateOneRequiredWithoutServiceInvoicesNestedInput
-    job?: JobUpdateOneWithoutServiceInvoiceNestedInput
+    job?: JobUpdateOneWithoutServiceInvoicesNestedInput
     transaction?: TransactionUpdateOneWithoutServiceNestedInput
     items?: ServiceInvoiceItemUpdateManyWithoutInvoiceNestedInput
   }
@@ -71597,7 +71610,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
     expenses?: ExpenseUpdateManyWithoutJobNestedInput
-    serviceInvoice?: ServiceInvoiceUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUpdateManyWithoutJobNestedInput
     freightInvoice?: FreightInvoiceUpdateOneWithoutJobNestedInput
     branch?: BranchUpdateOneWithoutJobsNestedInput
     company?: CompanyUpdateOneRequiredWithoutJobsNestedInput
@@ -71634,7 +71647,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
     expenses?: ExpenseUncheckedUpdateManyWithoutJobNestedInput
-    serviceInvoice?: ServiceInvoiceUncheckedUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUncheckedUpdateManyWithoutJobNestedInput
     freightInvoice?: FreightInvoiceUncheckedUpdateOneWithoutJobNestedInput
   }
 
@@ -71719,6 +71732,7 @@ export namespace Prisma {
     description: string
     costPrice?: number
     sellingPrice?: number
+    invoiceCategory?: string
     currencyCode?: string
     exchangeRate?: number
     companyId: number
@@ -71777,6 +71791,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -71791,6 +71806,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     companyId?: IntFieldUpdateOperationsInput | number
@@ -71804,6 +71820,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     companyId?: IntFieldUpdateOperationsInput | number
@@ -71957,6 +71974,7 @@ export namespace Prisma {
     description: string
     costPrice?: number
     sellingPrice?: number
+    invoiceCategory?: string
     currencyCode?: string
     exchangeRate?: number
     companyId: number
@@ -71964,10 +71982,41 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ServiceInvoiceCreateManyJobInput = {
+    id?: number
+    invoiceNumber: string
+    date?: Date | string
+    customerId: number
+    type?: $Enums.InvoiceType
+    status?: $Enums.InvoiceStatus
+    masterNumber?: string | null
+    agentCode?: string | null
+    shippingLine?: string | null
+    origin?: string | null
+    destination?: string | null
+    creditDays?: number | null
+    vendorType?: string | null
+    totalAmount?: number
+    taxAmount?: number
+    grandTotal?: number
+    currencyCode?: string
+    exchangeRate?: number
+    isApproved?: boolean
+    approvedById?: number | null
+    isLocked?: boolean
+    lockedAt?: Date | string | null
+    companyId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactionId?: number | null
+    division?: string | null
+  }
+
   export type ExpenseUpdateWithoutJobInput = {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -71982,6 +72031,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     companyId?: IntFieldUpdateOperationsInput | number
@@ -71995,11 +72045,103 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     costPrice?: FloatFieldUpdateOperationsInput | number
     sellingPrice?: FloatFieldUpdateOperationsInput | number
+    invoiceCategory?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     exchangeRate?: FloatFieldUpdateOperationsInput | number
     companyId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceInvoiceUpdateWithoutJobInput = {
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    taxAmount?: FloatFieldUpdateOperationsInput | number
+    grandTotal?: FloatFieldUpdateOperationsInput | number
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
+    isApproved?: BoolFieldUpdateOperationsInput | boolean
+    approvedById?: NullableIntFieldUpdateOperationsInput | number | null
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: CompanyUpdateOneRequiredWithoutServiceInvoicesNestedInput
+    customer?: CustomerUpdateOneRequiredWithoutServiceInvoicesNestedInput
+    transaction?: TransactionUpdateOneWithoutServiceNestedInput
+    items?: ServiceInvoiceItemUpdateManyWithoutInvoiceNestedInput
+  }
+
+  export type ServiceInvoiceUncheckedUpdateWithoutJobInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    customerId?: IntFieldUpdateOperationsInput | number
+    type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    taxAmount?: FloatFieldUpdateOperationsInput | number
+    grandTotal?: FloatFieldUpdateOperationsInput | number
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
+    isApproved?: BoolFieldUpdateOperationsInput | boolean
+    approvedById?: NullableIntFieldUpdateOperationsInput | number | null
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactionId?: NullableIntFieldUpdateOperationsInput | number | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
+    items?: ServiceInvoiceItemUncheckedUpdateManyWithoutInvoiceNestedInput
+  }
+
+  export type ServiceInvoiceUncheckedUpdateManyWithoutJobInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    invoiceNumber?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    customerId?: IntFieldUpdateOperationsInput | number
+    type?: EnumInvoiceTypeFieldUpdateOperationsInput | $Enums.InvoiceType
+    status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
+    masterNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    agentCode?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingLine?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: NullableStringFieldUpdateOperationsInput | string | null
+    destination?: NullableStringFieldUpdateOperationsInput | string | null
+    creditDays?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorType?: NullableStringFieldUpdateOperationsInput | string | null
+    totalAmount?: FloatFieldUpdateOperationsInput | number
+    taxAmount?: FloatFieldUpdateOperationsInput | number
+    grandTotal?: FloatFieldUpdateOperationsInput | number
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    exchangeRate?: FloatFieldUpdateOperationsInput | number
+    isApproved?: BoolFieldUpdateOperationsInput | boolean
+    approvedById?: NullableIntFieldUpdateOperationsInput | number | null
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    companyId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactionId?: NullableIntFieldUpdateOperationsInput | number | null
+    division?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServiceInvoiceItemCreateManyInvoiceInput = {
@@ -72599,7 +72741,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
     expenses?: ExpenseUpdateManyWithoutJobNestedInput
-    serviceInvoice?: ServiceInvoiceUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUpdateManyWithoutJobNestedInput
     freightInvoice?: FreightInvoiceUpdateOneWithoutJobNestedInput
     branch?: BranchUpdateOneWithoutJobsNestedInput
     company?: CompanyUpdateOneRequiredWithoutJobsNestedInput
@@ -72636,7 +72778,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     division?: NullableStringFieldUpdateOperationsInput | string | null
     expenses?: ExpenseUncheckedUpdateManyWithoutJobNestedInput
-    serviceInvoice?: ServiceInvoiceUncheckedUpdateOneWithoutJobNestedInput
+    serviceInvoices?: ServiceInvoiceUncheckedUpdateManyWithoutJobNestedInput
     freightInvoice?: FreightInvoiceUncheckedUpdateOneWithoutJobNestedInput
   }
 

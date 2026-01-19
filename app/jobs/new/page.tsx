@@ -34,7 +34,7 @@ export default function NewJobPage() {
     const [ports, setPorts] = useState<Port[]>([]);
 
     const [expenses, setExpenses] = useState([
-        { code: '', name: '', description: '', cost: '', selling: '' },
+        { code: '', name: '', description: '', cost: '', selling: '', invoiceCategory: 'SERVICE' },
     ]);
 
     const [formData, setFormData] = useState({
@@ -92,7 +92,7 @@ export default function NewJobPage() {
         };
         fetchData();
         // Fill initial 15 rows for expenses like in the image
-        setExpenses(Array(15).fill(null).map(() => ({ code: '', name: '', description: '', cost: '', selling: '' })));
+        setExpenses(Array(15).fill(null).map(() => ({ code: '', name: '', description: '', cost: '', selling: '', invoiceCategory: 'SERVICE' })));
     }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -491,6 +491,7 @@ export default function NewJobPage() {
                                         <th className="w-32 px-4 py-4 text-subtext border-r border-border/50 dark:border-slate-800">Code</th>
                                         <th className="px-4 py-4 text-subtext border-r border-border/50 dark:border-slate-800 text-center">Expense Name</th>
                                         <th className="w-1/3 px-4 py-4 text-subtext border-r border-border/50 dark:border-slate-800">Description</th>
+                                        <th className="w-32 px-4 py-4 text-subtext border-r border-border/50 dark:border-slate-800 text-center">INVOICE TYPE</th>
                                         <th className="w-32 px-4 py-4 text-subtext border-r border-border/50 dark:border-slate-800 text-right">COST</th>
                                         <th className="w-32 px-4 py-4 text-subtext text-right">SELLING</th>
                                     </tr>
@@ -523,6 +524,16 @@ export default function NewJobPage() {
                                                     onChange={(e) => updateExpense(idx, 'description', e.target.value)}
                                                 />
                                             </td>
+                                            <td className="px-1 py-1 border-r border-border/50 dark:border-slate-800">
+                                                <select
+                                                    className="w-full bg-transparent px-2 py-2 text-xs font-bold text-slate-600 dark:text-slate-400 focus:outline-none focus:bg-slate-500/10 rounded-lg transition-all"
+                                                    value={expense.invoiceCategory || 'SERVICE'}
+                                                    onChange={(e) => updateExpense(idx, 'invoiceCategory', e.target.value)}
+                                                >
+                                                    <option value="SERVICE">Sales Tax (Service)</option>
+                                                    <option value="FREIGHT">Trucking Bill (Freight)</option>
+                                                </select>
+                                            </td>
                                             <td className="px-1 py-1 border-r border-border/50 dark:border-slate-800 bg-slate-500/5 dark:bg-slate-800/30">
                                                 <input
                                                     type="number"
@@ -551,7 +562,7 @@ export default function NewJobPage() {
                         <div className="bg-slate-500/5 dark:bg-slate-950 p-6 flex justify-between items-center border-t border-border/50 dark:border-slate-800">
                             <button
                                 type="button"
-                                onClick={() => setExpenses([...expenses, { code: '', name: '', description: '', cost: '', selling: '' }])}
+                                onClick={() => setExpenses([...expenses, { code: '', name: '', description: '', cost: '', selling: '', invoiceCategory: 'SERVICE' }])}
                                 className="flex items-center gap-2 group"
                             >
                                 <div className="w-8 h-8 rounded-full bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-all">

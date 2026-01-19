@@ -50,6 +50,7 @@ interface InvoiceItem {
 export default function NewInvoicePage() {
     const router = useRouter();
     const [category, setCategory] = useState<'SERVICE' | 'FREIGHT'>('SERVICE');
+    const [serviceInvoiceType, setServiceInvoiceType] = useState<'SALES_TAX' | 'TRUCKING'>('SALES_TAX');
     const [loading, setLoading] = useState(false);
     const [searching, setSearching] = useState(false);
     const [jobNumber, setJobNumber] = useState('');
@@ -76,6 +77,60 @@ export default function NewInvoicePage() {
             fetchPendingJobs();
         }
     }, [category]);
+
+    const generateItems = (currentJob: any) => {
+        if (!currentJob) return;
+
+        const containerCount = currentJob.containerNo ? currentJob.containerNo.split(',').filter((x: string) => x.trim()).length : 0;
+        const initialItems: InvoiceItem[] = [];
+
+        // 1. Add Service Charges ONLY if Sales Tax Invoice
+        if (serviceInvoiceType === 'SALES_TAX') {
+            const serviceChargeRate = 2000;
+            const serviceChargeAmount = containerCount * serviceChargeRate;
+            if (containerCount > 0) {
+                initialItems.push({
+                    description: `Service Charges (${containerCount} Containers)`,
+                    quantity: containerCount,
+                    rate: serviceChargeRate,
+                    amount: serviceChargeAmount,
+                    taxPercentage: 13,
+                    taxAmount: (serviceChargeAmount * 13) / 100,
+                    total: serviceChargeAmount + (serviceChargeAmount * 13) / 100,
+                    productId: null
+                });
+            }
+        }
+
+        // 2. Add Expenses based on Category
+        const targetCategory = serviceInvoiceType === 'SALES_TAX' ? 'SERVICE' : 'FREIGHT';
+
+        const relevantExpenses = (currentJob.expenses || []).filter((e: any) =>
+            (e.invoiceCategory || 'SERVICE') === targetCategory
+        );
+
+        relevantExpenses.forEach((exp: any) => {
+            initialItems.push({
+                description: exp.description,
+                quantity: 1,
+                rate: exp.sellingPrice,
+                amount: exp.sellingPrice,
+                taxPercentage: 0,
+                taxAmount: 0,
+                total: exp.sellingPrice,
+                productId: null
+            });
+        });
+
+        setInvoiceItems(initialItems);
+    };
+
+    // Regenerate items when invoice type changes
+    useEffect(() => {
+        if (job && category === 'SERVICE') {
+            generateItems(job);
+        }
+    }, [serviceInvoiceType]);
 
     const fetchPendingJobs = async () => {
         setFetchingJobs(true);
@@ -114,47 +169,34 @@ export default function NewInvoicePage() {
         setSearching(true);
         setJob(null);
         try {
-            const res = await fetch(`/api/jobs/by-number/${jobNumber}`);
+            const res = await fetch(`/api/jobs?jobNumber=${jobNumber}`);
             if (res.ok) {
                 const data = await res.json();
-                const foundJob = data.job;
-                setJob(foundJob);
+                // The API returns { jobs: [...] }
+                // We need to pick the first one and then fetch details?
+                // Actually the API returns details (including expenses count, but logic in page needs full expenses?)
+                // app/api/jobs GET returns _count expenses. It DOES NOT return actual expenses list.
+                // We typically need to fetch /api/jobs/[id] to get expenses list.
 
-                // Service Invoice Logic:
-                // 1. Service Charges (Container Count * 2000)
-                const containerCount = foundJob.containerNo ? foundJob.containerNo.split(',').filter((x: string) => x.trim()).length : 0;
-                const serviceChargeRate = 2000;
-                const serviceChargeAmount = containerCount * serviceChargeRate;
+                const foundJobSummary = data.jobs?.[0];
 
-                const initialItems: InvoiceItem[] = [
-                    {
-                        description: `Service Charges (${containerCount} Containers)`,
-                        quantity: containerCount,
-                        rate: serviceChargeRate,
-                        amount: serviceChargeAmount,
-                        taxPercentage: 13, // Default Sales Tax as requested
-                        taxAmount: (serviceChargeAmount * 13) / 100,
-                        total: serviceChargeAmount + (serviceChargeAmount * 13) / 100,
-                        productId: null
-                    },
-                    ...(foundJob.expenses || []).map((exp: any) => ({
-                        description: exp.description,
-                        quantity: 1,
-                        rate: exp.sellingPrice,
-                        amount: exp.sellingPrice,
-                        taxPercentage: 0, // No tax on expenses by default
-                        taxAmount: 0,
-                        total: exp.sellingPrice,
-                        productId: null
-                    }))
-                ];
-                setInvoiceItems(initialItems);
+                if (foundJobSummary) {
+                    const detailRes = await fetch(`/api/jobs/${foundJobSummary.id}`);
+                    if (detailRes.ok) {
+                        const detailData = await detailRes.json();
+                        const foundJob = detailData.job;
+                        setJob(foundJob);
+                        generateItems(foundJob);
 
-                setInvoiceData(prev => ({
-                    ...prev,
-                    invoiceNumber: `SIN-${new Date().getFullYear()}-WAIT`, // Will be generated on server or refined
-                    currencyCode: 'PKR'
-                }));
+                        setInvoiceData(prev => ({
+                            ...prev,
+                            invoiceNumber: `SIN-${new Date().getFullYear()}-WAIT`,
+                            currencyCode: 'PKR'
+                        }));
+                    }
+                } else {
+                    alert('Job not found');
+                }
             } else {
                 const error = await res.json();
                 alert(error.error || 'Job not found');
@@ -165,6 +207,8 @@ export default function NewInvoicePage() {
             setSearching(false);
         }
     };
+
+
 
     const addInvoiceItem = () => {
         setInvoiceItems([...invoiceItems, {
@@ -344,6 +388,27 @@ export default function NewInvoicePage() {
                                                 </button>
                                             ))
                                         )}
+                                    </div>
+                                </div>
+
+                                {/* Classification Toggle */}
+                                <div className="space-y-3 pt-4 border-t border-border/50">
+                                    <label className="text-subtext ml-1">Invoice Classification</label>
+                                    <div className="flex gap-4">
+                                        <button
+                                            type="button"
+                                            onClick={() => setServiceInvoiceType('SALES_TAX')}
+                                            className={`flex-1 py-3 px-4 rounded-xl border transition-all font-bold text-sm ${serviceInvoiceType === 'SALES_TAX' ? 'bg-blue-600/10 border-blue-600 text-blue-500' : 'bg-transparent border-slate-700 text-slate-500 hover:border-slate-500'}`}
+                                        >
+                                            Sales Tax Invoice
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setServiceInvoiceType('TRUCKING')}
+                                            className={`flex-1 py-3 px-4 rounded-xl border transition-all font-bold text-sm ${serviceInvoiceType === 'TRUCKING' ? 'bg-emerald-600/10 border-emerald-600 text-emerald-500' : 'bg-transparent border-slate-700 text-slate-500 hover:border-slate-500'}`}
+                                        >
+                                            Trucking Bill
+                                        </button>
                                     </div>
                                 </div>
                             </div>

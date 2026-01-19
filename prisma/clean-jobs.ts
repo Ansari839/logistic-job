@@ -26,6 +26,7 @@ async function main() {
             '"AccountEntry"',
             '"Voucher"',
             '"Transaction"',
+            '"Payment"',
             '"Expense"',
             '"Job"',
             '"AuditLog"'
