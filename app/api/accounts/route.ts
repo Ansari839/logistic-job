@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth';
 import { z } from 'zod';
 import prisma from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
 const accountSchema = z.object({
     code: z.string().min(1),
@@ -121,7 +122,7 @@ export async function POST(req: Request) {
     while (attempts < 3) {
         try {
             // Transaction logic
-            const account = await prisma.$transaction(async (tx) => {
+            const account = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
                 const newAccount = await tx.account.create({
                     data: {
                         ...accountData,
