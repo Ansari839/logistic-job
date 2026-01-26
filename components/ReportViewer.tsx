@@ -286,7 +286,7 @@ export default function ReportViewer({ report }: ReportViewerProps) {
                             <Search size={32} className="text-slate-800" />
                         </div>
                         <h4 className="text-white font-black uppercase tracking-widest">No Data Discovered</h4>
-                        <p className="text-slate-500 text-xs font-bold uppercase tracking-widest max-w-xs">Adjust filters or select a different period to view results.</p>
+                        <p className="text-slate-500 text-xs font-bold uppercase tracking-widest max-w-xs">Adjust filter or select a different period to view results.</p>
                     </div>
                 )}
             </div>
