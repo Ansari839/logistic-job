@@ -143,32 +143,41 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                 {/* Main Invoice Card */}
                 <div className="bg-white text-slate-900 rounded-[2rem] overflow-hidden shadow-2xl print:shadow-none print:rounded-none">
                     {/* Header: Company & Invoice Info */}
-                    <div className="p-10 border-b-2 border-slate-100 flex justify-between items-start bg-slate-50/50">
-                        <div>
+                    {/* Header: Company & Invoice Info */}
+                    <div className="bg-slate-50/50 border-b-2 border-slate-100">
+                        {/* Centered Company Info */}
+                        <div className="p-6 text-center border-b border-slate-100 flex flex-col items-center">
                             {invoice.company.logo ? (
-                                <img src={invoice.company.logo} alt="Logo" className="h-16 mb-4" />
+                                <img src={invoice.company.logo} alt="Logo" className="h-20 mb-4" />
                             ) : (
-                                <div className="flex items-center gap-3 mb-6">
-                                    <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-blue-600/20">L</div>
-                                    <span className="text-2xl font-black tracking-tighter uppercase italic text-blue-900">{invoice.company.name}</span>
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-600/20">L</div>
+                                    <span className="text-3xl font-black tracking-tighter uppercase italic text-blue-900">{invoice.company.name}</span>
                                 </div>
                             )}
                             <div className="space-y-1 text-slate-500 text-sm">
-                                <p className="font-bold flex items-center gap-2"><MapPin size={14} /> {invoice.company.address || 'Address Not Set'}</p>
-                                <p className="font-bold flex items-center gap-2"><Building2 size={14} /> {invoice.company.email} | {invoice.company.phone}</p>
+                                <p className="font-bold flex items-center justify-center gap-2"><MapPin size={14} /> {invoice.company.address || 'Address Not Set'}</p>
+                                <p className="font-bold flex items-center justify-center gap-2"><Building2 size={14} /> {invoice.company.email} | {invoice.company.phone}</p>
                                 {invoice.company.taxNumber && (
                                     <p className="font-black text-[10px] text-blue-600 uppercase tracking-widest mt-2">NTN: {invoice.company.taxNumber}</p>
                                 )}
                             </div>
                         </div>
-                        <div className="text-right">
-                            <div className="flex flex-col items-end gap-2 mb-2">
-                                <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${invoice.category === 'SERVICE' ? 'bg-blue-600/10 text-blue-600 border-blue-600/20' : 'bg-purple-600/10 text-purple-600 border-purple-600/20'}`}>
-                                    {invoice.category} INVOICE
+
+                        {/* Invoice Metadata Bar */}
+                        <div className="p-6 flex justify-between items-end bg-white">
+                            <div className="flex flex-col items-start gap-1">
+                                <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${(invoice.category === 'FREIGHT' || invoice.invoiceNumber.startsWith('TRK') || invoice.invoiceNumber.startsWith('FIN'))
+                                    ? 'bg-purple-600/10 text-purple-600 border-purple-600/20'
+                                    : 'bg-blue-600/10 text-blue-600 border-blue-600/20'
+                                    }`}>
+                                    {(invoice.category === 'FREIGHT' || invoice.invoiceNumber.startsWith('TRK') || invoice.invoiceNumber.startsWith('FIN')) ? 'TRUCKING BILL' : 'TAX INVOICE'}
                                 </span>
-                                <h1 className="text-6xl font-black text-slate-200 tracking-tighter leading-none uppercase italic">Invoice</h1>
+                                <h1 className="text-4xl font-black text-slate-200 tracking-tighter leading-none uppercase italic">
+                                    {(invoice.category === 'FREIGHT' || invoice.invoiceNumber.startsWith('TRK') || invoice.invoiceNumber.startsWith('FIN')) ? 'TRUCKING BILL' : 'SALES TAX INVOICE'}
+                                </h1>
                             </div>
-                            <div className="space-y-2">
+                            <div className="text-right space-y-2">
                                 <div>
                                     <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Invoice Number</p>
                                     <p className="text-xl font-black font-mono text-slate-900">{invoice.invoiceNumber}</p>
@@ -190,7 +199,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                     </div>
 
                     {/* Billing Details */}
-                    <div className="p-10 grid grid-cols-2 gap-12 bg-white">
+                    <div className="p-6 grid grid-cols-2 gap-6 bg-white">
                         <div>
                             <p className="text-[10px] text-blue-600 font-black uppercase tracking-[0.2em] mb-4 border-b pb-2 border-blue-50/50">Bill To</p>
                             <h3 className="text-2xl font-black text-slate-900 mb-2">{invoice.customer.name}</h3>
@@ -246,26 +255,28 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                     </div>
 
                     {/* Items Table */}
-                    <div className="px-10 pb-10">
+                    <div className="px-6 pb-6">
                         <div className="rounded-3xl border border-slate-100 overflow-hidden">
                             <table className="w-full text-left">
                                 <thead>
                                     <tr className="bg-slate-900 text-white">
-                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest">Detail Description</th>
-                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-center">Qty</th>
-                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-right">Unit Rate</th>
-                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-right">Tax (%)</th>
-                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-right">Total ({invoice.currencyCode})</th>
+                                        <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest">Detail Description</th>
+                                        <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-center">Qty</th>
+                                        <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-right">Unit Rate</th>
+                                        <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-right">
+                                            {invoice.category === 'SERVICE' ? 'Amount (Excl. Tax)' : `Total (${invoice.currencyCode})`}
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100">
                                     {invoice.items.map((item, idx) => (
                                         <tr key={item.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}>
-                                            <td className="px-6 py-4 font-bold text-slate-800 text-sm">{item.description}</td>
-                                            <td className="px-6 py-4 text-center font-bold text-slate-600 text-sm">{item.quantity}</td>
-                                            <td className="px-6 py-4 text-right font-mono text-slate-600 text-sm">{item.rate.toLocaleString()}</td>
-                                            <td className="px-6 py-4 text-right font-mono text-slate-400 text-xs">{item.taxPercentage}%</td>
-                                            <td className="px-6 py-4 text-right font-black text-slate-900 text-sm">{item.total.toLocaleString()}</td>
+                                            <td className="px-4 py-2 font-bold text-slate-800 text-sm">{item.description}</td>
+                                            <td className="px-4 py-2 text-center font-bold text-slate-600 text-sm">{item.quantity}</td>
+                                            <td className="px-4 py-2 text-right font-mono text-slate-600 text-sm">{item.rate.toLocaleString()}</td>
+                                            <td className="px-4 py-2 text-right font-black text-slate-900 text-sm">
+                                                {invoice.category === 'SERVICE' ? item.amount.toLocaleString() : item.total.toLocaleString()}
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -274,15 +285,8 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                     </div>
 
                     {/* Summary Footer */}
-                    <div className="p-10 bg-slate-50/50 border-t-2 border-slate-100 grid grid-cols-2 gap-20">
+                    <div className="p-6 bg-slate-50/50 border-t-2 border-slate-100 grid grid-cols-2 gap-10">
                         <div className="space-y-6">
-                            <div className="bg-white p-6 rounded-3xl border border-slate-200">
-                                <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-4">Payment Terms & Info</p>
-                                <p className="text-xs text-slate-500 font-bold leading-relaxed italic">
-                                    Please include the invoice number on your check or wire transfer reference.
-                                    Payments are due within 15 days of issue date unless otherwise specified.
-                                </p>
-                            </div>
                             <div className="flex items-center gap-4 px-6">
                                 <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
                                     <Info size={20} />
@@ -299,7 +303,9 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                                 <span className="text-lg font-bold text-slate-600">{invoice.totalAmount.toLocaleString()}</span>
                             </div>
                             <div className="flex justify-between items-center px-4">
-                                <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">WHT / Other Taxes</span>
+                                <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
+                                    {invoice.category === 'SERVICE' ? 'Sales Tax (17%)' : 'WHT / Other Taxes'}
+                                </span>
                                 <span className="text-lg font-bold text-slate-600">{invoice.taxAmount.toLocaleString()}</span>
                             </div>
                             <div className={`flex justify-between items-center p-6 rounded-[2.5rem] shadow-xl ${invoice.category === 'SERVICE' ? 'bg-blue-600 shadow-blue-600/20 text-white' : 'bg-purple-600 shadow-purple-600/20 text-white'}`}>
@@ -310,7 +316,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                     </div>
 
                     {/* Authorized Signature */}
-                    <div className="px-10 pb-16 pt-10 grid grid-cols-2">
+                    <div className="px-6 pb-6 pt-6 grid grid-cols-2">
                         <div className="self-end">
                             <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Generated By System At</p>
                             <p className="text-xs font-black text-slate-400">{new Date().toLocaleString()}</p>
@@ -326,6 +332,10 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
 
             <style jsx global>{`
                 @media print {
+                    @page {
+                        size: A4;
+                        margin: 0;
+                    }
                     nav, button, .print\\:hidden {
                         display: none !important;
                     }
@@ -335,10 +345,13 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                         margin: 0 !important;
                     }
                     .max-w-5xl {
-                        max-width: 100% !important;
+                        max-width: 210mm !important;
+                        min-height: 297mm !important;
+                        margin: 0 auto !important;
+                        box-shadow: none !important;
                     }
                 }
             `}</style>
-        </DashboardLayout>
+        </DashboardLayout >
     );
 }
