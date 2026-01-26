@@ -70,6 +70,23 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
     const router = useRouter();
     const [invoice, setInvoice] = useState<Invoice | null>(null);
     const [loading, setLoading] = useState(true);
+    const [settings, setSettings] = useState<any>({});
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await fetch('/api/settings/system');
+                if (res.ok) {
+                    const data = await res.json();
+                    const settingsMap = data.reduce((acc: any, curr: any) => ({ ...acc, [curr.key]: curr.value }), {});
+                    setSettings(settingsMap);
+                }
+            } catch (error) {
+                console.error('Failed to load settings', error);
+            }
+        };
+        fetchSettings();
+    }, []);
 
     useEffect(() => {
         const fetchInvoice = async () => {
@@ -304,7 +321,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                             </div>
                             <div className="flex justify-between items-center px-4">
                                 <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
-                                    {invoice.category === 'SERVICE' ? 'Sales Tax (17%)' : 'WHT / Other Taxes'}
+                                    {invoice.category === 'SERVICE' ? `Sales Tax (${settings.serviceTaxRate || '17'}%)` : 'WHT / Other Taxes'}
                                 </span>
                                 <span className="text-lg font-bold text-slate-600">{invoice.taxAmount.toLocaleString()}</span>
                             </div>

@@ -310,13 +310,32 @@ export async function PATCH(request: Request) {
                                         },
                                         ...inv.items.map((item: any) => ({
                                             accountId: revenueAccount.id,
-                                            credit: item.total,
+                                            credit: item.amount, // Exclusive Amount
                                             description: `Revenue: ${item.description} for ${job.jobNumber}${containerInfo}`
                                         }))
                                     ]
                                 }
                             }
                         });
+
+                        // Add Sales Tax Entry if applicable
+                        if (inv.taxAmount > 0) {
+                            const taxAccount = await tx.account.findUnique({
+                                where: { companyId_code: { companyId: user.companyId as number, code: '2221' } }
+                            });
+
+                            if (taxAccount) {
+                                await tx.accountEntry.create({
+                                    data: {
+                                        transactionId: transaction.id,
+                                        accountId: taxAccount.id,
+                                        credit: inv.taxAmount,
+                                        description: `Sales Tax (${((inv.taxAmount / inv.totalAmount) * 100).toFixed(0)}%) for Invoice ${inv.invoiceNumber}`
+                                    }
+                                });
+                            }
+                        }
+
                         await tx.serviceInvoice.update({
                             where: { id: inv.id },
                             data: { transactionId: transaction.id }

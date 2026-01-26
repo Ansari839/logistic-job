@@ -399,6 +399,36 @@ export default function SystemConfigPage() {
                                     <option value="YYYY-MM-DD">YYYY - MM - DD (ISO TECHNICAL)</option>
                                 </select>
                             </div>
+
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1.5">Default Service Tax Rate (%)</label>
+                                <div className="relative group">
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        className="glass-input w-full font-black text-xl py-5 pr-12 focus:ring-blue-500/10"
+                                        value={getSetting('serviceTaxRate')}
+                                        onChange={e => updateSetting('serviceTaxRate', e.target.value)}
+                                        placeholder="17"
+                                    />
+                                    <span className="absolute right-6 top-1/2 -translate-y-1/2 text-lg font-black text-slate-400">%</span>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1.5">Default Service Charges (%)</label>
+                                <div className="relative group">
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        className="glass-input w-full font-black text-xl py-5 pr-12 focus:ring-blue-500/10"
+                                        value={getSetting('serviceCharges')}
+                                        onChange={e => updateSetting('serviceCharges', e.target.value)}
+                                        placeholder="0"
+                                    />
+                                    <span className="absolute right-6 top-1/2 -translate-y-1/2 text-lg font-black text-slate-400">%</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div className="mt-20 pt-10 border-t border-slate-200 dark:border-slate-800 flex justify-end">
