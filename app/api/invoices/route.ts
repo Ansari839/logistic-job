@@ -224,12 +224,11 @@ export async function PATCH(request: Request) {
                 }
 
                 if (invoice.jobId) {
-                    const expenses = await tx.expense.findMany({ where: { jobId: invoice.jobId } });
-                    const expRefs = expenses.map((e: any) => `EXP-${e.id}`);
+                    // Delete expense transactions created by this invoice
                     await tx.transaction.deleteMany({
                         where: {
                             companyId: user.companyId as number,
-                            reference: { in: expRefs }
+                            reference: { startsWith: `${invoice.invoiceNumber}-EXP-` }
                         }
                     });
 
@@ -331,11 +330,15 @@ export async function PATCH(request: Request) {
                     include: { vendor: true }
                 }) : [];
 
+                console.log(`[APPROVE] Found ${jobExpenses.length} expenses for Job ${inv.jobId}`);
+
                 const costAccount = await tx.account.findUnique({
                     where: { companyId_code: { companyId: user.companyId as number, code: '5100' } }
                 });
+                if (!costAccount) console.error('[APPROVE] Cost Account 5100 not found!');
 
                 for (const exp of jobExpenses) {
+                    console.log(`[APPROVE] Processing Expense ID: ${exp.id}, Cost: ${exp.costPrice}`);
                     if (exp.costPrice > 0) {
                         let vendorAccount = null;
                         if (exp.vendor?.accountId) {
@@ -352,48 +355,83 @@ export async function PATCH(request: Request) {
                             });
                         }
 
+                        if (!vendorAccount) console.warn(`[APPROVE] No Vendor Account found for Expense ${exp.id} (Vendor: ${exp.vendor?.name})`);
+
                         if (!vendorAccount) {
+                            console.log(`[APPROVE] Attempting to find default vendor account (2210) for Expense ${exp.id}`);
                             vendorAccount = await tx.account.findUnique({
                                 where: { companyId_code: { companyId: user.companyId as number, code: '2210' } }
                             });
                         }
 
-                        if (costAccount && vendorAccount && inv.job) {
+                        // Dynamic Account Lookup
+                        const expenseName = exp.description.split(' - ')[0];
+                        let targetCostAccount = costAccount;
+
+                        const specificAccount = await tx.account.findFirst({
+                            where: {
+                                companyId: user.companyId as number,
+                                name: expenseName,
+                                type: 'EXPENSE'
+                            }
+                        });
+
+                        if (specificAccount) {
+                            console.log(`[APPROVE] Found specific account for '${expenseName}': ${specificAccount.name} (${specificAccount.code})`);
+                            targetCostAccount = specificAccount;
+                        } else {
+                            console.warn(`[APPROVE] specific account not found for '${expenseName}', using default 5100`);
+                        }
+
+                        if (targetCostAccount && vendorAccount && inv.job) {
                             const job = inv.job;
                             const containerInfo = job.containerNo ? ` | Cont: ${job.containerNo}` : '';
-                            await tx.transaction.create({
-                                data: {
-                                    reference: `EXP-${exp.id}`,
-                                    description: `Expense Allocation - Job ${job.jobNumber}: ${exp.description}${containerInfo}`,
-                                    type: 'JOURNAL',
+                            // Check if this expense has ALREADY been posted by ANY invoice
+                            const globalExistingTx = await tx.transaction.findFirst({
+                                where: {
                                     companyId: user.companyId as number,
-                                    date: inv.date,
-                                    entries: {
-                                        create: [
-                                            {
-                                                accountId: costAccount.id,
-                                                debit: exp.costPrice,
-                                                description: `Service Cost: ${exp.description} for Job ${job.jobNumber}${containerInfo}`
-                                            },
-                                            {
-                                                accountId: vendorAccount.id,
-                                                credit: exp.costPrice,
-                                                description: `Payable to ${exp.vendor?.name || 'Vendor'} for Job ${job.jobNumber}`
-                                            }
-                                        ]
-                                    }
+                                    reference: { endsWith: `-EXP-${exp.id}` }
                                 }
                             });
+
+                            if (globalExistingTx) {
+                                console.log(`[APPROVE] Expense ${exp.id} already allocated by ${globalExistingTx.reference}. Skipping.`);
+                            } else {
+                                console.log(`[APPROVE] Creating Transaction for Expense ${exp.id}`);
+                                await tx.transaction.create({
+                                    data: {
+                                        reference: `${inv.invoiceNumber}-EXP-${exp.id}`,
+                                        description: `${inv.customer.name} | Job ${job.jobNumber} | ${exp.description}${containerInfo}`,
+                                        type: 'JOURNAL',
+                                        companyId: user.companyId as number,
+                                        date: inv.date,
+                                        entries: {
+                                            create: [
+                                                {
+                                                    accountId: targetCostAccount.id,
+                                                    debit: exp.costPrice,
+                                                    description: `${inv.customer.name} | ${exp.description} | Job ${job.jobNumber}`
+                                                },
+                                                {
+                                                    accountId: vendorAccount.id,
+                                                    credit: exp.costPrice,
+                                                    description: `Payable to ${exp.vendor?.name || 'Vendor'} | Job ${job.jobNumber}`
+                                                }
+                                            ]
+                                        }
+                                    }
+                                });
+                            }
                         }
                     }
                 }
 
-                if (inv.jobId) {
-                    await tx.job.update({
-                        where: { id: inv.jobId },
-                        data: { status: 'CLOSED' }
-                    });
-                }
+                // if (inv.jobId) {
+                //     await tx.job.update({
+                //         where: { id: inv.jobId },
+                //         data: { status: 'CLOSED' }
+                //     });
+                // }
 
                 return inv;
             }, { timeout: 30000 });

@@ -208,8 +208,8 @@ export async function PATCH(request: Request) {
                         if (vendor) {
                             await tx.transaction.create({
                                 data: {
-                                    reference: `${inv.invoiceNumber}-COST`,
-                                    description: `Freight Cost Allocation: ${item.description}`,
+                                    reference: `${inv.invoiceNumber}-COST-${item.id}`,
+                                    description: `${inv.customer.name} | ${item.description}`,
                                     type: 'JOURNAL',
                                     companyId: user.companyId as number,
                                     date: inv.date,
@@ -218,12 +218,12 @@ export async function PATCH(request: Request) {
                                             {
                                                 accountId: costAccount.id,
                                                 debit: item.amount, // Using base amount for cost
-                                                description: `Freight Cost: ${item.description}`
+                                                description: `${inv.customer.name} | Freight Cost: ${item.description}`
                                             },
                                             {
                                                 accountId: vendor.accountId || defaultVendorAccount!.id,
                                                 credit: item.amount,
-                                                description: `Payable to ${vendor.name} for ${item.description}`
+                                                description: `Payable to ${vendor.name} | ${inv.customer.name} | ${item.description}`
                                             }
                                         ]
                                     }
