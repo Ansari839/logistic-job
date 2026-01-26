@@ -12,7 +12,6 @@ const userSchema = z.object({
     branch: z.string().optional(),
     department: z.string().optional(),
     region: z.string().optional(),
-    division: z.string().optional(),
 });
 
 // GET /api/users - List all users (filtered by company)
@@ -48,7 +47,6 @@ export async function GET(req: NextRequest) {
                 branch: true,
                 department: true,
                 region: true,
-                division: true,
                 createdAt: true,
                 updatedAt: true,
             },
@@ -101,7 +99,7 @@ export async function POST(req: NextRequest) {
                 branch: validatedData.branch,
                 department: validatedData.department,
                 region: validatedData.region,
-                division: validatedData.division || user.division,
+                division: 'logistics',
                 companyId: user.companyId,
             },
             select: {
@@ -112,7 +110,6 @@ export async function POST(req: NextRequest) {
                 branch: true,
                 department: true,
                 region: true,
-                division: true,
                 createdAt: true,
             },
         });

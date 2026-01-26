@@ -12,7 +12,7 @@ const loginSchema = z.object({
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { email, password, division } = loginSchema.parse(body);
+        const { email, password } = loginSchema.parse(body);
 
         const user = await prisma.user.findUnique({
             where: { email },
@@ -25,9 +25,9 @@ export async function POST(request: Request) {
             );
         }
 
-        // Simplified Division Check: User must match 'logistics' if they have a division
+        // User is always in 'logistics' division now
         if (user.division && user.division !== 'logistics') {
-            // For now, we block others since we removed feed
+            // Keep this check just in case there are legacy users from other hubs
             return NextResponse.json(
                 { error: `This account is registered for ${user.division.toUpperCase()} Hub, which is currently inactive.` },
                 { status: 403 }

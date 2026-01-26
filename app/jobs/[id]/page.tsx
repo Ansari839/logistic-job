@@ -297,6 +297,28 @@ export default function JobDetailsPage({ params }: { params: Promise<{ id: strin
                         </button>
                         <button
                             type="button"
+                            onClick={async () => {
+                                if (confirm('Are you sure you want to delete/cancel this job?')) {
+                                    setLoading(true);
+                                    try {
+                                        const res = await fetch(`/api/jobs/${id}`, { method: 'DELETE' });
+                                        if (res.ok) router.push('/jobs');
+                                        else alert('Failed to delete');
+                                    } catch (e) {
+                                        alert('Error deleting job');
+                                    } finally {
+                                        setLoading(false);
+                                    }
+                                }
+                            }}
+                            disabled={loading}
+                            className="flex flex-col items-center gap-1 px-4 py-2 hover:bg-red-500/10 rounded-xl transition-all text-slate-400 hover:text-red-500"
+                        >
+                            <Trash2 size={16} /> <span className="text-[8px] font-black uppercase tracking-widest">Delete</span>
+                        </button>
+                        <div className="w-px h-8 bg-slate-800 mx-2 hidden lg:block"></div>
+                        <button
+                            type="button"
                             onClick={() => router.push('/jobs')}
                             className="flex flex-col items-center gap-1 px-4 py-2 hover:bg-slate-800 rounded-xl transition-all text-slate-400 hover:text-red-400 underline decoration-2 underline-offset-4"
                         >

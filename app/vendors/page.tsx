@@ -23,7 +23,6 @@ export default function VendorsPage() {
     const [partners, setPartners] = useState<Partner[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [activeDivision, setActiveDivision] = useState<string | null>(null);
     const [partnerType, setPartnerType] = useState<'vendor' | 'customer'>('vendor');
     const [showModal, setShowModal] = useState(false);
     const [form, setForm] = useState({
@@ -33,22 +32,10 @@ export default function VendorsPage() {
     const router = useRouter();
 
     useEffect(() => {
-        const getCookie = (name: string) => {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop()?.split(';').shift();
-        };
-
-        const cookieDiv = getCookie('app_division');
-        setActiveDivision(cookieDiv || localStorage.getItem('app_division') || 'logistics');
-    }, []);
-
-    useEffect(() => {
         fetchPartners();
     }, [partnerType]);
 
-    const isAnimalFeed = activeDivision === 'animal-feed';
-    const accentColor = isAnimalFeed ? 'emerald' : 'blue';
+    const accentColor = 'blue';
 
     const fetchPartners = async () => {
         setLoading(true);

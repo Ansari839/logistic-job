@@ -6,7 +6,7 @@ import Link from 'next/link';
 import {
     Plus, Search, Filter, MoreHorizontal,
     ArrowUpRight, Package, Calendar, User,
-    FileText, Tag, Ship, Hash, Copy, Check
+    FileText, Tag, Ship, Hash, Copy, Check, Trash2, Loader2
 } from 'lucide-react';
 
 interface Job {
@@ -20,6 +20,7 @@ interface Job {
     containerNo: string | null;
     serviceInvoices: { id: number }[];
     freightInvoice: { id: number } | null;
+    status: string;
     _count: { expenses: number };
 }
 
@@ -28,6 +29,7 @@ export default function JobsPage() {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [copiedId, setCopiedId] = useState<number | null>(null);
+    const [deletingId, setDeletingId] = useState<number | null>(null);
 
     const handleCopy = (e: React.MouseEvent, text: string, id: number) => {
         e.preventDefault();
@@ -40,6 +42,34 @@ export default function JobsPage() {
     useEffect(() => {
         fetchJobs();
     }, []);
+
+    const handleDelete = async (e: React.MouseEvent, id: number, jobNumber: string) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!confirm(`Are you sure you want to delete or cancel Job #${jobNumber}?`)) {
+            return;
+        }
+
+        setDeletingId(id);
+        try {
+            const response = await fetch(`/api/jobs/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                fetchJobs();
+            } else {
+                const error = await response.json();
+                alert(error.error || 'Failed to delete job');
+            }
+        } catch (error) {
+            console.error('Delete job failed:', error);
+            alert('An unexpected error occurred');
+        } finally {
+            setDeletingId(null);
+        }
+    };
 
     const fetchJobs = async () => {
         try {
@@ -140,6 +170,11 @@ export default function JobsPage() {
                                                 }`}>
                                                 {job.jobType}
                                             </span>
+                                            {job.status === 'CANCELLED' && (
+                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20">
+                                                    CANCELLED
+                                                </span>
+                                            )}
                                         </div>
                                         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-subtext text-xs font-bold">
                                             <div className="flex items-center gap-1.5">
@@ -174,8 +209,18 @@ export default function JobsPage() {
                                             <p className="text-subtext mb-1">Invoice</p>
                                             <p className="text-lg font-black text-slate-900 dark:text-white uppercase">{(job.serviceInvoices?.length || 0) + (job.freightInvoice ? 1 : 0)}</p>
                                         </div>
-                                        <div className="ml-4 p-3 rounded-2xl bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-all text-blue-600 dark:text-blue-400">
-                                            <ArrowUpRight size={20} />
+                                        <div className="flex items-center gap-2 ml-4">
+                                            <button
+                                                onClick={(e) => handleDelete(e, job.id, job.jobNumber)}
+                                                disabled={deletingId === job.id}
+                                                className="p-3 rounded-2xl bg-red-500/5 text-red-500 hover:bg-red-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                                                title="Delete Job"
+                                            >
+                                                {deletingId === job.id ? <Loader2 size={18} className="animate-spin" /> : <Trash2 size={18} />}
+                                            </button>
+                                            <div className="p-3 rounded-2xl bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-all text-blue-600 dark:text-blue-400">
+                                                <ArrowUpRight size={20} />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

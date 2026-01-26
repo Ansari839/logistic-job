@@ -210,7 +210,7 @@ export async function DELETE(
                     data: { status: 'CANCELLED' }
                 });
             } else if (existingJob.status === 'CANCELLED') {
-                throw new Error('Job is already cancelled');
+                return; // Already cancelled, nothing to do
             }
         });
 

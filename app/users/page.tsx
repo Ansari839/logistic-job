@@ -205,7 +205,6 @@ export default function UsersPage() {
                                         <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">Name</th>
                                         <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">Email</th>
                                         <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">Role</th>
-                                        <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">Division</th>
                                         <th className="px-6 py-4 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">Branch</th>
                                         <th className="px-6 py-4 text-right text-xs font-black uppercase tracking-widest text-muted-foreground">Actions</th>
                                     </tr>
@@ -229,7 +228,6 @@ export default function UsersPage() {
                                                     {user.role}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-muted-foreground capitalize">{user.division || '-'}</td>
                                             <td className="px-6 py-4 text-muted-foreground">{user.branch || '-'}</td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center justify-end gap-2">
@@ -313,17 +311,6 @@ export default function UsersPage() {
                                             <option className="bg-card text-foreground" value="SALES">Sales</option>
                                             <option className="bg-card text-foreground" value="ACCOUNTS">Accounts</option>
                                             <option className="bg-card text-foreground" value="ADMIN">Admin</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-bold text-muted-foreground mb-2">Division</label>
-                                        <select
-                                            value={formData.division}
-                                            onChange={(e) => setFormData({ ...formData, division: e.target.value })}
-                                            className="w-full glass-input"
-                                        >
-                                            <option className="bg-card text-foreground" value="logistics">Logistics</option>
-                                            <option className="bg-card text-foreground" value="animal-feed">Animal Feed</option>
                                         </select>
                                     </div>
                                     <div>
