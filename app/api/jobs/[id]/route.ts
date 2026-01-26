@@ -94,7 +94,7 @@ export async function PATCH(
             return NextResponse.json({ error: 'Job is locked (Status: CLOSED). Revert invoice to draft to make changes.' }, { status: 400 });
         }
 
-        const job = await prisma.$transaction(async (tx) => {
+        const job = await prisma.$transaction(async (tx: any) => {
             // 1. Update Job Core Data
             const updatedJob = await tx.job.update({
                 where: { id: parseInt(id) },
