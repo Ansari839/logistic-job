@@ -1,4 +1,4 @@
-import { PrismaClient, AccountType } from '../app/generated/prisma/client';
+import { PrismaClient, AccountType } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 import dotenv from 'dotenv';
