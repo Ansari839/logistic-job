@@ -85,8 +85,8 @@ export async function GET(request: Request) {
                     amount: acc.entries.reduce((sum: any, e: any) => sum + (e.debit - e.credit), 0)
                 }));
 
-                const totalRevenue = revenue.reduce((sum, r) => sum + r.amount, 0);
-                const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+                const totalRevenue = revenue.reduce((sum: any, r: any) => sum + r.amount, 0);
+                const totalExpenses = expenses.reduce((sum: any, e: any) => sum + e.amount, 0);
 
                 return NextResponse.json({
                     report: {

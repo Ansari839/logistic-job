@@ -56,12 +56,12 @@ export async function GET(request: Request) {
                     })
                 ]);
 
-                const totalSales = serviceInvoices.reduce((sum, s) => sum + s.grandTotal, 0) +
-                    freightInvoices.reduce((sum, f) => sum + f.grandTotal, 0);
+                const totalSales = serviceInvoices.reduce((sum: any, s: any) => sum + s.grandTotal, 0) +
+                    freightInvoices.reduce((sum: any, f: any) => sum + f.grandTotal, 0);
 
                 return NextResponse.json({
                     report: {
-                        totalPurchases: purchases.reduce((sum, p) => sum + p.grandTotal, 0),
+                        totalPurchases: purchases.reduce((sum: any, p: any) => sum + p.grandTotal, 0),
                         totalSales: totalSales,
                         purchaseCount: purchases.length,
                         salesCount: serviceInvoices.length + freightInvoices.length

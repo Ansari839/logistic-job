@@ -46,10 +46,10 @@ export async function GET(request: Request) {
         });
 
         if (noInvoice) {
-            jobs = jobs.filter(job => {
+            jobs = jobs.filter((job: any) => {
                 if (invoiceCategory) {
                     // Check if job has an active invoice of this category
-                    const hasCategoryInvoice = job.serviceInvoices.some(inv =>
+                    const hasCategoryInvoice = job.serviceInvoices.some((inv: any) =>
                         (inv as any).serviceCategory === invoiceCategory && inv.status !== 'CANCELLED'
                     );
                     return !hasCategoryInvoice;
@@ -59,7 +59,7 @@ export async function GET(request: Request) {
         }
 
         if (noFreight) {
-            jobs = jobs.filter(job => !job.freightInvoice);
+            jobs = jobs.filter((job: any) => !job.freightInvoice);
         }
 
         return NextResponse.json({ jobs });

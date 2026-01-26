@@ -44,7 +44,7 @@ export async function GET(request: Request) {
 
         return NextResponse.json({
             report: stockReport,
-            totalValuation: stockReport.reduce((sum, item) => sum + item.valuation, 0)
+            totalValuation: stockReport.reduce((sum: any, item: any) => sum + item.valuation, 0)
         });
     } catch (error) {
         console.error('Fetch stock report error:', error);
