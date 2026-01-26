@@ -43,7 +43,7 @@ export async function POST(request: Request) {
             finalInvoiceNumber = `FIN-${year}-${sequence.toString().padStart(4, '0')}`;
         }
 
-        const result = await prisma.$transaction(async (tx) => {
+        const result = await prisma.$transaction(async (tx: any) => {
             const inv = await tx.freightInvoice.create({
                 data: {
                     invoiceNumber: finalInvoiceNumber,
@@ -113,7 +113,7 @@ export async function PATCH(request: Request) {
         if (action === 'UPDATE') {
             if (invoice.isApproved) return NextResponse.json({ error: 'Cannot update approved invoice' }, { status: 400 });
 
-            const updated = await prisma.$transaction(async (tx) => {
+            const updated = await prisma.$transaction(async (tx: any) => {
                 await tx.freightInvoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
 
                 return await tx.freightInvoice.update({
@@ -149,7 +149,7 @@ export async function PATCH(request: Request) {
         if (action === 'APPROVE') {
             if (invoice.isApproved) return NextResponse.json({ error: 'Invoice already approved' }, { status: 400 });
 
-            const updated = await prisma.$transaction(async (tx) => {
+            const updated = await prisma.$transaction(async (tx: any) => {
                 const inv = await tx.freightInvoice.update({
                     where: { id: invoice.id },
                     data: { isApproved: true, approvedById: user.id, status: 'SENT' },
@@ -186,7 +186,7 @@ export async function PATCH(request: Request) {
                                         debit: inv.grandTotal,
                                         description: `Freight Receivable: ${inv.invoiceNumber}`
                                     },
-                                    ...inv.items.map(item => ({
+                                    ...inv.items.map((item: any) => ({
                                         accountId: revenueAccount.id,
                                         credit: item.total,
                                         description: `Freight Revenue: ${item.description}`

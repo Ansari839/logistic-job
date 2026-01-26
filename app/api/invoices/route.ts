@@ -42,9 +42,9 @@ export async function GET(request: Request) {
 
         // Add a category field to distinguish them in the UI
         const combined = [
-            ...serviceInvoices.map(inv => ({ ...inv, category: 'SERVICE' })),
-            ...freightInvoices.map(inv => ({ ...inv, category: 'FREIGHT' }))
-        ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            ...serviceInvoices.map((inv: any) => ({ ...inv, category: 'SERVICE' })),
+            ...freightInvoices.map((inv: any) => ({ ...inv, category: 'FREIGHT' }))
+        ].sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
         return NextResponse.json({ invoices: combined });
     } catch (error) {
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
             finalInvoiceNumber = `SIN-${year}-${sequence.toString().padStart(4, '0')}`;
         }
 
-        const result = await prisma.$transaction(async (tx) => {
+        const result = await prisma.$transaction(async (tx: any) => {
             const inv = await tx.serviceInvoice.create({
                 data: {
                     invoiceNumber: finalInvoiceNumber,
@@ -183,7 +183,7 @@ export async function PATCH(request: Request) {
         if (action === 'UPDATE') {
             if (invoice.isApproved) return NextResponse.json({ error: 'Cannot update approved invoice' }, { status: 400 });
 
-            const updated = await prisma.$transaction(async (tx) => {
+            const updated = await prisma.$transaction(async (tx: any) => {
                 await tx.serviceInvoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
 
                 return await tx.serviceInvoice.update({
@@ -218,14 +218,14 @@ export async function PATCH(request: Request) {
         if (action === 'REVERT_TO_DRAFT') {
             if (!invoice.isApproved) return NextResponse.json({ error: 'Invoice is already in draft status' }, { status: 400 });
 
-            const updated = await prisma.$transaction(async (tx) => {
+            const updated = await prisma.$transaction(async (tx: any) => {
                 if (invoice.transactionId) {
                     await tx.transaction.delete({ where: { id: invoice.transactionId } });
                 }
 
                 if (invoice.jobId) {
                     const expenses = await tx.expense.findMany({ where: { jobId: invoice.jobId } });
-                    const expRefs = expenses.map(e => `EXP-${e.id}`);
+                    const expRefs = expenses.map((e: any) => `EXP-${e.id}`);
                     await tx.transaction.deleteMany({
                         where: {
                             companyId: user.companyId as number,
@@ -254,7 +254,7 @@ export async function PATCH(request: Request) {
         if (action === 'APPROVE') {
             if (invoice.isApproved) return NextResponse.json({ error: 'Invoice is already approved' }, { status: 400 });
 
-            const updated = await prisma.$transaction(async (tx) => {
+            const updated = await prisma.$transaction(async (tx: any) => {
                 const inv = await tx.serviceInvoice.update({
                     where: { id: parseInt(id) },
                     data: { isApproved: true, approvedById: user.id, status: 'SENT' },
@@ -309,7 +309,7 @@ export async function PATCH(request: Request) {
                                             debit: inv.grandTotal,
                                             description: `Invoice ${inv.invoiceNumber}: Overall receivable amount for ${job.jobNumber}`
                                         },
-                                        ...inv.items.map(item => ({
+                                        ...inv.items.map((item: any) => ({
                                             accountId: revenueAccount.id,
                                             credit: item.total,
                                             description: `Revenue: ${item.description} for ${job.jobNumber}${containerInfo}`

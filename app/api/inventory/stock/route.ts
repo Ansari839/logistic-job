@@ -17,7 +17,7 @@ export async function GET(request: Request) {
         });
 
         // 2. Fetch stock movements and aggregate
-        const stockReport = await Promise.all(products.map(async (product) => {
+        const stockReport = await Promise.all(products.map(async (product: any) => {
             const movements = await prisma.stockMovement.aggregate({
                 where: {
                     productId: product.id,

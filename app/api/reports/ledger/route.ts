@@ -41,7 +41,7 @@ export async function GET(req: Request) {
             select: { debit: true, credit: true }
         });
 
-        const openingBalance = openingBalanceEntries.reduce((sum, e) => sum + (e.debit - e.credit), 0);
+        const openingBalance = openingBalanceEntries.reduce((sum: any, e: any) => sum + (e.debit - e.credit), 0);
 
         // 2. Fetch all entries within range
         const entries = await prisma.accountEntry.findMany({
@@ -60,7 +60,7 @@ export async function GET(req: Request) {
 
         // 3. Transform to include running balance
         let currentBalance = openingBalance;
-        const ledger = entries.map(e => {
+        const ledger = entries.map((e: any) => {
             currentBalance += (e.debit - e.credit);
             return {
                 ...e,

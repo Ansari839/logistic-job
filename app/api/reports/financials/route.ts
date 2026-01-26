@@ -37,9 +37,9 @@ export async function GET(request: Request) {
                     }
                 });
 
-                const report = accounts.map(acc => {
-                    const totalDebit = acc.entries.reduce((sum, e) => sum + e.debit, 0);
-                    const totalCredit = acc.entries.reduce((sum, e) => sum + e.credit, 0);
+                const report = accounts.map((acc: any) => {
+                    const totalDebit = acc.entries.reduce((sum: any, e: any) => sum + e.debit, 0);
+                    const totalCredit = acc.entries.reduce((sum: any, e: any) => sum + e.credit, 0);
                     return {
                         code: acc.code,
                         name: acc.name,
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
                             ? totalDebit - totalCredit
                             : totalCredit - totalDebit
                     };
-                }).filter(r => r.debit !== 0 || r.credit !== 0);
+                }).filter((r: any) => r.debit !== 0 || r.credit !== 0);
 
                 return NextResponse.json({ report });
             }
@@ -75,14 +75,14 @@ export async function GET(request: Request) {
                     }
                 });
 
-                const revenue = accounts.filter(a => a.type === 'REVENUE').map(acc => ({
+                const revenue = accounts.filter((a: any) => a.type === 'REVENUE').map((acc: any) => ({
                     name: acc.name,
-                    amount: acc.entries.reduce((sum, e) => sum + (e.credit - e.debit), 0)
+                    amount: acc.entries.reduce((sum: any, e: any) => sum + (e.credit - e.debit), 0)
                 }));
 
-                const expenses = accounts.filter(a => a.type === 'EXPENSE').map(acc => ({
+                const expenses = accounts.filter((a: any) => a.type === 'EXPENSE').map((acc: any) => ({
                     name: acc.name,
-                    amount: acc.entries.reduce((sum, e) => sum + (e.debit - e.credit), 0)
+                    amount: acc.entries.reduce((sum: any, e: any) => sum + (e.debit - e.credit), 0)
                 }));
 
                 const totalRevenue = revenue.reduce((sum, r) => sum + r.amount, 0);
@@ -120,11 +120,11 @@ export async function GET(request: Request) {
                         }
                     });
 
-                    const report = customers.map(c => {
-                        const serviceInvoiced = c.serviceInvoices.reduce((sum, i) => sum + i.grandTotal, 0);
-                        const freightInvoiced = c.freightInvoices.reduce((sum, i) => sum + i.grandTotal, 0);
+                    const report = customers.map((c: any) => {
+                        const serviceInvoiced = c.serviceInvoices.reduce((sum: any, i: any) => sum + i.grandTotal, 0);
+                        const freightInvoiced = c.freightInvoices.reduce((sum: any, i: any) => sum + i.grandTotal, 0);
                         const totalInvoiced = serviceInvoiced + freightInvoiced;
-                        const totalPaid = c.payments.reduce((sum, p) => sum + p.amount, 0);
+                        const totalPaid = c.payments.reduce((sum: any, p: any) => sum + p.amount, 0);
                         return {
                             id: c.id,
                             name: c.name,
@@ -133,7 +133,7 @@ export async function GET(request: Request) {
                             totalPaid,
                             balance: totalInvoiced - totalPaid
                         };
-                    }).filter(r => r.balance !== 0);
+                    }).filter((r: any) => r.balance !== 0);
 
                     return NextResponse.json({ report });
                 } else {
@@ -150,9 +150,9 @@ export async function GET(request: Request) {
                         }
                     });
 
-                    const report = vendors.map(v => {
-                        const totalInvoiced = v.purchaseInvoices.reduce((sum, i) => sum + i.grandTotal, 0);
-                        const totalPaid = v.payments.reduce((sum, p) => sum + p.amount, 0);
+                    const report = vendors.map((v: any) => {
+                        const totalInvoiced = v.purchaseInvoices.reduce((sum: any, i: any) => sum + i.grandTotal, 0);
+                        const totalPaid = v.payments.reduce((sum: any, p: any) => sum + p.amount, 0);
                         return {
                             id: v.id,
                             name: v.name,
@@ -161,7 +161,7 @@ export async function GET(request: Request) {
                             totalPaid,
                             balance: totalInvoiced - totalPaid
                         };
-                    }).filter(r => r.balance !== 0);
+                    }).filter((r: any) => r.balance !== 0);
 
                     return NextResponse.json({ report });
                 }

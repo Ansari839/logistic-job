@@ -39,9 +39,9 @@ export async function GET(request: Request) {
                     },
                 });
 
-                const report = jobs.map(job => {
-                    const totalCost = job.expenses.reduce((sum, exp) => sum + exp.costPrice, 0);
-                    const serviceRevenue = job.serviceInvoices.reduce((sum, inv) =>
+                const report = jobs.map((job: any) => {
+                    const totalCost = job.expenses.reduce((sum: any, exp: any) => sum + exp.costPrice, 0);
+                    const serviceRevenue = job.serviceInvoices.reduce((sum: any, inv: any) =>
                         inv.status !== 'CANCELLED' ? sum + inv.totalAmount : sum, 0);
                     const freightRevenue = job.freightInvoice && job.freightInvoice.status !== 'CANCELLED' ? job.freightInvoice.totalAmount : 0;
                     const totalRevenue = serviceRevenue + freightRevenue;
@@ -90,11 +90,11 @@ export async function GET(request: Request) {
                     }
                 });
 
-                const report = customers.map(c => {
+                const report = customers.map((c: any) => {
                     const totalJobs = c.jobs.length;
-                    const totalRevenue = c.jobs.reduce((sum, job) => {
-                        const serRev = job.serviceInvoices.reduce((sum: number, inv: any) =>
-                            inv.status !== 'CANCELLED' ? sum + inv.totalAmount : sum, 0);
+                    const totalRevenue = c.jobs.reduce((sum: any, job: any) => {
+                        const serRev = job.serviceInvoices.reduce((serSum: any, inv: any) =>
+                            inv.status !== 'CANCELLED' ? serSum + inv.totalAmount : serSum, 0);
                         const freRev = job.freightInvoice && job.freightInvoice.status !== 'CANCELLED' ? job.freightInvoice.totalAmount : 0;
                         return sum + serRev + freRev;
                     }, 0);
@@ -124,12 +124,12 @@ export async function GET(request: Request) {
                     }
                 });
 
-                const report = vendors.map(v => ({
+                const report = vendors.map((v: any) => ({
                     name: v.name,
                     code: v.code,
                     type: v.type,
                     expenseCount: v.expenses.length,
-                    totalCost: v.expenses.reduce((sum, exp) => sum + exp.costPrice, 0)
+                    totalCost: v.expenses.reduce((sum: any, exp: any) => sum + exp.costPrice, 0)
                 }));
 
                 return NextResponse.json({ report });

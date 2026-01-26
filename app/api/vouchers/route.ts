@@ -95,14 +95,14 @@ export async function POST(req: NextRequest) {
         const validatedData = voucherSchema.parse(body);
 
         // Validate balance
-        const totalDebit = validatedData.entries.reduce((sum, e) => sum + e.debit, 0);
-        const totalCredit = validatedData.entries.reduce((sum, e) => sum + e.credit, 0);
+        const totalDebit = validatedData.entries.reduce((sum: any, e: any) => sum + e.debit, 0);
+        const totalCredit = validatedData.entries.reduce((sum: any, e: any) => sum + e.credit, 0);
 
         if (Math.abs(totalDebit - totalCredit) > 0.01) {
             return NextResponse.json({ error: 'Debits must equal Credits' }, { status: 400 });
         }
 
-        const voucher = await prisma.$transaction(async (tx) => {
+        const voucher = await prisma.$transaction(async (tx: any) => {
             const date = validatedData.date ? new Date(validatedData.date) : new Date();
             if (isNaN(date.getTime())) throw new Error('Invalid voucher date');
 
@@ -123,7 +123,7 @@ export async function POST(req: NextRequest) {
                     status: 'POSTED',
                     postedById: user.id,
                     entries: {
-                        create: validatedData.entries.map(e => ({
+                        create: validatedData.entries.map((e: any) => ({
                             accountId: e.accountId,
                             description: e.description,
                             debit: e.debit,
@@ -143,7 +143,7 @@ export async function POST(req: NextRequest) {
                     type: validatedData.voucherType as any,
                     companyId: user.companyId!,
                     entries: {
-                        create: validatedData.entries.map(e => ({
+                        create: validatedData.entries.map((e: any) => ({
                             accountId: e.accountId,
                             description: e.description,
                             debit: e.debit,
@@ -187,8 +187,6 @@ export async function DELETE(req: NextRequest) {
 
         const voucherId = parseInt(id);
 
-
-
         await prisma.$transaction(async (tx: any) => {
             const voucher = await tx.voucher.findUnique({
                 where: { id: voucherId, companyId: user.companyId! }
@@ -209,27 +207,6 @@ export async function DELETE(req: NextRequest) {
                     data: { status: 'CANCELLED' }
                 });
             } else {
-                // Hard Delete (Draft or Already Cancelled - Wait, if Cancelled, maybe just delete? Or strict?)
-                // Assuming DRAFT or CANCELLED can be hard deleted if user really wants to remove it?
-                // Plan said: DRAFT -> Hard Delete. POSTED -> Soft Delete.
-                // If it's already CANCELLED, reusing delete again might mean "Cleanup".
-                // For now, let's treat anything NOT POSTED as deletable, or strictly DRAFT.
-                // But usually if it's Cancelled, it stays. The user button usually handles "Delete" vs "Cancel".
-                // If user hits Delete on a Cancelled item, maybe allowed?
-                // Let's stick to: If POSTED, Void it. If DRAFT (or others), Delete it.
-                // Wait, if it is CANCELLED, and they click DELETE, should we hard delete?
-                // User said: "It stays in the database... UI shows... as VOID".
-                // So DELETE on a Cancelled item should probably be blocked or do nothing?
-                // Or maybe the UI won't show a delete button for Cancelled?
-                // Let's implement: If POSTED -> Cancel. If DRAFT -> Delete. If CANCELLED -> Error "Already Voided" or Allow Delete? 
-                // "Reuse the number" logic implies Hard Delete frees it.
-                // Let's assume standard behavior:
-                // If status is POSTED: Void it.
-                // If status is DRAFT: Delete it.
-                // If status is CANCELLED: Delete it (Hard Delete) ? No, user said "Stays in DB".
-                // So if status is CANCELLED, we should probably throw "Cannot delete voided voucher" or just return success (noop).
-                // Let's allow Hard Delete only for DRAFT.
-
                 if (voucher.status === 'DRAFT') {
                     // Delete linked transaction coverage (just in case)
                     await tx.transaction.deleteMany({
@@ -274,14 +251,14 @@ export async function PATCH(req: NextRequest) {
         const validatedData = voucherSchema.parse(updateData);
 
         // Validate balance
-        const totalDebit = validatedData.entries.reduce((sum, e) => sum + e.debit, 0);
-        const totalCredit = validatedData.entries.reduce((sum, e) => sum + e.credit, 0);
+        const totalDebit = validatedData.entries.reduce((sum: any, e: any) => sum + e.debit, 0);
+        const totalCredit = validatedData.entries.reduce((sum: any, e: any) => sum + e.credit, 0);
 
         if (Math.abs(totalDebit - totalCredit) > 0.01) {
             return NextResponse.json({ error: 'Debits must equal Credits' }, { status: 400 });
         }
 
-        const voucher = await prisma.$transaction(async (tx) => {
+        const voucher = await prisma.$transaction(async (tx: any) => {
             const existingVoucher = await tx.voucher.findUnique({
                 where: { id: parseInt(id), companyId: user.companyId! }
             });
@@ -302,7 +279,7 @@ export async function PATCH(req: NextRequest) {
                     paymentMode: validatedData.paymentMode as any,
                     entries: {
                         deleteMany: {},
-                        create: validatedData.entries.map(e => ({
+                        create: validatedData.entries.map((e: any) => ({
                             accountId: e.accountId,
                             description: e.description,
                             debit: e.debit,
@@ -326,7 +303,7 @@ export async function PATCH(req: NextRequest) {
                     description: validatedData.description,
                     entries: {
                         deleteMany: {},
-                        create: validatedData.entries.map(e => ({
+                        create: validatedData.entries.map((e: any) => ({
                             accountId: e.accountId,
                             description: e.description,
                             debit: e.debit,

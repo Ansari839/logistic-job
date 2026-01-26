@@ -65,8 +65,8 @@ export async function POST(req: Request) {
         const validatedData = transactionSchema.parse(body);
 
         // Validate that debits equal credits
-        const totalDebit = validatedData.entries.reduce((sum, e) => sum + e.debit, 0);
-        const totalCredit = validatedData.entries.reduce((sum, e) => sum + e.credit, 0);
+        const totalDebit = validatedData.entries.reduce((sum: any, e: any) => sum + e.debit, 0);
+        const totalCredit = validatedData.entries.reduce((sum: any, e: any) => sum + e.credit, 0);
 
         if (Math.abs(totalDebit - totalCredit) > 0.01) {
             return NextResponse.json({ error: 'Debits must equal Credits' }, { status: 400 });
@@ -109,7 +109,7 @@ export async function POST(req: Request) {
                     type: validatedData.type,
                     companyId: user.companyId!,
                     entries: {
-                        create: validatedData.entries.map(e => ({
+                        create: validatedData.entries.map((e: any) => ({
                             accountId: e.accountId,
                             description: e.description,
                             debit: e.debit,

@@ -63,7 +63,7 @@ export async function POST(request: Request) {
             // 1. Calculate totals
             let totalAmount = 0;
             let totalTax = 0;
-            const preparedItems = items.map(item => {
+            const preparedItems = items.map((item: any) => {
                 const amount = item.quantity * item.rate;
                 const taxAmount = (amount * item.taxPercentage) / 100;
                 totalAmount += amount;
