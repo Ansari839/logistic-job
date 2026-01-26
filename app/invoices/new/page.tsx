@@ -76,7 +76,7 @@ export default function NewInvoicePage() {
         } else {
             fetchPendingJobs();
         }
-    }, [category]);
+    }, [category, serviceInvoiceType]);
 
     const generateItems = (currentJob: any) => {
         if (!currentJob) return;
@@ -135,7 +135,7 @@ export default function NewInvoicePage() {
     const fetchPendingJobs = async () => {
         setFetchingJobs(true);
         try {
-            const res = await fetch('/api/jobs?noInvoice=true');
+            const res = await fetch(`/api/jobs?noInvoice=true&invoiceCategory=${serviceInvoiceType}`);
             if (res.ok) {
                 const data = await res.json();
                 setPendingJobs(data.jobs || []);
@@ -188,9 +188,16 @@ export default function NewInvoicePage() {
                         setJob(foundJob);
                         generateItems(foundJob);
 
+                        // Auto-populate invoice number based on job number serial
+                        let invNum = '';
+                        if (foundJob.jobNumber) {
+                            const serial = foundJob.jobNumber.split('-').pop(); // e.g. 0001
+                            invNum = serviceInvoiceType === 'SALES_TAX' ? `INV-${serial}` : `TRK-${serial}`;
+                        }
+
                         setInvoiceData(prev => ({
                             ...prev,
-                            invoiceNumber: `SIN-${new Date().getFullYear()}-WAIT`,
+                            invoiceNumber: invNum,
                             currencyCode: 'PKR'
                         }));
                     }
@@ -268,6 +275,7 @@ export default function NewInvoicePage() {
                 totalAmount: subtotal,
                 taxAmount: totalTax,
                 grandTotal: grandTotal,
+                serviceCategory: serviceInvoiceType,
                 items: invoiceItems
             };
 

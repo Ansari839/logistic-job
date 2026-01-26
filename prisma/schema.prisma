@@ -273,6 +273,7 @@ model ServiceInvoice {
   updatedAt     DateTime             @updatedAt
   transactionId Int?                 @unique
   division      String?              @default("logistics")
+  serviceCategory String?            @default("SALES_TAX")
   company       Company              @relation(fields: [companyId], references: [id])
   customer      Customer             @relation(fields: [customerId], references: [id])
   job           Job?                 @relation(fields: [jobId], references: [id])

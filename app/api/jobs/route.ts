@@ -12,9 +12,13 @@ export async function GET(request: Request) {
     const customerId = searchParams.get('customerId');
     const jobNumber = searchParams.get('jobNumber');
     const noInvoice = searchParams.get('noInvoice') === 'true';
+    const invoiceCategory = searchParams.get('invoiceCategory'); // SALES_TAX or TRUCKING
+    const noFreight = searchParams.get('noFreight') === 'true';
+
+    console.log('API FETCH JOBS:', { noInvoice, invoiceCategory, noFreight, companyId: user.companyId, division: user.division });
 
     try {
-        const jobs = await prisma.job.findMany({
+        let jobs = await prisma.job.findMany({
             where: {
                 companyId: user.companyId as number,
                 division: user.division,
@@ -22,11 +26,6 @@ export async function GET(request: Request) {
                 ...(jobType && { jobType: jobType as any }),
                 ...(customerId && { customerId: parseInt(customerId) }),
                 ...(jobNumber && { jobNumber: jobNumber }),
-                ...(noInvoice && {
-                    // Allow jobs that don't have ANY service invoice (or maybe partial logic later)
-                    // For now, let's return jobs that are not CLOSED
-                    status: { not: 'CLOSED' }
-                })
             },
             include: {
                 customer: {
@@ -38,15 +37,30 @@ export async function GET(request: Request) {
                 _count: {
                     select: { expenses: true }
                 },
-                serviceInvoices: {
-                    select: { id: true }
-                },
+                serviceInvoices: true, // Fetch all to filter in memory
                 freightInvoice: {
                     select: { id: true }
                 }
             },
             orderBy: { createdAt: 'desc' },
         });
+
+        if (noInvoice) {
+            jobs = jobs.filter(job => {
+                if (invoiceCategory) {
+                    // Check if job has an active invoice of this category
+                    const hasCategoryInvoice = job.serviceInvoices.some(inv =>
+                        (inv as any).serviceCategory === invoiceCategory && inv.status !== 'CANCELLED'
+                    );
+                    return !hasCategoryInvoice;
+                }
+                return job.status !== 'CLOSED';
+            });
+        }
+
+        if (noFreight) {
+            jobs = jobs.filter(job => !job.freightInvoice);
+        }
 
         return NextResponse.json({ jobs });
     } catch (error) {

@@ -61,17 +61,42 @@ export async function POST(request: Request) {
         const body = await request.json();
         const {
             invoiceNumber, jobId, customerId, type,
-            totalAmount, taxAmount, grandTotal, currencyCode, items
+            totalAmount, taxAmount, grandTotal, currencyCode, items,
+            serviceCategory
         } = body;
 
-        if (!invoiceNumber || !jobId || !customerId) {
-            return NextResponse.json({ error: 'Invoice Number, Job, and Customer are required' }, { status: 400 });
+        if (!jobId || !customerId) {
+            return NextResponse.json({ error: 'Job and Customer are required' }, { status: 400 });
+        }
+
+        let finalInvoiceNumber = invoiceNumber;
+
+        if (!finalInvoiceNumber) {
+            const date = new Date();
+            const year = date.getFullYear();
+            const lastInvoice = await prisma.serviceInvoice.findFirst({
+                where: {
+                    companyId: user.companyId as number,
+                    invoiceNumber: { startsWith: `SIN-${year}-` }
+                },
+                orderBy: { invoiceNumber: 'desc' }
+            });
+
+            let sequence = 1;
+            if (lastInvoice) {
+                const parts = lastInvoice.invoiceNumber.split('-');
+                if (parts.length === 3) {
+                    const seq = parseInt(parts[2]);
+                    if (!isNaN(seq)) sequence = seq + 1;
+                }
+            }
+            finalInvoiceNumber = `SIN-${year}-${sequence.toString().padStart(4, '0')}`;
         }
 
         const result = await prisma.$transaction(async (tx) => {
             const inv = await tx.serviceInvoice.create({
                 data: {
-                    invoiceNumber,
+                    invoiceNumber: finalInvoiceNumber,
                     jobId: parseInt(jobId),
                     customerId: parseInt(customerId),
                     type: type || 'MASTER',
@@ -81,6 +106,7 @@ export async function POST(request: Request) {
                     currencyCode: currencyCode || 'PKR',
                     companyId: user.companyId as number,
                     division: user.division,
+                    serviceCategory: serviceCategory || 'SALES_TAX',
                     items: {
                         create: items?.map((item: any) => ({
                             description: item.description,
@@ -93,7 +119,7 @@ export async function POST(request: Request) {
                             productId: item.productId ? parseInt(item.productId) : null,
                         })) || []
                     }
-                },
+                } as any,
                 include: {
                     items: true,
                     customer: true,
@@ -197,23 +223,25 @@ export async function PATCH(request: Request) {
                     await tx.transaction.delete({ where: { id: invoice.transactionId } });
                 }
 
-                const expenses = await tx.expense.findMany({ where: { jobId: invoice.jobId } });
-                const expRefs = expenses.map(e => `EXP-${e.id}`);
-                await tx.transaction.deleteMany({
-                    where: {
-                        companyId: user.companyId as number,
-                        reference: { in: expRefs }
-                    }
-                });
+                if (invoice.jobId) {
+                    const expenses = await tx.expense.findMany({ where: { jobId: invoice.jobId } });
+                    const expRefs = expenses.map(e => `EXP-${e.id}`);
+                    await tx.transaction.deleteMany({
+                        where: {
+                            companyId: user.companyId as number,
+                            reference: { in: expRefs }
+                        }
+                    });
+
+                    await tx.job.update({
+                        where: { id: invoice.jobId },
+                        data: { status: 'IN_PROGRESS' }
+                    });
+                }
 
                 const inv = await tx.serviceInvoice.update({
                     where: { id: invoice.id },
                     data: { isApproved: false, approvedById: null, transactionId: null, status: 'DRAFT' }
-                });
-
-                await tx.job.update({
-                    where: { id: invoice.jobId },
-                    data: { status: 'IN_PROGRESS' }
                 });
 
                 return inv;
@@ -264,12 +292,13 @@ export async function PATCH(request: Request) {
                         });
                     }
 
-                    if (customerAccount && revenueAccount) {
-                        const containerInfo = inv.job.containerNo ? ` | Cont: ${inv.job.containerNo}` : '';
+                    if (customerAccount && revenueAccount && inv.job) {
+                        const job = inv.job;
+                        const containerInfo = job.containerNo ? ` | Cont: ${job.containerNo}` : '';
                         const transaction = await tx.transaction.create({
                             data: {
                                 reference: inv.invoiceNumber,
-                                description: `Invoiced Job ${inv.job.jobNumber}: ${inv.invoiceNumber} for ${inv.customer.name}${containerInfo}`,
+                                description: `Invoiced Job ${job.jobNumber}: ${inv.invoiceNumber} for ${inv.customer.name}${containerInfo}`,
                                 type: 'INVOICE',
                                 companyId: user.companyId as number,
                                 date: inv.date,
@@ -278,12 +307,12 @@ export async function PATCH(request: Request) {
                                         {
                                             accountId: customerAccount.id,
                                             debit: inv.grandTotal,
-                                            description: `Invoice ${inv.invoiceNumber}: Overall receivable amount for ${inv.job.jobNumber}`
+                                            description: `Invoice ${inv.invoiceNumber}: Overall receivable amount for ${job.jobNumber}`
                                         },
                                         ...inv.items.map(item => ({
                                             accountId: revenueAccount.id,
                                             credit: item.total,
-                                            description: `Revenue: ${item.description} for ${inv.job.jobNumber}${containerInfo}`
+                                            description: `Revenue: ${item.description} for ${job.jobNumber}${containerInfo}`
                                         }))
                                     ]
                                 }
@@ -297,10 +326,10 @@ export async function PATCH(request: Request) {
                 }
 
                 // 2. Handle Job Cost Posting (Expenses)
-                const jobExpenses = await tx.expense.findMany({
+                const jobExpenses = inv.jobId ? await tx.expense.findMany({
                     where: { jobId: inv.jobId, companyId: user.companyId as number },
                     include: { vendor: true }
-                });
+                }) : [];
 
                 const costAccount = await tx.account.findUnique({
                     where: { companyId_code: { companyId: user.companyId as number, code: '5100' } }
@@ -329,12 +358,13 @@ export async function PATCH(request: Request) {
                             });
                         }
 
-                        if (costAccount && vendorAccount) {
-                            const containerInfo = inv.job.containerNo ? ` | Cont: ${inv.job.containerNo}` : '';
+                        if (costAccount && vendorAccount && inv.job) {
+                            const job = inv.job;
+                            const containerInfo = job.containerNo ? ` | Cont: ${job.containerNo}` : '';
                             await tx.transaction.create({
                                 data: {
                                     reference: `EXP-${exp.id}`,
-                                    description: `Expense Allocation - Job ${inv.job.jobNumber}: ${exp.description}${containerInfo}`,
+                                    description: `Expense Allocation - Job ${job.jobNumber}: ${exp.description}${containerInfo}`,
                                     type: 'JOURNAL',
                                     companyId: user.companyId as number,
                                     date: inv.date,
@@ -343,12 +373,12 @@ export async function PATCH(request: Request) {
                                             {
                                                 accountId: costAccount.id,
                                                 debit: exp.costPrice,
-                                                description: `Service Cost: ${exp.description} for Job ${inv.job.jobNumber}${containerInfo}`
+                                                description: `Service Cost: ${exp.description} for Job ${job.jobNumber}${containerInfo}`
                                             },
                                             {
                                                 accountId: vendorAccount.id,
                                                 credit: exp.costPrice,
-                                                description: `Payable to ${exp.vendor?.name || 'Vendor'} for Job ${inv.job.jobNumber}`
+                                                description: `Payable to ${exp.vendor?.name || 'Vendor'} for Job ${job.jobNumber}`
                                             }
                                         ]
                                     }
@@ -358,10 +388,12 @@ export async function PATCH(request: Request) {
                     }
                 }
 
-                await tx.job.update({
-                    where: { id: inv.jobId },
-                    data: { status: 'CLOSED' }
-                });
+                if (inv.jobId) {
+                    await tx.job.update({
+                        where: { id: inv.jobId },
+                        data: { status: 'CLOSED' }
+                    });
+                }
 
                 return inv;
             }, { timeout: 30000 });

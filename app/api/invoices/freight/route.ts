@@ -15,14 +15,38 @@ export async function POST(request: Request) {
             usdRate, exchangeRate
         } = body;
 
-        if (!invoiceNumber || !customerId) {
-            return NextResponse.json({ error: 'Invoice Number and Customer are required' }, { status: 400 });
+        if (!customerId) {
+            return NextResponse.json({ error: 'Customer is required' }, { status: 400 });
+        }
+
+        let finalInvoiceNumber = invoiceNumber;
+
+        if (!finalInvoiceNumber) {
+            const date = new Date();
+            const year = date.getFullYear();
+            const lastInvoice = await prisma.freightInvoice.findFirst({
+                where: {
+                    companyId: user.companyId as number,
+                    invoiceNumber: { startsWith: `FIN-${year}-` }
+                },
+                orderBy: { invoiceNumber: 'desc' }
+            });
+
+            let sequence = 1;
+            if (lastInvoice) {
+                const parts = lastInvoice.invoiceNumber.split('-');
+                if (parts.length === 3) {
+                    const seq = parseInt(parts[2]);
+                    if (!isNaN(seq)) sequence = seq + 1;
+                }
+            }
+            finalInvoiceNumber = `FIN-${year}-${sequence.toString().padStart(4, '0')}`;
         }
 
         const result = await prisma.$transaction(async (tx) => {
             const inv = await tx.freightInvoice.create({
                 data: {
-                    invoiceNumber,
+                    invoiceNumber: finalInvoiceNumber,
                     jobId: jobId ? parseInt(jobId) : null,
                     customerId: parseInt(customerId),
                     usdRate: parseFloat(usdRate) || 0,
