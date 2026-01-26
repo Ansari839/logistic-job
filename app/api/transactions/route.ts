@@ -72,7 +72,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Debits must equal Credits' }, { status: 400 });
         }
 
-        const transaction = await prisma.$transaction(async (tx) => {
+        const transaction = await prisma.$transaction(async (tx: any) => {
             let reference = validatedData.reference;
 
             // Auto-generate reference if not provided or if it's a JOURNAL type

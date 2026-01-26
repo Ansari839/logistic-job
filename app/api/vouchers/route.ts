@@ -189,7 +189,7 @@ export async function DELETE(req: NextRequest) {
 
 
 
-        await prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx: any) => {
             const voucher = await tx.voucher.findUnique({
                 where: { id: voucherId, companyId: user.companyId! }
             });

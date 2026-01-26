@@ -59,7 +59,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Financial period is closed for this date' }, { status: 400 });
         }
 
-        const purchase = await prisma.$transaction(async (tx) => {
+        const purchase = await prisma.$transaction(async (tx: any) => {
             // 1. Calculate totals
             let totalAmount = 0;
             let totalTax = 0;

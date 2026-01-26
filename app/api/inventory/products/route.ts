@@ -44,7 +44,7 @@ export async function POST(request: Request) {
         const body = await request.json();
         const { name, sku, description, unit, purchasePrice, sellingPrice, categoryId, initialStock, warehouseId } = productSchema.parse(body);
 
-        const product = await prisma.$transaction(async (tx) => {
+        const product = await prisma.$transaction(async (tx: any) => {
             const p = await tx.product.create({
                 data: {
                     name, sku, description, unit, purchasePrice, sellingPrice, categoryId,

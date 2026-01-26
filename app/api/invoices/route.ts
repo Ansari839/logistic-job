@@ -421,7 +421,7 @@ export async function PATCH(request: Request) {
             }
 
             if (invoice.isApproved || invoice.status === 'SENT' || invoice.status === 'PAID') {
-                await prisma.$transaction(async (tx) => {
+                await prisma.$transaction(async (tx: any) => {
                     await tx.stockMovement.deleteMany({ where: { reference: invoice.invoiceNumber, companyId: user.companyId as number } });
                     await tx.serviceInvoice.update({
                         where: { id: invoice.id },
@@ -431,7 +431,7 @@ export async function PATCH(request: Request) {
                 await logAction({ user, action: 'UPDATE', module: 'INVOICE', entityId: invoice.id });
                 return NextResponse.json({ message: 'Invoice voided successfully' });
             } else if (invoice.status === 'DRAFT') {
-                await prisma.$transaction(async (tx) => {
+                await prisma.$transaction(async (tx: any) => {
                     await tx.stockMovement.deleteMany({ where: { reference: invoice.invoiceNumber, companyId: user.companyId as number } });
                     await tx.serviceInvoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
                     await tx.serviceInvoice.delete({ where: { id: invoice.id } });
@@ -474,7 +474,7 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: 'Only admins can delete non-draft invoices' }, { status: 403 });
         }
 
-        await prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx: any) => {
             await tx.stockMovement.deleteMany({ where: { reference: invoice.invoiceNumber, companyId: user.companyId as number } });
             await tx.serviceInvoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
             await tx.serviceInvoice.delete({ where: { id: invoice.id } });

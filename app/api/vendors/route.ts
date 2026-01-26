@@ -54,7 +54,7 @@ export async function POST(request: Request) {
         }
 
         // 1. Transaction to create Vendor and its Ledger Account
-        const vendor = await prisma.$transaction(async (tx) => {
+        const vendor = await prisma.$transaction(async (tx: any) => {
             // Find parent account for Accounts Payable (2210)
             const parentAccount = await tx.account.findUnique({
                 where: { companyId_code: { companyId: user.companyId, code: '2210' } }

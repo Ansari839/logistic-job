@@ -247,7 +247,7 @@ export async function PATCH(request: Request) {
                 return NextResponse.json({ error: 'Only admins can delete non-draft invoices' }, { status: 403 });
             }
 
-            await prisma.$transaction(async (tx) => {
+            await prisma.$transaction(async (tx: any) => {
                 await tx.freightInvoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
                 await tx.freightInvoice.delete({ where: { id: invoice.id } });
             });

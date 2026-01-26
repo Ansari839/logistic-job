@@ -47,7 +47,7 @@ export async function PATCH(req: Request) {
     try {
         const { id, exchangeRate, isDefault } = await req.json();
 
-        await prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx: any) => {
             if (isDefault) {
                 await tx.companyCurrency.updateMany({
                     where: { companyId: user.companyId! },

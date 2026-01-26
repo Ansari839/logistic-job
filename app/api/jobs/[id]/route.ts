@@ -184,7 +184,7 @@ export async function DELETE(
             return NextResponse.json({ error: 'Job not found' }, { status: 404 });
         }
 
-        await prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx: any) => {
             if (existingJob.status === 'DRAFT') {
                 // Hard Delete
                 await tx.expense.deleteMany({ where: { jobId: parseInt(id) } });

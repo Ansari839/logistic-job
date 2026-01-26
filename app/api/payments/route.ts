@@ -64,7 +64,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Either Customer or Vendor must be specified' }, { status: 400 });
         }
 
-        const payment = await prisma.$transaction(async (tx) => {
+        const payment = await prisma.$transaction(async (tx: any) => {
             // 1. Identify the contra account (Accounts Receivable or Accounts Payable)
             let contraAccountCode = '';
             if (validatedData.customerId) {

@@ -26,7 +26,7 @@ async function simulate() {
     console.log("Attempting transaction...");
 
     try {
-        const result = await prisma.$transaction(async (tx) => {
+        const result = await prisma.$transaction(async (tx: any) => {
             // Find parent account for Accounts Receivable (1230)
             const parentAccount = await tx.account.findUnique({
                 where: { companyId_code: { companyId: company.id, code: '1230' } }
