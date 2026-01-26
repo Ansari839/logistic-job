@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getAuthToken, verifyToken } from '@/lib/auth';
 import { generateVoucherNumber } from '@/lib/utils/voucher';
-import { VoucherType } from '@prisma/client';
 import { z } from 'zod';
 
 const voucherSchema = z.object({
