@@ -13,6 +13,7 @@ export async function GET(request: Request) {
     const customerId = searchParams.get('customerId');
     const vendorId = searchParams.get('vendorId');
     const branchId = searchParams.get('branchId');
+    const jobType = searchParams.get('jobType');
 
     const dateFilter: any = {};
     if (startDate || endDate) {
@@ -133,6 +134,75 @@ export async function GET(request: Request) {
                 }));
 
                 return NextResponse.json({ report });
+            }
+
+            case 'job-master': {
+                const jobs = await prisma.job.findMany({
+                    where: {
+                        companyId: user.companyId,
+                        ...(branchId && { branchId: parseInt(branchId) }),
+                        ...(customerId && { customerId: parseInt(customerId) }),
+                        ...(jobType && { jobType: jobType }),
+                        ...dateFilter,
+                    },
+                    include: {
+                        customer: { select: { name: true, code: true } },
+                        expenses: {
+                            include: {
+                                vendor: { select: { name: true } }
+                            }
+                        },
+                        serviceInvoices: { select: { totalAmount: true, status: true } },
+                        freightInvoice: { select: { totalAmount: true, status: true } },
+                    },
+                    orderBy: { jobNumber: 'desc' }
+                });
+
+                const report = jobs.map((job: any) => {
+                    const detailedExpenses = job.expenses.map((exp: any) => ({
+                        id: exp.id,
+                        description: exp.description,
+                        cost: exp.costPrice,
+                        sell: exp.sellingPrice,
+                        profit: exp.sellingPrice - exp.costPrice,
+                        vendor: exp.vendor?.name || 'N/A'
+                    }));
+
+                    const totalCost = job.expenses.reduce((sum: any, exp: any) => sum + exp.costPrice, 0);
+                    const totalSellFromExpenses = job.expenses.reduce((sum: any, exp: any) => sum + exp.sellingPrice, 0);
+
+                    // Invoices might have different totals than individual expense selling prices
+                    const serviceRevenue = job.serviceInvoices.reduce((sum: any, inv: any) =>
+                        inv.status !== 'CANCELLED' ? sum + inv.totalAmount : sum, 0);
+                    const freightRevenue = job.freightInvoice && job.freightInvoice.status !== 'CANCELLED' ? job.freightInvoice.totalAmount : 0;
+                    const invoiceRevenue = serviceRevenue + freightRevenue;
+
+                    // Use selling price from expenses for margin analysis unless invoices are specified
+                    const totalRevenue = invoiceRevenue > 0 ? invoiceRevenue : totalSellFromExpenses;
+
+                    return {
+                        id: job.id,
+                        jobNumber: job.jobNumber,
+                        date: job.jobDate || job.date,
+                        customer: job.customer.name,
+                        customerCode: job.customer.code,
+                        vessel: job.vessel || 'N/A',
+                        gdNo: job.gdNo || 'N/A',
+                        sell: totalRevenue,
+                        cost: totalCost,
+                        profit: totalRevenue - totalCost,
+                        expenses: detailedExpenses
+                    };
+                });
+
+                // Calculate grand totals for the summary
+                const totals = {
+                    sell: report.reduce((sum, item) => sum + item.sell, 0),
+                    cost: report.reduce((sum, item) => sum + item.cost, 0),
+                    profit: report.reduce((sum, item) => sum + item.profit, 0)
+                };
+
+                return NextResponse.json({ report, totals });
             }
 
             default:

@@ -29,10 +29,13 @@ const REPORT_CATEGORIES = [
         icon: Briefcase,
         color: 'blue',
         reports: [
+            { id: 'job-master', name: 'Job Master Summary', description: 'Comprehensive job analysis with profit & loss drill-down', type: 'operational' },
+            /*
             { id: 'job-profitability', name: 'Job Profitability Report', description: 'Analyze revenue vs cost per job', type: 'operational' },
             { id: 'job-status', name: 'Job Status Analytics', description: 'Overview of pending vs completed jobs', type: 'operational' },
             { id: 'customer-summary', name: 'Customer Job Summary', description: 'Consolidated view of customer performance', type: 'operational' },
             { id: 'vendor-cost', name: 'Vendor Cost Analysis', description: 'Expense breakdown by vendor', type: 'operational', endpoint: 'vendor-analysis' },
+            */
         ]
     },
     {
