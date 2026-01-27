@@ -39,9 +39,11 @@ export default function ReportViewer({ report }: ReportViewerProps) {
         vendorId: '',
         accountId: '',
     });
+    const [pagination, setPagination] = useState({ page: 1, limit: 50, totalItems: 0, totalPages: 0 });
     const [accounts, setAccounts] = useState<any[]>([]);
     const [company, setCompany] = useState<any>(null);
     const [ledgerSummary, setLedgerSummary] = useState<any>(null);
+    const [trialBalanceTotals, setTrialBalanceTotals] = useState<any>(null);
 
     useEffect(() => {
         const fetchAccounts = async () => {
@@ -65,10 +67,12 @@ export default function ReportViewer({ report }: ReportViewerProps) {
     const fetchReport = async () => {
         setLoading(true);
         try {
-            const apiBase = report.apiOverride || `/api/reports/${report.type}`;
+            // Fix: Use 'financials' for financial reports
+            const apiBase = report.apiOverride || `/api/reports/${report.type === 'financial' ? 'financials' : report.type}`;
             const query = new URLSearchParams({
                 type: report.endpoint || report.id,
                 ...(report.subType && { subType: report.subType }),
+                ...(report.id === 'trial-balance' && { page: pagination.page.toString(), limit: pagination.limit.toString() }),
                 ...Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== ''))
             });
 
@@ -81,9 +85,16 @@ export default function ReportViewer({ report }: ReportViewerProps) {
                         openingBalance: result.openingBalance,
                         closingBalance: result.closingBalance
                     });
+                    setTrialBalanceTotals(null);
+                } else if (report.id === 'trial-balance') {
+                    setData(result.report || []);
+                    setTrialBalanceTotals(result.totals || null);
+                    setPagination(result.pagination || pagination);
+                    setLedgerSummary(null);
                 } else {
                     setData(result.report || []);
                     setLedgerSummary(null);
+                    setTrialBalanceTotals(null);
                 }
             }
         } catch (error) {
@@ -95,7 +106,7 @@ export default function ReportViewer({ report }: ReportViewerProps) {
 
     useEffect(() => {
         fetchReport();
-    }, [report.id, filters]);
+    }, [report.id, filters, pagination.page]);
 
     const handleExport = (format: 'pdf' | 'excel') => {
         if (!data.length) return;
@@ -113,49 +124,52 @@ export default function ReportViewer({ report }: ReportViewerProps) {
 
     return (
         <div className="glass-panel border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-500">
-            {/* Filter Bar */}
-            <div className="p-8 border-b border-white/5 flex flex-wrap items-center gap-4 bg-white/[0.02]">
-                <div className="flex items-center gap-3 bg-slate-950 border border-slate-800 rounded-2xl px-4 py-2">
-                    <Calendar size={14} className="text-slate-500" />
-                    <input
-                        type="date"
-                        className="bg-transparent text-[10px] font-black text-white focus:outline-none uppercase tracking-widest"
-                        value={filters.startDate}
-                        onChange={e => setFilters({ ...filters, startDate: e.target.value })}
-                    />
-                    <span className="text-slate-700 font-bold">to</span>
-                    <input
-                        type="date"
-                        className="bg-transparent text-[10px] font-black text-white focus:outline-none uppercase tracking-widest"
-                        value={filters.endDate}
-                        onChange={e => setFilters({ ...filters, endDate: e.target.value })}
-                    />
-                </div>
+            {/* Filters */}
+            <div className="p-6 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-white/5">
+                <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                        <Calendar size={16} className="text-slate-500 dark:text-slate-600" />
+                        <input
+                            type="date"
+                            value={filters.startDate}
+                            onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
+                            className="px-4 py-2 rounded-xl bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white text-xs font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                        <span className="text-slate-500 dark:text-slate-600 text-xs font-black">TO</span>
+                        <input
+                            type="date"
+                            value={filters.endDate}
+                            onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
+                            className="px-4 py-2 rounded-xl bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white text-xs font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                    </div>
 
-                {report.type === 'ledger' && (
-                    <div className="flex items-center gap-3 bg-slate-950 border border-slate-800 rounded-2xl px-4 py-2 min-w-[200px]">
-                        <BookOpen size={14} className="text-slate-500" />
+                    {report.type === 'ledger' && (
                         <select
-                            className="bg-transparent text-[10px] font-black text-white focus:outline-none uppercase tracking-widest w-full cursor-pointer"
                             value={filters.accountId}
-                            onChange={e => setFilters({ ...filters, accountId: e.target.value })}
+                            onChange={(e) => setFilters({ ...filters, accountId: e.target.value })}
+                            className="px-4 py-2 rounded-xl bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white text-xs font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                         >
-                            <option value="" className="bg-slate-900">Select Account</option>
-                            {accounts.map(acc => (
-                                <option key={acc.id} value={acc.id} className="bg-slate-900">
+                            <option value="">All Accounts</option>
+                            {accounts.map((acc: any) => (
+                                <option key={acc.id} value={acc.id}>
                                     {acc.code} - {acc.name}
                                 </option>
                             ))}
                         </select>
-                    </div>
-                )}
+                    )}
 
-                <div className="flex-1" />
+                    <button
+                        onClick={fetchReport}
+                        className="ml-auto px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2"
+                    >
+                        <RefreshCw size={16} />
+                        Refresh
+                    </button>
 
-                <div className="flex gap-2">
                     <button
                         onClick={() => handleExport('pdf')}
-                        className="p-3 rounded-2xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2"
+                        className="p-3 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2"
                     >
                         <FileText size={16} />
                         <span className="text-[10px] font-black uppercase tracking-widest px-1">PDF</span>
@@ -220,22 +234,22 @@ export default function ReportViewer({ report }: ReportViewerProps) {
                         )}
 
                         {data.length > 0 ? (
-                            <div className="overflow-x-auto rounded-3xl border border-white/5 bg-slate-950">
+                            <div className="overflow-x-auto rounded-3xl border border-slate-200 dark:border-white/5 bg-white dark:bg-slate-950">
                                 <table className="w-full text-left border-collapse">
                                     <thead>
-                                        <tr className="bg-white/[0.02]">
+                                        <tr className="bg-slate-50 dark:bg-white/[0.02]">
                                             {report.type === 'ledger' ? (
                                                 <>
-                                                    <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Date</th>
-                                                    <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Reference</th>
-                                                    <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Description</th>
-                                                    <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5 text-right">Debit</th>
-                                                    <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5 text-right">Credit</th>
-                                                    <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5 text-right">Balance</th>
+                                                    <th className="p-5 text-[10px] font-black text-slate-600 dark:text-slate-500 uppercase tracking-widest border-b border-slate-200 dark:border-white/5">Date</th>
+                                                    <th className="p-5 text-[10px] font-black text-slate-600 dark:text-slate-500 uppercase tracking-widest border-b border-slate-200 dark:border-white/5">Reference</th>
+                                                    <th className="p-5 text-[10px] font-black text-slate-600 dark:text-slate-500 uppercase tracking-widest border-b border-slate-200 dark:border-white/5">Description</th>
+                                                    <th className="p-5 text-[10px] font-black text-slate-600 dark:text-slate-500 uppercase tracking-widest border-b border-slate-200 dark:border-white/5 text-right">Debit</th>
+                                                    <th className="p-5 text-[10px] font-black text-slate-600 dark:text-slate-500 uppercase tracking-widest border-b border-slate-200 dark:border-white/5 text-right">Credit</th>
+                                                    <th className="p-5 text-[10px] font-black text-slate-600 dark:text-slate-500 uppercase tracking-widest border-b border-slate-200 dark:border-white/5 text-right">Balance</th>
                                                 </>
                                             ) : (
                                                 Object.keys(data[0]).filter(k => typeof data[0][k] !== 'object' && k !== 'id').map((col) => (
-                                                    <th key={col} className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">
+                                                    <th key={col} className="p-5 text-[10px] font-black text-slate-600 dark:text-slate-500 uppercase tracking-widest border-b border-slate-200 dark:border-white/5">
                                                         {col.replace(/([A-Z])/g, ' $1')}
                                                     </th>
                                                 ))
@@ -244,26 +258,34 @@ export default function ReportViewer({ report }: ReportViewerProps) {
                                     </thead>
                                     <tbody>
                                         {data.map((row, i) => (
-                                            <tr key={i} className="hover:bg-white/[0.01] transition-colors border-b border-white/5 last:border-0 group">
+                                            <tr key={i} className="hover:bg-slate-50 dark:hover:bg-white/[0.01] transition-colors border-b border-slate-200 dark:border-white/5 last:border-0 group">
                                                 {report.type === 'ledger' ? (
                                                     <>
-                                                        <td className="p-5 text-[11px] font-medium text-slate-400">{new Date(row.transaction.date).toLocaleDateString()}</td>
-                                                        <td className="p-5 text-[11px] font-medium text-white font-bold">{row.transaction.reference}</td>
-                                                        <td className="p-5 text-[11px] font-medium text-slate-400">{row.transaction.description}</td>
-                                                        <td className="p-5 text-[11px] font-medium text-white font-bold text-right text-emerald-500">{row.debit > 0 ? row.debit.toLocaleString() : '-'}</td>
-                                                        <td className="p-5 text-[11px] font-medium text-white font-bold text-right text-rose-500">{row.credit > 0 ? row.credit.toLocaleString() : '-'}</td>
-                                                        <td className={`p-5 text-[11px] font-black text-right ${row.balance >= 0 ? 'text-blue-400' : 'text-amber-500'}`}>
+                                                        <td className="p-5 text-[11px] font-medium text-slate-600 dark:text-slate-400">{new Date(row.transaction.date).toLocaleDateString()}</td>
+                                                        <td className="p-5 text-[11px] font-medium text-slate-900 dark:text-white font-bold">{row.transaction.reference}</td>
+                                                        <td className="p-5 text-[11px] font-medium text-slate-600 dark:text-slate-400">{row.transaction.description}</td>
+                                                        <td className="p-5 text-[11px] font-medium text-slate-900 dark:text-white font-bold text-right text-emerald-600 dark:text-emerald-500">{row.debit > 0 ? row.debit.toLocaleString() : '-'}</td>
+                                                        <td className="p-5 text-[11px] font-medium text-slate-900 dark:text-white font-bold text-right text-rose-600 dark:text-rose-500">{row.credit > 0 ? row.credit.toLocaleString() : '-'}</td>
+                                                        <td className={`p-5 text-[11px] font-black text-right ${row.balance >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-amber-600 dark:text-amber-500'}`}>
                                                             {Math.abs(row.balance).toLocaleString()} {row.balance >= 0 ? 'DR' : 'CR'}
                                                         </td>
                                                     </>
                                                 ) : (
-                                                    Object.keys(row).filter(k => typeof row[k] !== 'object' && k !== 'id').map((col) => (
-                                                        <td key={col} className="p-5 text-[11px] font-medium text-slate-400">
-                                                            {typeof row[col] === 'number' && (col.toLowerCase().includes('amount') || col.toLowerCase().includes('revenue') || col.toLowerCase().includes('cost') || col.toLowerCase().includes('profit') || col.toLowerCase().includes('valuation'))
-                                                                ? <span className="text-white font-bold">{Number(row[col]).toLocaleString()} <span className="text-[9px] text-slate-600">PKR</span></span>
-                                                                : row[col]?.toString()}
-                                                        </td>
-                                                    ))
+                                                    Object.keys(row).filter(k => typeof row[k] !== 'object' && k !== 'id').map((col) => {
+                                                        const isBalanceColumn = col.toLowerCase().includes('balance');
+                                                        const isAmountColumn = col.toLowerCase().includes('amount') || col.toLowerCase().includes('revenue') || col.toLowerCase().includes('cost') || col.toLowerCase().includes('profit') || col.toLowerCase().includes('valuation') || col.toLowerCase().includes('debit') || col.toLowerCase().includes('credit');
+
+                                                        return (
+                                                            <td key={col} className="p-5 text-[11px] font-medium text-slate-700 dark:text-slate-400">
+                                                                {typeof row[col] === 'number' && (isBalanceColumn || isAmountColumn)
+                                                                    ? <span className="text-slate-900 dark:text-white font-bold">
+                                                                        {Number(row[col]).toLocaleString()}
+                                                                        {isBalanceColumn && <span className="text-[9px] text-slate-500 dark:text-slate-600 ml-1">PKR</span>}
+                                                                    </span>
+                                                                    : row[col]?.toString()}
+                                                            </td>
+                                                        );
+                                                    })
                                                 )}
                                             </tr>
                                         ))}
@@ -291,15 +313,75 @@ export default function ReportViewer({ report }: ReportViewerProps) {
                 )}
             </div>
 
+            {/* Trial Balance Totals */}
+            {!loading && trialBalanceTotals && (
+                <div className="p-8 bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-950 dark:to-slate-900 border-t border-slate-200 dark:border-white/5">
+                    <div className="grid grid-cols-3 gap-6">
+                        <div className="bg-white dark:bg-white/5 rounded-2xl p-6 border border-slate-200 dark:border-white/10">
+                            <p className="text-[10px] font-black text-slate-500 dark:text-slate-500 uppercase tracking-widest mb-3">Total Debit</p>
+                            <p className="text-3xl font-black text-emerald-600 dark:text-emerald-500">
+                                {Number(trialBalanceTotals.totalDebit).toLocaleString()}
+                                <span className="text-xs text-slate-500 dark:text-slate-600 ml-2">PKR</span>
+                            </p>
+                        </div>
+                        <div className="bg-white dark:bg-white/5 rounded-2xl p-6 border border-slate-200 dark:border-white/10">
+                            <p className="text-[10px] font-black text-slate-500 dark:text-slate-500 uppercase tracking-widest mb-3">Total Credit</p>
+                            <p className="text-3xl font-black text-rose-600 dark:text-rose-500">
+                                {Number(trialBalanceTotals.totalCredit).toLocaleString()}
+                                <span className="text-xs text-slate-500 dark:text-slate-600 ml-2">PKR</span>
+                            </p>
+                        </div>
+                        <div className="bg-white dark:bg-white/5 rounded-2xl p-6 border border-slate-200 dark:border-white/10">
+                            <p className="text-[10px] font-black text-slate-500 dark:text-slate-500 uppercase tracking-widest mb-3">Difference</p>
+                            <p className="text-3xl font-black text-blue-600 dark:text-blue-400">
+                                {Number(trialBalanceTotals.difference).toLocaleString()}
+                                <span className="text-xs text-slate-500 dark:text-slate-600 ml-2">PKR</span>
+                            </p>
+                            {Math.abs(trialBalanceTotals.difference) < 0.01 && (
+                                <span className="text-[8px] text-emerald-500 font-bold uppercase tracking-widest">✓ Balanced</span>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Trial Balance Pagination */}
+            {!loading && report.id === 'trial-balance' && pagination.totalPages > 1 && (
+                <div className="p-6 bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-white/5 flex justify-between items-center">
+                    <button
+                        onClick={() => setPagination({ ...pagination, page: Math.max(1, pagination.page - 1) })}
+                        disabled={pagination.page === 1}
+                        className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-300 dark:hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-xs font-black uppercase tracking-widest"
+                    >
+                        ← Previous
+                    </button>
+                    <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">
+                            Page {pagination.page} of {pagination.totalPages}
+                        </span>
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-widest">
+                            ({pagination.totalItems} accounts)
+                        </span>
+                    </div>
+                    <button
+                        onClick={() => setPagination({ ...pagination, page: Math.min(pagination.totalPages, pagination.page + 1) })}
+                        disabled={pagination.page === pagination.totalPages}
+                        className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-300 dark:hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-xs font-black uppercase tracking-widest"
+                    >
+                        Next →
+                    </button>
+                </div>
+            )}
+
             {/* Footer Summary */}
             {!loading && data.length > 0 && (
-                <div className="p-6 bg-slate-950 border-t border-white/5 flex justify-between items-center">
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest italic flex items-center gap-2">
+                <div className="p-6 bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-white/5 flex justify-between items-center">
+                    <p className="text-[10px] font-black text-slate-500 dark:text-slate-500 uppercase tracking-widest italic flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         Live Aggregate Analysis Complete
                     </p>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                        Total Records: <span className="text-white">{data.length}</span>
+                    <p className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">
+                        Total Records: <span className="text-slate-900 dark:text-white">{data.length}</span>
                     </p>
                 </div>
             )}

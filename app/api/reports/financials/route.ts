@@ -22,37 +22,68 @@ export async function GET(request: Request) {
     try {
         switch (type) {
             case 'trial-balance': {
+                // Get pagination params
+                const page = parseInt(searchParams.get('page') || '1');
+                const limit = parseInt(searchParams.get('limit') || '50');
+                const skip = (page - 1) * limit;
+
+                // Fetch all posting accounts with their entries
                 const accounts = await prisma.account.findMany({
-                    where: { companyId: user.companyId },
+                    where: {
+                        companyId: user.companyId,
+                    },
                     include: {
                         entries: {
-                            where: {
-                                transaction: {
-                                    companyId: user.companyId,
-                                    ...(endDate && { createdAt: { lte: new Date(endDate) } })
-                                }
-                            },
-                            select: { debit: true, credit: true }
+                            select: {
+                                debit: true,
+                                credit: true
+                            }
                         }
-                    }
+                    },
+                    orderBy: { code: 'asc' }
                 });
 
-                const report = accounts.map((acc: any) => {
-                    const totalDebit = acc.entries.reduce((sum: any, e: any) => sum + e.debit, 0);
-                    const totalCredit = acc.entries.reduce((sum: any, e: any) => sum + e.credit, 0);
+                // Build report with balances
+                const allReportItems = accounts.map((account: any) => {
+                    const totalDebit = account.entries.reduce((sum: number, entry: any) => sum + Number(entry.debit), 0);
+                    const totalCredit = account.entries.reduce((sum: number, entry: any) => sum + Number(entry.credit), 0);
+                    const balance = totalDebit - totalCredit;
+
                     return {
-                        code: acc.code,
-                        name: acc.name,
-                        type: acc.type,
+                        accountCode: account.code,
+                        accountName: account.name,
+                        accountType: account.type,
                         debit: totalDebit,
                         credit: totalCredit,
-                        balance: acc.type === 'ASSET' || acc.type === 'EXPENSE'
-                            ? totalDebit - totalCredit
-                            : totalCredit - totalDebit
+                        balance: Math.abs(balance),
+                        balanceType: balance >= 0 ? 'DR' : 'CR'
                     };
-                }).filter((r: any) => r.debit !== 0 || r.credit !== 0);
+                })
+                    .filter((item: any) => Math.abs(item.debit) > 0.01 || Math.abs(item.credit) > 0.01); // Exclude zero balances
 
-                return NextResponse.json({ report });
+                // Paginate
+                const totalItems = allReportItems.length;
+                const totalPages = Math.ceil(totalItems / limit);
+                const report = allReportItems.slice(skip, skip + limit);
+
+                // Calculate grand totals (from all items, not just current page)
+                const grandTotalDebit = allReportItems.reduce((sum: number, item: any) => sum + item.debit, 0);
+                const grandTotalCredit = allReportItems.reduce((sum: number, item: any) => sum + item.credit, 0);
+
+                return NextResponse.json({
+                    report,
+                    pagination: {
+                        page,
+                        limit,
+                        totalItems,
+                        totalPages
+                    },
+                    totals: {
+                        totalDebit: grandTotalDebit,
+                        totalCredit: grandTotalCredit,
+                        difference: grandTotalDebit - grandTotalCredit
+                    }
+                });
             }
 
             case 'profit-loss': {
