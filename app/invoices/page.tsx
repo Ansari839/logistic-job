@@ -28,6 +28,7 @@ export default function InvoicesPage() {
     const [invoices, setInvoices] = useState<Invoice[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [activeTab, setActiveTab] = useState<'all' | 'trucking' | 'sales_tax' | 'freight'>('all');
     const router = useRouter();
 
     useEffect(() => {
@@ -108,11 +109,22 @@ export default function InvoicesPage() {
         }
     };
 
-    const filteredInvoices = invoices.filter(inv =>
-        inv.invoiceNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        inv.customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (inv.job?.jobNumber || '').toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredInvoices = invoices.filter(inv => {
+        const matchesSearch = inv.invoiceNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            inv.customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (inv.job?.jobNumber || '').toLowerCase().includes(searchTerm.toLowerCase());
+
+        if (!matchesSearch) return false;
+
+        const isTrucking = inv.invoiceNumber.startsWith('TRK');
+        const isSalesTax = inv.category === 'SERVICE' && !isTrucking;
+        const isFreight = inv.category === 'FREIGHT' || inv.invoiceNumber.startsWith('FIN');
+
+        if (activeTab === 'trucking') return isTrucking;
+        if (activeTab === 'sales_tax') return isSalesTax;
+        if (activeTab === 'freight') return isFreight;
+        return true;
+    });
 
     const getStatusStyle = (status: string) => {
         switch (status) {
@@ -143,14 +155,40 @@ export default function InvoicesPage() {
                     </div>
                 </div>
 
-                {/* Search & Filter Bar */}
-                <div className="glass-panel p-4 flex flex-col lg:flex-row gap-4 items-center">
+                {/* Tab Switcher & Search Bar */}
+                <div className="glass-panel p-4 rounded-[2.5rem] flex flex-col lg:flex-row gap-6 items-center">
+                    <div className="flex p-1 bg-background/50 border border-border rounded-2xl w-full lg:w-auto overflow-x-auto no-scrollbar">
+                        <button
+                            onClick={() => setActiveTab('all')}
+                            className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'all' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                        >
+                            All
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('sales_tax')}
+                            className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'sales_tax' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                        >
+                            Sales Tax
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('trucking')}
+                            className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'trucking' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                        >
+                            Trucking
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('freight')}
+                            className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === 'freight' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                        >
+                            Freight
+                        </button>
+                    </div>
                     <div className="relative flex-1 group w-full">
-                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 transition-colors group-focus-within:text-blue-500" size={20} />
+                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 transition-colors group-focus-within:text-blue-500" size={20} />
                         <input
                             type="text"
                             placeholder="Search by Invoice #, Customer or Job..."
-                            className="glass-input w-full pl-14 font-bold placeholder:text-slate-500 dark:placeholder:text-slate-600"
+                            className="glass-input w-full pl-16 py-4 font-bold placeholder:text-slate-500 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -184,8 +222,13 @@ export default function InvoicesPage() {
                                         <div>
                                             <div className="flex items-center gap-3 mb-1">
                                                 <h3 className="text-xl font-black text-white tracking-tight">{inv.invoiceNumber}</h3>
-                                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${inv.category === 'SERVICE' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-purple-500/10 text-purple-400 border-purple-500/20'}`}>
-                                                    {inv.category}
+                                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${inv.invoiceNumber.startsWith('TRK')
+                                                        ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                                                        : (inv.category === 'FREIGHT' || inv.invoiceNumber.startsWith('FIN'))
+                                                            ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                                                            : 'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                                                    }`}>
+                                                    {inv.invoiceNumber.startsWith('TRK') ? 'TRUCKING' : (inv.category === 'FREIGHT' || inv.invoiceNumber.startsWith('FIN') ? 'FREIGHT' : 'SALES TAX')}
                                                 </span>
                                                 <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${getStatusStyle(inv.status)}`}>
                                                     {inv.status}
