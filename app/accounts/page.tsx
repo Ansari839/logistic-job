@@ -201,11 +201,11 @@ export default function ChartOfAccountsPage() {
                                     description: node.description || '',
                                     parentId: node.parentId?.toString() || '',
                                     partnerDetails: {
-                                        address: '',
-                                        phone: '',
-                                        email: '',
-                                        taxNumber: '',
-                                        type: '' as '' | 'CUSTOMER' | 'VENDOR'
+                                        address: (node as any).customer?.address || (node as any).vendor?.address || '',
+                                        phone: (node as any).customer?.phone || (node as any).vendor?.phone || '',
+                                        email: (node as any).customer?.email || (node as any).vendor?.email || '',
+                                        taxNumber: (node as any).customer?.taxNumber || (node as any).vendor?.taxNumber || '',
+                                        type: (node as any).customer ? 'CUSTOMER' : (node as any).vendor ? 'VENDOR' : ''
                                     }
                                 });
                                 setShowModal(true);
@@ -483,6 +483,7 @@ export default function ChartOfAccountsPage() {
                                                         <input
                                                             className="glass-input w-full rounded-2xl px-4 py-3 text-slate-900 dark:text-white text-xs font-bold"
                                                             placeholder="NTN-..."
+                                                            value={formData.partnerDetails.taxNumber}
                                                             onChange={e => setFormData({ ...formData, partnerDetails: { ...formData.partnerDetails, taxNumber: e.target.value, type: isCustomer ? 'CUSTOMER' : 'VENDOR' } } as any)}
                                                         />
                                                     </div>
@@ -491,6 +492,7 @@ export default function ChartOfAccountsPage() {
                                                         <input
                                                             className="glass-input w-full rounded-2xl px-4 py-3 text-slate-900 dark:text-white text-xs font-bold"
                                                             placeholder="+92..."
+                                                            value={formData.partnerDetails.phone}
                                                             onChange={e => setFormData({ ...formData, partnerDetails: { ...formData.partnerDetails, phone: e.target.value, type: isCustomer ? 'CUSTOMER' : 'VENDOR' } } as any)}
                                                         />
                                                     </div>
@@ -499,6 +501,7 @@ export default function ChartOfAccountsPage() {
                                                         <input
                                                             className="glass-input w-full rounded-2xl px-4 py-3 text-slate-900 dark:text-white text-xs font-bold"
                                                             placeholder="Email Address"
+                                                            value={formData.partnerDetails.email}
                                                             onChange={e => setFormData({ ...formData, partnerDetails: { ...formData.partnerDetails, email: e.target.value, type: isCustomer ? 'CUSTOMER' : 'VENDOR' } } as any)}
                                                         />
                                                     </div>
@@ -508,6 +511,7 @@ export default function ChartOfAccountsPage() {
                                                             rows={2}
                                                             className="glass-input w-full rounded-2xl px-4 py-3 text-slate-900 dark:text-white text-xs font-medium resize-none"
                                                             placeholder="Full Business Address"
+                                                            value={formData.partnerDetails.address}
                                                             onChange={e => setFormData({ ...formData, partnerDetails: { ...formData.partnerDetails, address: e.target.value, type: isCustomer ? 'CUSTOMER' : 'VENDOR' } } as any)}
                                                         />
                                                     </div>

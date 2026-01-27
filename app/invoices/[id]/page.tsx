@@ -41,6 +41,7 @@ interface Invoice {
         email: string | null;
         phone: string | null;
         address: string | null;
+        taxNumber: string | null;
     };
     job: {
         id: number;
@@ -167,63 +168,59 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                             {invoice.company.logo ? (
                                 <img src={invoice.company.logo} alt="Logo" className="h-20 mb-4" />
                             ) : (
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-600/20">L</div>
-                                    <span className="text-3xl font-black tracking-tighter uppercase italic text-blue-900">{invoice.company.name}</span>
+                                <div className="flex items-center gap-3 mb-2">
+                                    <span className="text-2xl font-black tracking-tighter uppercase italic text-blue-900">{invoice.company.name}</span>
                                 </div>
                             )}
-                            <div className="space-y-1 text-slate-500 text-sm">
-                                <p className="font-bold flex items-center justify-center gap-2"><MapPin size={14} /> {invoice.company.address || 'Address Not Set'}</p>
-                                <p className="font-bold flex items-center justify-center gap-2"><Building2 size={14} /> {invoice.company.email} | {invoice.company.phone}</p>
+                            <div className="space-y-0.5 text-slate-500 text-[10px]">
+                                <p className="font-bold flex items-center justify-center gap-2"><MapPin size={12} /> {invoice.company.address || 'Address Not Set'}</p>
+                                <p className="font-bold flex items-center justify-center gap-2"><Building2 size={12} /> {invoice.company.email} | {invoice.company.phone}</p>
                                 {invoice.company.taxNumber && (
-                                    <p className="font-black text-[10px] text-blue-600 uppercase tracking-widest mt-2">NTN: {invoice.company.taxNumber}</p>
+                                    <p className="font-black text-[9px] text-blue-600 uppercase tracking-widest mt-1">NTN: {invoice.company.taxNumber}</p>
                                 )}
                             </div>
                         </div>
 
                         {/* Invoice Metadata Bar */}
-                        <div className="p-6 flex justify-between items-end bg-white">
+                        <div className="p-4 flex justify-between items-end bg-white border-b border-slate-100">
                             <div className="flex flex-col items-start gap-1">
-                                <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${(invoice.category === 'FREIGHT' || invoice.invoiceNumber.startsWith('TRK') || invoice.invoiceNumber.startsWith('FIN'))
+                                <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${(invoice.category === 'FREIGHT' || invoice.invoiceNumber.startsWith('TRK') || invoice.invoiceNumber.startsWith('FIN'))
                                     ? 'bg-purple-600/10 text-purple-600 border-purple-600/20'
                                     : 'bg-blue-600/10 text-blue-600 border-blue-600/20'
                                     }`}>
                                     {(invoice.category === 'FREIGHT' || invoice.invoiceNumber.startsWith('TRK') || invoice.invoiceNumber.startsWith('FIN')) ? 'TRUCKING BILL' : 'TAX INVOICE'}
                                 </span>
-                                <h1 className="text-4xl font-black text-slate-200 tracking-tighter leading-none uppercase italic">
+                                <h1 className="text-2xl font-black text-slate-200 tracking-tighter leading-none uppercase italic">
                                     {(invoice.category === 'FREIGHT' || invoice.invoiceNumber.startsWith('TRK') || invoice.invoiceNumber.startsWith('FIN')) ? 'TRUCKING BILL' : 'SALES TAX INVOICE'}
                                 </h1>
                             </div>
-                            <div className="text-right space-y-2">
+                            <div className="text-right space-y-1">
                                 <div>
-                                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Invoice Number</p>
-                                    <p className="text-xl font-black font-mono text-slate-900">{invoice.invoiceNumber}</p>
+                                    <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest leading-none">Invoice Number</p>
+                                    <p className="text-lg font-black font-mono text-slate-900">{invoice.invoiceNumber}</p>
                                 </div>
-                                <div className="flex justify-end gap-6">
+                                <div className="flex justify-end gap-4">
                                     <div className="text-right">
-                                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Issue Date</p>
-                                        <p className="font-black text-slate-700">{new Date(invoice.date).toLocaleDateString()}</p>
+                                        <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest leading-none">Issue Date</p>
+                                        <p className="text-xs font-black text-slate-700">{new Date(invoice.date).toLocaleDateString()}</p>
                                     </div>
-                                    {invoice.job && (
-                                        <div className="text-right">
-                                            <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Job Number</p>
-                                            <p className="font-black text-slate-900"># {invoice.job.jobNumber}</p>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Billing Details */}
-                    <div className="p-6 grid grid-cols-2 gap-6 bg-white">
+                    <div className="p-4 grid grid-cols-2 gap-4 bg-white">
                         <div>
-                            <p className="text-[10px] text-blue-600 font-black uppercase tracking-[0.2em] mb-4 border-b pb-2 border-blue-50/50">Bill To</p>
-                            <h3 className="text-2xl font-black text-slate-900 mb-2">{invoice.customer.name}</h3>
-                            <div className="space-y-1 text-slate-500 text-sm font-bold">
+                            <p className="text-[9px] text-blue-600 font-black uppercase tracking-[0.2em] mb-2 border-b pb-1 border-blue-50/50">Bill To</p>
+                            <h3 className="text-xl font-black text-slate-900 mb-1">{invoice.customer.name}</h3>
+                            <div className="space-y-0.5 text-slate-500 text-xs font-bold">
                                 <p>{invoice.customer.address}</p>
                                 <p>{invoice.customer.email}</p>
                                 <p>{invoice.customer.phone}</p>
+                                <p className="text-blue-600 font-black uppercase text-[10px] mt-1">
+                                    NTN: {invoice.customer.taxNumber || 'Not Provided'}
+                                </p>
                             </div>
                         </div>
                         <div className="bg-slate-50 rounded-3xl p-6 border border-slate-100 flex flex-col justify-center">
@@ -272,30 +269,48 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                     </div>
 
                     {/* Items Table */}
-                    <div className="px-6 pb-6">
-                        <div className="rounded-3xl border border-slate-100 overflow-hidden">
-                            <table className="w-full text-left">
+                    <div className="px-4 pb-4">
+                        <div className="border-2 border-slate-900 overflow-hidden">
+                            <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="bg-slate-900 text-white">
-                                        <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest">Detail Description</th>
-                                        <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-center">Qty</th>
-                                        <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-right">Unit Rate</th>
-                                        <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-right">
+                                        <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest border-r border-slate-700">Detail Description</th>
+                                        <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-center border-r border-slate-700">Qty</th>
+                                        <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right border-r border-slate-700">Unit Rate</th>
+                                        <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right">
                                             {invoice.category === 'SERVICE' ? 'Amount (Excl. Tax)' : `Total (${invoice.currencyCode})`}
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-100">
-                                    {invoice.items.map((item, idx) => (
-                                        <tr key={item.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}>
-                                            <td className="px-4 py-2 font-bold text-slate-800 text-sm">{item.description}</td>
-                                            <td className="px-4 py-2 text-center font-bold text-slate-600 text-sm">{item.quantity}</td>
-                                            <td className="px-4 py-2 text-right font-mono text-slate-600 text-sm">{item.rate.toLocaleString()}</td>
-                                            <td className="px-4 py-2 text-right font-black text-slate-900 text-sm">
-                                                {invoice.category === 'SERVICE' ? item.amount.toLocaleString() : item.total.toLocaleString()}
-                                            </td>
-                                        </tr>
-                                    ))}
+                                <tbody className="divide-y divide-slate-900">
+                                    {(() => {
+                                        const sortedItems = [...invoice.items].sort((a, b) => {
+                                            const isAService = a.description.toLowerCase().includes('service charge');
+                                            const isBService = b.description.toLowerCase().includes('service charge');
+                                            if (isAService && !isBService) return 1;
+                                            if (!isAService && isBService) return -1;
+                                            return 0;
+                                        });
+                                        return Array.from({ length: Math.max(10, sortedItems.length) }).map((_, idx) => {
+                                            const item = sortedItems[idx];
+                                            return (
+                                                <tr key={item?.id || `empty-${idx}`} className={`h-8 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}`}>
+                                                    <td className="px-3 py-1 border-r-2 border-slate-900 font-bold text-slate-800 text-xs">
+                                                        {item?.description || ''}
+                                                    </td>
+                                                    <td className="px-3 py-1 border-r-2 border-slate-900 text-center font-bold text-slate-600 text-xs">
+                                                        {item?.quantity || ''}
+                                                    </td>
+                                                    <td className="px-3 py-1 border-r-2 border-slate-900 text-right font-mono text-slate-600 text-xs">
+                                                        {item?.rate?.toLocaleString() || ''}
+                                                    </td>
+                                                    <td className="px-3 py-1 text-right font-black text-slate-900 text-xs">
+                                                        {item ? (invoice.category === 'SERVICE' ? item.amount.toLocaleString() : item.total.toLocaleString()) : ''}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        });
+                                    })()}
                                 </tbody>
                             </table>
                         </div>

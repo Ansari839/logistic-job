@@ -172,30 +172,25 @@ export default function JobPrintTemplate({ job }: JobPrintTemplateProps) {
                         </tr>
                     </thead>
                     <tbody>
-                        {job.expenses.length === 0 ? (
-                            <tr>
-                                <td colSpan={6} className="border border-gray-300 px-3 py-4 text-center text-gray-500">
-                                    No expenses recorded
-                                </td>
-                            </tr>
-                        ) : (
-                            job.expenses.map((exp, idx) => (
-                                <tr key={exp.id}>
-                                    <td className="border border-gray-300 px-3 py-2">{idx + 1}</td>
-                                    <td className="border border-gray-300 px-3 py-2">{exp.description}</td>
-                                    <td className="border border-gray-300 px-3 py-2">{exp.vendor?.name || '-'}</td>
-                                    <td className="border border-gray-300 px-3 py-2 text-right font-mono">
-                                        {exp.costPrice.toLocaleString()}
+                        {Array.from({ length: Math.max(10, job.expenses.length) }).map((_, idx) => {
+                            const exp = job.expenses[idx];
+                            return (
+                                <tr key={exp?.id || `empty-${idx}`} className="h-8">
+                                    <td className="border-2 border-slate-900 px-3 py-1">{idx + 1}</td>
+                                    <td className="border-2 border-slate-900 px-3 py-1 font-bold">{exp?.description || ''}</td>
+                                    <td className="border-2 border-slate-900 px-3 py-1">{exp?.vendor?.name || '-'}</td>
+                                    <td className="border-2 border-slate-900 px-3 py-1 text-right font-mono">
+                                        {exp?.costPrice?.toLocaleString() || ''}
                                     </td>
-                                    <td className="border border-gray-300 px-3 py-2 text-right font-mono">
-                                        {exp.sellingPrice.toLocaleString()}
+                                    <td className="border-2 border-slate-900 px-3 py-1 text-right font-mono">
+                                        {exp?.sellingPrice?.toLocaleString() || ''}
                                     </td>
-                                    <td className="border border-gray-300 px-3 py-2 text-right font-mono font-bold">
-                                        {(exp.sellingPrice - exp.costPrice).toLocaleString()}
+                                    <td className="border-2 border-slate-900 px-3 py-1 text-right font-mono font-bold">
+                                        {exp ? (exp.sellingPrice - exp.costPrice).toLocaleString() : ''}
                                     </td>
                                 </tr>
-                            ))
-                        )}
+                            );
+                        })}
                     </tbody>
                     {job.expenses.length > 0 && (
                         <tfoot>

@@ -87,6 +87,8 @@ export async function GET(request: Request) {
             },
             include: {
                 parent: { select: { name: true, code: true } },
+                customer: true,
+                vendor: true,
                 _count: { select: { children: true } }
             },
             orderBy: { code: 'asc' },
@@ -192,15 +194,56 @@ export async function PATCH(req: Request) {
 
         if (!id) return NextResponse.json({ error: 'Account ID is required' }, { status: 400 });
 
-        const account = await prisma.account.update({
-            where: { id: parseInt(id), companyId: user.companyId },
-            data: {
-                code,
-                name,
-                type,
-                description,
-                parentId: parentId ? parseInt(parentId) : null,
-            },
+        const account = await prisma.$transaction(async (tx: any) => {
+            const updatedAccount = await tx.account.update({
+                where: { id: parseInt(id), companyId: user.companyId },
+                data: {
+                    code,
+                    name,
+                    type,
+                    description,
+                    parentId: parentId ? parseInt(parentId) : null,
+                },
+            });
+
+            // If partnerDetails are provided (even if empty, but we check if type is present)
+            if (body.partnerDetails && body.partnerDetails.type) {
+                const partnerType = body.partnerDetails.type;
+                const partnerData = {
+                    name: updatedAccount.name,
+                    code: updatedAccount.code,
+                    address: body.partnerDetails.address,
+                    phone: body.partnerDetails.phone,
+                    email: body.partnerDetails.email,
+                    taxNumber: body.partnerDetails.taxNumber,
+                };
+
+                if (partnerType === 'CUSTOMER') {
+                    await tx.customer.upsert({
+                        where: { accountId: updatedAccount.id },
+                        update: partnerData,
+                        create: {
+                            ...partnerData,
+                            accountId: updatedAccount.id,
+                            companyId: user.companyId!,
+                            division: user.division
+                        }
+                    });
+                } else if (partnerType === 'VENDOR') {
+                    await tx.vendor.upsert({
+                        where: { accountId: updatedAccount.id },
+                        update: partnerData,
+                        create: {
+                            ...partnerData,
+                            accountId: updatedAccount.id,
+                            companyId: user.companyId!,
+                            division: user.division
+                        }
+                    });
+                }
+            }
+
+            return updatedAccount;
         });
 
         return NextResponse.json({ account, message: 'Account updated successfully' });
