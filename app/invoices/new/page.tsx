@@ -43,8 +43,11 @@ interface InvoiceItem {
     taxPercentage: number;
     taxAmount: number;
     total: number;
+    usdAmount?: number;
     productId?: string | null;
     vendorId?: string | null;
+    expenseMasterId?: string | null;
+    costAccountId?: string | null;
 }
 
 export default function NewInvoicePage() {
@@ -57,7 +60,9 @@ export default function NewInvoicePage() {
     const [job, setJob] = useState<Job | null>(null);
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [vendors, setVendors] = useState<Vendor[]>([]);
+    const [expensesMaster, setExpensesMaster] = useState<any[]>([]);
     const [selectedCustomerId, setSelectedCustomerId] = useState<string>('');
+    const [accounts, setAccounts] = useState<any[]>([]);
     const [invoiceItems, setInvoiceItems] = useState<InvoiceItem[]>([]);
     const [invoiceData, setInvoiceData] = useState({
         invoiceNumber: '',
@@ -73,6 +78,8 @@ export default function NewInvoicePage() {
         if (category === 'FREIGHT') {
             fetchCustomers();
             fetchVendors();
+            fetchExpensesMaster();
+            fetchAccounts();
         } else {
             fetchPendingJobs();
         }
@@ -154,6 +161,20 @@ export default function NewInvoicePage() {
         } catch (err) { console.error('Fetch customers error'); }
     };
 
+    const fetchAccounts = async () => {
+        try {
+            const res = await fetch('/api/accounts');
+            if (res.ok) {
+                const data = await res.json();
+                // Filter for posting accounts (those without children)
+                const postingAccounts = (data.accounts || []).filter((a: any) => !a._count || a._count.children === 0);
+                setAccounts(postingAccounts);
+            }
+        } catch (error) {
+            console.error('Failed to fetch accounts', error);
+        }
+    };
+
     const fetchVendors = async () => {
         try {
             const res = await fetch('/api/vendors');
@@ -162,6 +183,15 @@ export default function NewInvoicePage() {
                 setVendors(data.vendors || []);
             }
         } catch (err) { console.error('Fetch vendors error'); }
+    };
+    const fetchExpensesMaster = async () => {
+        try {
+            const res = await fetch('/api/settings/expenses-master');
+            if (res.ok) {
+                const data = await res.json();
+                setExpensesMaster(data.expensesMaster || []);
+            }
+        } catch (err) { console.error('Fetch expenses master error'); }
     };
 
     const handleSearchJob = async () => {
@@ -226,8 +256,11 @@ export default function NewInvoicePage() {
             taxPercentage: 0,
             taxAmount: 0,
             total: 0,
+            usdAmount: 0,
             productId: null,
-            vendorId: null
+            vendorId: null,
+            expenseMasterId: null,
+            costAccountId: null
         }]);
     };
 
@@ -235,14 +268,27 @@ export default function NewInvoicePage() {
         const newItems = [...invoiceItems];
         const item = { ...newItems[index], [field]: value };
 
-        if (field === 'quantity' || field === 'rate' || field === 'taxPercentage') {
+        if (field === 'quantity' || field === 'rate' || field === 'taxPercentage' || field === 'usdAmount') {
             const qty = field === 'quantity' ? parseFloat(value) || 0 : item.quantity;
-            const rate = field === 'rate' ? parseFloat(value) || 0 : item.rate;
+            let rate = field === 'rate' ? parseFloat(value) || 0 : item.rate;
             const taxPerc = field === 'taxPercentage' ? parseFloat(value) || 0 : item.taxPercentage;
+            const usdAmt = field === 'usdAmount' ? parseFloat(value) || 0 : (item.usdAmount || 0);
+
+            if (category === 'FREIGHT') {
+                // For Freight, we prioritize USD -> PKR conversion
+                if (field === 'usdAmount') {
+                    rate = usdAmt * invoiceData.exchangeRate;
+                    item.rate = rate;
+                }
+            }
 
             item.amount = qty * rate;
             item.taxAmount = (item.amount * taxPerc) / 100;
             item.total = item.amount + item.taxAmount;
+        }
+
+        if (field === 'costAccountId') {
+            item.costAccountId = value ? value.toString() : null;
         }
 
         newItems[index] = item;
@@ -457,7 +503,23 @@ export default function NewInvoicePage() {
                                             className="glass-input w-full pl-10"
                                             placeholder="e.g. 280"
                                             value={invoiceData.exchangeRate}
-                                            onChange={(e) => setInvoiceData({ ...invoiceData, exchangeRate: parseFloat(e.target.value) || 1 })}
+                                            onChange={(e) => {
+                                                const rate = parseFloat(e.target.value) || 1;
+                                                setInvoiceData({ ...invoiceData, exchangeRate: rate });
+                                                // Recalculate all items PKR if they have USD
+                                                if (category === 'FREIGHT') {
+                                                    setInvoiceItems(prev => prev.map(item => {
+                                                        const usdAmt = item.usdAmount || 0;
+                                                        if (usdAmt > 0) {
+                                                            const newRate = usdAmt * rate;
+                                                            const amount = item.quantity * newRate;
+                                                            const taxAmount = (amount * item.taxPercentage) / 100;
+                                                            return { ...item, rate: newRate, amount, total: amount + taxAmount };
+                                                        }
+                                                        return item;
+                                                    }));
+                                                }
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -477,6 +539,12 @@ export default function NewInvoicePage() {
                                         <p className="text-sm font-black text-foreground">
                                             {category === 'SERVICE' ? job?.customer.name : (selectedCustomer?.name || '---')}
                                         </p>
+                                        {(category === 'FREIGHT' && selectedCustomer) && (
+                                            <div className="flex flex-col gap-0.5 mt-1">
+                                                <p className="text-[10px] text-slate-500 font-bold">{selectedCustomer.address}</p>
+                                                <p className="text-[10px] text-blue-500 font-black">NTN: {selectedCustomer.taxNumber || 'N/A'}</p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 {category === 'SERVICE' && (
@@ -563,11 +631,14 @@ export default function NewInvoicePage() {
                                             <thead>
                                                 <tr className="border-b border-border/50">
                                                     <th className="py-3 px-4 text-subtext">Description</th>
-                                                    {category === 'FREIGHT' && <th className="py-3 px-4 text-subtext w-48">Vendor (Expense Mapping)</th>}
-                                                    <th className="py-3 px-4 text-subtext w-24">Qty</th>
-                                                    <th className="py-3 px-4 text-subtext w-32">Rate</th>
+                                                    {category === 'FREIGHT' && <th className="py-3 px-4 text-subtext w-32">USD Amount</th>}
+                                                    {category === 'FREIGHT' && <th className="py-3 px-4 text-subtext w-56">Account Mapping</th>}
+                                                    {category === 'SERVICE' && <th className="py-3 px-4 text-subtext w-24">Qty</th>}
+                                                    {category === 'SERVICE' && <th className="py-3 px-4 text-subtext w-32">Rate (PKR)</th>}
                                                     <th className="py-3 px-4 text-subtext w-24 text-center">Tax %</th>
-                                                    <th className="py-3 px-4 text-subtext w-32 border-l border-border/50 text-right">Total</th>
+                                                    <th className="py-3 px-4 text-subtext w-32 border-l border-border/50 text-right">
+                                                        {category === 'FREIGHT' ? 'Amount (PKR)' : 'Total'}
+                                                    </th>
                                                     <th className="py-3 px-4 w-12 text-center"></th>
                                                 </tr>
                                             </thead>
@@ -584,34 +655,51 @@ export default function NewInvoicePage() {
                                                         </td>
                                                         {category === 'FREIGHT' && (
                                                             <td className="py-2 px-1">
+                                                                <div className="relative">
+                                                                    <DollarSign size={14} className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-500" />
+                                                                    <input
+                                                                        type="number"
+                                                                        className="w-full bg-transparent pl-7 pr-3 py-2 text-sm font-black text-blue-500 focus:outline-none focus:bg-primary/5 rounded-lg transition-all"
+                                                                        value={item.usdAmount || 0}
+                                                                        onChange={(e) => updateItem(idx, 'usdAmount', e.target.value)}
+                                                                    />
+                                                                </div>
+                                                            </td>
+                                                        )}
+                                                        {category === 'FREIGHT' && (
+                                                            <td className="py-2 px-1">
                                                                 <select
-                                                                    className="w-full bg-transparent px-3 py-2 text-xs font-bold text-subtext focus:outline-none focus:bg-primary/5 rounded-lg transition-all"
-                                                                    value={item.vendorId || ''}
-                                                                    onChange={(e) => updateItem(idx, 'vendorId', e.target.value)}
+                                                                    className="w-full bg-transparent px-3 py-2 text-[11px] font-black text-blue-400 focus:outline-none focus:bg-primary/5 rounded-lg border border-border/30 uppercase"
+                                                                    value={item.costAccountId || ''}
+                                                                    onChange={(e) => updateItem(idx, 'costAccountId', e.target.value)}
                                                                 >
-                                                                    <option value="">No Vendor (Direct)</option>
-                                                                    {vendors.map(v => (
-                                                                        <option key={v.id} value={v.id}>{v.name}</option>
+                                                                    <option value="">Select Account...</option>
+                                                                    {accounts.map(acc => (
+                                                                        <option key={acc.id} value={acc.id}>{acc.code} - {acc.name}</option>
                                                                     ))}
                                                                 </select>
                                                             </td>
                                                         )}
-                                                        <td className="py-2 px-1">
-                                                            <input
-                                                                type="number"
-                                                                className="w-full bg-transparent px-3 py-2 text-sm font-black text-foreground focus:outline-none focus:bg-primary/5 rounded-lg transition-all text-center"
-                                                                value={item.quantity}
-                                                                onChange={(e) => updateItem(idx, 'quantity', e.target.value)}
-                                                            />
-                                                        </td>
-                                                        <td className="py-2 px-1">
-                                                            <input
-                                                                type="number"
-                                                                className="w-full bg-transparent px-3 py-2 text-sm font-black text-foreground focus:outline-none focus:bg-primary/5 rounded-lg transition-all text-right"
-                                                                value={item.rate}
-                                                                onChange={(e) => updateItem(idx, 'rate', e.target.value)}
-                                                            />
-                                                        </td>
+                                                        {category === 'SERVICE' && (
+                                                            <>
+                                                                <td className="py-2 px-1">
+                                                                    <input
+                                                                        type="number"
+                                                                        className="w-full bg-transparent px-3 py-2 text-sm font-black text-foreground focus:outline-none focus:bg-primary/5 rounded-lg transition-all text-center"
+                                                                        value={item.quantity}
+                                                                        onChange={(e) => updateItem(idx, 'quantity', e.target.value)}
+                                                                    />
+                                                                </td>
+                                                                <td className="py-2 px-1">
+                                                                    <input
+                                                                        type="number"
+                                                                        className="w-full bg-transparent px-3 py-2 text-sm font-black text-foreground focus:outline-none focus:bg-primary/5 rounded-lg transition-all text-right"
+                                                                        value={item.rate}
+                                                                        onChange={(e) => updateItem(idx, 'rate', e.target.value)}
+                                                                    />
+                                                                </td>
+                                                            </>
+                                                        )}
                                                         <td className="py-2 px-1 text-center">
                                                             <input
                                                                 type="number"

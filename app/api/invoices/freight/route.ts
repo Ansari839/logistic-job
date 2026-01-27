@@ -66,7 +66,10 @@ export async function POST(request: Request) {
                             taxPercentage: parseFloat(item.taxPercentage) || 0,
                             taxAmount: parseFloat(item.taxAmount) || 0,
                             total: parseFloat(item.total),
+                            usdAmount: parseFloat(item.usdAmount) || 0,
                             vendorId: item.vendorId ? parseInt(item.vendorId) : null,
+                            expenseMasterId: item.expenseMasterId ? parseInt(item.expenseMasterId) : null,
+                            costAccountId: item.costAccountId ? parseInt(item.costAccountId) : null,
                         })) || []
                     }
                 },
@@ -136,7 +139,10 @@ export async function PATCH(request: Request) {
                                 taxPercentage: parseFloat(item.taxPercentage) || 0,
                                 taxAmount: parseFloat(item.taxAmount) || 0,
                                 total: parseFloat(item.total),
+                                usdAmount: parseFloat(item.usdAmount) || 0,
                                 vendorId: item.vendorId ? parseInt(item.vendorId) : null,
+                                expenseMasterId: item.expenseMasterId ? parseInt(item.expenseMasterId) : null,
+                                costAccountId: item.costAccountId ? parseInt(item.costAccountId) : null,
                             })) || []
                         }
                     },
@@ -153,7 +159,12 @@ export async function PATCH(request: Request) {
                 const inv = await tx.freightInvoice.update({
                     where: { id: invoice.id },
                     data: { isApproved: true, approvedById: user.id, status: 'SENT' },
-                    include: { items: true, customer: true }
+                    include: {
+                        items: {
+                            include: { expenseMaster: true, costAccount: true }
+                        },
+                        customer: true
+                    }
                 });
 
                 // Posting for Freight Invoice
@@ -201,29 +212,57 @@ export async function PATCH(request: Request) {
                     });
                 }
 
-                // 2. Handle Item-based Cost Posting (Vendors)
+                // 2. Handle Item-based Cost Posting (Vendors & Expenses)
                 for (const item of inv.items) {
-                    if (item.vendorId && costAccount) {
-                        const vendor = await tx.vendor.findUnique({ where: { id: item.vendorId } });
-                        if (vendor) {
+                    if (costAccount) {
+                        let targetCostAccount = item.costAccount || costAccount;
+
+                        // If no direct account mapping, try lookup legacy way
+                        if (!item.costAccountId && (item.expenseMaster || item.description)) {
+                            const lookupName = item.expenseMaster?.name || item.description;
+                            const specificAccount = await tx.account.findFirst({
+                                where: {
+                                    companyId: user.companyId as number,
+                                    name: { contains: lookupName, mode: 'insensitive' },
+                                    type: 'EXPENSE'
+                                }
+                            });
+                            if (specificAccount) targetCostAccount = specificAccount;
+                        }
+
+                        let vendorAccount = defaultVendorAccount;
+                        if (item.vendorId) {
+                            const vendor = await tx.vendor.findUnique({ where: { id: item.vendorId } });
+                            if (vendor?.accountId) {
+                                const va = await tx.account.findUnique({ where: { id: vendor.accountId } });
+                                if (va) vendorAccount = va;
+                            } else if (vendor) {
+                                const va = await tx.account.findFirst({
+                                    where: { companyId: user.companyId as number, name: vendor.name }
+                                });
+                                if (va) vendorAccount = va;
+                            }
+                        }
+
+                        if (targetCostAccount && (item.vendorId ? vendorAccount : true)) {
                             await tx.transaction.create({
                                 data: {
                                     reference: `${inv.invoiceNumber}-COST-${item.id}`,
-                                    description: `${inv.customer.name} | ${item.description}`,
+                                    description: `Cost for ${inv.customer.name} | ${item.description}`,
                                     type: 'JOURNAL',
                                     companyId: user.companyId as number,
                                     date: inv.date,
                                     entries: {
                                         create: [
                                             {
-                                                accountId: costAccount.id,
-                                                debit: item.amount, // Using base amount for cost
-                                                description: `${inv.customer.name} | Freight Cost: ${item.description}`
+                                                accountId: targetCostAccount.id,
+                                                debit: item.amount,
+                                                description: `${inv.customer.name} | Cost: ${item.description}`
                                             },
                                             {
-                                                accountId: vendor.accountId || defaultVendorAccount!.id,
+                                                accountId: item.vendorId ? (vendorAccount?.id || defaultVendorAccount!.id) : defaultVendorAccount!.id,
                                                 credit: item.amount,
-                                                description: `Payable to ${vendor.name} | ${inv.customer.name} | ${item.description}`
+                                                description: `Payable for ${inv.customer.name} | ${item.description}`
                                             }
                                         ]
                                     }

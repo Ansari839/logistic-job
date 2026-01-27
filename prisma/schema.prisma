@@ -215,13 +215,14 @@ model Job {
 }
 
 model ExpenseMaster {
-  id        Int      @id @default(autoincrement())
-  code      String
-  name      String
-  companyId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  company   Company  @relation(fields: [companyId], references: [id])
+  id                  Int                  @id @default(autoincrement())
+  code                String
+  name                String
+  companyId           Int
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  company             Company              @relation(fields: [companyId], references: [id])
+  freightInvoiceItems FreightInvoiceItem[]
 
   @@unique([companyId, code])
 }
@@ -334,18 +335,23 @@ model FreightInvoice {
 }
 
 model FreightInvoiceItem {
-  id            Int            @id @default(autoincrement())
-  invoiceId     Int
-  description   String
-  quantity      Float          @default(1.0)
-  rate          Float          @default(0.0)
-  amount        Float
-  taxPercentage Float          @default(0.0)
-  taxAmount     Float          @default(0.0)
-  total         Float
-  vendorId      Int?
-  invoice       FreightInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
-  vendor        Vendor?        @relation(fields: [vendorId], references: [id])
+  id              Int            @id @default(autoincrement())
+  invoiceId       Int
+  description     String
+  quantity        Float          @default(1.0)
+  rate            Float          @default(0.0)
+  usdAmount       Float?         @default(0.0)
+  amount          Float
+  taxPercentage   Float          @default(0.0)
+  taxAmount       Float          @default(0.0)
+  total           Float
+  vendorId        Int?
+  expenseMasterId Int?
+  costAccountId   Int?
+  invoice         FreightInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  vendor          Vendor?        @relation(fields: [vendorId], references: [id])
+  expenseMaster   ExpenseMaster? @relation(fields: [expenseMasterId], references: [id])
+  costAccount     Account?       @relation("FreightCostAccount", fields: [costAccountId], references: [id])
 }
 
 model ProductCategory {
@@ -467,7 +473,8 @@ model Account {
   entries        AccountEntry[]
   customer       Customer?
   vendor         Vendor?
-  voucherEntries VoucherEntry[]
+  voucherEntries      VoucherEntry[]
+  freightInvoiceItems FreightInvoiceItem[] @relation("FreightCostAccount")
 
   @@unique([companyId, code])
 }

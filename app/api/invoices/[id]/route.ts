@@ -35,7 +35,7 @@ export async function GET(
                 include: {
                     customer: true,
                     job: true,
-                    items: { include: { vendor: true } },
+                    items: { include: { vendor: true, costAccount: true } },
                     company: true
                 }
             });

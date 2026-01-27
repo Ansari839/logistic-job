@@ -19,6 +19,8 @@ interface InvoiceItem {
     taxPercentage: number;
     taxAmount: number;
     total: number;
+    usdAmount?: number;
+    costAccount?: { name: string; code: string };
 }
 
 interface Invoice {
@@ -224,7 +226,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                             </div>
                         </div>
                         <div className="bg-slate-50 rounded-3xl p-6 border border-slate-100 flex flex-col justify-center">
-                            {invoice.category === 'SERVICE' && invoice.job ? (
+                            {invoice.job ? (
                                 <>
                                     <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mb-4 border-b pb-2 border-slate-200">Job Metadata</p>
                                     <div className="grid grid-cols-2 gap-y-4 gap-x-6">
@@ -245,6 +247,18 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                                             <p className="text-xs font-black text-slate-700 font-mono tracking-tighter">{invoice.job.containerNo || 'N/A'}</p>
                                         </div>
                                     </div>
+                                    {invoice.category === 'FREIGHT' && (
+                                        <div className="mt-6 pt-4 border-t border-slate-200">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-[8px] text-slate-400 font-black uppercase tracking-widest">Rate (USD)</span>
+                                                <span className="text-xs font-black text-slate-900">$ {invoice.usdRate?.toLocaleString()}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center mt-1">
+                                                <span className="text-[8px] text-slate-400 font-black uppercase tracking-widest">Conversion</span>
+                                                <span className="text-xs font-black text-blue-600">{invoice.exchangeRate?.toLocaleString()} PKR</span>
+                                            </div>
+                                        </div>
+                                    )}
                                 </>
                             ) : (
                                 <>
@@ -256,7 +270,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                                         </div>
                                         <div className="flex justify-between items-center">
                                             <span className="text-[9px] text-slate-400 font-black uppercase">Exchange Rate</span>
-                                            <span className="text-sm font-black text-slate-900">Rs. {invoice.exchangeRate?.toLocaleString()}</span>
+                                            <span className="text-sm font-black text-slate-900">{invoice.exchangeRate?.toLocaleString()} PKR</span>
                                         </div>
                                         <div className="flex justify-between items-center border-t border-slate-200 pt-2">
                                             <span className="text-[9px] text-slate-400 font-black uppercase">Total (PKR)</span>
@@ -275,10 +289,20 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                                 <thead>
                                     <tr className="bg-slate-900 text-white">
                                         <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest border-r border-slate-700">Detail Description</th>
-                                        <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-center border-r border-slate-700">Qty</th>
-                                        <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right border-r border-slate-700">Unit Rate</th>
+                                        {invoice.category === 'FREIGHT' && (
+                                            <>
+                                                <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right border-r border-slate-700">USD Amount</th>
+                                                <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest border-r border-slate-700">Account Mapping</th>
+                                            </>
+                                        )}
+                                        {invoice.category === 'SERVICE' && (
+                                            <>
+                                                <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-center border-r border-slate-700">Qty</th>
+                                                <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right border-r border-slate-700">Unit Rate</th>
+                                            </>
+                                        )}
                                         <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right">
-                                            {invoice.category === 'SERVICE' ? 'Amount (Excl. Tax)' : `Total (${invoice.currencyCode})`}
+                                            {invoice.category === 'SERVICE' ? 'Amount' : `Amount (PKR)`}
                                         </th>
                                     </tr>
                                 </thead>
@@ -295,15 +319,29 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                                             const item = sortedItems[idx];
                                             return (
                                                 <tr key={item?.id || `empty-${idx}`} className={`h-8 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}`}>
-                                                    <td className="px-3 py-1 border-r-2 border-slate-900 font-bold text-slate-800 text-xs">
+                                                    <td className="px-3 py-1 border-r-2 border-slate-900 font-bold text-slate-800 text-xs text-wrap max-w-[200px]">
                                                         {item?.description || ''}
                                                     </td>
-                                                    <td className="px-3 py-1 border-r-2 border-slate-900 text-center font-bold text-slate-600 text-xs">
-                                                        {item?.quantity || ''}
-                                                    </td>
-                                                    <td className="px-3 py-1 border-r-2 border-slate-900 text-right font-mono text-slate-600 text-xs">
-                                                        {item?.rate?.toLocaleString() || ''}
-                                                    </td>
+                                                    {invoice.category === 'FREIGHT' && (
+                                                        <>
+                                                            <td className="px-3 py-1 border-r-2 border-slate-900 text-right font-black text-blue-600 text-[10px]">
+                                                                {item?.usdAmount ? `$ ${item.usdAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}` : ''}
+                                                            </td>
+                                                            <td className="px-3 py-1 border-r-2 border-slate-900 font-bold text-slate-700 text-[10px] uppercase">
+                                                                {item?.costAccount ? `${item.costAccount.code} - ${item.costAccount.name}` : ''}
+                                                            </td>
+                                                        </>
+                                                    )}
+                                                    {invoice.category === 'SERVICE' && (
+                                                        <>
+                                                            <td className="px-3 py-1 border-r-2 border-slate-900 text-center font-bold text-slate-600 text-xs">
+                                                                {item?.quantity || ''}
+                                                            </td>
+                                                            <td className="px-3 py-1 border-r-2 border-slate-900 text-right font-mono text-slate-600 text-[10px]">
+                                                                {item?.rate?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || ''}
+                                                            </td>
+                                                        </>
+                                                    )}
                                                     <td className="px-3 py-1 text-right font-black text-slate-900 text-xs">
                                                         {item ? (invoice.category === 'SERVICE' ? item.amount.toLocaleString() : item.total.toLocaleString()) : ''}
                                                     </td>
