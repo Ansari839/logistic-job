@@ -41,9 +41,17 @@ export default function ReportViewer({ report }: ReportViewerProps) {
     });
     const [pagination, setPagination] = useState({ page: 1, limit: 50, totalItems: 0, totalPages: 0 });
     const [accounts, setAccounts] = useState<any[]>([]);
+    const [accountSearch, setAccountSearch] = useState('');
+    const [showAccountDropdown, setShowAccountDropdown] = useState(false);
     const [company, setCompany] = useState<any>(null);
     const [ledgerSummary, setLedgerSummary] = useState<any>(null);
     const [trialBalanceTotals, setTrialBalanceTotals] = useState<any>(null);
+
+    // Filter accounts based on search
+    const filteredAccounts = accounts.filter((acc: any) =>
+        acc.code.toLowerCase().includes(accountSearch.toLowerCase()) ||
+        acc.name.toLowerCase().includes(accountSearch.toLowerCase())
+    );
 
     useEffect(() => {
         const fetchAccounts = async () => {
@@ -145,18 +153,57 @@ export default function ReportViewer({ report }: ReportViewerProps) {
                     </div>
 
                     {report.type === 'ledger' && (
-                        <select
-                            value={filters.accountId}
-                            onChange={(e) => setFilters({ ...filters, accountId: e.target.value })}
-                            className="px-4 py-2 rounded-xl bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white text-xs font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                        >
-                            <option value="">All Accounts</option>
-                            {accounts.map((acc: any) => (
-                                <option key={acc.id} value={acc.id}>
-                                    {acc.code} - {acc.name}
-                                </option>
-                            ))}
-                        </select>
+                        <div className="flex items-center gap-2 flex-1 relative">
+                            <BookOpen size={16} className="text-slate-500 dark:text-slate-600" />
+                            <div className="flex-1 relative">
+                                <input
+                                    type="text"
+                                    value={accountSearch}
+                                    onChange={(e) => setAccountSearch(e.target.value)}
+                                    onFocus={() => setShowAccountDropdown(true)}
+                                    placeholder="🔍 Search Account by Code or Name..."
+                                    className="w-full px-4 py-2 rounded-xl bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white text-xs font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                />
+                                {showAccountDropdown && accountSearch && (
+                                    <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 rounded-xl shadow-2xl max-h-64 overflow-y-auto z-50">
+                                        {filteredAccounts.length > 0 ? (
+                                            filteredAccounts.map((acc: any) => (
+                                                <button
+                                                    key={acc.id}
+                                                    onClick={() => {
+                                                        setFilters({ ...filters, accountId: acc.id.toString() });
+                                                        setAccountSearch(`${acc.code} - ${acc.name}`);
+                                                        setShowAccountDropdown(false);
+                                                    }}
+                                                    className="w-full text-left px-4 py-3 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors border-b border-slate-200 dark:border-white/5 last:border-0"
+                                                >
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-xs font-black text-blue-600 dark:text-blue-400">{acc.code}</span>
+                                                        <span className="text-xs font-medium text-slate-700 dark:text-slate-300">{acc.name}</span>
+                                                    </div>
+                                                    <div className="text-[10px] text-slate-500 dark:text-slate-600 uppercase tracking-widest mt-1">{acc.type}</div>
+                                                </button>
+                                            ))
+                                        ) : (
+                                            <div className="px-4 py-6 text-center text-slate-500 dark:text-slate-600 text-xs">
+                                                No accounts found
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                            {filters.accountId && (
+                                <button
+                                    onClick={() => {
+                                        setFilters({ ...filters, accountId: '' });
+                                        setAccountSearch('');
+                                    }}
+                                    className="px-3 py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 transition-all text-xs font-black"
+                                >
+                                    Clear
+                                </button>
+                            )}
+                        </div>
                     )}
 
                     <button

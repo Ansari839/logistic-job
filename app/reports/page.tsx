@@ -48,17 +48,19 @@ const REPORT_CATEGORIES = [
             { id: 'outstandings-vendor', name: 'Vendor Outstanding', description: 'Payables to transport/service vendors', type: 'financial', endpoint: 'outstandings', subType: 'VENDOR' },
         ]
     },
-    {
-        id: 'inventory',
-        title: 'Inventory & Business',
-        icon: Package,
-        color: 'amber',
-        reports: [
-            { id: 'stock-summary', name: 'Real-time Stock Summary', description: 'Current inventory levels and valuation', type: 'inventory', apiOverride: '/api/inventory/stock' },
-            { id: 'stock-movement', name: 'Stock Movement Report', description: 'Inbound and outbound history', type: 'inventory' },
-            { id: 'business-summary', name: 'Sales & Purchase Trends', description: 'Monthly business volume summary', type: 'inventory' },
-        ]
-    }
+    /*
+        {
+            id: 'inventory',
+            title: 'Inventory & Business',
+            icon: Package,
+            color: 'amber',
+            reports: [
+                { id: 'stock-summary', name: 'Real-time Stock Summary', description: 'Current inventory levels and valuation', type: 'inventory', apiOverride: '/api/inventory/stock' },
+                { id: 'stock-movement', name: 'Stock Movement Report', description: 'Inbound and outbound history', type: 'inventory' },
+                { id: 'business-summary', name: 'Sales & Purchase Trends', description: 'Monthly business volume summary', type: 'inventory' },
+            ]
+        }
+    */
 ];
 
 export default function ReportingPage() {
