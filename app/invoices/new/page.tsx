@@ -7,6 +7,7 @@ import {
     FileText, Search, Loader2, Save, X, Plus, Trash2, Printer,
     ChevronLeft, CreditCard, User, Briefcase, Hash, DollarSign, ArrowRightLeft
 } from 'lucide-react';
+import AccountSearch from '@/components/AccountSearch';
 
 interface Job {
     id: number;
@@ -668,16 +669,11 @@ export default function NewInvoicePage() {
                                                         )}
                                                         {category === 'FREIGHT' && (
                                                             <td className="py-2 px-1">
-                                                                <select
-                                                                    className="w-full bg-transparent px-3 py-2 text-[11px] font-black text-blue-400 focus:outline-none focus:bg-primary/5 rounded-lg border border-border/30 uppercase"
+                                                                <AccountSearch
+                                                                    accounts={accounts}
                                                                     value={item.costAccountId || ''}
-                                                                    onChange={(e) => updateItem(idx, 'costAccountId', e.target.value)}
-                                                                >
-                                                                    <option value="">Select Account...</option>
-                                                                    {accounts.map(acc => (
-                                                                        <option key={acc.id} value={acc.id}>{acc.code} - {acc.name}</option>
-                                                                    ))}
-                                                                </select>
+                                                                    onChange={(val: number) => updateItem(idx, 'costAccountId', val)}
+                                                                />
                                                             </td>
                                                         )}
                                                         {category === 'SERVICE' && (

@@ -222,12 +222,7 @@ export default function InvoicesPage() {
                                         <div>
                                             <div className="flex items-center gap-3 mb-1">
                                                 <h3 className="text-xl font-black text-white tracking-tight">{inv.invoiceNumber}</h3>
-                                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${inv.invoiceNumber.startsWith('TRK')
-                                                        ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-                                                        : (inv.category === 'FREIGHT' || inv.invoiceNumber.startsWith('FIN'))
-                                                            ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
-                                                            : 'bg-blue-500/10 text-blue-400 border-blue-500/20'
-                                                    }`}>
+                                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-slate-700 bg-slate-800 text-slate-100 shadow-sm`}>
                                                     {inv.invoiceNumber.startsWith('TRK') ? 'TRUCKING' : (inv.category === 'FREIGHT' || inv.invoiceNumber.startsWith('FIN') ? 'FREIGHT' : 'SALES TAX')}
                                                 </span>
                                                 <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${getStatusStyle(inv.status)}`}>

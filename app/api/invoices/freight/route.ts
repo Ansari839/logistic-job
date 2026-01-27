@@ -279,6 +279,45 @@ export async function PATCH(request: Request) {
             return NextResponse.json({ invoice: updated });
         }
 
+        if (action === 'REVERT_TO_DRAFT') {
+            if (!invoice.isApproved) return NextResponse.json({ error: 'Invoice is already in draft status' }, { status: 400 });
+
+            const updated = await prisma.$transaction(async (tx: any) => {
+                // 1. Delete main revenue transaction
+                if (invoice.transactionId) {
+                    await tx.transaction.delete({ where: { id: invoice.transactionId } });
+                }
+
+                // 2. Delete item-based cost transactions
+                const costTransactions = await tx.transaction.findMany({
+                    where: {
+                        companyId: user.companyId as number,
+                        reference: { startsWith: `${invoice.invoiceNumber}-COST-` }
+                    }
+                });
+
+                for (const ctx of costTransactions) {
+                    await tx.transaction.delete({ where: { id: ctx.id } });
+                }
+
+                // 3. Reset invoice status
+                const inv = await tx.freightInvoice.update({
+                    where: { id: invoice.id },
+                    data: {
+                        isApproved: false,
+                        approvedById: null,
+                        transactionId: null,
+                        status: 'DRAFT'
+                    }
+                });
+
+                return inv;
+            });
+
+            await logAction({ user, action: 'REVERT_TO_DRAFT', module: 'FREIGHT_INVOICE', entityId: invoice.id });
+            return NextResponse.json({ invoice: updated });
+        }
+
         if (action === 'DELETE') {
             if (invoice.isApproved) return NextResponse.json({ error: 'Approved invoice cannot be deleted' }, { status: 400 });
 

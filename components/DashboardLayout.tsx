@@ -155,26 +155,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             {/* Main Content */}
             <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-64'}`}>
-                <header className="sticky top-0 z-30 flex items-center justify-between p-4 lg:p-8 backdrop-blur-md border-b bg-background/80 border-border">
+                <header className="sticky top-0 z-30 flex items-center justify-between p-4 lg:p-8 backdrop-blur-md border-b bg-background/80 border-border print:hidden">
                     <div className="flex items-center space-x-4">
                         <button
-                            className="lg:hidden p-2 rounded-xl bg-accent hover:bg-accent/80 text-foreground"
+                            className="lg:hidden p-2 rounded-xl bg-accent hover:bg-accent/80 text-foreground print:hidden"
                             onClick={() => setIsSidebarOpen(true)}
                         >
                             <Menu size={24} />
                         </button>
                         <div>
                             <h1 className="text-xl lg:text-3xl font-bold capitalize">
-                                {pathname.split('/')[2] || pathname.split('/')[1] || 'Dashboard'}
+                                {pathname.includes('/invoices/') ? '' : (pathname.split('/')[2] || pathname.split('/')[1] || 'Dashboard')}
                             </h1>
                         </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                        <div className="hidden sm:block px-3 py-1 rounded-full 
-                            bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400 border-blue-200 dark:border-blue-500/20
-                            border text-[10px] font-bold uppercase tracking-wider">
-                            {user.branch || 'Head Office'}
-                        </div>
                     </div>
                 </header>
 
