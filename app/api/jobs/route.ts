@@ -47,6 +47,11 @@ export async function GET(request: Request) {
 
         if (noInvoice) {
             jobs = jobs.filter((job: any) => {
+                // Exclude cancelled jobs from invoice creation
+                if (job.status === 'CANCELLED') {
+                    return false;
+                }
+
                 if (invoiceCategory) {
                     // Check if job has an active invoice of this category
                     const hasCategoryInvoice = job.serviceInvoices.some((inv: any) =>
