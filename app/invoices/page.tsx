@@ -221,7 +221,7 @@ export default function InvoicesPage() {
                                         </div>
                                         <div>
                                             <div className="flex items-center gap-3 mb-1">
-                                                <h3 className="text-xl font-black text-white tracking-tight">{inv.invoiceNumber}</h3>
+                                                <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{inv.invoiceNumber}</h3>
                                                 <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-slate-700 bg-slate-800 text-slate-100 shadow-sm`}>
                                                     {inv.invoiceNumber.startsWith('TRK') ? 'TRUCKING' : (inv.category === 'FREIGHT' || inv.invoiceNumber.startsWith('FIN') ? 'FREIGHT' : 'SALES TAX')}
                                                 </span>
@@ -242,7 +242,7 @@ export default function InvoicesPage() {
                                     <div className="flex items-center justify-between lg:justify-end gap-6 lg:pl-12 lg:border-l lg:border-border/50 flex-1">
                                         <div className="text-right">
                                             <p className="text-subtext mb-1">Grand Total</p>
-                                            <p className="text-2xl font-black text-white tracking-tighter">
+                                            <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">
                                                 {inv.grandTotal.toLocaleString()} <span className="text-xs">{inv.currencyCode}</span>
                                             </p>
                                         </div>

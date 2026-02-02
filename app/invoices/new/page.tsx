@@ -284,7 +284,10 @@ export default function NewInvoicePage() {
             }
 
             item.amount = qty * rate;
-            item.taxAmount = (item.amount * taxPerc) / 100;
+            // Force tax to 0 for Trucking Bills
+            const finalTaxPerc = (category === 'SERVICE' && serviceInvoiceType === 'TRUCKING') ? 0 : taxPerc;
+            item.taxPercentage = finalTaxPerc;
+            item.taxAmount = (item.amount * finalTaxPerc) / 100;
             item.total = item.amount + item.taxAmount;
         }
 
@@ -636,7 +639,7 @@ export default function NewInvoicePage() {
                                                     {category === 'FREIGHT' && <th className="py-3 px-4 text-subtext w-56">Account Mapping</th>}
                                                     {category === 'SERVICE' && <th className="py-3 px-4 text-subtext w-24">Qty</th>}
                                                     {category === 'SERVICE' && <th className="py-3 px-4 text-subtext w-32">Rate (PKR)</th>}
-                                                    <th className="py-3 px-4 text-subtext w-24 text-center">Tax %</th>
+                                                    {category === 'SERVICE' && serviceInvoiceType !== 'TRUCKING' && <th className="py-3 px-4 text-subtext w-24 text-center">Tax %</th>}
                                                     <th className="py-3 px-4 text-subtext w-32 border-l border-border/50 text-right">
                                                         {category === 'FREIGHT' ? 'Amount (PKR)' : 'Total'}
                                                     </th>
@@ -696,14 +699,16 @@ export default function NewInvoicePage() {
                                                                 </td>
                                                             </>
                                                         )}
-                                                        <td className="py-2 px-1 text-center">
-                                                            <input
-                                                                type="number"
-                                                                className="w-20 bg-transparent px-3 py-2 text-sm font-black text-primary focus:outline-none focus:bg-primary/5 rounded-lg transition-all text-center"
-                                                                value={item.taxPercentage}
-                                                                onChange={(e) => updateItem(idx, 'taxPercentage', e.target.value)}
-                                                            />
-                                                        </td>
+                                                        {category === 'SERVICE' && serviceInvoiceType !== 'TRUCKING' && (
+                                                            <td className="py-2 px-1 text-center">
+                                                                <input
+                                                                    type="number"
+                                                                    className="w-20 bg-transparent px-3 py-2 text-sm font-black text-primary focus:outline-none focus:bg-primary/5 rounded-lg transition-all text-center"
+                                                                    value={item.taxPercentage}
+                                                                    onChange={(e) => updateItem(idx, 'taxPercentage', e.target.value)}
+                                                                />
+                                                            </td>
+                                                        )}
                                                         <td className="py-2 px-4 text-right border-l border-border/50 bg-primary/5">
                                                             <span className="text-sm font-black text-foreground">{item.total.toLocaleString()}</span>
                                                         </td>
@@ -730,16 +735,18 @@ export default function NewInvoicePage() {
                                             <span className="text-subtext w-24">Subtotal :</span>
                                             <span className="text-sm font-black text-foreground">{subtotal.toLocaleString()} {invoiceData.currencyCode}</span>
                                         </div>
-                                        <div className="flex items-center gap-4">
-                                            <span className="text-subtext w-24">Tax Total :</span>
-                                            <span className="text-sm font-black text-foreground">{totalTax.toLocaleString()} {invoiceData.currencyCode}</span>
-                                        </div>
+                                        {!(category === 'SERVICE' && serviceInvoiceType === 'TRUCKING') && (
+                                            <div className="flex items-center gap-4">
+                                                <span className="text-subtext w-24">Tax Total :</span>
+                                                <span className="text-sm font-black text-foreground">{totalTax.toLocaleString()} {invoiceData.currencyCode}</span>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="flex flex-col items-end gap-6 w-full md:w-auto">
                                         <div className="text-right">
                                             <p className="text-subtext mb-1">Grand Total</p>
-                                            <p className="text-5xl font-black text-white tracking-tighter leading-none">
+                                            <p className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
                                                 <span className="text-xs text-primary mr-2 uppercase tracking-widest font-black">{invoiceData.currencyCode}</span>
                                                 {grandTotal.toLocaleString()}
                                             </p>

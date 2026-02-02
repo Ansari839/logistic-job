@@ -21,6 +21,7 @@ interface InvoiceItem {
     total: number;
     usdAmount?: number;
     costAccount?: { name: string; code: string };
+    serviceCategory?: string;
 }
 
 interface Invoice {
@@ -186,11 +187,8 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                         {/* Invoice Metadata Bar */}
                         <div className="p-4 flex justify-between items-end bg-white border-b border-slate-100">
                             <div className="flex flex-col items-start gap-1">
-                                <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-slate-700 bg-slate-600 text-slate-100 shadow-sm">
-                                    {invoice.category === 'FREIGHT' ? 'FREIGHT INVOICE' : (invoice.invoiceNumber.startsWith('TRK') || invoice.invoiceNumber.startsWith('FIN')) ? 'TRUCKING BILL' : 'TAX INVOICE'}
-                                </span>
-                                <h1 className="text-2xl font-black text-slate-400 tracking-tighter leading-none uppercase italic">
-                                    {invoice.category === 'FREIGHT' ? 'FREIGHT INVOICE' : (invoice.invoiceNumber.startsWith('TRK') || invoice.invoiceNumber.startsWith('FIN')) ? 'TRUCKING BILL' : 'SALES TAX INVOICE'}
+                                <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase italic">
+                                    {invoice.category === 'FREIGHT' ? 'FREIGHT INVOICE' : (invoice.invoiceNumber.startsWith('TRK') || (invoice as any).serviceCategory === 'TRUCKING') ? 'TRUCKING BILL' : 'SALES TAX INVOICE'}
                                 </h1>
                             </div>
                             <div className="text-right space-y-1">
@@ -345,19 +343,23 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                             </div>
                         </div>
                         <div className="space-y-3">
-                            <div className="flex justify-between items-center px-4">
-                                <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Subtotal</span>
-                                <span className="text-lg font-bold text-slate-600">{invoice.totalAmount.toLocaleString()}</span>
-                            </div>
-                            <div className="flex justify-between items-center px-4">
-                                <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
-                                    {invoice.category === 'SERVICE' ? `Sales Tax (${settings.serviceTaxRate || '17'}%)` : 'WHT / Other Taxes'}
-                                </span>
-                                <span className="text-lg font-bold text-slate-600">{invoice.taxAmount.toLocaleString()}</span>
-                            </div>
+                            {invoice.taxAmount > 0 && (
+                                <div className="flex justify-between items-center px-4">
+                                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-widest">Subtotal</span>
+                                    <span className="text-lg font-bold text-slate-900 dark:text-slate-400">{invoice.totalAmount.toLocaleString()}</span>
+                                </div>
+                            )}
+                            {!(invoice.category === 'SERVICE' && ((invoice as any).serviceCategory === 'TRUCKING' || invoice.invoiceNumber.startsWith('TRK'))) && (
+                                <div className="flex justify-between items-center px-4">
+                                    <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
+                                        {invoice.category === 'SERVICE' ? `Sales Tax (${settings.serviceTaxRate || '17'}%)` : 'WHT / Other Taxes'}
+                                    </span>
+                                    <span className="text-lg font-bold text-slate-900 dark:text-slate-400">{invoice.taxAmount.toLocaleString()}</span>
+                                </div>
+                            )}
                             <div className={`flex justify-between items-center p-6 rounded-[2.5rem] shadow-xl ${invoice.category === 'SERVICE' ? 'bg-blue-600 shadow-blue-600/20 text-white' : 'bg-purple-600 shadow-purple-600/20 text-white'}`}>
-                                <span className="text-[10px] text-blue-100 font-black uppercase tracking-[0.2em]">Grand Total ({invoice.currencyCode})</span>
-                                <span className="text-3xl font-black italic tracking-tighter leading-none">{invoice.grandTotal.toLocaleString()}</span>
+                                <span className="text-[10px] text-white/80 font-black uppercase tracking-[0.2em]">Grand Total ({invoice.currencyCode})</span>
+                                <span className="text-3xl font-black italic tracking-tighter leading-none text-white">{invoice.grandTotal.toLocaleString()}</span>
                             </div>
                         </div>
                     </div>
