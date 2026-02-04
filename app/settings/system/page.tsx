@@ -93,12 +93,15 @@ export default function SystemConfigPage() {
             });
             if (res.ok) {
                 setMessage('Business profile updated!');
-                setTimeout(() => setMessage(''), 3000);
+            } else {
+                const data = await res.json();
+                setMessage(data.error || 'Failed to save profile');
             }
         } catch (error) {
-            setMessage('Failed to save profile');
+            setMessage('Network error: Failed to save profile');
         } finally {
             setSaving(false);
+            setTimeout(() => setMessage(''), 5000);
         }
     };
 
@@ -112,12 +115,15 @@ export default function SystemConfigPage() {
             });
             if (res.ok) {
                 setMessage('General preferences saved!');
-                setTimeout(() => setMessage(''), 3000);
+            } else {
+                const data = await res.json();
+                setMessage(data.error || 'Failed to save settings');
             }
         } catch (error) {
-            setMessage('Failed to save settings');
+            setMessage('Network error: Failed to save settings');
         } finally {
             setSaving(false);
+            setTimeout(() => setMessage(''), 5000);
         }
     };
 
@@ -223,8 +229,14 @@ export default function SystemConfigPage() {
             {/* Notification */}
             {message && (
                 <div className="fixed top-24 right-8 z-[100] animate-in slide-in-from-right duration-300">
-                    <div className="glass-panel p-4 bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center gap-3 shadow-2xl">
-                        <CheckCircle2 size={20} />
+                    <div className={`glass-panel p-4 border flex items-center gap-3 shadow-2xl ${message.toLowerCase().includes('failed') || message.toLowerCase().includes('error')
+                            ? 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400'
+                            : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                        }`}>
+                        {message.toLowerCase().includes('failed') || message.toLowerCase().includes('error')
+                            ? <AlertCircle size={20} />
+                            : <CheckCircle2 size={20} />
+                        }
                         <span className="text-sm font-black uppercase italic tracking-tight">{message}</span>
                     </div>
                 </div>

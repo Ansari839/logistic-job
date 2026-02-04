@@ -37,22 +37,44 @@ export async function PATCH(request: Request) {
 
     try {
         const body = await request.json();
-        const dbUser = await prisma.user.findUnique({
-            where: { id: user.id },
-        });
 
-        if (!dbUser?.companyId) {
-            return NextResponse.json({ error: 'Company not found' }, { status: 404 });
+        // Sanitize body to only include modifiable fields
+        const {
+            name, tagline, address, phone, email, website,
+            industry, city, country, postalCode, registrationNo,
+            state, taxNumber
+        } = body;
+
+        const updateData: any = {};
+        if (name !== undefined) updateData.name = name;
+        if (tagline !== undefined) updateData.tagline = tagline;
+        if (address !== undefined) updateData.address = address;
+        if (phone !== undefined) updateData.phone = phone;
+        if (email !== undefined) updateData.email = email;
+        if (website !== undefined) updateData.website = website;
+        if (industry !== undefined) updateData.industry = industry;
+        if (city !== undefined) updateData.city = city;
+        if (country !== undefined) updateData.country = country;
+        if (postalCode !== undefined) updateData.postalCode = postalCode;
+        if (registrationNo !== undefined) updateData.registrationNo = registrationNo;
+        if (state !== undefined) updateData.state = state;
+        if (taxNumber !== undefined) updateData.taxNumber = taxNumber;
+
+        if (!user.companyId) {
+            return NextResponse.json({ error: 'Company not found for this user' }, { status: 404 });
         }
 
         const updatedCompany = await prisma.company.update({
-            where: { id: dbUser.companyId },
-            data: body,
+            where: { id: user.companyId },
+            data: updateData,
         });
 
         return NextResponse.json(updatedCompany);
-    } catch (error) {
+    } catch (error: any) {
         console.error('Update company error:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        return NextResponse.json({
+            error: 'Internal server error',
+            details: error.message
+        }, { status: 500 });
     }
 }
