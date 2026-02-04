@@ -124,11 +124,11 @@ export async function PATCH(
                     });
                 }
 
-                const relevantExpenses = invoice.job.expenses.filter(e =>
+                const relevantExpenses = invoice.job.expenses.filter((e: any) =>
                     e.invoiceCategory === targetCategory ||
                     (targetCategory === 'SERVICE' && !e.invoiceCategory)
                 );
-                relevantExpenses.forEach(exp => {
+                relevantExpenses.forEach((exp: any) => {
                     newItems.push({
                         description: exp.description,
                         quantity: 1,
@@ -142,8 +142,8 @@ export async function PATCH(
 
                 await tx.serviceInvoiceItem.deleteMany({ where: { invoiceId: invoice.id } });
             } else {
-                const relevantExpenses = invoice.job.expenses.filter(e => e.invoiceCategory === 'FREIGHT');
-                relevantExpenses.forEach(exp => {
+                const relevantExpenses = invoice.job.expenses.filter((e: any) => e.invoiceCategory === 'FREIGHT');
+                relevantExpenses.forEach((exp: any) => {
                     newItems.push({
                         description: exp.description,
                         quantity: 1,
