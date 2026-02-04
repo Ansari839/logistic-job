@@ -269,6 +269,7 @@ export async function PATCH(request: Request) {
                     const revenueAccount = await tx.account.findUnique({
                         where: { companyId_code: { companyId: user.companyId as number, code: '4100' } }
                     });
+                    if (!revenueAccount) throw new Error('Revenue Account (4100) not found. Please check your Chart of Accounts.');
 
                     let customerAccount = null;
                     if (inv.customer.accountId) {
@@ -354,7 +355,7 @@ export async function PATCH(request: Request) {
                 const costAccount = await tx.account.findUnique({
                     where: { companyId_code: { companyId: user.companyId as number, code: '5100' } }
                 });
-                if (!costAccount) console.error('[APPROVE] Cost Account 5100 not found!');
+                if (!costAccount) throw new Error('Cost Account (5100) not found. Please check your Chart of Accounts.');
 
                 for (const exp of jobExpenses) {
                     console.log(`[APPROVE] Processing Expense ID: ${exp.id}, Cost: ${exp.costPrice}`);

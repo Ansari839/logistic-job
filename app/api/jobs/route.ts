@@ -24,7 +24,7 @@ export async function GET(request: Request) {
                 division: user.division,
                 deletedAt: null,
                 ...(jobType && { jobType: jobType as any }),
-                ...(customerId && { customerId: parseInt(customerId) }),
+                ...(customerId && !isNaN(parseInt(customerId)) && { customerId: parseInt(customerId) }),
                 ...(jobNumber && { jobNumber: jobNumber }),
             },
             include: {
@@ -88,8 +88,8 @@ export async function POST(request: Request) {
             expenses, podId
         } = body;
 
-        if (!customerId) {
-            return NextResponse.json({ error: 'Customer is required' }, { status: 400 });
+        if (!customerId || isNaN(parseInt(customerId))) {
+            return NextResponse.json({ error: 'Valid Customer ID is required' }, { status: 400 });
         }
 
         // Auto-Generate Job Number: JOB-YYYY-SEQ
@@ -131,7 +131,7 @@ export async function POST(request: Request) {
                 customerId: parseInt(customerId),
                 companyId: user.companyId as number,
                 division: user.division,
-                branchId: branchId ? parseInt(branchId) : null,
+                branchId: (branchId && !isNaN(parseInt(branchId.toString()))) ? parseInt(branchId.toString()) : null,
                 vessel,
                 place,
                 shipperRef,
@@ -142,15 +142,15 @@ export async function POST(request: Request) {
                 commodity,
                 volume,
                 containerNo,
-                packages: packages ? parseInt(packages) : null,
-                weight: weight ? parseFloat(weight) : null,
+                packages: (packages && !isNaN(parseInt(packages.toString()))) ? parseInt(packages.toString()) : null,
+                weight: (weight && !isNaN(parseFloat(weight.toString()))) ? parseFloat(weight.toString()) : null,
                 hawbBl,
                 handledBy,
                 salesPerson,
-                podId: podId ? parseInt(podId) : null,
+                podId: (podId && !isNaN(parseInt(podId.toString()))) ? parseInt(podId.toString()) : null,
                 expenses: {
                     create: expenses?.filter((e: any) => e.name || e.cost || e.selling).map((e: any) => {
-                        const parsedVendor = e.vendorId ? parseInt(e.vendorId) : null;
+                        const parsedVendor = (e.vendorId && !isNaN(parseInt(e.vendorId.toString()))) ? parseInt(e.vendorId.toString()) : null;
                         return {
                             description: e.name + (e.description ? ` - ${e.description}` : ''),
                             costPrice: parseFloat(e.cost) || 0,

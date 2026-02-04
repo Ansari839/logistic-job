@@ -82,8 +82,8 @@ export async function PATCH(
                 data: {
                     jobType: jobType || undefined,
                     jobDate: jobDate ? new Date(jobDate) : undefined,
-                    customerId: customerId ? parseInt(customerId) : undefined,
-                    branchId: branchId ? parseInt(branchId) : (branchId === null ? null : undefined),
+                    customerId: (customerId && !isNaN(parseInt(customerId.toString()))) ? parseInt(customerId.toString()) : undefined,
+                    branchId: (branchId && !isNaN(parseInt(branchId.toString()))) ? parseInt(branchId.toString()) : (branchId === null ? null : undefined),
                     vessel,
                     place,
                     shipperRef,
@@ -94,12 +94,12 @@ export async function PATCH(
                     commodity,
                     volume,
                     containerNo,
-                    packages: packages ? parseInt(packages) : undefined,
-                    weight: weight ? parseFloat(weight) : undefined,
+                    packages: (packages && !isNaN(parseInt(packages.toString()))) ? parseInt(packages.toString()) : undefined,
+                    weight: (weight && !isNaN(parseFloat(weight.toString()))) ? parseFloat(weight.toString()) : undefined,
                     hawbBl,
                     handledBy,
                     salesPerson,
-                    podId: podId ? parseInt(podId) : (podId === null ? null : undefined),
+                    podId: (podId && !isNaN(parseInt(podId.toString()))) ? parseInt(podId.toString()) : (podId === null ? null : undefined),
                 }
             });
 
@@ -116,9 +116,9 @@ export async function PATCH(
                         data: expenses.filter((e: any) => e.name || e.cost || e.selling).map((e: any) => ({
                             jobId: parseInt(id),
                             description: e.name + (e.description ? ` - ${e.description}` : ''),
-                            costPrice: parseFloat(e.cost) || 0,
-                            sellingPrice: parseFloat(e.selling) || 0,
-                            vendorId: e.vendorId ? parseInt(e.vendorId) : null,
+                            costPrice: (e.cost && !isNaN(parseFloat(e.cost.toString()))) ? parseFloat(e.cost.toString()) : 0,
+                            sellingPrice: (e.selling && !isNaN(parseFloat(e.selling.toString()))) ? parseFloat(e.selling.toString()) : 0,
+                            vendorId: (e.vendorId && !isNaN(parseInt(e.vendorId.toString()))) ? parseInt(e.vendorId.toString()) : null,
                             invoiceCategory: e.invoiceCategory || 'SERVICE',
                             currencyCode: 'PKR',
                             companyId: user.companyId as number,

@@ -180,6 +180,10 @@ export async function PATCH(request: Request) {
                 const defaultVendorAccount = await tx.account.findUnique({
                     where: { companyId_code: { companyId: user.companyId as number, code: '2210' } }
                 });
+                if (!revenueAccount) throw new Error('Revenue Account (4100) not found. Please check your Chart of Accounts.');
+                if (!costAccount) throw new Error('Cost Account (5100) not found. Please check your Chart of Accounts.');
+                if (!defaultCustomerAccount) throw new Error('Default Customer Account (1230) not found. Please check your Chart of Accounts.');
+                if (!defaultVendorAccount) throw new Error('Default Vendor Account (2210) not found. Please check your Chart of Accounts.');
 
                 if (inv.grandTotal > 0 && revenueAccount && (inv.customer.accountId || defaultCustomerAccount)) {
                     // 1. Post Customer Receivable
