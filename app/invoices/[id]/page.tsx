@@ -167,7 +167,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                     {/* Header: Company & Invoice Info */}
                     <div className="bg-slate-50/50 border-b-2 border-slate-100">
                         {/* Centered Company Info */}
-                        <div className="p-8 print:p-12 text-center border-b border-slate-100 flex flex-col items-center">
+                        <div className="p-8 print:p-4 text-center border-b border-slate-100 flex flex-col items-center">
                             {invoice.company.logo ? (
                                 <img src={invoice.company.logo} alt="Logo" className="h-24 print:h-16 mb-4 print:mb-2" />
                             ) : (
@@ -207,7 +207,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                     </div>
 
                     {/* Billing Details */}
-                    <div className="p-4 print:p-8 grid grid-cols-2 gap-4 bg-white">
+                    <div className="p-4 print:p-4 grid grid-cols-2 gap-4 bg-white">
                         <div>
                             <p className="text-[9px] text-blue-600 font-black uppercase tracking-[0.2em] mb-2 border-b pb-1 border-blue-50/50">Bill To</p>
                             <h3 className="text-xl font-black text-slate-900 mb-1">{invoice.customer.name}</h3>
@@ -277,9 +277,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                                             <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right border-r border-slate-700">USD Amount</th>
                                         )}
                                         <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right border-r border-slate-700">Rate</th>
-                                        <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right">
-                                            {invoice.category === 'SERVICE' ? 'Amount' : `Amount (PKR)`}
-                                        </th>
+                                        <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right">Amount (PKR)</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-900">
@@ -332,7 +330,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                                                         ) : ''}
                                                     </td>
                                                     <td className="px-3 py-1 text-right font-black text-slate-900 text-xs">
-                                                        {item ? (invoice.category === 'SERVICE' ? item.amount.toLocaleString() : item.total.toLocaleString()) : ''}
+                                                        {item ? item.total.toLocaleString() : ''}
                                                     </td>
                                                 </tr>
                                             );
@@ -363,15 +361,15 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                                     <span className="text-lg font-bold text-slate-900 dark:text-slate-400">{invoice.totalAmount.toLocaleString()}</span>
                                 </div>
                             )}
-                            {!(invoice.category === 'SERVICE' && ((invoice as any).serviceCategory === 'TRUCKING' || invoice.invoiceNumber.startsWith('TRK'))) && (
+                            {invoice.taxAmount > 0 && (
                                 <div className="flex justify-between items-center px-4">
                                     <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
-                                        {invoice.category === 'SERVICE' ? `Sales Tax (${settings.serviceTaxRate || '17'}%)` : 'WHT / Other Taxes'}
+                                        {invoice.category === 'SERVICE' ? `Sales Tax (${settings.serviceTaxRate || '17'}%) on service` : 'WHT / Other Taxes'}
                                     </span>
                                     <span className="text-lg font-bold text-slate-900 dark:text-slate-400">{invoice.taxAmount.toLocaleString()}</span>
                                 </div>
                             )}
-                            <div className={`flex justify-between items-center p-6 rounded-[2.5rem] shadow-xl ${invoice.category === 'SERVICE' ? 'bg-blue-600 shadow-blue-600/20 text-white' : 'bg-purple-600 shadow-purple-600/20 text-white'}`}>
+                            <div className={`flex justify-between items-center p-6 rounded-[2.5rem] shadow-xl bg-purple-600 shadow-purple-600/20 text-white`}>
                                 <span className="text-[10px] text-white/80 font-black uppercase tracking-[0.2em]">Grand Total ({invoice.currencyCode})</span>
                                 <span className="text-3xl font-black italic tracking-tighter leading-none text-white">{invoice.grandTotal.toLocaleString()}</span>
                             </div>
@@ -379,7 +377,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                     </div>
 
                     {/* Authorized Signature */}
-                    <div className="px-6 pb-6 pt-6 print:p-2 print:mt-12 grid grid-cols-2">
+                    <div className="px-6 pb-6 pt-6 print:p-2 print:mt-4 grid grid-cols-2">
                         <div className="self-end">
                             <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Generated By System At</p>
                             <p className="text-xs font-black text-slate-400">{new Date().toLocaleString()}</p>
@@ -410,6 +408,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                         background: white !important;
                         margin: 0 !important;
                         padding: 0 !important;
+                        height: auto !important;
                     }
 
                     /* Force color printing */
@@ -422,7 +421,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                     /* Container */
                     .max-w-5xl {
                         max-width: 100% !important;
-                        padding: 10mm !important;
+                        padding: 5mm !important;
                         margin: 0 !important;
                     }
 
