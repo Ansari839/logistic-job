@@ -13,17 +13,17 @@ export async function GET(
     const { id } = await params;
 
     try {
-        const job = await prisma.job.findUnique({
-            where: { id: parseInt(id) },
+        const job = await prisma.job.findFirst({
+            where: { id: parseInt(id), companyId: user.companyId as number },
             include: {
-                customer: true,
-                branch: true,
+                customer: { select: { id: true, name: true, code: true } },
+                branch: { select: { id: true, name: true } },
                 expenses: {
-                    include: { vendor: { select: { name: true, code: true } } },
+                    include: { vendor: { select: { id: true, name: true, code: true } } },
                     orderBy: { createdAt: 'desc' }
                 },
                 serviceInvoices: {
-                    include: { items: true }
+                    include: { items: { include: { product: { select: { name: true } } } } }
                 },
                 freightInvoice: {
                     include: { items: true }

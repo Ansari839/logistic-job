@@ -230,8 +230,8 @@ export default function SystemConfigPage() {
             {message && (
                 <div className="fixed top-24 right-8 z-[100] animate-in slide-in-from-right duration-300">
                     <div className={`glass-panel p-4 border flex items-center gap-3 shadow-2xl ${message.toLowerCase().includes('failed') || message.toLowerCase().includes('error')
-                            ? 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400'
-                            : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                        ? 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400'
+                        : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
                         }`}>
                         {message.toLowerCase().includes('failed') || message.toLowerCase().includes('error')
                             ? <AlertCircle size={20} />
@@ -428,7 +428,7 @@ export default function SystemConfigPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1.5">Default Service Charges (%)</label>
+                                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1.5">Default Service Charges (Fixed Rate)</label>
                                 <div className="relative group">
                                     <input
                                         type="number"
@@ -438,7 +438,7 @@ export default function SystemConfigPage() {
                                         onChange={e => updateSetting('serviceCharges', e.target.value)}
                                         placeholder="0"
                                     />
-                                    <span className="absolute right-6 top-1/2 -translate-y-1/2 text-lg font-black text-slate-400">%</span>
+                                    <span className="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-400">PKR</span>
                                 </div>
                             </div>
                         </div>

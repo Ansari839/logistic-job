@@ -74,6 +74,11 @@ export default function NewInvoicePage() {
     });
     const [pendingJobs, setPendingJobs] = useState<Job[]>([]);
     const [fetchingJobs, setFetchingJobs] = useState(false);
+    const [systemSettings, setSystemSettings] = useState<any[]>([]);
+
+    useEffect(() => {
+        fetchSystemSettings();
+    }, []);
 
     useEffect(() => {
         if (category === 'FREIGHT') {
@@ -89,12 +94,16 @@ export default function NewInvoicePage() {
     const generateItems = (currentJob: any) => {
         if (!currentJob) return;
 
+        const getSetting = (key: string, defaultValue: string) =>
+            systemSettings.find(s => s.key === key)?.value || defaultValue;
+
         const containerCount = currentJob.containerNo ? currentJob.containerNo.split(',').filter((x: string) => x.trim()).length : 0;
         const initialItems: InvoiceItem[] = [];
 
         // 1. Add Service Charges ONLY if Sales Tax Invoice
         if (serviceInvoiceType === 'SALES_TAX') {
-            const serviceChargeRate = 2000;
+            const serviceChargeRate = parseFloat(getSetting('serviceCharges', '2000'));
+            const taxPercentage = parseFloat(getSetting('serviceTaxRate', '13'));
             const serviceChargeAmount = containerCount * serviceChargeRate;
             if (containerCount > 0) {
                 initialItems.push({
@@ -102,9 +111,9 @@ export default function NewInvoicePage() {
                     quantity: containerCount,
                     rate: serviceChargeRate,
                     amount: serviceChargeAmount,
-                    taxPercentage: 13,
-                    taxAmount: (serviceChargeAmount * 13) / 100,
-                    total: serviceChargeAmount + (serviceChargeAmount * 13) / 100,
+                    taxPercentage: taxPercentage,
+                    taxAmount: (serviceChargeAmount * taxPercentage) / 100,
+                    total: serviceChargeAmount + (serviceChargeAmount * taxPercentage) / 100,
                     productId: null
                 });
             }
@@ -193,6 +202,16 @@ export default function NewInvoicePage() {
                 setExpensesMaster(data.expensesMaster || []);
             }
         } catch (err) { console.error('Fetch expenses master error'); }
+    };
+
+    const fetchSystemSettings = async () => {
+        try {
+            const res = await fetch('/api/settings/system');
+            if (res.ok) {
+                const data = await res.json();
+                setSystemSettings(data || []);
+            }
+        } catch (err) { console.error('Fetch settings error'); }
     };
 
     const handleSearchJob = async () => {
