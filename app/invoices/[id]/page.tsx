@@ -7,7 +7,7 @@ import {
     FileText, Printer, ChevronLeft, Download,
     Ship, User, MapPin, Calendar, Hash,
     Package, Info, CreditCard, Building2,
-    CheckCircle2, Clock, AlertCircle, DollarSign, ArrowRightLeft
+    CheckCircle2, Clock, AlertCircle, DollarSign, ArrowRightLeft, RefreshCw
 } from 'lucide-react';
 
 interface InvoiceItem {
@@ -74,6 +74,7 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
     const router = useRouter();
     const [invoice, setInvoice] = useState<Invoice | null>(null);
     const [loading, setLoading] = useState(true);
+    const [syncing, setSyncing] = useState(false);
     const [settings, setSettings] = useState<any>({});
 
     useEffect(() => {
@@ -116,6 +117,34 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
         window.print();
     };
 
+    const handleSync = async () => {
+        if (!invoice || syncing) return;
+        if (!confirm('This will update the invoice lines with the latest Job data. Any manual changes will be lost. Proceed?')) return;
+
+        setSyncing(true);
+        try {
+            const url = `/api/invoices/${id}?action=sync${category ? `&category=${category}` : ''}`;
+            const res = await fetch(url, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'sync' })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setInvoice(data.invoice);
+                alert('Invoice synchronized with latest Job data');
+            } else {
+                const err = await res.json();
+                alert(err.error || 'Failed to sync invoice');
+            }
+        } catch (error) {
+            console.error('Sync error:', error);
+            alert('An error occurred during sync');
+        } finally {
+            setSyncing(false);
+        }
+    };
+
     if (loading) return (
         <DashboardLayout>
             <div className="flex items-center justify-center min-h-[60vh]">
@@ -144,9 +173,24 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                         className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-sm font-black uppercase tracking-widest"
                     >
                         <ChevronLeft size={16} />
-                        Back
+                        ← Back
                     </button>
-                    <div className="flex gap-3">
+                    <div className="flex gap-4">
+                        {(invoice.status === 'DRAFT' || !invoice.isApproved || (invoice as any).status === 'draft') ? (
+                            <button
+                                onClick={handleSync}
+                                disabled={syncing}
+                                className="bg-amber-600 hover:bg-amber-500 text-white px-6 py-3 rounded-2xl font-black transition-all flex items-center gap-2 text-xs uppercase tracking-widest shadow-lg shadow-amber-600/20 disabled:opacity-50"
+                            >
+                                <RefreshCw size={18} className={syncing ? 'animate-spin' : ''} />
+                                {syncing ? 'Syncing...' : 'Refresh Data'}
+                            </button>
+                        ) : (
+                            <div className="bg-slate-100 text-slate-400 px-6 py-3 rounded-2xl font-black flex items-center gap-2 text-[10px] uppercase tracking-widest border border-slate-200">
+                                <CheckCircle2 size={16} />
+                                Data Locked
+                            </div>
+                        )}
                         <button
                             onClick={handlePrint}
                             className="bg-slate-900 border border-slate-800 text-white px-6 py-3 rounded-2xl font-black transition-all hover:bg-slate-800 flex items-center gap-2 text-xs uppercase tracking-widest shadow-xl"

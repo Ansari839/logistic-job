@@ -5,7 +5,7 @@ import DashboardLayout from '@/components/DashboardLayout';
 import {
     FileText, Search, Filter, Download,
     Printer, MoreVertical, ChevronRight,
-    Clock, CheckCircle2, AlertCircle, ArrowUpRight, Plus, Trash2, RotateCcw
+    Clock, CheckCircle2, AlertCircle, ArrowUpRight, Plus, Trash2, RotateCcw, RefreshCw
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -27,6 +27,7 @@ interface Invoice {
 export default function InvoicesPage() {
     const [invoices, setInvoices] = useState<Invoice[]>([]);
     const [loading, setLoading] = useState(true);
+    const [syncingId, setSyncingId] = useState<number | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [activeTab, setActiveTab] = useState<'all' | 'trucking' | 'sales_tax' | 'freight'>('all');
     const router = useRouter();
@@ -106,6 +107,28 @@ export default function InvoicesPage() {
             }
         } catch (err) {
             alert('Revert error');
+        }
+    };
+
+    const handleSync = async (id: number, cat: string) => {
+        if (!confirm('Refresh this draft with latest Job expenses?')) return;
+        setSyncingId(id);
+        try {
+            const res = await fetch(`/api/invoices/${id}?category=${cat}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'sync' })
+            });
+            if (res.ok) {
+                fetchInvoices();
+            } else {
+                const error = await res.json();
+                alert(error.error || 'Sync failed');
+            }
+        } catch (err) {
+            alert('Sync error');
+        } finally {
+            setSyncingId(null);
         }
     };
 
@@ -247,6 +270,17 @@ export default function InvoicesPage() {
                                             </p>
                                         </div>
                                         <div className="flex gap-2">
+                                            {inv.status === 'DRAFT' && (
+                                                <button
+                                                    onClick={() => handleSync(inv.id, inv.category)}
+                                                    disabled={syncingId === inv.id}
+                                                    className="p-4 rounded-2xl bg-amber-600/10 border border-amber-500/20 text-amber-600 hover:bg-amber-600 hover:text-white transition-all font-bold disabled:opacity-50"
+                                                    title="Refresh from Job"
+                                                >
+                                                    <RefreshCw size={18} className={syncingId === inv.id ? 'animate-spin' : ''} />
+                                                </button>
+                                            )}
+
                                             {inv.status === 'DRAFT' && (
                                                 <button
                                                     onClick={() => handleApprove(inv.id, inv.category)}
