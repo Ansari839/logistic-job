@@ -115,7 +115,7 @@ export async function PATCH(
                     await tx.expense.createMany({
                         data: expenses.filter((e: any) => e.name || e.cost || e.selling).map((e: any) => ({
                             jobId: parseInt(id),
-                            description: e.name + (e.description ? ` - ${e.description}` : ''),
+                            description: e.name + (e.description ? ` | ${e.description}` : ''),
                             costPrice: (e.cost && !isNaN(parseFloat(e.cost.toString()))) ? parseFloat(e.cost.toString()) : 0,
                             sellingPrice: (e.selling && !isNaN(parseFloat(e.selling.toString()))) ? parseFloat(e.selling.toString()) : 0,
                             vendorId: (e.vendorId && !isNaN(parseInt(e.vendorId.toString()))) ? parseInt(e.vendorId.toString()) : null,

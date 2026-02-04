@@ -152,7 +152,7 @@ export async function POST(request: Request) {
                     create: expenses?.filter((e: any) => e.name || e.cost || e.selling).map((e: any) => {
                         const parsedVendor = (e.vendorId && !isNaN(parseInt(e.vendorId.toString()))) ? parseInt(e.vendorId.toString()) : null;
                         return {
-                            description: e.name + (e.description ? ` - ${e.description}` : ''),
+                            description: e.name + (e.description ? ` | ${e.description}` : ''),
                             costPrice: parseFloat(e.cost) || 0,
                             sellingPrice: parseFloat(e.selling) || 0,
                             vendorId: isNaN(parsedVendor as number) ? null : parsedVendor,

@@ -271,16 +271,12 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="bg-slate-900 text-white">
-                                        <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest border-r border-slate-700">Detail Description</th>
+                                        <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest border-r border-slate-700">Expense Name</th>
+                                        <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest border-r border-slate-700">Description</th>
                                         {invoice.category === 'FREIGHT' && (
                                             <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right border-r border-slate-700">USD Amount</th>
                                         )}
-                                        {invoice.category === 'SERVICE' && (
-                                            <>
-                                                <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-center border-r border-slate-700">Qty</th>
-                                                <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right border-r border-slate-700">Unit Rate</th>
-                                            </>
-                                        )}
+                                        <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right border-r border-slate-700">Rate</th>
                                         <th className="px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-right">
                                             {invoice.category === 'SERVICE' ? 'Amount' : `Amount (PKR)`}
                                         </th>
@@ -297,26 +293,44 @@ export default function InvoiceViewPage({ params }: { params: Promise<{ id: stri
                                         });
                                         return Array.from({ length: Math.max(6, sortedItems.length) }).map((_, idx) => {
                                             const item = sortedItems[idx];
+                                            let name = '';
+                                            let details = '';
+
+                                            if (item) {
+                                                if (item.description.includes(' | ')) {
+                                                    [name, details] = item.description.split(' | ');
+                                                } else if (item.description.includes(' - ')) {
+                                                    const parts = item.description.split(' - ');
+                                                    name = parts[0];
+                                                    details = parts.slice(1).join(' - ');
+                                                } else if (item.description.includes('(') && item.description.includes(')')) {
+                                                    const start = item.description.indexOf('(');
+                                                    name = item.description.substring(0, start).trim();
+                                                    details = item.description.substring(start);
+                                                } else {
+                                                    name = item.description;
+                                                }
+                                            }
+
                                             return (
                                                 <tr key={item?.id || `empty-${idx}`} className={`h-8 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}`}>
-                                                    <td className="px-3 py-1 border-r-2 border-slate-900 font-bold text-slate-800 text-xs text-wrap max-w-[200px]">
-                                                        {item?.description || ''}
+                                                    <td className="px-3 py-1 border-r-2 border-slate-900 font-bold text-slate-800 text-xs">
+                                                        {name}
+                                                    </td>
+                                                    <td className="px-3 py-1 border-r-2 border-slate-900 font-medium text-slate-600 text-[10px]">
+                                                        {details}
                                                     </td>
                                                     {invoice.category === 'FREIGHT' && (
                                                         <td className="px-3 py-1 border-r-2 border-slate-900 text-right font-black text-blue-600 text-[10px]">
                                                             {item?.usdAmount ? `$ ${item.usdAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}` : ''}
                                                         </td>
                                                     )}
-                                                    {invoice.category === 'SERVICE' && (
-                                                        <>
-                                                            <td className="px-3 py-1 border-r-2 border-slate-900 text-center font-bold text-slate-600 text-xs">
-                                                                {item?.quantity || ''}
-                                                            </td>
-                                                            <td className="px-3 py-1 border-r-2 border-slate-900 text-right font-mono text-slate-600 text-[10px]">
-                                                                {item?.rate?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || ''}
-                                                            </td>
-                                                        </>
-                                                    )}
+                                                    <td className="px-3 py-1 border-r-2 border-slate-900 text-right font-mono text-slate-600 text-[10px]">
+                                                        {item ? (
+                                                            (item.quantity === 1 && item.rate === item.amount) ? '' :
+                                                                item.rate.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                                        ) : ''}
+                                                    </td>
                                                     <td className="px-3 py-1 text-right font-black text-slate-900 text-xs">
                                                         {item ? (invoice.category === 'SERVICE' ? item.amount.toLocaleString() : item.total.toLocaleString()) : ''}
                                                     </td>

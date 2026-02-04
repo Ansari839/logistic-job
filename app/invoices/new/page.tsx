@@ -107,7 +107,7 @@ export default function NewInvoicePage() {
             const serviceChargeAmount = containerCount * serviceChargeRate;
             if (containerCount > 0) {
                 initialItems.push({
-                    description: `Service Charges (${containerCount} Containers)`,
+                    description: `Service Charges | ${containerCount} Containers`,
                     quantity: containerCount,
                     rate: serviceChargeRate,
                     amount: serviceChargeAmount,
