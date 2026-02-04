@@ -3,23 +3,31 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
 
 const globalForPrisma = global as unknown as {
-  prisma: PrismaClient
+  prisma: PrismaClient | undefined
+  pgPool: Pool | undefined
 }
 
 const connectionString = process.env.DATABASE_URL
-const pool = new Pool({
+
+// Singleton Pool - Always reuse in global if available
+const pool = globalForPrisma.pgPool ?? new Pool({
   connectionString,
-  max: 20,
+  max: 3, // Very defensive for Neon/Vercel
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
 })
+
+globalForPrisma.pgPool = pool
+
+// Singleton Adapter
 const adapter = new PrismaPg(pool)
 
-const prisma = globalForPrisma.prisma || new PrismaClient({
+// Singleton PrismaClient - Always reuse in global if available
+const prisma = globalForPrisma.prisma ?? new PrismaClient({
   adapter,
   log: ['error', 'warn'],
 })
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+globalForPrisma.prisma = prisma
 
 export default prisma
