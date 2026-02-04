@@ -6,7 +6,7 @@ const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({ connectionString });
 
 async function main() {
-    console.log('Starting cleanup of Jobs and Invoices (Native PG)...');
+    console.log('Starting cleanup of Job and Invoices (Native PG)...');
     const client = await pool.connect();
 
     try {
